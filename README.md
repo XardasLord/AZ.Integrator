@@ -1,2 +1,2 @@
 # AZ.Integrator
-Integrator software for AZ company that integrated Allegro, Subiekt, ShipX (Inpost) and DPD.
+Integrator software for AZ company that integrates Allegro, Subiekt, ShipX (Inpost) and DPD.
