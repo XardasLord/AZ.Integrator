@@ -45,8 +45,10 @@ public static class Extensions
         {
             app.UseIntegratorOpenApi();
         }
-
-        app.UseHttpsRedirection();
+        else
+        {
+            app.UseHttpsRedirection();
+        }
         
         app.UseCors(builder =>
         {

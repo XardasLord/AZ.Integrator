@@ -1,0 +1,45 @@
+version: '3.4'
+
+services:
+  api:
+    image: az.integrator.api
+    container_name: az-integrator-api
+    build:
+      context: .
+      dockerfile: AZ.Integrator.Api/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "6010:80"
+    networks:
+      - az
+    healthcheck:
+      test: curl --fail http://localhost/api/healthz || exit 1
+      interval: 5s
+      retries: 5
+      timeout: 10s
+
+  db:
+    image: "postgres:15"
+    container_name: az-integrator-db
+    ports:
+      - "5433:5432"
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - az
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  az:
+    driver: bridge
