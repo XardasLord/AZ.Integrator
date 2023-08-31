@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AZ.Integrator.Infrastructure.Persistence.EF.DbContexts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AZ.Integrator.Infrastructure.Persistence.EF;
@@ -9,9 +11,15 @@ internal static class Extensions
 
     public static IServiceCollection AddPostgres(this IServiceCollection services, IConfiguration configuration)
     {
-        // services.Configure<PostgresOptions>(configuration.GetRequiredSection(OptionsSectionName));
+        services.Configure<PostgresOptions>(configuration.GetRequiredSection(OptionsSectionName));
 
-        // var postgresOptions = configuration.GetOptions<PostgresOptions>(OptionsSectionName);
+        var postgresOptions = configuration.GetOptions<PostgresOptions>(OptionsSectionName);
+        
+        services.AddDbContext<UserDbContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
+        });
         
         // EF Core + Npgsql issue (https://www.npgsql.org/doc/types/datetime.html)
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

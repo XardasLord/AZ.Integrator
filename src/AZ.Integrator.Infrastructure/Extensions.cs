@@ -3,6 +3,7 @@ using AZ.Integrator.Infrastructure.Authentication;
 using AZ.Integrator.Infrastructure.Authorization;
 using AZ.Integrator.Infrastructure.DomainServices;
 using AZ.Integrator.Infrastructure.ErrorHandling;
+using AZ.Integrator.Infrastructure.Identity;
 using AZ.Integrator.Infrastructure.OpenApi;
 using AZ.Integrator.Infrastructure.Persistence.EF;
 using AZ.Integrator.Infrastructure.Persistence.GraphQL;
@@ -29,6 +30,7 @@ public static class Extensions
         
         services.AddIntegratorAuthentication(configuration);
         services.AddIntegratorAuthorization(configuration);
+        services.AddIntegratorIdentity(configuration);
         
         services.AddPostgres(configuration);
         services.AddIntegratorGraphQl(configuration);
@@ -62,6 +64,7 @@ public static class Extensions
 
         app.UseMiddleware<ErrorHandlerMiddleware>();
         app.UseRouting();
+        app.UseAuthentication();
         app.UseAuthorization();
         
         app.UseIntegratorGraphQl(configuration, env);

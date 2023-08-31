@@ -15,12 +15,12 @@ public static class DependencyInjection
         {
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Type = SecuritySchemeType.ApiKey,
+                Type = SecuritySchemeType.Http,
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
-                Description = "Type bearer token"
+                Description = "Please enter a valid token"
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement

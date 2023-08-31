@@ -4,7 +4,7 @@ services:
   api:
     environment:
       - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
-      - Infrastructure__Postgres__ConnectionStringApplication=Server=az.db;Port=5433;Database=integrator;Username=postgres;Password=postgres;
+      - Infrastructure__Postgres__ConnectionStringApplication=Server=db;Port=5432;Database=integrator;Username=postgres;Password=postgres;
     ports:
       - "80"
 
