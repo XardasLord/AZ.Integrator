@@ -8,15 +8,15 @@
     
     <ItemGroup>
         <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="7.0.0" />
-        <PackageReference Include="HotChocolate" Version="13.3.0" />
-        <PackageReference Include="HotChocolate.Abstractions" Version="13.3.0" />
-        <PackageReference Include="HotChocolate.AspNetCore" Version="13.3.0" />
-        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.3.0" />
-        <PackageReference Include="HotChocolate.Data" Version="13.3.0" />
-        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.3.0" />
-        <PackageReference Include="HotChocolate.Types.Scalars" Version="13.3.0" />
+        <PackageReference Include="HotChocolate" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.Abstractions" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.Data" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.Types.Scalars" Version="13.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -34,7 +34,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.8" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.10" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
