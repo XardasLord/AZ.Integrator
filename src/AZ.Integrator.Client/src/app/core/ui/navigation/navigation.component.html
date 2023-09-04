@@ -1,0 +1,25 @@
+<app-toolbar (toggleSideNav)="sidenav.toggle()"></app-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" opened="true" fixedInViewport="true">
+    <mat-nav-list>
+      <mat-list-item
+        [routerLink]="RoutePaths.Test"
+        routerLinkActive="active-route"
+        *appScopeAllow="[AuthScopes.MenuTest]">
+        <mat-icon matListItemIcon>description</mat-icon>
+        <span matListItemTitle *ngIf="sidenav.opened">Test</span>
+      </mat-list-item>
+    </mat-nav-list>
+
+    <div class="bottom-stick">
+      <mat-list-item>
+        <span mat-line class="app-version">v.{{ appVersion }}</span>
+      </mat-list-item>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content id="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

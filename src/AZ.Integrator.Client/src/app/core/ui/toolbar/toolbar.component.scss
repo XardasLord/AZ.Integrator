@@ -1,0 +1,17 @@
+@import "../../../../styles/variables.scss";
+
+.logo {
+  color: white;
+}
+
+.right-section {
+  .user-info {
+    .name {
+      vertical-align: text-bottom;
+    }
+  }
+
+  .section {
+    margin-left: 30px;
+  }
+}
