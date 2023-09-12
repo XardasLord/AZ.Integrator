@@ -11,8 +11,4 @@
       <PackageReference Include="Ardalis.Specification" Version="7.0.0" />
       <PackageReference Include="Mediator.Abstractions" Version="2.1.5" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Aggregates\" />
-    </ItemGroup>
 </Project>

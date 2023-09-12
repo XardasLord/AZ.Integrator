@@ -20,6 +20,12 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
+
+        services.AddDbContext<OrderDbContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
+        });
         
         // EF Core + Npgsql issue (https://www.npgsql.org/doc/types/datetime.html)
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

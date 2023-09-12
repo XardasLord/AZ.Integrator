@@ -44,21 +44,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AZ.Integrator.Application\AZ.Integrator.Application.csproj" />
-
-
-
-
-
-
-
-
-
     </ItemGroup>
-
-
-
-
-
-
-
+    
+    <ItemGroup>
+      <Folder Include="Persistence\EF\Configurations\View\" />
+    </ItemGroup>
+    
 </Project>

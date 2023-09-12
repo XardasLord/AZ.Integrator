@@ -88,4 +88,12 @@ public static class GuardExtensions
 
         return input;
     }
+    
+    public static string OrderNumber(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            throw new InvalidOrderNumberException(input, "Order number cannot be empty");
+
+        return input;
+    }
 }

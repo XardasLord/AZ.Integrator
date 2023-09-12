@@ -5,9 +5,11 @@ namespace AZ.Integrator.Domain.Aggregates.Order;
 
 public class Order : Entity, IAggregateRoot
 {
-    private OrderNumber _orderNumber;
+    private OrderNumber _number;
+    private OrderStatus _status;
 
-    public OrderNumber OrderNumber => _orderNumber;
+    public OrderNumber Number => _number;
+    public OrderStatus Status => _status;
     
     private Order() { }
 }
