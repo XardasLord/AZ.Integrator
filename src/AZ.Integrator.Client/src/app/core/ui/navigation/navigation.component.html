@@ -3,10 +3,7 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" opened="true" fixedInViewport="true">
     <mat-nav-list>
-      <mat-list-item
-        [routerLink]="RoutePaths.Test"
-        routerLinkActive="active-route"
-        *appScopeAllow="[AuthScopes.MenuTest]">
+      <mat-list-item [routerLink]="RoutePaths.Test" routerLinkActive="active-route">
         <mat-icon matListItemIcon>description</mat-icon>
         <span matListItemTitle *ngIf="sidenav.opened">Test</span>
       </mat-list-item>

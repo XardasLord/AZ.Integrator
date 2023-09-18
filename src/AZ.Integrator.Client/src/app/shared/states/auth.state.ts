@@ -19,7 +19,7 @@ export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 @State<AuthStateModel>({
   name: AUTH_STATE_TOKEN,
   defaults: {
-    user: null,
+    user: JSON.parse(localStorage.getItem('user')!),
   },
 })
 @Injectable()
@@ -30,6 +30,12 @@ export class AuthState implements NgxsOnInit {
   ) {}
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
+    const state = ctx.getState();
+    if (state.user) {
+      ctx.dispatch(new LoginCompleted(state.user));
+      return;
+    }
+
     const currentUrl = this.document.location.href;
     const regExp = new RegExp(`(access_token=)(.+)`).exec(currentUrl);
 
