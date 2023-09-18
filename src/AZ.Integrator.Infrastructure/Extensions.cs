@@ -3,6 +3,7 @@ using AZ.Integrator.Infrastructure.Authentication;
 using AZ.Integrator.Infrastructure.Authorization;
 using AZ.Integrator.Infrastructure.DomainServices;
 using AZ.Integrator.Infrastructure.ErrorHandling;
+using AZ.Integrator.Infrastructure.ExternalServices;
 using AZ.Integrator.Infrastructure.Identity;
 using AZ.Integrator.Infrastructure.OpenApi;
 using AZ.Integrator.Infrastructure.Persistence.EF;
@@ -37,6 +38,7 @@ public static class Extensions
         services.AddIntegratorOpenApi(configuration);
         
         services.AddDomainServices();
+        services.AddExternalServices();
         
         return services;
     }
