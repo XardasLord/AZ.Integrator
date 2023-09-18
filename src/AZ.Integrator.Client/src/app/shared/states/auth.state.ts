@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Action, NgxsOnInit, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
 import { map, tap } from 'rxjs';
@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 import { AuthStateModel } from './auth.state.model';
 import { User } from 'oidc-client';
 import { UserAuthHelper } from '../auth/helpers/user-auth.helper';
+import { DOCUMENT } from '@angular/common';
 
 export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 
@@ -21,11 +22,24 @@ export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 })
 @Injectable()
 export class AuthState implements NgxsOnInit {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
-    const user = AuthState.getUser(ctx.getState());
+    const currentUrl = this.document.location.href;
+    const regExp = new RegExp(`(access_token=)(.+)`).exec(currentUrl);
+    if (regExp && regExp[2]) {
+      console.warn(regExp[2]);
+      // TODO: Logowanie zakończone. Zapisz token
+      // return ctx.dispatch(new CallbackSelected());
+    } else {
+      // TODO: Zaloguj
+      console.warn('BRAK');
+    }
 
+    const user = AuthState.getUser(ctx.getState());
     if (!user) {
       ctx.dispatch(new Navigate([RoutePaths.Login]));
     }

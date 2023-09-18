@@ -11,6 +11,7 @@ using AZ.Integrator.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Infrastructure.Time;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +39,7 @@ public static class Extensions
         services.AddIntegratorOpenApi(configuration);
         
         services.AddDomainServices();
-        services.AddExternalServices();
+        services.AddExternalServices(configuration);
         
         return services;
     }
@@ -68,6 +69,10 @@ public static class Extensions
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseCookiePolicy(new CookiePolicyOptions
+        {
+            Secure = CookieSecurePolicy.Always
+        });
         
         app.UseIntegratorGraphQl(configuration, env);
 

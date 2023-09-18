@@ -36,10 +36,10 @@ public class ErrorHandlerMiddleware
         var response = ex switch
         {
             DomainException exception => new ExceptionResponse(exception.Code, exception.Message,
-                HttpStatusCode.BadRequest),
+                HttpStatusCode.BadRequest, ex.InnerException?.Message),
             ApplicationException exception => new ExceptionResponse(exception.Code, exception.Message,
-                HttpStatusCode.BadRequest),
-            _ => new ExceptionResponse("unexpected_error", ex.Message, HttpStatusCode.InternalServerError)
+                HttpStatusCode.BadRequest, ex.InnerException?.Message),
+            _ => new ExceptionResponse("unexpected_error", ex.Message, HttpStatusCode.InternalServerError, ex.InnerException?.Message)
         };
 
         var result = JsonSerializer.Serialize(response);

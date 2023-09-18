@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <button mat-icon-button (click)="toggleMenu()">
-      <mat-icon svgIcon="menu"></mat-icon>
+      <mat-icon>menu</mat-icon>
     </button>
     <span>Integrator</span>
 
@@ -11,12 +11,12 @@
       <span class="section user-info">
         <span class="name">{{ (user$ | async)?.unique_name }} ({{ (user$ | async)?.role }})</span>
         <button mat-icon-button>
-          <mat-icon svgIcon="face"></mat-icon>
+          <mat-icon>face</mat-icon>
         </button>
       </span>
 
       <button mat-icon-button matTooltip="Wyloguj" (click)="logout()">
-        <mat-icon class="material-icons-outlined" svgIcon="logout"></mat-icon>
+        <mat-icon class="material-icons-outlined">logout</mat-icon>
       </button>
     </span>
   </mat-toolbar-row>

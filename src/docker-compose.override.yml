@@ -5,6 +5,7 @@ services:
     environment:
       - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
       - Infrastructure__Postgres__ConnectionStringApplication=Server=db;Port=5432;Database=integrator;Username=postgres;Password=postgres;
+      - Infrastructure__Allegro__RedirectUri=http://host.docker.internal:6010/auth/allegro-auth-callback
     ports:
       - "80"
 

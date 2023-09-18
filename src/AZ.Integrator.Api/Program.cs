@@ -10,4 +10,9 @@ var app = builder.Build();
 
 app.UseInfrastructure(builder.Configuration, app.Environment);
 
+app.MapGet("/", (HttpContext ctx) =>
+{
+    return ctx.User.Claims.Select(x => new { x.Type, x.Value }).ToList();
+});
+
 app.Run();
