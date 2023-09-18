@@ -31,9 +31,10 @@ internal static class Extensions
         services
             .AddAuthentication(sharedOptions =>
             {
-                sharedOptions.DefaultScheme = "cookie";
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = "allegro";
             })
-            .AddCookie("cookie", options =>
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 // add an instance of the patched manager to the options:
                 options.CookieManager = new ChunkingCookieManager();
@@ -72,7 +73,7 @@ internal static class Extensions
                 options.AuthorizationEndpoint = allegroOptions.AuthorizationEndpoint;
                 options.TokenEndpoint = allegroOptions.TokenEndpoint;
 
-                options.SignInScheme = "cookie";
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.SaveTokens = true;
                 
                 options.CorrelationCookie.HttpOnly = true;

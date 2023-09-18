@@ -11,6 +11,8 @@ import { AuthStateModel } from './auth.state.model';
 import { User } from 'oidc-client';
 import { UserAuthHelper } from '../auth/helpers/user-auth.helper';
 import { DOCUMENT } from '@angular/common';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from '../../../environments/environment';
 
 export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 
@@ -30,23 +32,27 @@ export class AuthState implements NgxsOnInit {
   ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
     const currentUrl = this.document.location.href;
     const regExp = new RegExp(`(access_token=)(.+)`).exec(currentUrl);
+
     if (regExp && regExp[2]) {
-      console.warn(regExp[2]);
-      // TODO: Logowanie zakończone. Zapisz token
-      // return ctx.dispatch(new CallbackSelected());
+      const accessToken = regExp[2];
+      console.warn(accessToken);
+
+      const authUser = UserAuthHelper.parseAccessToken(accessToken);
+
+      ctx.dispatch(new LoginCompleted(authUser!));
     } else {
-      // TODO: Zaloguj
-      console.warn('BRAK');
+      console.warn('BRAK TOKENU - wymagane zalogowanie');
+      ctx.dispatch(new Login());
     }
 
-    const user = AuthState.getUser(ctx.getState());
-    if (!user) {
-      ctx.dispatch(new Navigate([RoutePaths.Login]));
-    }
-
-    ctx.patchState({
-      user: user,
-    });
+    // const user = AuthState.getUser(ctx.getState());
+    // if (!user) {
+    //   ctx.dispatch(new Navigate([RoutePaths.Login]));
+    // }
+    //
+    // ctx.patchState({
+    //   user: user,
+    // });
   }
 
   @Selector([AUTH_STATE_TOKEN])
@@ -73,29 +79,34 @@ export class AuthState implements NgxsOnInit {
   }
 
   @Action(Login)
-  login(ctx: StateContext<AuthStateModel>, action: Login) {
-    return this.authService.login(action.login, action.password).pipe(
-      map((user: User) => {
-        const authUser = UserAuthHelper.parseUserAuthData(user);
-
-        if (authUser) {
-          localStorage.setItem('access_token', user.access_token);
-          localStorage.setItem('user', JSON.stringify(authUser));
-
-          // const expiresAt = moment().add(authResult.expiresIn,'second');
-          // localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
-
-          ctx.dispatch(new LoginCompleted(authUser));
-        }
-      })
-    );
+  login(ctx: StateContext<AuthStateModel>, _: Login) {
+    const authUrl = `${environment.allegroLoginEndpoint}`;
+    window.location.href = authUrl;
+    // return this.authService.login(action.login, action.password).pipe(
+    //   map((user: User) => {
+    //     const authUser = UserAuthHelper.parseAccessToken(user);
+    //
+    //     if (authUser) {
+    //       localStorage.setItem('access_token', user.access_token);
+    //       localStorage.setItem('user', JSON.stringify(authUser));
+    //
+    //       // const expiresAt = moment().add(authResult.expiresIn,'second');
+    //       // localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
+    //
+    //       ctx.dispatch(new LoginCompleted(authUser));
+    //     }
+    //   })
+    // );
   }
 
   @Action(LoginCompleted)
   loginCompleted(ctx: StateContext<AuthStateModel>, action: LoginCompleted): void {
     ctx.patchState({
-      user: action.response,
+      user: action.user,
     });
+
+    localStorage.setItem('access_token', action.user.access_token!);
+    localStorage.setItem('user', JSON.stringify(action.user));
 
     ctx.dispatch(new Navigate([RoutePaths.Test]));
   }

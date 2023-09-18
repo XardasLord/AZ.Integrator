@@ -25,7 +25,7 @@ export class LoginComponent {
     const val = this.form.value;
 
     if (val.login && val.password) {
-      this.store.dispatch(new Login(val.login, val.password));
+      // this.store.dispatch(new Login(val.login, val.password));
     }
   }
 

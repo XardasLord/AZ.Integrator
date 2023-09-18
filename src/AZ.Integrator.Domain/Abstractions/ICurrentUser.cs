@@ -6,4 +6,6 @@ public interface ICurrentUser
     string UserName { get; }
     string Role { get; }
     IReadOnlyCollection<string> AppScopes { get; }
+    string AllegroAccessToken { get; }
+    string AllegroRefreshToken { get; }
 }

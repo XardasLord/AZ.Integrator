@@ -1,20 +1,23 @@
-import { User } from 'oidc-client';
 import { UserAuthModel } from '../models/user-auth.model';
 import { AuthScopes } from '../models/auth.scopes';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 export class UserAuthHelper {
-  public static parseUserAuthData(user: User): UserAuthModel | null {
-    if (!user) {
-      console.error('UserData not defined!');
+  public static parseAccessToken(accessToken: string): UserAuthModel | null {
+    if (!accessToken) {
+      console.error('Access Token not defined!');
       return null;
     }
 
     const helper = new JwtHelperService();
 
-    const decodedToken = helper.decodeToken<UserAuthModel>(user.access_token);
+    const user = helper.decodeToken<UserAuthModel>(accessToken);
 
-    return decodedToken;
+    if (user) {
+      user.access_token = accessToken;
+    }
+
+    return user;
   }
 
   public static getScopes(keys: string[]): number[] {

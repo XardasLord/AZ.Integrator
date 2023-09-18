@@ -21,6 +21,9 @@ public class CurrentUser : ICurrentUser
     public string UserName => GetClaimValue(UserClaimType.UserName) ?? System;
     public string Role => GetClaimValue(UserClaimType.Role) ?? System;
 
+    public string AllegroAccessToken => GetClaimValue(UserClaimType.AllegroAccessToken) ?? "";
+    public string AllegroRefreshToken => GetClaimValue(UserClaimType.AllegroRefreshToken) ?? "";
+
     public IReadOnlyCollection<string> AppScopes => _httpContextAccessor.HttpContext?.User.Claims
         .Where(c => c.Type == AppClaims.Scopes)
         .Select(c => c.Value)

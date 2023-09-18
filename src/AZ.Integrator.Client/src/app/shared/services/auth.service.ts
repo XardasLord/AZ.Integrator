@@ -25,7 +25,7 @@ export class AuthService implements OnDestroy {
         return;
       }
 
-      this.userRole = user.role;
+      // this.userRole = user.role;
 
       if (user.auth_scopes) {
         this.userScopes = Object.values(user.auth_scopes).map(x => +x as number);
