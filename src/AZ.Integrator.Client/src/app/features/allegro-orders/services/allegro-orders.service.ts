@@ -4,24 +4,24 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { RemoteServiceBase } from '../../../shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
-import { GetTestResponseModel } from '../models/get-test-response.model';
+import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
 
 @Injectable()
-export class TestService extends RemoteServiceBase {
+export class AllegroOrdersService extends RemoteServiceBase {
   private apiUrl = environment.apiEndpoint;
 
   constructor(httpClient: HttpClient) {
     super(httpClient);
   }
 
-  load(pageInfo: PageEvent): Observable<GetTestResponseModel> {
+  load(pageInfo: PageEvent): Observable<GetAllegroOrdersResponseModel> {
     // const params = new HttpParams()
     //   .set('offset', pageInfo.pageIndex * pageInfo.pageSize)
     //   .set('count', pageInfo.pageSize);
 
-    const logs: GetTestResponseModel = {
-      logCount: 2,
-      logs: [
+    const orders: GetAllegroOrdersResponseModel = {
+      ordersCount: 2,
+      orders: [
         {
           timestamp: new Date(),
           type: 'test',
@@ -35,7 +35,7 @@ export class TestService extends RemoteServiceBase {
       ],
     };
 
-    return of(logs);
+    return of(orders);
 
     // return this.httpClient.get<GetAllegroOrdersResponseModel>(`${this.apiUrl}/test/getLogs`, { params });
   }

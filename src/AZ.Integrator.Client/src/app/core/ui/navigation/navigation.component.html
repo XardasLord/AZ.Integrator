@@ -7,6 +7,10 @@
         <mat-icon matListItemIcon>description</mat-icon>
         <span matListItemTitle *ngIf="sidenav.opened">Test</span>
       </mat-list-item>
+      <mat-list-item [routerLink]="RoutePaths.AllegroOrders" routerLinkActive="active-route">
+        <mat-icon matListItemIcon>shopping_cart</mat-icon>
+        <span matListItemTitle *ngIf="sidenav.opened">Zamówienia z allegro</span>
+      </mat-list-item>
     </mat-nav-list>
 
     <div class="bottom-stick">

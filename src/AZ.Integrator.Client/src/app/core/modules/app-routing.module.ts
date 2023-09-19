@@ -6,6 +6,7 @@ export const RoutePaths = {
   Auth: 'auth',
   Login: 'login',
   Test: 'test',
+  AllegroOrders: 'allegro-orders',
 };
 
 const routes: Routes = [
@@ -22,6 +23,11 @@ const routes: Routes = [
         path: RoutePaths.Test,
         loadChildren: () => import('../../features/test/test.module').then(m => m.TestModule),
         // canActivate: mapToCanActivate([AuthGuard]),
+      },
+      {
+        path: RoutePaths.AllegroOrders,
+        loadChildren: () =>
+          import('../../features/allegro-orders/allegro-orders.module').then(m => m.AllegroOrdersModule),
       },
     ],
   },
