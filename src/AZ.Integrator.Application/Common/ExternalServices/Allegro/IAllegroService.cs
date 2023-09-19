@@ -1,6 +1,8 @@
-﻿namespace AZ.Integrator.Application.Common.ExternalServices.Allegro;
+﻿using AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
+
+namespace AZ.Integrator.Application.Common.ExternalServices.Allegro;
 
 public interface IAllegroService
 {
-    Task<object> GetOrders();
+    Task<IEnumerable<OrderListDto>> GetOrdersReadyForProcessing();
 }

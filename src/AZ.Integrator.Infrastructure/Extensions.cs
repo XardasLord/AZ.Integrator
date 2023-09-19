@@ -40,6 +40,8 @@ public static class Extensions
         
         services.AddDomainServices();
         services.AddExternalServices(configuration);
+
+        services.AddCors();
         
         return services;
     }

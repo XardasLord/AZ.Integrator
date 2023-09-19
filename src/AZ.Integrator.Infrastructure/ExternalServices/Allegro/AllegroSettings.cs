@@ -7,4 +7,5 @@ public class AllegroSettings
     public string AuthorizationEndpoint { get; set; }
     public string TokenEndpoint { get; set; }
     public string RedirectUri { get; set; }
+    public string ApiUrl { get; set; }
 }

@@ -13,7 +13,16 @@ public static class Extensions
         var allegroOptions = new AllegroSettings();
         configuration.Bind(OptionsSectionName, allegroOptions);
         services.AddSingleton(allegroOptions);
+
+        services.AddTransient<IAllegroService, AllegroApiService>();
+            
+        services.AddHttpClient("AllegroClient", config =>
+        {
+            config.BaseAddress = new Uri(allegroOptions.ApiUrl);
+            config.Timeout = new TimeSpan(0, 0, 20);
+            config.DefaultRequestHeaders.Clear();
+        });
         
-        return services.AddTransient<IAllegroService, AllegroApiService>();
+        return services;
     }
 }
