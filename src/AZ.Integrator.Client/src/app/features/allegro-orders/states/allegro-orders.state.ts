@@ -22,12 +22,12 @@ export class AllegroOrdersState {
   constructor(private logsService: AllegroOrdersService) {}
 
   @Selector([TEST_STATE_TOKEN])
-  static getLogs(state: AllegroOrdersStateModel): AllegroOrderModel[] {
+  static getOrders(state: AllegroOrdersStateModel): AllegroOrderModel[] {
     return state.restQueryResponse.result;
   }
 
   @Selector([TEST_STATE_TOKEN])
-  static getLogsCount(state: AllegroOrdersStateModel): number {
+  static getOrdersCount(state: AllegroOrdersStateModel): number {
     return state.restQueryResponse.totalCount;
   }
 

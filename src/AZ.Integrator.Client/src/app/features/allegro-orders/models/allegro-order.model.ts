@@ -1,4 +1,12 @@
 export interface AllegroOrderModel {
   orderId: string;
-  // TODO: Extend model
+  date: Date;
+  buyer: BuyerModel;
+}
+
+export interface BuyerModel {
+  id: string;
+  email: string;
+  login: string;
+  guest: boolean;
 }

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
-import { TestModel } from '../../../test/models/test.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import { ChangePage, Load } from '../../states/allegro-orders.action';
+import { AllegroOrderModel } from '../../models/allegro-order.model';
 
 @Component({
   selector: 'app-allegro-orders-list',
@@ -13,12 +13,12 @@ import { ChangePage, Load } from '../../states/allegro-orders.action';
 })
 export class AllegroOrdersListComponent implements OnInit {
   displayedColumns: string[] = [
-    nameof<TestModel>('timestamp'),
-    nameof<TestModel>('type'),
-    nameof<TestModel>('eventInfo'),
+    nameof<AllegroOrderModel>('date'),
+    nameof<AllegroOrderModel>('orderId'),
+    nameof<AllegroOrderModel>('buyer'),
   ];
-  orders$ = this.store.select(AllegroOrdersState.getLogs);
-  totalItems$ = this.store.select(AllegroOrdersState.getLogsCount);
+  orders$ = this.store.select(AllegroOrdersState.getOrders);
+  totalItems$ = this.store.select(AllegroOrdersState.getOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
 

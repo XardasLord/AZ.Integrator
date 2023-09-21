@@ -31,7 +31,8 @@ public class AllegroApiService : IAllegroService
 
         return orderEvents.Events.Where(x => x.Type == OrderTypes.ReadyForProcessing).Select(x => new OrderListDto
         {
-            OrderId = Guid.Parse(x.Order.CheckoutForm.Id)
+            OrderId = Guid.Parse(x.Order.CheckoutForm.Id),
+            Date = x.OccurredAt
         });;
     }
 }
