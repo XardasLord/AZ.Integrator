@@ -11,6 +11,7 @@ import { AuthInterceptor } from './interceptor/auth.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { NoCacheInterceptor } from './interceptor/no-cache.interceptor';
 import { AppGraphQLModule } from './modules/app-graphql.module';
+import { UnauthorizedInterceptor } from './interceptor/unauthorized.interceptor';
 
 @NgModule({
   declarations: [NavigationComponent, ToolbarComponent, LoginComponent],
@@ -29,6 +30,11 @@ import { AppGraphQLModule } from './modules/app-graphql.module';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NoCacheInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UnauthorizedInterceptor,
       multi: true,
     },
   ],
