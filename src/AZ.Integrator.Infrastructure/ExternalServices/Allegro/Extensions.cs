@@ -10,7 +10,7 @@ public static class Extensions
     
     public static IServiceCollection AddAllegro(this IServiceCollection services, IConfiguration configuration)
     {
-        var allegroOptions = new AllegroSettings();
+        var allegroOptions = new AllegroOptions();
         configuration.Bind(OptionsSectionName, allegroOptions);
         services.AddSingleton(allegroOptions);
 

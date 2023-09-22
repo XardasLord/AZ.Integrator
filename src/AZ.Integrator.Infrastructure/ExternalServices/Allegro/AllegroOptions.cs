@@ -1,6 +1,6 @@
 ﻿namespace AZ.Integrator.Infrastructure.ExternalServices.Allegro;
 
-public class AllegroSettings
+public class AllegroOptions
 {
     public string ClientId { get; set; }
     public string ClientSecret { get; set; }

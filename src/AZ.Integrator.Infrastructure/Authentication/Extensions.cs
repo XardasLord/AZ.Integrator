@@ -22,8 +22,8 @@ internal static class Extensions
         services.Configure<IdentityOptions>(configuration.GetRequiredSection(IdentityOptionsSectionName));
         var identityOptions = configuration.GetOptions<IdentityOptions>(IdentityOptionsSectionName);
         
-        services.Configure<AllegroSettings>(configuration.GetRequiredSection(AllegroOptionsSectionName));
-        var allegroOptions = configuration.GetOptions<AllegroSettings>(AllegroOptionsSectionName);
+        services.Configure<AllegroOptions>(configuration.GetRequiredSection(AllegroOptionsSectionName));
+        var allegroOptions = configuration.GetOptions<AllegroOptions>(AllegroOptionsSectionName);
             
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();

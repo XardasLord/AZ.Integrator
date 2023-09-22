@@ -8,10 +8,10 @@ import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
 import { ChangePage, Load } from './allegro-orders.action';
 
-const TEST_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
+const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
 @State<AllegroOrdersStateModel>({
-  name: TEST_STATE_TOKEN,
+  name: ALLEGRO_ORDERS_STATE_TOKEN,
   defaults: {
     restQuery: new RestQueryVo(),
     restQueryResponse: new RestQueryResponse<AllegroOrderModel[]>(),
@@ -21,22 +21,22 @@ const TEST_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders
 export class AllegroOrdersState {
   constructor(private logsService: AllegroOrdersService) {}
 
-  @Selector([TEST_STATE_TOKEN])
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getOrders(state: AllegroOrdersStateModel): AllegroOrderModel[] {
     return state.restQueryResponse.result;
   }
 
-  @Selector([TEST_STATE_TOKEN])
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getOrdersCount(state: AllegroOrdersStateModel): number {
     return state.restQueryResponse.totalCount;
   }
 
-  @Selector([TEST_STATE_TOKEN])
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getCurrentPage(state: AllegroOrdersStateModel): number {
     return state.restQuery.currentPage.pageIndex;
   }
 
-  @Selector([TEST_STATE_TOKEN])
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getPageSize(state: AllegroOrdersStateModel): number {
     return state.restQuery.currentPage.pageSize;
   }

@@ -15,14 +15,14 @@ public class AuthController : ControllerBase
     private readonly UserManager<IdentityUser> _userManager;
     private readonly UserDbContext _context;
     private readonly TokenService _tokenService;
-    private readonly AllegroSettings _allegroSettings;
+    private readonly AllegroOptions _allegroOptions;
 
-    public AuthController(UserManager<IdentityUser> userManager, UserDbContext context, TokenService tokenService, IOptions<AllegroSettings> allegroSettings)
+    public AuthController(UserManager<IdentityUser> userManager, UserDbContext context, TokenService tokenService, IOptions<AllegroOptions> allegroSettings)
     {
         _userManager = userManager;
         _context = context;
         _tokenService = tokenService;
-        _allegroSettings = allegroSettings.Value;
+        _allegroOptions = allegroSettings.Value;
     }
     
     [HttpPost]
