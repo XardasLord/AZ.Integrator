@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
-import { ChangePage, Load } from '../../states/allegro-orders.action';
+import { ChangePage, Load, RegisterParcel } from '../../states/allegro-orders.action';
 import { AllegroOrderModel } from '../../models/allegro-order.model';
 
 @Component({
@@ -16,6 +16,7 @@ export class AllegroOrdersListComponent implements OnInit {
     nameof<AllegroOrderModel>('date'),
     nameof<AllegroOrderModel>('orderId'),
     nameof<AllegroOrderModel>('buyer'),
+    'actions',
   ];
   orders$ = this.store.select(AllegroOrdersState.getOrders);
   totalItems$ = this.store.select(AllegroOrdersState.getOrdersCount);
@@ -30,5 +31,9 @@ export class AllegroOrdersListComponent implements OnInit {
 
   pageChanged(event: PageEvent): void {
     this.store.dispatch(new ChangePage(event));
+  }
+
+  registerParcel(order: AllegroOrderModel) {
+    this.store.dispatch(new RegisterParcel(order));
   }
 }

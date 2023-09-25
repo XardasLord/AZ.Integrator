@@ -47,7 +47,7 @@ export class AllegroOrdersState {
       tap(response => {
         const customResponse = new RestQueryResponse<AllegroOrderModel[]>();
         customResponse.result = response.orders;
-        customResponse.totalCount = response.ordersCount;
+        customResponse.totalCount = response.totalCount;
 
         ctx.patchState({
           restQueryResponse: customResponse,
