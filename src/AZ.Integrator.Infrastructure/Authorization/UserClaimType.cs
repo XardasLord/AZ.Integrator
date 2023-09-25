@@ -7,4 +7,5 @@ public static class UserClaimType
     public const string Role = "role";
     public const string AllegroAccessToken = "allegro_access_token";
     public const string AllegroRefreshToken = "allegro_refresh_token";
+    public const string ShipXOrganizationId = "shipx_organization_id";
 }

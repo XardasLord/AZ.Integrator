@@ -23,6 +23,7 @@ public class CurrentUser : ICurrentUser
 
     public string AllegroAccessToken => GetClaimValue(UserClaimType.AllegroAccessToken) ?? "";
     public string AllegroRefreshToken => GetClaimValue(UserClaimType.AllegroRefreshToken) ?? "";
+    public int ShipXOrganizationId => GetClaimValueAsNumber(UserClaimType.ShipXOrganizationId) ?? -1;
 
     public IReadOnlyCollection<string> AppScopes => _httpContextAccessor.HttpContext?.User.Claims
         .Where(c => c.Type == AppClaims.Scopes)
@@ -31,4 +32,5 @@ public class CurrentUser : ICurrentUser
         .ToList();
 
     private string GetClaimValue(string claimType) => _httpContextAccessor.HttpContext?.User.FindFirstValue(claimType);
+    private int? GetClaimValueAsNumber(string claimType) => int.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(claimType) ?? "");
 }

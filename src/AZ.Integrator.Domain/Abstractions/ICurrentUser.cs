@@ -8,4 +8,5 @@ public interface ICurrentUser
     IReadOnlyCollection<string> AppScopes { get; }
     string AllegroAccessToken { get; }
     string AllegroRefreshToken { get; }
+    int ShipXOrganizationId { get; }
 }

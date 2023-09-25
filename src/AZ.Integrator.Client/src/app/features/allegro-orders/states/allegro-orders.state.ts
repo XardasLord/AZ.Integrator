@@ -53,9 +53,6 @@ export class AllegroOrdersState {
         ctx.patchState({
           restQueryResponse: customResponse,
         });
-      }),
-      catchError(error => {
-        return throwError(error);
       })
     );
   }
@@ -79,9 +76,6 @@ export class AllegroOrdersState {
         ctx.patchState({
           selectedOrderDetails: response,
         });
-      }),
-      catchError(error => {
-        return throwError(error);
       })
     );
   }

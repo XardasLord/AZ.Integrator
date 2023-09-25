@@ -17,7 +17,7 @@ public static class Extensions
 
         services.AddTransient<IShipXService, ShipXApiService>();
             
-        services.AddHttpClient("ShipXClient", config =>
+        services.AddHttpClient(ExternalHttpClientNames.ShipXHttpClientName, config =>
         {
             config.BaseAddress = new Uri(shipXOptions.ApiUrl);
             config.Timeout = new TimeSpan(0, 0, 20);

@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AZ.Integrator.Infrastructure.Authorization;
 using AZ.Integrator.Infrastructure.ExternalServices.Allegro;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -89,8 +90,9 @@ internal static class Extensions
                     
                     var claims = new List<Claim>
                     {
-                        new("allegro_access_token", allegroAccessToken),
-                        new("allegro_refresh_token", allegroRefreshToken)
+                        new(UserClaimType.AllegroAccessToken, allegroAccessToken),
+                        new(UserClaimType.AllegroRefreshToken, allegroRefreshToken),
+                        new(UserClaimType.ShipXOrganizationId, configuration["Infrastructure:ShipX:OrganizationId"])
                     };
                     
                     var jwtTokenHandler = new JwtSecurityTokenHandler();
