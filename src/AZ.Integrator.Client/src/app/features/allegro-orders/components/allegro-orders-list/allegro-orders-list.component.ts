@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import { ChangePage, Load, RegisterParcel } from '../../states/allegro-orders.action';
-import { AllegroOrderModel } from '../../models/allegro-order.model';
+import { AllegroOrderModel, LineItem } from '../../models/allegro-order.model';
 
 @Component({
   selector: 'app-allegro-orders-list',
@@ -16,6 +16,9 @@ export class AllegroOrdersListComponent implements OnInit {
     nameof<AllegroOrderModel>('date'),
     nameof<AllegroOrderModel>('orderId'),
     nameof<AllegroOrderModel>('buyer'),
+    'items',
+    nameof<LineItem>('quantity'),
+    nameof<LineItem>('price'),
     'actions',
   ];
   orders$ = this.store.select(AllegroOrdersState.getOrders);

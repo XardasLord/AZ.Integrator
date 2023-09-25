@@ -28,7 +28,8 @@ public class OrderListDtoMapper : Profile
 
         CreateMap<OrderEvent, OrderListDto>()
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.OccurredAt))
-            .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.Order.CheckoutForm.Id));
-        // .ForMember(dest => dest.Buyer, opt => opt.MapFrom(src => src.Order.Buyer));
+            .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.Order.CheckoutForm.Id))
+            .ForMember(dest => dest.Buyer, opt => opt.MapFrom(src => src.Order.Buyer))
+            .ForMember(dest => dest.LineItems, opt => opt.MapFrom(src => src.Order.LineItems));
     }
 }

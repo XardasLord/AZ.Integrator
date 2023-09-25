@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { RemoteServiceBase } from '../../../shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
 import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
+import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 
 @Injectable()
 export class AllegroOrdersService extends RemoteServiceBase {
@@ -16,5 +17,9 @@ export class AllegroOrdersService extends RemoteServiceBase {
 
   load(pageInfo: PageEvent): Observable<GetAllegroOrdersResponseModel> {
     return this.httpClient.get<GetAllegroOrdersResponseModel>(`${this.apiUrl}/allegroOrders`);
+  }
+
+  getDetails(orderId: string): Observable<AllegroOrderDetailsModel> {
+    return this.httpClient.get<AllegroOrderDetailsModel>(`${this.apiUrl}/allegroOrders/${orderId}`);
   }
 }

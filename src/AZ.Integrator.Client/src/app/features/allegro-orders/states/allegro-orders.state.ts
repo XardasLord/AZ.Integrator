@@ -6,7 +6,7 @@ import { AllegroOrderModel } from '../models/allegro-order.model';
 import { AllegroOrdersService } from '../services/allegro-orders.service';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
-import { ChangePage, Load } from './allegro-orders.action';
+import { ChangePage, Load, RegisterParcel } from './allegro-orders.action';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -15,11 +15,12 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
   defaults: {
     restQuery: new RestQueryVo(),
     restQueryResponse: new RestQueryResponse<AllegroOrderModel[]>(),
+    selectedOrderDetails: null,
   },
 })
 @Injectable()
 export class AllegroOrdersState {
-  constructor(private logsService: AllegroOrdersService) {}
+  constructor(private allegroOrderService: AllegroOrdersService) {}
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getOrders(state: AllegroOrdersStateModel): AllegroOrderModel[] {
@@ -42,8 +43,8 @@ export class AllegroOrdersState {
   }
 
   @Action(Load)
-  loadLogs(ctx: StateContext<AllegroOrdersStateModel>, _: Load) {
-    return this.logsService.load(ctx.getState().restQuery.currentPage).pipe(
+  loadOrders(ctx: StateContext<AllegroOrdersStateModel>) {
+    return this.allegroOrderService.load(ctx.getState().restQuery.currentPage).pipe(
       tap(response => {
         const customResponse = new RestQueryResponse<AllegroOrderModel[]>();
         customResponse.result = response.orders;
@@ -69,5 +70,19 @@ export class AllegroOrdersState {
     });
 
     return ctx.dispatch(new Load());
+  }
+
+  @Action(RegisterParcel)
+  registerParcel(ctx: StateContext<AllegroOrdersStateModel>, action: RegisterParcel) {
+    return this.allegroOrderService.getDetails(action.order.orderId).pipe(
+      tap(response => {
+        ctx.patchState({
+          selectedOrderDetails: response,
+        });
+      }),
+      catchError(error => {
+        return throwError(error);
+      })
+    );
   }
 }

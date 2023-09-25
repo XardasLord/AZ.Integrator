@@ -14,12 +14,39 @@
     <td mat-cell *matCellDef="let order">{{ order.buyer.login }} - {{ order.buyer.email }}</td>
   </ng-container>
 
+  <ng-container matColumnDef="items">
+    <th mat-header-cell *matHeaderCellDef>Przedmioty</th>
+    <td mat-cell *matCellDef="let order">
+      <div *ngFor="let item of order.lineItems">
+        {{ item.itemName }}
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef>Ilość</th>
+    <td mat-cell *matCellDef="let order">
+      <div *ngFor="let item of order.lineItems">
+        {{ item.quantity }}
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>Wartość brutto</th>
+    <td mat-cell *matCellDef="let order">
+      <div *ngFor="let item of order.lineItems">
+        {{ item.price.amount * item.quantity | number: '1.2-2' }} {{ item.price.currency }}
+      </div>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>Akcje</th>
     <td mat-cell *matCellDef="let order">
       <div class="table-action-buttons">
         <button mat-icon-button matTooltip="Nadaj paczkę" (click)="registerParcel(order); $event.stopPropagation()">
-          <mat-icon class="material-icons-outlined" matListItemIcon>box_add</mat-icon>
+          <mat-icon class="material-icons-outlined" matListItemIcon>home</mat-icon>
         </button>
       </div>
     </td>

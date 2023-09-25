@@ -8,26 +8,33 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.Allegro;
 
 public class AllegroApiService : IAllegroService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ICurrentUser _currentUser;
+    private readonly HttpClient _httpClient;
 
     public AllegroApiService(IHttpClientFactory httpClientFactory, ICurrentUser currentUser)
     {
-        _httpClientFactory = httpClientFactory;
-        _currentUser = currentUser;
+        _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", currentUser.AllegroAccessToken);
     }
 
     public async Task<IEnumerable<OrderEvent>> GetOrderEvents()
     {
-        var httpClient = _httpClientFactory.CreateClient("AllegroClient");
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _currentUser.AllegroAccessToken);
-
-        using var response = await httpClient.GetAsync("order/events");
+        using var response = await _httpClient.GetAsync("order/events");
         
         response.EnsureSuccessStatusCode();
 
         var orderEvents = await response.Content.ReadFromJsonAsync<GetOrderEventsModel>();
 
         return orderEvents.Events;
+    }
+
+    public async Task<GetOrderDetailsModel> GetOrderDetails(Guid orderId)
+    {
+        using var response = await _httpClient.GetAsync($"order/checkout-forms/{orderId}");
+        
+        response.EnsureSuccessStatusCode();
+
+        var orderDetails = await response.Content.ReadFromJsonAsync<GetOrderDetailsModel>();
+
+        return orderDetails;
     }
 }

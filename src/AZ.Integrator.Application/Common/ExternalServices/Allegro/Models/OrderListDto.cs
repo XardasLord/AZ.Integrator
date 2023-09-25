@@ -24,11 +24,4 @@ public class LineItemDto
     public int Quantity { get; set; }
     public PriceDto OriginalPrice { get; set; }
     public PriceDto Price { get; set; }
-    public DateTime BoughtAt { get; set; }
-}
-
-public class PriceDto
-{
-    public string Amount { get; set; }
-    public string Currency { get; set; }
 }

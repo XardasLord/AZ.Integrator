@@ -16,7 +16,7 @@ public static class Extensions
 
         services.AddTransient<IAllegroService, AllegroApiService>();
             
-        services.AddHttpClient("AllegroClient", config =>
+        services.AddHttpClient(ExternalHttpClientNames.AllegroHttpClientName, config =>
         {
             config.BaseAddress = new Uri(allegroOptions.ApiUrl);
             config.Timeout = new TimeSpan(0, 0, 20);
