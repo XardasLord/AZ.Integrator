@@ -13,6 +13,7 @@ public static class Extensions
     {
         services
             .AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped)
+            .AddAutoMapper(Assembly.GetExecutingAssembly())
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
             .AddSingleton(typeof(IPipelineBehavior<,>), typeof(ErrorLoggingBehaviour<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(MessageValidatorBehaviour<,>));

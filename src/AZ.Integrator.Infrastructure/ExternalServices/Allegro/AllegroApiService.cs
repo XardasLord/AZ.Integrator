@@ -3,7 +3,6 @@ using System.Net.Http.Json;
 using AZ.Integrator.Application.Common.ExternalServices.Allegro;
 using AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
 using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Infrastructure.ExternalServices.Allegro.Models;
 
 namespace AZ.Integrator.Infrastructure.ExternalServices.Allegro;
 
@@ -18,7 +17,7 @@ public class AllegroApiService : IAllegroService
         _currentUser = currentUser;
     }
 
-    public async Task<IEnumerable<OrderListDto>> GetOrdersReadyForProcessing()
+    public async Task<IEnumerable<OrderEvent>> GetOrderEvents()
     {
         var httpClient = _httpClientFactory.CreateClient("AllegroClient");
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _currentUser.AllegroAccessToken);
@@ -29,10 +28,6 @@ public class AllegroApiService : IAllegroService
 
         var orderEvents = await response.Content.ReadFromJsonAsync<GetOrderEventsModel>();
 
-        return orderEvents.Events.Where(x => x.Type == OrderTypes.ReadyForProcessing).Select(x => new OrderListDto
-        {
-            OrderId = Guid.Parse(x.Order.CheckoutForm.Id),
-            Date = x.OccurredAt
-        });;
+        return orderEvents.Events;
     }
 }

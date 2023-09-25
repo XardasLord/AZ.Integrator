@@ -1,30 +1,30 @@
-﻿namespace AZ.Integrator.Infrastructure.ExternalServices.Allegro.Models;
+﻿namespace AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
 
-internal class OriginalPrice
+public class OriginalPrice
 {
     public string Amount { get; set; }
     public string Currency { get; set; }
 }
 
-internal class Price
+public class Price
 {
     public string Amount { get; set; }
     public string Currency { get; set; }
 }
 
-internal class External
+public class External
 {
     public string Id { get; set; }
 }
 
-internal class Offer
+public class Offer
 {
     public string Id { get; set; }
     public string Name { get; set; }
     public External External { get; set; }
 }
 
-internal class LineItem
+public class LineItem
 {
     public string Id { get; set; }
     public Offer Offer { get; set; }
@@ -34,12 +34,12 @@ internal class LineItem
     public DateTime BoughtAt { get; set; }
 }
 
-internal class Preferences
+public class Preferences
 {
     public string Language { get; set; }
 }
 
-internal class Buyer
+public class Buyer
 {
     public string Id { get; set; }
     public string Email { get; set; }
@@ -48,23 +48,23 @@ internal class Buyer
     public Preferences Preferences { get; set; }
 }
 
-internal class Seller
+public class Seller
 {
     public string Id { get; set; }
 }
 
-internal class CheckoutForm
+public class CheckoutForm
 {
     public string Id { get; set; }
     public string Revision { get; set; }
 }
 
-internal class Marketplace
+public class Marketplace
 {
     public string Id { get; set; }
 }
 
-internal class Order
+public class Order
 {
     public Seller Seller { get; set; }
     public Buyer Buyer { get; set; }
@@ -73,7 +73,7 @@ internal class Order
     public Marketplace Marketplace { get; set; }
 }
 
-internal class Event
+public class OrderEvent
 {
     public string Id { get; set; }
     public Order Order { get; set; }
@@ -81,12 +81,12 @@ internal class Event
     public DateTime OccurredAt { get; set; }
 }
 
-internal class GetOrderEventsModel
+public class GetOrderEventsModel
 {
-    public IEnumerable<Event> Events { get; set; }
+    public IEnumerable<OrderEvent> Events { get; set; }
 }
 
-internal class OrderTypes
+public class OrderTypes
 {
     public const string Bought = "BOUGHT";
     public const string FilledIn = "FILLED_IN";
