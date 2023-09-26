@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Web;
 using AZ.Integrator.Application.Common.ExternalServices.Allegro;
 using AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
 using AZ.Integrator.Domain.Abstractions;
@@ -18,7 +19,10 @@ public class AllegroApiService : IAllegroService
 
     public async Task<IEnumerable<OrderEvent>> GetOrderEvents()
     {
-        using var response = await _httpClient.GetAsync("order/events");
+        var orderTypes = new[] { OrderTypes.ReadyForProcessing, OrderTypes.FulfillmentStatusChanged };
+        var queryString = string.Join("&", orderTypes.Select(type => $"type={HttpUtility.UrlEncode(type)}"));
+        
+        using var response = await _httpClient.GetAsync($"order/events?{queryString}");
         
         response.EnsureSuccessStatusCode();
 

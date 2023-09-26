@@ -24,14 +24,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AZ.Integrator.Domain\AZ.Integrator.Domain.csproj" />
-
-
-
-
-
     </ItemGroup>
-
-
-
-
+    
+    <ItemGroup>
+      <Folder Include="UseCases\Orders\Commands\" />
+    </ItemGroup>
 </Project>
