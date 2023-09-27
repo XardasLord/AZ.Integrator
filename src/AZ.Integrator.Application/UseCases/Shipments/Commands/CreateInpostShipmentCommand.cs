@@ -3,4 +3,12 @@ using Mediator;
 
 namespace AZ.Integrator.Application.UseCases.Shipments.Commands;
 
-public record CreateInpostShipmentCommand() : ICommand<ShipmentResponse>;
+public record CreateInpostShipmentCommand(
+    Sender Sender,
+    Receiver Receiver,
+    List<Parcel> Parcels,
+    Insurance Insurance,
+    Cod Cod,
+    string Reference,
+    string Comments,
+    string ExternalCustomerId) : ICommand<ShipmentResponse>;
