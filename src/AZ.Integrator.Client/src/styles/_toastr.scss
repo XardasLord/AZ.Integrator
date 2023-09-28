@@ -1,0 +1,14 @@
+@import "ngx-toastr/toastr";
+
+.toast-success {
+  @apply bg-success;
+}
+.toast-info {
+  @apply bg-info;
+}
+.toast-warning {
+  @apply bg-warn;
+}
+.toast-error {
+  @apply bg-error;
+}
