@@ -4,7 +4,7 @@ import { Navigate } from '@ngxs/router-plugin';
 import { map, tap } from 'rxjs';
 import { UserAuthModel } from '../auth/models/user-auth.model';
 import { AuthScopes } from '../auth/models/auth.scopes';
-import { Login, LoginCompleted, Logout } from './auth.action';
+import { Login, LoginCompleted, Logout, Relog } from './auth.action';
 import { RoutePaths } from '../../core/modules/app-routing.module';
 import { AuthService } from '../services/auth.service';
 import { AuthStateModel } from './auth.state.model';
@@ -129,8 +129,14 @@ export class AuthState implements NgxsOnInit {
           user: null,
         });
 
-        ctx.dispatch(new Navigate([RoutePaths.Login]));
+        ctx.dispatch(new Login());
+        // ctx.dispatch(new Navigate([RoutePaths.Login]));
       })
     );
+  }
+
+  @Action(Relog)
+  relog(ctx: StateContext<AuthStateModel>) {
+    return ctx.dispatch(new Logout());
   }
 }

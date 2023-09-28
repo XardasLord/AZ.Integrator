@@ -19,3 +19,7 @@ export class Logout {
 export class NotAuthorized {
   static readonly type = `${prefix} ${NotAuthorized.name}`;
 }
+
+export class Relog {
+  static readonly type = `${prefix} ${Relog.name}`;
+}

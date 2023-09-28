@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
-import { Login } from '../../shared/states/auth.action';
+import { Relog } from '../../shared/states/auth.action';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
@@ -18,7 +18,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
         },
         error => {
           if (error.status === 401) {
-            this.store.dispatch(new Login());
+            this.store.dispatch(new Relog());
           }
         }
       )
