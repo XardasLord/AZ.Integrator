@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
-import { ChangePage, Load, RegisterParcel } from '../../states/allegro-orders.action';
+import { ChangePage, Load, OpenRegisterParcelModal } from '../../states/allegro-orders.action';
 import { AllegroOrderModel, LineItem } from '../../models/allegro-order.model';
 
 @Component({
@@ -37,6 +37,6 @@ export class AllegroOrdersListComponent implements OnInit {
   }
 
   registerParcel(order: AllegroOrderModel) {
-    this.store.dispatch(new RegisterParcel(order));
+    this.store.dispatch(new OpenRegisterParcelModal(order));
   }
 }

@@ -6,7 +6,10 @@ import { AllegroOrderModel } from '../models/allegro-order.model';
 import { AllegroOrdersService } from '../services/allegro-orders.service';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
-import { ChangePage, Load, RegisterParcel } from './allegro-orders.action';
+import { ChangePage, Load, OpenRegisterParcelModal } from './allegro-orders.action';
+import { MatDialog } from '@angular/material/dialog';
+import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
+import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -20,7 +23,10 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
 })
 @Injectable()
 export class AllegroOrdersState {
-  constructor(private allegroOrderService: AllegroOrdersService) {}
+  constructor(
+    private allegroOrderService: AllegroOrdersService,
+    private dialog: MatDialog
+  ) {}
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getOrders(state: AllegroOrdersStateModel): AllegroOrderModel[] {
@@ -69,12 +75,16 @@ export class AllegroOrdersState {
     return ctx.dispatch(new Load());
   }
 
-  @Action(RegisterParcel)
-  registerParcel(ctx: StateContext<AllegroOrdersStateModel>, action: RegisterParcel) {
+  @Action(OpenRegisterParcelModal)
+  registerParcel(ctx: StateContext<AllegroOrdersStateModel>, action: OpenRegisterParcelModal) {
     return this.allegroOrderService.getDetails(action.order.orderId).pipe(
       tap(response => {
         ctx.patchState({
           selectedOrderDetails: response,
+        });
+
+        this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(RegisterParcelModalComponent, {
+          data: <AllegroOrderDetailsModel>response,
         });
       })
     );

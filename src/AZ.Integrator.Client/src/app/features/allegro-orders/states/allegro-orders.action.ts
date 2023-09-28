@@ -13,8 +13,8 @@ export class ChangePage {
   constructor(public event: PageEvent) {}
 }
 
-export class RegisterParcel {
-  static readonly type = `${prefix} ${RegisterParcel.name}`;
+export class OpenRegisterParcelModal {
+  static readonly type = `${prefix} ${OpenRegisterParcelModal.name}`;
 
   constructor(public order: AllegroOrderModel) {}
 }

@@ -1,0 +1,20 @@
+<div mat-dialog-title>
+  <div class="flex justify-between items-center">
+    <div>Nadaj przesyłkę</div>
+    <mat-icon class="cursor-pointer" mat-dialog-close>close</mat-icon>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-content class="!pb-1">
+  <form id="ncr-payment-form" (ngSubmit)="onSubmit()" [formGroup]="form" class="flex flex-col mt-4">
+    <mat-form-field class="w-full">
+      <mat-label>E-mail</mat-label>
+      <input type="text" matInput formControlName="bankEmail" />
+    </mat-form-field>
+  </form>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-actions>
+  <button mat-flat-button [disabled]="form.invalid" color="primary" (click)="onSubmit()">Nadaj przesyłkę</button>
+  <button mat-stroked-button color="primary" mat-dialog-close>Anuluj</button>
+</div>
