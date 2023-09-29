@@ -6,6 +6,7 @@ import { RemoteServiceBase } from '../../../shared/services/remote-service.base'
 import { environment } from '../../../../environments/environment';
 import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
+import { CreateInpostShipmentCommand } from '../models/commands/create-inpost-shipment.command';
 
 @Injectable()
 export class AllegroOrdersService extends RemoteServiceBase {
@@ -21,5 +22,10 @@ export class AllegroOrdersService extends RemoteServiceBase {
 
   getDetails(orderId: string): Observable<AllegroOrderDetailsModel> {
     return this.httpClient.get<AllegroOrderDetailsModel>(`${this.apiUrl}/allegroOrders/${orderId}`);
+  }
+
+  // TODO: Move it to a new dedicated shipment service
+  registerInpostShipment(shipment: CreateInpostShipmentCommand): Observable<void> {
+    return this.httpClient.post<void>(`${this.apiUrl}/inpostShipments/`, shipment);
   }
 }

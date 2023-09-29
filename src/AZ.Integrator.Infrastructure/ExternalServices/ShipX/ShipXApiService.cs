@@ -14,7 +14,7 @@ public class ShipXApiService : IShipXService
     public ShipXApiService(IHttpClientFactory httpClientFactory, ICurrentUser currentUser)
     {
         _currentUser = currentUser;
-        _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
+        _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.ShipXHttpClientName);
     }
 
     public async Task<ShipmentResponse> CreateShipment(Shipment shipment)

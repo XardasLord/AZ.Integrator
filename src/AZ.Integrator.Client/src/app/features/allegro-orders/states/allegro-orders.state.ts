@@ -6,10 +6,11 @@ import { AllegroOrderModel } from '../models/allegro-order.model';
 import { AllegroOrdersService } from '../services/allegro-orders.service';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
-import { ChangePage, Load, OpenRegisterParcelModal } from './allegro-orders.action';
+import { ChangePage, Load, OpenRegisterParcelModal, RegisterInpostShipment } from './allegro-orders.action';
 import { MatDialog } from '@angular/material/dialog';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
+import { ToastrService } from 'ngx-toastr';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -25,7 +26,8 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
 export class AllegroOrdersState {
   constructor(
     private allegroOrderService: AllegroOrdersService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastService: ToastrService
   ) {}
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
@@ -85,7 +87,22 @@ export class AllegroOrdersState {
 
         this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(RegisterParcelModalComponent, {
           data: <AllegroOrderDetailsModel>response,
+          width: '50%',
+          height: '75%',
         });
+      })
+    );
+  }
+
+  @Action(RegisterInpostShipment)
+  registerInpostShipment(ctx: StateContext<AllegroOrdersStateModel>, action: RegisterInpostShipment) {
+    return this.allegroOrderService.registerInpostShipment(action.command).pipe(
+      tap(() => {
+        this.toastService.success('Przesyłka została zarejestrowana', 'Przesyłka Inpost');
+      }),
+      catchError(error => {
+        this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost');
+        return throwError(error);
       })
     );
   }
