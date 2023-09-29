@@ -19,8 +19,6 @@ public class CreateInpostShipmentCommandHandler : ICommandHandler<CreateInpostSh
     public async ValueTask<ShipmentResponse> Handle(CreateInpostShipmentCommand command, CancellationToken cancellationToken)
     {
         var shipment = _mapper.Map<Shipment>(command);
-        
-        // TODO: Fill shipment missing properties
 
         var response = await _shipXService.CreateShipment(shipment);
         

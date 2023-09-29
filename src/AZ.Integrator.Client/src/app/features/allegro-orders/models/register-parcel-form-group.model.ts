@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { FormArray, FormControl } from '@angular/forms';
 
 export interface RegisterParcelFormGroupModel {
   receiverName: FormControl<string | null>;
@@ -14,4 +14,12 @@ export interface RegisterParcelFormGroupModel {
   receiverAddressCountryCode: FormControl<string | null>;
   insuranceAmount: FormControl<number | null>;
   insuranceCurrency: FormControl<string | null>;
+  parcels: FormArray;
+}
+
+export interface ParcelFromGroupModel {
+  length: FormControl<number | null>;
+  width: FormControl<number | null>;
+  height: FormControl<number | null>;
+  weight: FormControl<number | null>;
 }

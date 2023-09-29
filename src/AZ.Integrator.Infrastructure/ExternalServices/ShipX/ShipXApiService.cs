@@ -19,7 +19,8 @@ public class ShipXApiService : IShipXService
 
     public async Task<ShipmentResponse> CreateShipment(Shipment shipment)
     {
-        var shipmentContent = new StringContent(System.Text.Json.JsonSerializer.Serialize(shipment), Encoding.UTF8, "application/json");
+        var shipmentJson = System.Text.Json.JsonSerializer.Serialize(shipment);
+        var shipmentContent = new StringContent(shipmentJson, Encoding.UTF8, "application/json");
         
         using var response = await _httpClient.PostAsync($"v1/organizations/{_currentUser.ShipXOrganizationId}/shipments", shipmentContent);
         

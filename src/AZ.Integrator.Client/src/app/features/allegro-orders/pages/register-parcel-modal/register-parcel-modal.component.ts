@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.model';
-import { CreateInpostShipmentCommand } from '../../models/commands/create-inpost-shipment.command';
+import { CreateInpostShipmentCommand, Parcel } from '../../models/commands/create-inpost-shipment.command';
 import { ParcelFromGroupModel, RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterInpostShipment } from '../../states/allegro-orders.action';
 
@@ -48,37 +48,62 @@ export class RegisterParcelModalComponent {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      const command: CreateInpostShipmentCommand = {
-        receiver: {
-          name: this.form.value.receiverName!,
-          companyName: this.form.value.receiverCompanyName!,
-          firstName: this.form.value.receiverFirstName!,
-          lastName: this.form.value.receiverLastName!,
-          email: this.form.value.receiverEmail!,
-          phone: this.form.value.receiverPhoneNumber!,
-          address: {
-            street: this.form.value.receiverAddressStreet!,
-            city: this.form.value.receiverAddressCity!,
-            postCode: this.form.value.receiverAddressPostCode!,
-            countryCode: this.form.value.receiverAddressCountryCode!,
-            buildingNumber: '',
-          },
-        },
-        sender: undefined!,
-        parcels: [],
-        insurance: {
-          amount: this.form.value.insuranceAmount!,
-          currency: this.form.value.insuranceCurrency!,
-        },
-        cod: undefined!,
-        reference: this.allegroOrderDetails.id,
-        comments: '',
-        externalCustomerId: '',
-      };
-
-      this.store.dispatch(new RegisterInpostShipment(command));
+    if (this.form.invalid) {
+      return;
     }
+
+    const parcels: Parcel[] = [];
+
+    for (let i = 0; i < this.form.value.parcels.length; i++) {
+      const parcel = this.form.value.parcels[i];
+
+      parcels.push({
+        id: 'big package',
+        weight: {
+          amount: parcel.weight,
+          unit: 'kg',
+        },
+        dimensions: {
+          length: parcel.length,
+          width: parcel.width,
+          height: parcel.height,
+          unit: 'mm',
+        },
+        is_non_standard: false,
+      });
+    }
+
+    const command: CreateInpostShipmentCommand = {
+      receiver: {
+        name: this.form.value.receiverName!,
+        company_name: this.form.value.receiverCompanyName!,
+        first_name: this.form.value.receiverFirstName!,
+        last_name: this.form.value.receiverLastName!,
+        email: this.form.value.receiverEmail!,
+        phone: this.form.value.receiverPhoneNumber!,
+        address: {
+          street: this.form.value.receiverAddressStreet!,
+          building_number: this.form.value.receiverAddressBuildingNumber!,
+          city: this.form.value.receiverAddressCity!,
+          post_code: this.form.value.receiverAddressPostCode!,
+          country_code: this.form.value.receiverAddressCountryCode!,
+        },
+      },
+      sender: undefined!,
+      parcels: parcels,
+      insurance: {
+        amount: this.form.value.insuranceAmount!,
+        currency: this.form.value.insuranceCurrency!,
+      },
+      cod: undefined!,
+      reference: this.allegroOrderDetails.id,
+      comments: '',
+      external_customer_id: '',
+    };
+
+    this.store.dispatch(new RegisterInpostShipment(command));
+  }
+
   addNewParcel() {
     const parcel = this.fb.group<ParcelFromGroupModel>({
       length: new FormControl<number>(0, [Validators.required, Validators.min(1)]),

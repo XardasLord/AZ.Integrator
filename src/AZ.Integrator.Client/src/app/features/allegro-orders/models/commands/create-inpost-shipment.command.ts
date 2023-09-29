@@ -6,22 +6,22 @@ export interface CreateInpostShipmentCommand {
   cod: Cod;
   reference: string;
   comments: string;
-  externalCustomerId: string;
+  external_customer_id: string;
 }
 
 export interface Address {
   street: string;
-  buildingNumber: string;
+  building_number: string;
   city: string;
-  postCode: string;
-  countryCode: string;
+  post_code: string;
+  country_code: string;
 }
 
 export interface Sender {
   name: string;
-  companyName: string;
-  firstName: string;
-  lastName: string;
+  company_name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
   address: Address;
@@ -29,9 +29,9 @@ export interface Sender {
 
 export interface Receiver {
   name: string;
-  companyName: string;
-  firstName: string;
-  lastName: string;
+  company_name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
   address: Address;
@@ -53,7 +53,7 @@ export interface Parcel {
   id: string;
   dimensions: Dimensions;
   weight: Weight;
-  isNonStandard: boolean;
+  is_non_standard: boolean;
 }
 
 export interface Insurance {

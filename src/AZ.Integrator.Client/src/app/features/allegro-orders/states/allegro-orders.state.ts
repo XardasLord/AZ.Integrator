@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { catchError, tap, throwError } from 'rxjs';
 import { AllegroOrdersStateModel } from './allegro-orders.state.model';
@@ -27,6 +27,7 @@ export class AllegroOrdersState {
   constructor(
     private allegroOrderService: AllegroOrdersService,
     private dialog: MatDialog,
+    private zone: NgZone,
     private toastService: ToastrService
   ) {}
 
@@ -85,10 +86,12 @@ export class AllegroOrdersState {
           selectedOrderDetails: response,
         });
 
-        this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(RegisterParcelModalComponent, {
-          data: <AllegroOrderDetailsModel>response,
-          width: '50%',
-          height: '75%',
+        this.zone.run(() => {
+          this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(RegisterParcelModalComponent, {
+            data: <AllegroOrderDetailsModel>response,
+            width: '50%',
+            height: '75%',
+          });
         });
       })
     );
