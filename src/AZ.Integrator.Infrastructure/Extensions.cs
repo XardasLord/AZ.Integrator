@@ -4,6 +4,7 @@ using AZ.Integrator.Infrastructure.Authorization;
 using AZ.Integrator.Infrastructure.DomainServices;
 using AZ.Integrator.Infrastructure.ErrorHandling;
 using AZ.Integrator.Infrastructure.ExternalServices;
+using AZ.Integrator.Infrastructure.Hangfire;
 using AZ.Integrator.Infrastructure.Identity;
 using AZ.Integrator.Infrastructure.OpenApi;
 using AZ.Integrator.Infrastructure.Persistence.EF;
@@ -35,6 +36,7 @@ public static class Extensions
         services.AddIntegratorIdentity(configuration);
         
         services.AddPostgres(configuration);
+        services.AddIntegratorHangfire(configuration);
         services.AddIntegratorGraphQl(configuration);
         services.AddIntegratorOpenApi(configuration);
         
@@ -76,6 +78,7 @@ public static class Extensions
             Secure = CookieSecurePolicy.Always
         });
         
+        app.UseIntegratorHangfire();
         app.UseIntegratorGraphQl(configuration, env);
 
         app.UseEndpoints(endpoints =>
