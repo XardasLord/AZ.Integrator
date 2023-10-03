@@ -101,10 +101,10 @@ export class AllegroOrdersState {
   registerInpostShipment(ctx: StateContext<AllegroOrdersStateModel>, action: RegisterInpostShipment) {
     return this.allegroOrderService.registerInpostShipment(action.command).pipe(
       tap(() => {
-        this.toastService.success('Przesyłka została zarejestrowana', 'Przesyłka Inpost');
+        this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana', 'Przesyłka Inpost'));
       }),
       catchError(error => {
-        this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost');
+        this.zone.run(() => this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost'));
         return throwError(error);
       })
     );

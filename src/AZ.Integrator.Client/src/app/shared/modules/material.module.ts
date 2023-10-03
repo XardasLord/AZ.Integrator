@@ -36,7 +36,6 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CustomPaginator } from '../models/pagination/custom-paginator.model';
 
-// TODO: Add Angular Materials modules that GeoLink uses
 @NgModule({
   declarations: [],
   imports: [

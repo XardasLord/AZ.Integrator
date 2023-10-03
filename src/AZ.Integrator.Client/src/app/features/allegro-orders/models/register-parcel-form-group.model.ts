@@ -12,6 +12,7 @@ export interface RegisterParcelFormGroupModel {
   receiverAddressCity: FormControl<string | null>;
   receiverAddressPostCode: FormControl<string | null>;
   receiverAddressCountryCode: FormControl<string | null>;
+  insuranceActive: FormControl<boolean | null>;
   insuranceAmount: FormControl<number | null>;
   insuranceCurrency: FormControl<string | null>;
   parcels: FormArray;

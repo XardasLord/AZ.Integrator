@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using Ardalis.GuardClauses;
-using AZ.Integrator.Domain.Aggregates.Order.Exceptions;
+using AZ.Integrator.Domain.Aggregates.InpostShipment.Exceptions;
 using AZ.Integrator.Domain.SharedKernel.Exceptions;
 
 namespace AZ.Integrator.Domain.Extensions;
@@ -34,11 +34,11 @@ public static class GuardExtensions
 
     public static Guid CreationInformationCreator(this IGuardClause guardClause, Guid input, [CallerArgumentExpression("input")] string parameterName = null)
     {
-        if (input == default)
-            throw new InvalidCreationInformationCreatorException(input, "Creator cannot be empty");
+        // if (input == default)
+        //     throw new InvalidCreationInformationCreatorException(input, "Creator cannot be empty");
 
-        if (input == Guid.Empty)
-            throw new InvalidCreationInformationCreatorException(input, "Creator cannot be unknown");
+        // if (input == Guid.Empty)
+        //     throw new InvalidCreationInformationCreatorException(input, "Creator cannot be unknown");
 
         return input;
     }
@@ -89,10 +89,18 @@ public static class GuardExtensions
         return input;
     }
     
-    public static string OrderNumber(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
+    public static string AllegroOrderNumber(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
     {
         if (string.IsNullOrWhiteSpace(input))
-            throw new InvalidOrderNumberException(input, "Order number cannot be empty");
+            throw new InvalidAllegroOrderNumberException(input, "Allegro order number cannot be empty");
+
+        return input;
+    }
+    
+    public static string ShipmentNumber(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            throw new InvalidShipmentNumberException(input, "Shipment number cannot be empty");
 
         return input;
     }

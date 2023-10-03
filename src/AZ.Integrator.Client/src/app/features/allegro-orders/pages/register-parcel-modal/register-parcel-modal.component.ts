@@ -27,7 +27,10 @@ export class RegisterParcelModalComponent {
       receiverFirstName: new FormControl<string>(allegroOrderDetails.buyer.firstName, [Validators.required]),
       receiverLastName: new FormControl<string>(allegroOrderDetails.buyer.lastName, [Validators.required]),
       receiverEmail: new FormControl<string>(allegroOrderDetails.buyer.email, [Validators.required, Validators.email]),
-      receiverPhoneNumber: new FormControl<string>(allegroOrderDetails.buyer.phoneNumber, [Validators.required]),
+      receiverPhoneNumber: new FormControl<string>(allegroOrderDetails.buyer.phoneNumber, [
+        Validators.required,
+        Validators.pattern('[0-9]{9}'),
+      ]),
       receiverAddressStreet: new FormControl<string>(allegroOrderDetails.buyer.address.street, [Validators.required]),
       receiverAddressBuildingNumber: new FormControl<string>(allegroOrderDetails.buyer.address.street, [
         Validators.required,
@@ -39,12 +42,31 @@ export class RegisterParcelModalComponent {
       receiverAddressCountryCode: new FormControl<string>(allegroOrderDetails.buyer.address.countryCode, [
         Validators.required,
       ]),
-      insuranceAmount: new FormControl<number>(0, [Validators.required]),
+      insuranceActive: new FormControl<boolean>(true),
+      insuranceAmount: new FormControl<number>(this.allegroOrderDetails.summary.totalToPay.amount, [
+        Validators.required,
+      ]),
       insuranceCurrency: new FormControl<string>('PLN', [Validators.required]),
       parcels: this.fb.array<FormGroup>([], [Validators.required]),
     });
 
     this.addNewParcel();
+
+    this.form.markAllAsTouched();
+
+    this.form.controls.insuranceActive.valueChanges.subscribe(value => {
+      if (value) {
+        this.form.controls.insuranceAmount.setValidators(Validators.required);
+        this.form.controls.insuranceAmount.enable();
+        this.form.controls.insuranceCurrency.setValidators(Validators.required);
+        this.form.controls.insuranceCurrency.enable();
+      } else {
+        this.form.controls.insuranceAmount.clearValidators();
+        this.form.controls.insuranceAmount.disable();
+        this.form.controls.insuranceCurrency.clearValidators();
+        this.form.controls.insuranceCurrency.disable();
+      }
+    });
   }
 
   onSubmit() {
@@ -58,15 +80,15 @@ export class RegisterParcelModalComponent {
       const parcel = this.form.value.parcels[i];
 
       parcels.push({
-        id: 'big package',
+        id: `${i + 1}/${this.form.value.parcels.length}`,
         weight: {
-          amount: parcel.weight,
+          amount: parcel.weight.toString(),
           unit: 'kg',
         },
         dimensions: {
-          length: parcel.length,
-          width: parcel.width,
-          height: parcel.height,
+          length: parcel.length.toString(),
+          width: parcel.width.toString(),
+          height: parcel.height.toString(),
           unit: 'mm',
         },
         is_non_standard: false,
@@ -91,10 +113,12 @@ export class RegisterParcelModalComponent {
       },
       sender: undefined!,
       parcels: parcels,
-      insurance: {
-        amount: this.form.value.insuranceAmount!,
-        currency: this.form.value.insuranceCurrency!,
-      },
+      insurance: this.form.value.insuranceActive
+        ? {
+            amount: this.form.value.insuranceAmount!,
+            currency: this.form.value.insuranceCurrency!,
+          }
+        : null,
       cod: undefined!,
       reference: this.allegroOrderDetails.id,
       comments: '',

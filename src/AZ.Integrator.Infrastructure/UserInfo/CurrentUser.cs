@@ -17,7 +17,7 @@ public class CurrentUser : ICurrentUser
     
     private static string System => "System";
 
-    public Guid UserId => Guid.Parse(GetClaimValue(UserClaimType.UserId));
+    public Guid UserId => GetClaimValue(UserClaimType.UserId) is null ? Guid.Empty : Guid.Parse(GetClaimValue(UserClaimType.UserId));
     public string UserName => GetClaimValue(UserClaimType.UserName) ?? System;
     public string Role => GetClaimValue(UserClaimType.Role) ?? System;
 

@@ -41,6 +41,9 @@
       <mat-form-field class="w-full flex-auto ml-4">
         <mat-label>Numer telefonu</mat-label>
         <input type="text" matInput formControlName="receiverPhoneNumber" />
+        <mat-error *ngIf="form.controls.receiverPhoneNumber.hasError('pattern')"
+          >Numer telefonu musi być w formacie XXXYYYZZZ</mat-error
+        >
       </mat-form-field>
     </div>
 
@@ -85,25 +88,33 @@
     <ng-container formArrayName="parcels">
       <ng-container *ngFor="let parcel of parcels.controls; let i = index">
         <div [formGroupName]="i" class="flex mt-4">
-          <!--          <mat-form-field class="w-full flex-auto">-->
-          <!--            <mat-label>Wielkość paczki</mat-label>-->
-          <!--            <input type="text" matInput formControlName="parcelSize" />-->
-          <!--          </mat-form-field>-->
           <mat-form-field class="w-full flex-auto ml-4">
             <mat-label>Długość [mm]</mat-label>
-            <input type="text" matInput formControlName="length" />
+            <input type="number" matInput formControlName="length" />
+            <mat-error *ngIf="parcels.controls[i].get('length')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="w-full flex-auto ml-4">
             <mat-label>Szerokość [mm]</mat-label>
-            <input type="text" matInput formControlName="width" />
+            <input type="number" matInput formControlName="width" />
+            <mat-error *ngIf="parcels.controls[i].get('width')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="w-full flex-auto ml-4">
             <mat-label>Wysokość [mm]</mat-label>
-            <input type="text" matInput formControlName="height" />
+            <input type="number" matInput formControlName="height" />
+            <mat-error *ngIf="parcels.controls[i].get('height')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="w-full flex-auto ml-4">
             <mat-label>Waga [kg]</mat-label>
-            <input type="text" matInput formControlName="weight" />
+            <input type="number" matInput formControlName="weight" />
+            <mat-error *ngIf="parcels.controls[i].get('weight')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
           </mat-form-field>
           <button mat-icon-button type="button" (click)="removeParcel(i)" matTooltip="Usuń paczkę">
             <mat-icon>close</mat-icon>
@@ -116,6 +127,8 @@
     <mat-divider></mat-divider>
 
     <div class="flex mt-4">
+      <mat-checkbox formControlName="insuranceActive">Ubezpieczenie?</mat-checkbox>
+
       <mat-form-field class="w-24 flex-none ml-4">
         <mat-label>Kwota</mat-label>
         <input type="text" matInput formControlName="insuranceAmount" />

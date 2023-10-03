@@ -2,7 +2,7 @@ export interface CreateInpostShipmentCommand {
   sender: Sender;
   receiver: Receiver;
   parcels: Parcel[];
-  insurance: Insurance;
+  insurance: Insurance | null;
   cod: Cod;
   reference: string;
   comments: string;

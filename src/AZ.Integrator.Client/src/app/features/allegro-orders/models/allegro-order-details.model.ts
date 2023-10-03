@@ -52,7 +52,7 @@ export interface PaymentDetails {
 }
 
 export interface AmountDetails {
-  amount: string;
+  amount: number;
   currency: string;
 }
 
