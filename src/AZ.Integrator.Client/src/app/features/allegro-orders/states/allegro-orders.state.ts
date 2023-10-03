@@ -7,7 +7,7 @@ import { AllegroOrdersService } from '../services/allegro-orders.service';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
 import { ChangePage, Load, OpenRegisterParcelModal, RegisterInpostShipment } from './allegro-orders.action';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 import { ToastrService } from 'ngx-toastr';
@@ -24,6 +24,8 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
 })
 @Injectable()
 export class AllegroOrdersState {
+  private dialogRef?: MatDialogRef<RegisterParcelModalComponent>;
+
   constructor(
     private allegroOrderService: AllegroOrdersService,
     private dialog: MatDialog,
@@ -87,11 +89,14 @@ export class AllegroOrdersState {
         });
 
         this.zone.run(() => {
-          this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(RegisterParcelModalComponent, {
-            data: <AllegroOrderDetailsModel>response,
-            width: '50%',
-            height: '75%',
-          });
+          this.dialogRef = this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(
+            RegisterParcelModalComponent,
+            {
+              data: <AllegroOrderDetailsModel>response,
+              width: '50%',
+              height: '75%',
+            }
+          );
         });
       })
     );
@@ -102,6 +107,7 @@ export class AllegroOrdersState {
     return this.allegroOrderService.registerInpostShipment(action.command).pipe(
       tap(() => {
         this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana', 'Przesyłka Inpost'));
+        this.dialogRef?.close();
       }),
       catchError(error => {
         this.zone.run(() => this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost'));
