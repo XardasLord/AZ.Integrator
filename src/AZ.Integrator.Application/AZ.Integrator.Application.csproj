@@ -28,5 +28,6 @@
     
     <ItemGroup>
       <Folder Include="UseCases\Orders\Commands\" />
+      <Folder Include="UseCases\Shipments\EventHandlers\InpostShipmentRegistered\" />
     </ItemGroup>
 </Project>

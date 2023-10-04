@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Infrastructure.Persistence.GraphQL.Queries;
+﻿using AZ.Integrator.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Infrastructure.Persistence.GraphQL.Queries;
 using HotChocolate.AspNetCore;
 using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Builder;
@@ -23,8 +24,12 @@ internal static class Extensions
             .AddGraphQLServer()
             .InitializeOnStartup()
             .AddAuthorization()
+            .RegisterDbContext<ShipmentDataViewContext>()
             .AddQueryType(q => q.Name("IntegratorQuery"))
             .AddType<IntegratorQuery>()
+            .AddProjections()
+            .AddFiltering()
+            .AddSorting()
             .SetPagingOptions(new PagingOptions
             {
                 IncludeTotalCount = true,

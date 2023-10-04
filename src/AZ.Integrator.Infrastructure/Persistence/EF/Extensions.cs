@@ -27,6 +27,14 @@ internal static class Extensions
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
         
+        services.AddDbContext<ShipmentDataViewContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            // .UseSnakeCaseNamingConvention();
+        });
+        
         // EF Core + Npgsql issue (https://www.npgsql.org/doc/types/datetime.html)
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         
