@@ -3,8 +3,15 @@ import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
-import { ChangePage, Load, OpenRegisterParcelModal } from '../../states/allegro-orders.action';
+import {
+  ChangePage,
+  GenerateInpostLabel,
+  Load,
+  LoadInpostShipments,
+  OpenRegisterParcelModal,
+} from '../../states/allegro-orders.action';
 import { AllegroOrderModel, LineItem } from '../../models/allegro-order.model';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-allegro-orders-list',
@@ -22,6 +29,7 @@ export class AllegroOrdersListComponent implements OnInit {
     'actions',
   ];
   orders$ = this.store.select(AllegroOrdersState.getOrders);
+  inpostShipments$ = this.store.select(AllegroOrdersState.getInpostShipments);
   totalItems$ = this.store.select(AllegroOrdersState.getOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
@@ -29,7 +37,7 @@ export class AllegroOrdersListComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch(new Load());
+    this.store.dispatch([new Load(), new LoadInpostShipments()]);
   }
 
   pageChanged(event: PageEvent): void {
@@ -38,5 +46,21 @@ export class AllegroOrdersListComponent implements OnInit {
 
   registerParcel(order: AllegroOrderModel) {
     this.store.dispatch(new OpenRegisterParcelModal(order));
+  }
+
+  generateShipmentLabel(order: AllegroOrderModel) {
+    this.store.dispatch(new GenerateInpostLabel(order.orderId));
+  }
+
+  canRegisterShipment(order: AllegroOrderModel): Observable<boolean> {
+    return this.inpostShipments$.pipe(
+      map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.orderId))
+    );
+  }
+
+  canGenerateShipmentLabel(order: AllegroOrderModel): Observable<boolean> {
+    return this.inpostShipments$.pipe(
+      map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.orderId))
+    );
   }
 }

@@ -13,6 +13,7 @@ import { DictionaryService } from './services/dictionary.service';
 import { DictionaryState } from './states/dictionary.state';
 import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
 import { ProgressSpinnerService } from './services/progress-spinner.service';
+import { DownloadService } from './services/download.service';
 
 @NgModule({
   declarations: [AuthScopeAllowDirective, ProgressSpinnerComponent],
@@ -42,6 +43,7 @@ import { ProgressSpinnerService } from './services/progress-spinner.service';
     AuthService,
     DictionaryService,
     ProgressSpinnerService,
+    DownloadService,
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
   ],
 })
