@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap, throwError } from 'rxjs';
 import { AllegroOrdersStateModel } from './allegro-orders.state.model';
 import { AllegroOrderModel } from '../models/allegro-order.model';
 import { AllegroOrdersService } from '../services/allegro-orders.service';
@@ -20,6 +20,7 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
     restQuery: new RestQueryVo(),
     restQueryResponse: new RestQueryResponse<AllegroOrderModel[]>(),
     selectedOrderDetails: null,
+    inpostShipments: [],
   },
 })
 @Injectable()
@@ -56,7 +57,7 @@ export class AllegroOrdersState {
   @Action(Load)
   loadOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService.load(ctx.getState().restQuery.currentPage).pipe(
-      tap(response => {
+      switchMap(response => {
         const customResponse = new RestQueryResponse<AllegroOrderModel[]>();
         customResponse.result = response.orders;
         customResponse.totalCount = response.totalCount;
@@ -64,6 +65,15 @@ export class AllegroOrdersState {
         ctx.patchState({
           restQueryResponse: customResponse,
         });
+
+        return this.allegroOrderService.getInpostShipments({}).pipe(
+          tap(shipmentsResponse => {
+            console.log(shipmentsResponse);
+            ctx.patchState({
+              inpostShipments: shipmentsResponse.result,
+            });
+          })
+        );
       })
     );
   }
