@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Application.UseCases.Shipments.Commands;
+﻿using AZ.Integrator.Application.UseCases.Shipments.Commands.CreateInpostShipment;
+using AZ.Integrator.Application.UseCases.Shipments.Queries.GetInpostLabel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,5 +15,13 @@ public class InpostShipmentsController : ApiBaseController
         await Mediator.Send(command);
         
         return NoContent();
+    }
+    
+    [HttpGet("{shipmentId}/label")]
+    public async Task<IActionResult> GetShipmentLabel(string shipmentId)
+    {
+        var result = await Mediator.Send(new GetInpostLabelQuery(shipmentId));
+
+        return File(result.ContentStream, result.ContentType, result.FileName);
     }
 }

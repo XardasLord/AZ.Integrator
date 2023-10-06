@@ -5,7 +5,7 @@ using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.Aggregates.InpostShipment;
 using Mediator;
 
-namespace AZ.Integrator.Application.UseCases.Shipments.Commands;
+namespace AZ.Integrator.Application.UseCases.Shipments.Commands.CreateInpostShipment;
 
 public class CreateInpostShipmentCommandHandler : ICommandHandler<CreateInpostShipmentCommand, ShipmentResponse>
 {

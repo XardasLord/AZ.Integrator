@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AZ.Integrator.Application.Common.ExternalServices.ShipX.Models;
-using AZ.Integrator.Application.UseCases.Shipments.Commands;
+using AZ.Integrator.Application.UseCases.Shipments.Commands.CreateInpostShipment;
 
 namespace AZ.Integrator.Application.Common.AutoMapper;
 

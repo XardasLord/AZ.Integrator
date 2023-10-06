@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Application.Common.ExternalServices.ShipX.Models;
 using Mediator;
 
-namespace AZ.Integrator.Application.UseCases.Shipments.Commands;
+namespace AZ.Integrator.Application.UseCases.Shipments.Commands.CreateInpostShipment;
 
 public record CreateInpostShipmentCommand(
     Sender Sender,

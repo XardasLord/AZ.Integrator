@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Application.Common.ExternalServices.ShipX.Models;
+using AZ.Integrator.Domain.Aggregates.InpostShipment.ValueObjects;
 
 namespace AZ.Integrator.Application.Common.ExternalServices.ShipX;
 
@@ -13,4 +14,5 @@ public interface IShipXService
     // 6. Tracking przesyłki (zgodnie z ustaleniami w MVP nie będzie potrzebne śledzenie przesyłek)
 
     Task<ShipmentResponse> CreateShipment(Shipment shipment);
+    Task<byte[]> GenerateLabel(ShipmentNumber number);
 }
