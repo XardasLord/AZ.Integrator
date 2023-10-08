@@ -83,7 +83,7 @@ internal static class Extensions
                 var innerHandler = new HttpClientHandler();
                 options.BackchannelHttpHandler = new TokenExchangeAuthorizingHandler(innerHandler, options);
                 
-                options.Events.OnCreatingTicket = async ctx =>
+                options.Events.OnCreatingTicket = ctx =>
                 {
                     var allegroAccessToken = ctx.AccessToken;
                     var allegroRefreshToken = ctx.RefreshToken;
@@ -114,6 +114,7 @@ internal static class Extensions
                             Value = jwtTokenHandler.WriteToken(jwtSecurityToken)
                         }
                     });
+                    return Task.CompletedTask;
                 };
             });
         

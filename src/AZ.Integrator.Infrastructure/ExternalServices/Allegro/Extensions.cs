@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Application.Common.ExternalServices.Allegro;
+﻿using System.Net.Http.Headers;
+using AZ.Integrator.Application.Common.ExternalServices.Allegro;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -6,4 +6,5 @@ public interface IAllegroService
 {
     Task<IEnumerable<OrderEvent>> GetOrderEvents();
     Task<GetOrderDetailsModel> GetOrderDetails(Guid orderId);
+    Task ChangeStatus(Guid orderNumber, AllegroStatusEnum allegroStatusEnum, string allegroAccessToken);
 }

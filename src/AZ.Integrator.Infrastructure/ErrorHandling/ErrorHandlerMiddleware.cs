@@ -39,6 +39,7 @@ public class ErrorHandlerMiddleware
                 HttpStatusCode.BadRequest, ex.InnerException?.Message),
             ApplicationException exception => new ExceptionResponse(exception.Code, exception.Message,
                 HttpStatusCode.BadRequest, ex.InnerException?.Message),
+            HttpRequestException exception => new ExceptionResponse("http_request_error", exception.Message, exception.StatusCode ?? HttpStatusCode.BadRequest, exception.InnerException?.Message),
             _ => new ExceptionResponse("unexpected_error", ex.Message, HttpStatusCode.InternalServerError, ex.InnerException?.Message)
         };
 

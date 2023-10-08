@@ -3,4 +3,4 @@ using Mediator;
 
 namespace AZ.Integrator.Domain.Aggregates.InpostShipment.DomainEvents;
 
-public record InpostShipmentRegistered(ShipmentNumber ShipmentNumber) : INotification;
+public record InpostShipmentRegistered(ShipmentNumber ShipmentNumber, AllegroOrderNumber AllegroOrderNumber) : INotification;
