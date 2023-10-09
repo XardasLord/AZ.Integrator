@@ -7,6 +7,6 @@ public class OrderDetailsDtoMapper : Profile
 {
     public OrderDetailsDtoMapper()
     {
-        CreateMap<GetOrderDetailsModel, OrderDetailsDto>();
+        CreateMap<GetOrderDetailsModelResponse, OrderDetailsDto>();
     }
 }

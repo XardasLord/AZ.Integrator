@@ -1,6 +1,6 @@
 ﻿namespace AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
 
-public class GetOrderDetailsModel
+public class GetOrderDetailsModelResponse
 {
     public string Id { get; set; }
     public string MessageToSeller { get; set; }

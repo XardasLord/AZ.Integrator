@@ -1,4 +1,6 @@
-﻿namespace AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
+﻿using Ardalis.SmartEnum;
+
+namespace AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
 
 public class OriginalPrice
 {
@@ -81,17 +83,21 @@ public class OrderEvent
     public DateTime OccurredAt { get; set; }
 }
 
-public class GetOrderEventsModel
+public class GetOrderEventsModelResponse
 {
     public IEnumerable<OrderEvent> Events { get; set; }
 }
 
-public class OrderTypes
+public sealed class AllegroOrderTypesEnum : SmartEnum<AllegroOrderTypesEnum>
 {
-    public const string Bought = "BOUGHT";
-    public const string FilledIn = "FILLED_IN";
-    public const string ReadyForProcessing = "READY_FOR_PROCESSING";
-    public const string BuyerCanceller = "BUYER_CANCELLED";
-    public const string FulfillmentStatusChanged = "FULFILLMENT_STATUS_CHANGED";
-    public const string AutoCancelled = "AUTO_CANCELLED";
+    public static readonly AllegroOrderTypesEnum Bought = new("BOUGHT", 0);
+    public static readonly AllegroOrderTypesEnum FilledIn = new("FILLED_IN", 1);
+    public static readonly AllegroOrderTypesEnum ReadyForProcessing = new("READY_FOR_PROCESSING", 2);
+    public static readonly AllegroOrderTypesEnum BuyerCanceller = new("BUYER_CANCELLED", 3);
+    public static readonly AllegroOrderTypesEnum FulfillmentStatusChanged = new("FULFILLMENT_STATUS_CHANGED", 4);
+    public static readonly AllegroOrderTypesEnum AutoCancelled = new("AUTO_CANCELLED", 5);
+    
+    private AllegroOrderTypesEnum(string name, int value) : base(name, value)
+    {
+    }
 }

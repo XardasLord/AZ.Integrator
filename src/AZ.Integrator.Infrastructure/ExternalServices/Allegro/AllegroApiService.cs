@@ -6,6 +6,7 @@ using AZ.Integrator.Application.Common.ExternalServices.Allegro;
 using AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Infrastructure.ExternalServices.Allegro.RequestModels;
+using AZ.Integrator.Infrastructure.UtilityExtensions;
 
 namespace AZ.Integrator.Infrastructure.ExternalServices.Allegro;
 
@@ -21,34 +22,52 @@ public class AllegroApiService : IAllegroService
 
     public async Task<IEnumerable<OrderEvent>> GetOrderEvents()
     {
-        var orderTypes = new[] { OrderTypes.ReadyForProcessing };
+        var orderTypes = new[] { AllegroOrderTypesEnum.ReadyForProcessing.Name };
         var queryString = string.Join("&", orderTypes.Select(type => $"type={HttpUtility.UrlEncode(type)}"));
         
         using var response = await _httpClient.GetAsync($"order/events?{queryString}");
         
         response.EnsureSuccessStatusCode();
 
-        var orderEvents = await response.Content.ReadFromJsonAsync<GetOrderEventsModel>();
+        var orderEvents = await response.Content.ReadFromJsonAsync<GetOrderEventsModelResponse>();
 
         return orderEvents.Events;
     }
 
-    public async Task<GetOrderDetailsModel> GetOrderDetails(Guid orderId)
+    public async Task<GetNewOrdersModelResponse> GetNewOrders()
+    {
+        var queryParams = new Dictionary<string, string>()
+        {
+            { "limit", "100" }, 
+            { "status", AllegroOrderTypesEnum.ReadyForProcessing.Name },
+            { "fulfillment.status", AllegroFulfillmentStatusEnum.New.Name }
+        }.ToHttpQueryString();
+
+        using var response = await _httpClient.GetAsync($"order/checkout-forms?{queryParams}");
+        
+        response.EnsureSuccessStatusCode();
+
+        var orders = await response.Content.ReadFromJsonAsync<GetNewOrdersModelResponse>();
+
+        return orders;
+    }
+
+    public async Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId)
     {
         using var response = await _httpClient.GetAsync($"order/checkout-forms/{orderId}");
         
         response.EnsureSuccessStatusCode();
 
-        var orderDetails = await response.Content.ReadFromJsonAsync<GetOrderDetailsModel>();
+        var orderDetails = await response.Content.ReadFromJsonAsync<GetOrderDetailsModelResponse>();
 
         return orderDetails;
     }
 
-    public async Task ChangeStatus(Guid orderNumber, AllegroStatusEnum allegroStatusEnum, string allegroAccessToken)
+    public async Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatusEnum, string allegroAccessToken)
     {
         var payload = new ChangeStatusRequestPayload
         {
-            Status = allegroStatusEnum.Name,
+            Status = allegroFulfillmentStatusEnum.Name,
             ShipmentSummary = new ShipmentSummary
             {
                 LineItemsSent = ShipmentSummaryLineItemsSentEnum.All.Name

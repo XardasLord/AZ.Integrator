@@ -10,8 +10,9 @@ import {
   LoadInpostShipments,
   OpenRegisterParcelModal,
 } from '../../states/allegro-orders.action';
-import { AllegroOrderModel, LineItem } from '../../models/allegro-order.model';
+import { AllegroOrderModel } from '../../models/allegro-order.model';
 import { Observable, map } from 'rxjs';
+import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 
 @Component({
   selector: 'app-allegro-orders-list',
@@ -20,17 +21,17 @@ import { Observable, map } from 'rxjs';
 })
 export class AllegroOrdersListComponent implements OnInit {
   displayedColumns: string[] = [
-    nameof<AllegroOrderModel>('date'),
-    nameof<AllegroOrderModel>('orderId'),
-    nameof<AllegroOrderModel>('buyer'),
-    'items',
-    nameof<LineItem>('quantity'),
-    nameof<LineItem>('price'),
+    nameof<LineItemDetails>('boughtAt'),
+    nameof<AllegroOrderDetailsModel>('id'),
+    nameof<AllegroOrderDetailsModel>('buyer'),
+    nameof<AllegroOrderDetailsModel>('lineItems'),
+    nameof<LineItemDetails>('quantity'),
+    nameof<LineItemDetails>('price'),
     'actions',
   ];
-  orders$ = this.store.select(AllegroOrdersState.getOrders);
+  orders$ = this.store.select(AllegroOrdersState.getAllNewOrders);
   inpostShipments$ = this.store.select(AllegroOrdersState.getInpostShipments);
-  totalItems$ = this.store.select(AllegroOrdersState.getOrdersCount);
+  totalItems$ = this.store.select(AllegroOrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
 

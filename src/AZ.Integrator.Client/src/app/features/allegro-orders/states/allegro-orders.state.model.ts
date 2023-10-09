@@ -6,7 +6,7 @@ import { InpostShipmentViewModel } from '../../../shared/graphql/graphql-integra
 
 export interface AllegroOrdersStateModel {
   restQuery: RestQueryVo;
-  restQueryResponse: RestQueryResponse<AllegroOrderModel[]>;
+  restQueryResponse: RestQueryResponse<AllegroOrderDetailsModel[]>;
   selectedOrderDetails: AllegroOrderDetailsModel | null;
   inpostShipments: InpostShipmentViewModel[];
 }

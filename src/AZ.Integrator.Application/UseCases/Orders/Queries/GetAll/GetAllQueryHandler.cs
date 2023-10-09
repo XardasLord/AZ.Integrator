@@ -18,10 +18,8 @@ public class GetAllQueryHandler : IQueryHandler<GetAllQuery, GetAllQueryResponse
     
     public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        var orderEvents = await _allegroService.GetOrderEvents();
+        var ordersResponse = await _allegroService.GetNewOrders();
 
-        var orderListDto = _mapper.Map<List<OrderListDto>>(orderEvents);
-        
-        return new GetAllQueryResponse(orderListDto, orderListDto.Count);
+        return new GetAllQueryResponse(ordersResponse.CheckoutForms, ordersResponse.Count, ordersResponse.TotalCount);
     }
 }

@@ -2,7 +2,6 @@ import { Injectable, NgZone } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { catchError, of, switchMap, tap, throwError } from 'rxjs';
 import { AllegroOrdersStateModel } from './allegro-orders.state.model';
-import { AllegroOrderModel } from '../models/allegro-order.model';
 import { AllegroOrdersService } from '../services/allegro-orders.service';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
@@ -27,7 +26,7 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
   name: ALLEGRO_ORDERS_STATE_TOKEN,
   defaults: {
     restQuery: new RestQueryVo(),
-    restQueryResponse: new RestQueryResponse<AllegroOrderModel[]>(),
+    restQueryResponse: new RestQueryResponse<AllegroOrderDetailsModel[]>(),
     selectedOrderDetails: null,
     inpostShipments: [],
   },
@@ -45,12 +44,23 @@ export class AllegroOrdersState {
   ) {}
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
-  static getOrders(state: AllegroOrdersStateModel): AllegroOrderModel[] {
+  static getAllNewOrders(state: AllegroOrdersStateModel): AllegroOrderDetailsModel[] {
     return state.restQueryResponse.result;
   }
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
-  static getOrdersCount(state: AllegroOrdersStateModel): number {
+  static getAllNewOrdersCount(state: AllegroOrdersStateModel): number {
+    return state.restQueryResponse.totalCount;
+  }
+
+  // @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
+  // static getOrdersWithRegisteredShipment(state: AllegroOrdersStateModel): AllegroOrderModel[] {
+  //   const allegroOrders = state.restQueryResponse.result;
+  //   return state.restQueryResponse.result;
+  // }
+
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
+  static getOrdersWithRegisteredShipmentCount(state: AllegroOrdersStateModel): number {
     return state.restQueryResponse.totalCount;
   }
 
@@ -73,7 +83,7 @@ export class AllegroOrdersState {
   loadOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService.load(ctx.getState().restQuery.currentPage).pipe(
       tap(response => {
-        const customResponse = new RestQueryResponse<AllegroOrderModel[]>();
+        const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
         customResponse.result = response.orders;
         customResponse.totalCount = response.totalCount;
 
