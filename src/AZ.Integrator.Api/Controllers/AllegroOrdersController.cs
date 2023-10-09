@@ -10,9 +10,9 @@ namespace AZ.Integrator.Api.Controllers;
 public class AllegroOrdersController : ApiBaseController
 {
     [HttpGet]
-    public async Task<OkObjectResult> GetOrders()
+    public async Task<OkObjectResult> GetOrders([FromQuery] GetAllQueryFilters filters)
     {
-        return Ok(await Mediator.Send(new GetAllQuery()));
+        return Ok(await Mediator.Send(new GetAllQuery(filters)));
     }
     
     [HttpGet("{orderId}")]

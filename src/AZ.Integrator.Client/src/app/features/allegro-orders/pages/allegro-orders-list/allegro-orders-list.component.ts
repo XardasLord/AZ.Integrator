@@ -6,7 +6,7 @@ import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
   GenerateInpostLabel,
-  Load,
+  LoadNew,
   LoadInpostShipments,
   OpenRegisterInPostShipmentModal,
 } from '../../states/allegro-orders.action';
@@ -37,7 +37,7 @@ export class AllegroOrdersListComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new Load(), new LoadInpostShipments()]);
+    this.store.dispatch([new LoadNew(), new LoadInpostShipments()]);
   }
 
   pageChanged(event: PageEvent): void {

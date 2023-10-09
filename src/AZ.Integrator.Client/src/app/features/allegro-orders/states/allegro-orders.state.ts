@@ -8,7 +8,7 @@ import { RestQueryResponse } from '../../../shared/models/pagination/rest.respon
 import {
   ChangePage,
   GenerateInpostLabel,
-  Load,
+  LoadNew,
   LoadInpostShipments,
   OpenRegisterInPostShipmentModal,
   RegisterInpostShipment,
@@ -19,6 +19,7 @@ import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model'
 import { ToastrService } from 'ngx-toastr';
 import { InpostShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { DownloadService } from '../../../shared/services/download.service';
+import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -73,19 +74,21 @@ export class AllegroOrdersState {
     return state.inpostShipments;
   }
 
-  @Action(Load)
-  loadOrders(ctx: StateContext<AllegroOrdersStateModel>) {
-    return this.allegroOrderService.load(ctx.getState().restQuery.currentPage).pipe(
-      tap(response => {
-        const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
-        customResponse.result = response.orders;
-        customResponse.totalCount = response.totalCount;
+  @Action(LoadNew)
+  loadNewOrders(ctx: StateContext<AllegroOrdersStateModel>) {
+    return this.allegroOrderService
+      .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.New)
+      .pipe(
+        tap(response => {
+          const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
+          customResponse.result = response.orders;
+          customResponse.totalCount = response.totalCount;
 
-        ctx.patchState({
-          restQueryResponse: customResponse,
-        });
-      })
-    );
+          ctx.patchState({
+            restQueryResponse: customResponse,
+          });
+        })
+      );
   }
 
   @Action(LoadInpostShipments)
@@ -108,7 +111,7 @@ export class AllegroOrdersState {
       restQuery: customQuery,
     });
 
-    return ctx.dispatch(new Load());
+    return ctx.dispatch(new LoadNew());
   }
 
   @Action(OpenRegisterInPostShipmentModal)

@@ -4,6 +4,7 @@ using System.Text;
 using System.Web;
 using AZ.Integrator.Application.Common.ExternalServices.Allegro;
 using AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
+using AZ.Integrator.Application.UseCases.Orders.Queries.GetAll;
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Infrastructure.ExternalServices.Allegro.RequestModels;
 using AZ.Integrator.Infrastructure.UtilityExtensions;
@@ -34,14 +35,9 @@ public class AllegroApiService : IAllegroService
         return orderEvents.Events;
     }
 
-    public async Task<GetNewOrdersModelResponse> GetNewOrders()
+    public async Task<GetNewOrdersModelResponse> GetNewOrders(GetAllQueryFilters filters)
     {
-        var queryParams = new Dictionary<string, string>()
-        {
-            { "limit", "100" }, 
-            { "status", AllegroOrderTypesEnum.ReadyForProcessing.Name },
-            { "fulfillment.status", AllegroFulfillmentStatusEnum.New.Name }
-        }.ToHttpQueryString();
+        var queryParams = ApplyFilters(filters);
 
         using var response = await _httpClient.GetAsync($"order/checkout-forms?{queryParams}");
         
@@ -50,6 +46,20 @@ public class AllegroApiService : IAllegroService
         var orders = await response.Content.ReadFromJsonAsync<GetNewOrdersModelResponse>();
 
         return orders;
+    }
+
+    private static string ApplyFilters(GetAllQueryFilters filters)
+    {
+        var queryParamsDictionary = new Dictionary<string, string>
+        {
+            { "limit", filters.Take.ToString() }, 
+            { "offset", filters.Skip.ToString() }, 
+            { "fulfillment.status", filters.OrderFulfillmentStatus }
+        };
+        
+        // TODO: Handle rest of parameters like skip, etc.
+
+        return queryParamsDictionary.ToHttpQueryString();
     }
 
     public async Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId)

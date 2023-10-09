@@ -1,12 +1,11 @@
 import { PageEvent } from '@angular/material/paginator';
-import { AllegroOrderModel } from '../models/allegro-order.model';
 import { CreateInpostShipmentCommand } from '../models/commands/create-inpost-shipment.command';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 
 const prefix = '[Allegro Orders]';
 
-export class Load {
-  static readonly type = `${prefix} ${Load.name}`;
+export class LoadNew {
+  static readonly type = `${prefix} ${LoadNew.name}`;
 }
 
 export class LoadInpostShipments {

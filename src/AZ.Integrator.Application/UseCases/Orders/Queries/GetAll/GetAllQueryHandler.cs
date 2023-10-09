@@ -18,7 +18,7 @@ public class GetAllQueryHandler : IQueryHandler<GetAllQuery, GetAllQueryResponse
     
     public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        var ordersResponse = await _allegroService.GetNewOrders();
+        var ordersResponse = await _allegroService.GetNewOrders(query.Filters);
 
         return new GetAllQueryResponse(ordersResponse.CheckoutForms, ordersResponse.Count, ordersResponse.TotalCount);
     }

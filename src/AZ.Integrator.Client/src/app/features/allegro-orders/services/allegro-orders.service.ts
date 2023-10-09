@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { RemoteServiceBase } from '../../../shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
@@ -14,6 +14,7 @@ import {
 } from '../../../shared/graphql/graphql-integrator.schema';
 import { GetInpostShipmentsGQL } from '../graphql-queries/get-inpost-shipments.graphql.query';
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
+import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
 
 @Injectable()
 export class AllegroOrdersService extends RemoteServiceBase {
@@ -26,8 +27,16 @@ export class AllegroOrdersService extends RemoteServiceBase {
     super(httpClient);
   }
 
-  load(pageInfo: PageEvent): Observable<GetAllegroOrdersResponseModel> {
-    return this.httpClient.get<GetAllegroOrdersResponseModel>(`${this.apiUrl}/allegroOrders`);
+  load(
+    pageInfo: PageEvent,
+    orderFulfillmentStatus: AllegroOrderFulfillmentStatusEnum
+  ): Observable<GetAllegroOrdersResponseModel> {
+    const params = new HttpParams()
+      .set('orderFulfillmentStatus', orderFulfillmentStatus)
+      .set('take', pageInfo.pageSize)
+      .set('skip', pageInfo.pageIndex * pageInfo.pageSize);
+
+    return this.httpClient.get<GetAllegroOrdersResponseModel>(`${this.apiUrl}/allegroOrders`, { params });
   }
 
   getDetails(orderId: string): Observable<AllegroOrderDetailsModel> {
