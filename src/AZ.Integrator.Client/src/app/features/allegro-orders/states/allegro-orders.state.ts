@@ -10,7 +10,7 @@ import {
   GenerateInpostLabel,
   Load,
   LoadInpostShipments,
-  OpenRegisterParcelModal,
+  OpenRegisterInPostShipmentModal,
   RegisterInpostShipment,
 } from './allegro-orders.action';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -52,12 +52,6 @@ export class AllegroOrdersState {
   static getAllNewOrdersCount(state: AllegroOrdersStateModel): number {
     return state.restQueryResponse.totalCount;
   }
-
-  // @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
-  // static getOrdersWithRegisteredShipment(state: AllegroOrdersStateModel): AllegroOrderModel[] {
-  //   const allegroOrders = state.restQueryResponse.result;
-  //   return state.restQueryResponse.result;
-  // }
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getOrdersWithRegisteredShipmentCount(state: AllegroOrdersStateModel): number {
@@ -117,33 +111,25 @@ export class AllegroOrdersState {
     return ctx.dispatch(new Load());
   }
 
-  @Action(OpenRegisterParcelModal)
-  registerParcel(ctx: StateContext<AllegroOrdersStateModel>, action: OpenRegisterParcelModal) {
-    return this.allegroOrderService.getDetails(action.order.orderId).pipe(
-      tap(response => {
-        ctx.patchState({
-          selectedOrderDetails: response,
-        });
-
-        this.zone.run(() => {
-          this.dialogRef = this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(
-            RegisterParcelModalComponent,
-            {
-              data: <AllegroOrderDetailsModel>response,
-              width: '50%',
-              height: '75%',
-            }
-          );
-        });
-      })
-    );
+  @Action(OpenRegisterInPostShipmentModal)
+  openRegisterInPostShipmentModal(ctx: StateContext<AllegroOrdersStateModel>, action: OpenRegisterInPostShipmentModal) {
+    this.zone.run(() => {
+      this.dialogRef = this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(
+        RegisterParcelModalComponent,
+        {
+          data: <AllegroOrderDetailsModel>action.order,
+          width: '50%',
+          height: '75%',
+        }
+      );
+    });
   }
 
   @Action(RegisterInpostShipment)
   registerInpostShipment(ctx: StateContext<AllegroOrdersStateModel>, action: RegisterInpostShipment) {
     return this.allegroOrderService.registerInpostShipment(action.command).pipe(
       tap(() => {
-        this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana', 'Przesyłka Inpost'));
+        this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w InPost', 'Przesyłka InPost'));
         this.dialogRef?.close();
 
         ctx.dispatch(new LoadInpostShipments());

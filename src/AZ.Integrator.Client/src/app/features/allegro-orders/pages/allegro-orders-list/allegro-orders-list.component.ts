@@ -8,9 +8,8 @@ import {
   GenerateInpostLabel,
   Load,
   LoadInpostShipments,
-  OpenRegisterParcelModal,
+  OpenRegisterInPostShipmentModal,
 } from '../../states/allegro-orders.action';
-import { AllegroOrderModel } from '../../models/allegro-order.model';
 import { Observable, map } from 'rxjs';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 
@@ -45,23 +44,23 @@ export class AllegroOrdersListComponent implements OnInit {
     this.store.dispatch(new ChangePage(event));
   }
 
-  registerParcel(order: AllegroOrderModel) {
-    this.store.dispatch(new OpenRegisterParcelModal(order));
+  registerInPostShipment(order: AllegroOrderDetailsModel) {
+    this.store.dispatch(new OpenRegisterInPostShipmentModal(order));
   }
 
-  generateShipmentLabel(order: AllegroOrderModel) {
-    this.store.dispatch(new GenerateInpostLabel(order.orderId));
+  generateShipmentLabel(order: AllegroOrderDetailsModel) {
+    this.store.dispatch(new GenerateInpostLabel(order.id));
   }
 
-  canRegisterShipment(order: AllegroOrderModel): Observable<boolean> {
+  canRegisterShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
     return this.inpostShipments$.pipe(
-      map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.orderId))
+      map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
     );
   }
 
-  canGenerateShipmentLabel(order: AllegroOrderModel): Observable<boolean> {
-    return this.inpostShipments$.pipe(
-      map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.orderId))
-    );
-  }
+  // canGenerateShipmentLabel(order: AllegroOrderModel): Observable<boolean> {
+  //   return this.inpostShipments$.pipe(
+  //     map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.orderId))
+  //   );
+  // }
 }

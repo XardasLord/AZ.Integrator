@@ -1,6 +1,7 @@
 import { PageEvent } from '@angular/material/paginator';
 import { AllegroOrderModel } from '../models/allegro-order.model';
 import { CreateInpostShipmentCommand } from '../models/commands/create-inpost-shipment.command';
+import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 
 const prefix = '[Allegro Orders]';
 
@@ -18,10 +19,10 @@ export class ChangePage {
   constructor(public event: PageEvent) {}
 }
 
-export class OpenRegisterParcelModal {
-  static readonly type = `${prefix} ${OpenRegisterParcelModal.name}`;
+export class OpenRegisterInPostShipmentModal {
+  static readonly type = `${prefix} ${OpenRegisterInPostShipmentModal.name}`;
 
-  constructor(public order: AllegroOrderModel) {}
+  constructor(public order: AllegroOrderDetailsModel) {}
 }
 
 export class RegisterInpostShipment {
