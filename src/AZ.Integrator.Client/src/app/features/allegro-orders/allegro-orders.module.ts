@@ -7,9 +7,10 @@ import { AllegroOrdersListComponent } from './pages/allegro-orders-list/allegro-
 import { AllegroOrdersState } from './states/allegro-orders.state';
 import { AllegroOrdersService } from './services/allegro-orders.service';
 import { RegisterParcelModalComponent } from './pages/register-parcel-modal/register-parcel-modal.component';
+import { AllegroOrdersListReadyForShipmentComponent } from './pages/allegro-orders-list-ready-for-shipment/allegro-orders-list-ready-for-shipment.component';
 
 @NgModule({
-  declarations: [AllegroOrdersComponent, AllegroOrdersListComponent, RegisterParcelModalComponent],
+  declarations: [AllegroOrdersComponent, AllegroOrdersListComponent, RegisterParcelModalComponent, AllegroOrdersListReadyForShipmentComponent],
   imports: [SharedModule, AllegroOrdersRoutingModule, NgxsModule.forFeature([AllegroOrdersState])],
   providers: [AllegroOrdersService],
 })

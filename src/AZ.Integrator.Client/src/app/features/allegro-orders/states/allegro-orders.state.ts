@@ -12,6 +12,7 @@ import {
   LoadInpostShipments,
   OpenRegisterInPostShipmentModal,
   RegisterInpostShipment,
+  LoadReadyForShipment,
 } from './allegro-orders.action';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
@@ -78,6 +79,23 @@ export class AllegroOrdersState {
   loadNewOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService
       .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.New)
+      .pipe(
+        tap(response => {
+          const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
+          customResponse.result = response.orders;
+          customResponse.totalCount = response.totalCount;
+
+          ctx.patchState({
+            restQueryResponse: customResponse,
+          });
+        })
+      );
+  }
+
+  @Action(LoadReadyForShipment)
+  loadReadyForShipmentOrders(ctx: StateContext<AllegroOrdersStateModel>) {
+    return this.allegroOrderService
+      .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.ReadyForShipment)
       .pipe(
         tap(response => {
           const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
