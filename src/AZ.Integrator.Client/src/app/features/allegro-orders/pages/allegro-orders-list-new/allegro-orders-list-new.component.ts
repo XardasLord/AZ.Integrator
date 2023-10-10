@@ -1,24 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
-import { map, Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
-import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
-  GenerateInpostLabel,
+  LoadNew,
   LoadInpostShipments,
-  LoadReadyForShipment,
   OpenRegisterInPostShipmentModal,
 } from '../../states/allegro-orders.action';
+import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 
 @Component({
-  selector: 'app-allegro-orders-list-ready-for-shipment',
-  templateUrl: './allegro-orders-list-ready-for-shipment.component.html',
-  styleUrls: ['./allegro-orders-list-ready-for-shipment.component.scss'],
+  selector: 'app-allegro-orders-list-new',
+  templateUrl: './allegro-orders-list-new.component.html',
+  styleUrls: ['./allegro-orders-list-new.component.scss'],
 })
-export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
+export class AllegroOrdersListNewComponent implements OnInit {
   displayedColumns: string[] = [
     nameof<LineItemDetails>('boughtAt'),
     nameof<AllegroOrderDetailsModel>('id'),
@@ -37,7 +36,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new LoadReadyForShipment(), new LoadInpostShipments()]);
+    this.store.dispatch([new LoadNew(), new LoadInpostShipments()]);
   }
 
   pageChanged(event: PageEvent): void {
@@ -48,13 +47,9 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     this.store.dispatch(new OpenRegisterInPostShipmentModal(order));
   }
 
-  generateShipmentLabel(order: AllegroOrderDetailsModel) {
-    this.store.dispatch(new GenerateInpostLabel(order.id));
-  }
-
-  canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
+  canRegisterShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
     return this.inpostShipments$.pipe(
-      map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id))
+      map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
     );
   }
 }
