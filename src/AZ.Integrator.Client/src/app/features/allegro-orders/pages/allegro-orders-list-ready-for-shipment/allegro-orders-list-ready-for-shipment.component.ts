@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
@@ -20,6 +20,7 @@ import {
 })
 export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   displayedColumns: string[] = [
+    'shipmentNumber',
     nameof<LineItemDetails>('boughtAt'),
     nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
@@ -55,6 +56,12 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
     return this.inpostShipments$.pipe(
       map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id))
+    );
+  }
+
+  getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
+    return this.inpostShipments$.pipe(
+      map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0].inpostShipmentNumber)
     );
   }
 }

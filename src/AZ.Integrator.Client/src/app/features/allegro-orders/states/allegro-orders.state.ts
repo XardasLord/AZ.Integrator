@@ -1,6 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { catchError, of, switchMap, tap, throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { AllegroOrdersStateModel } from './allegro-orders.state.model';
 import { AllegroOrdersService } from '../services/allegro-orders.service';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
@@ -13,11 +15,10 @@ import {
   OpenRegisterInPostShipmentModal,
   RegisterInpostShipment,
   LoadReadyForShipment,
+  LoadSent,
 } from './allegro-orders.action';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
-import { ToastrService } from 'ngx-toastr';
 import { InpostShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { DownloadService } from '../../../shared/services/download.service';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
@@ -96,6 +97,23 @@ export class AllegroOrdersState {
   loadReadyForShipmentOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService
       .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.ReadyForShipment)
+      .pipe(
+        tap(response => {
+          const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
+          customResponse.result = response.orders;
+          customResponse.totalCount = response.totalCount;
+
+          ctx.patchState({
+            restQueryResponse: customResponse,
+          });
+        })
+      );
+  }
+
+  @Action(LoadSent)
+  loadSentOrders(ctx: StateContext<AllegroOrdersStateModel>) {
+    return this.allegroOrderService
+      .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.Sent)
       .pipe(
         tap(response => {
           const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();

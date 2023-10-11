@@ -1,7 +1,7 @@
 <mat-tab-group mat-stretch-tabs="false">
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon class="mr-2">home</mat-icon>
+      <mat-icon class="mr-2">sell</mat-icon>
       Nowe zamówienia
     </ng-template>
     <ng-template matTabContent>
@@ -12,12 +12,23 @@
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon class="mr-2">home</mat-icon>
+      <mat-icon class="mr-2">pending</mat-icon>
       Nadane przesyłki InPost
     </ng-template>
     <ng-template matTabContent>
       <div class="padding-content">
         <app-allegro-orders-list-ready-for-shipment></app-allegro-orders-list-ready-for-shipment>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="mr-2">local_shipping</mat-icon>
+      Przesyłki wysłane
+    </ng-template>
+    <ng-template matTabContent>
+      <div class="padding-content">
+        <app-allegro-orders-list-sent></app-allegro-orders-list-sent>
       </div>
     </ng-template>
   </mat-tab>

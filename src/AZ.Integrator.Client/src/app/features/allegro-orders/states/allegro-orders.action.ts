@@ -12,6 +12,10 @@ export class LoadReadyForShipment {
   static readonly type = `${prefix} ${LoadReadyForShipment.name}`;
 }
 
+export class LoadSent {
+  static readonly type = `${prefix} ${LoadSent.name}`;
+}
+
 export class LoadInpostShipments {
   static readonly type = `${prefix} ${LoadInpostShipments.name}`;
 }
