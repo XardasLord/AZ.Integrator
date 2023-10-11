@@ -42,11 +42,13 @@ export class RegisterParcelModalComponent {
       receiverAddressCountryCode: new FormControl<string>(allegroOrderDetails.buyer.address.countryCode, [
         Validators.required,
       ]),
-      insuranceActive: new FormControl<boolean>(true),
-      insuranceAmount: new FormControl<number>(this.allegroOrderDetails.summary.totalToPay.amount, [
-        Validators.required,
-      ]),
-      insuranceCurrency: new FormControl<string>('PLN', [Validators.required]),
+      insuranceActive: new FormControl<boolean>(false),
+      insuranceAmount: new FormControl<number>({
+        value: this.allegroOrderDetails.summary.totalToPay.amount,
+        disabled: true,
+      }),
+      insuranceCurrency: new FormControl<string>({ value: 'PLN', disabled: true }),
+      codActive: new FormControl<boolean>(false),
       parcels: this.fb.array<FormGroup>([], [Validators.required]),
     });
 
@@ -57,6 +59,22 @@ export class RegisterParcelModalComponent {
     this.form.controls.insuranceActive.valueChanges.subscribe(value => {
       if (value) {
         this.form.controls.insuranceAmount.setValidators(Validators.required);
+        this.form.controls.insuranceAmount.enable();
+        this.form.controls.insuranceCurrency.setValidators(Validators.required);
+        this.form.controls.insuranceCurrency.enable();
+      } else {
+        this.form.controls.insuranceAmount.clearValidators();
+        this.form.controls.insuranceAmount.disable();
+        this.form.controls.insuranceCurrency.clearValidators();
+        this.form.controls.insuranceCurrency.disable();
+      }
+    });
+
+    this.form.controls.codActive.valueChanges.subscribe(value => {
+      if (value) {
+        this.form.controls.insuranceActive.setValue(true);
+        this.form.controls.insuranceAmount.setValidators(Validators.required);
+        this.form.controls.insuranceAmount.setValidators(Validators.min(this.form.controls.insuranceAmount.value!));
         this.form.controls.insuranceAmount.enable();
         this.form.controls.insuranceCurrency.setValidators(Validators.required);
         this.form.controls.insuranceCurrency.enable();
@@ -119,7 +137,12 @@ export class RegisterParcelModalComponent {
             currency: this.form.value.insuranceCurrency!,
           }
         : null,
-      cod: undefined!,
+      cod: this.form.value.codActive
+        ? {
+            amount: this.allegroOrderDetails.summary.totalToPay.amount!,
+            currency: 'PLN',
+          }
+        : undefined!,
       reference: this.allegroOrderDetails.id,
       comments: '',
       external_customer_id: '',

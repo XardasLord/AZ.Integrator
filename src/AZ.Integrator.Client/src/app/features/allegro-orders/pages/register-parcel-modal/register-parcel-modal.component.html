@@ -129,15 +129,25 @@
     <div class="flex mt-4">
       <mat-checkbox formControlName="insuranceActive">Ubezpieczenie?</mat-checkbox>
 
-      <mat-form-field class="w-24 flex-none ml-4">
+      <mat-form-field class="w-36 flex-none ml-4">
         <mat-label>Kwota</mat-label>
         <input type="text" matInput formControlName="insuranceAmount" />
+        <mat-error *ngIf="form.controls.insuranceAmount.hasError('min')"
+          >Kwota ubezpieczenia nie może być mniejsza niż wartość zamówienia</mat-error
+        >
       </mat-form-field>
 
-      <mat-form-field class="w-24 flex-none ml-4">
+      <mat-form-field class="w-36 flex-none ml-4">
         <mat-label>Waluta</mat-label>
         <input type="text" matInput formControlName="insuranceCurrency" />
       </mat-form-field>
+    </div>
+
+    <div class="text-lg mt-4 items-center">Pobranie</div>
+    <mat-divider></mat-divider>
+
+    <div class="flex mt-4">
+      <mat-checkbox formControlName="codActive">Pobranie?</mat-checkbox>
     </div>
   </form>
 </div>
