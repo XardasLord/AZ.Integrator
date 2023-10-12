@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
-import { filter, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
@@ -10,7 +10,6 @@ import {
   GenerateInpostLabel,
   LoadInpostShipments,
   LoadReadyForShipment,
-  OpenRegisterInPostShipmentModal,
 } from '../../states/allegro-orders.action';
 
 @Component({
@@ -43,10 +42,6 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
 
   pageChanged(event: PageEvent): void {
     this.store.dispatch(new ChangePage(event));
-  }
-
-  registerInPostShipment(order: AllegroOrderDetailsModel) {
-    this.store.dispatch(new OpenRegisterInPostShipmentModal(order));
   }
 
   generateShipmentLabel(order: AllegroOrderDetailsModel) {
