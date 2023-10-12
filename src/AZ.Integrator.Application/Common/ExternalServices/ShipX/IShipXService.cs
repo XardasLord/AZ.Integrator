@@ -15,4 +15,5 @@ public interface IShipXService
 
     Task<ShipmentResponse> CreateShipment(Shipment shipment);
     Task<byte[]> GenerateLabel(ShipmentNumber number);
+    Task<ShipmentResponse> GetDetails(ShipmentNumber number);
 }

@@ -97,6 +97,14 @@ public static class GuardExtensions
         return input;
     }
     
+    public static string InpostTrackingNumber(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            throw new InvalidTrackingNumberException(input, "Tracking Number cannot be empty");
+
+        return input;
+    }
+    
     public static string ShipmentNumber(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
     {
         if (string.IsNullOrWhiteSpace(input))

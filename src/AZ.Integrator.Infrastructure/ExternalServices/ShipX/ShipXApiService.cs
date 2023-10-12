@@ -51,4 +51,17 @@ public class ShipXApiService : IShipXService
 
         return label;
     }
+
+    public async Task<ShipmentResponse> GetDetails(ShipmentNumber number)
+    {
+        using var response = await _httpClient.GetAsync($"v1/shipments/{number.Value}");
+        
+        response.EnsureSuccessStatusCode();
+
+        await using var resultStream = await response.Content.ReadAsStreamAsync();
+
+        var shipmentResponse = await response.Content.ReadFromJsonAsync<ShipmentResponse>();
+
+        return shipmentResponse;
+    }
 }

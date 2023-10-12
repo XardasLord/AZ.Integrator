@@ -11,10 +11,12 @@ public class InpostShipment : Entity, IAggregateRoot
     private ShipmentNumber _number;
     private AllegroOrderNumber _allegroAllegroOrderNumber;
     private CreationInformation _creationInformation;
+    private TrackingNumber _trackingNumber;
 
     public ShipmentNumber Number => _number;
     public AllegroOrderNumber AllegroAllegroOrderNumber => _allegroAllegroOrderNumber;
     public CreationInformation CreationInformation => _creationInformation;
+    public TrackingNumber TrackingNumber => _trackingNumber;
     
     private InpostShipment() { }
 
@@ -33,5 +35,12 @@ public class InpostShipment : Entity, IAggregateRoot
         // TODO: We can handle this event and check for Shipment Status to get Tracking Number and save it to DB - for further development features
         
         return shipment;
+    }
+
+    public void SetTrackingNumber(TrackingNumber trackingNumber)
+    {
+        _trackingNumber = trackingNumber;
+        
+        AddDomainEvent(new InpostTrackingNumberAssigned(Number, TrackingNumber));
     }
 }

@@ -4,6 +4,10 @@ public abstract class ApplicationException : Exception
 {
     public abstract string Code { get; }
 
+    protected ApplicationException()
+    {
+    }
+
     protected ApplicationException(string message) : base(message)
     {
     }
