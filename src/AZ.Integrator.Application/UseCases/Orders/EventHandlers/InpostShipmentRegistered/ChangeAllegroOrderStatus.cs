@@ -4,7 +4,7 @@ using Hangfire;
 using Mediator;
 using InpostShipmentRegisteredEvent = AZ.Integrator.Domain.Aggregates.InpostShipment.DomainEvents.InpostShipmentRegistered;
 
-namespace AZ.Integrator.Application.UseCases.Shipments.EventHandlers.InpostShipmentRegistered;
+namespace AZ.Integrator.Application.UseCases.Orders.EventHandlers.InpostShipmentRegistered;
 
 public class ChangeAllegroOrderStatus : INotificationHandler<InpostShipmentRegisteredEvent>
 {
