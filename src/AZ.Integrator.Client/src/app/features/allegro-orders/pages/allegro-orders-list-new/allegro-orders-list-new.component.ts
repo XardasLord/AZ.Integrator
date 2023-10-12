@@ -22,6 +22,7 @@ export class AllegroOrdersListNewComponent implements OnInit {
     nameof<LineItemDetails>('boughtAt'),
     nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
+    'codActive',
     nameof<AllegroOrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
