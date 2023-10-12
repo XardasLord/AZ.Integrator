@@ -85,6 +85,10 @@ export class RegisterParcelModalComponent {
         this.form.controls.insuranceCurrency.disable();
       }
     });
+
+    if (allegroOrderDetails.payment.type === 'CASH_ON_DELIVERY') {
+      this.form.controls.codActive.setValue(true);
+    }
   }
 
   onSubmit() {

@@ -44,7 +44,7 @@ export interface AddressDetails {
 
 export interface PaymentDetails {
   id: string;
-  type: string;
+  type: 'CASH_ON_DELIVERY' | 'ONLINE' | string;
   provider: string;
   finishedAt: Date;
   paidAmount: AmountDetails;
