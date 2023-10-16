@@ -4,5 +4,6 @@ public class InpostShipmentViewModel
 {
     public string InpostShipmentNumber { get; set; }
     public string AllegroOrderNumber { get; set; }
+    public string TrackingNumber { get; set; }
     public DateTime CreatedAt { get; set; }
 }
