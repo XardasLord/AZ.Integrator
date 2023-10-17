@@ -114,7 +114,7 @@ export class AuthState implements NgxsOnInit {
     localStorage.setItem('access_token', action.user.access_token!);
     localStorage.setItem('user', JSON.stringify(action.user));
 
-    ctx.dispatch(new Navigate([RoutePaths.Test]));
+    ctx.dispatch(new Navigate([RoutePaths.AllegroOrders]));
   }
 
   @Action(Logout)
