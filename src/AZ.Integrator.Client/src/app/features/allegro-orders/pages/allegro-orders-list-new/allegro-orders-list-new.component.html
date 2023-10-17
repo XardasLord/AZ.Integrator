@@ -14,9 +14,14 @@
     <td mat-cell *matCellDef="let order">{{ order.buyer.login }} - {{ order.buyer.email }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="codActive">
-    <th mat-header-cell *matHeaderCellDef>Za pobraniem</th>
+  <ng-container matColumnDef="paymentType">
+    <th mat-header-cell *matHeaderCellDef>Sposób płatności</th>
     <td mat-cell *matCellDef="let order">{{ order.payment.type }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="deliveryType">
+    <th mat-header-cell *matHeaderCellDef>Sposób dostawy</th>
+    <td mat-cell *matCellDef="let order">{{ order?.delivery?.method?.name }}</td>
   </ng-container>
 
   <ng-container matColumnDef="lineItems">
