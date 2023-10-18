@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Infrastructure.ExternalServices.Allegro;
+using AZ.Integrator.Infrastructure.ExternalServices.Dpd;
 using AZ.Integrator.Infrastructure.ExternalServices.ShipX;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ public static class Extensions
     {
         return services
             .AddAllegro(configuration)
-            .AddShipX(configuration);
+            .AddShipX(configuration)
+            .AddDpd(configuration);
     }
 }
