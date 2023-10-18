@@ -55,7 +55,7 @@
     <th mat-header-cell *matHeaderCellDef>Akcje</th>
     <td mat-cell *matCellDef="let order">
       <div class="table-action-buttons">
-        <ng-container *ngIf="canRegisterShipment(order) | async">
+        <ng-container *ngIf="canRegisterInpostShipment(order) | async">
           <button
             mat-icon-button
             matTooltip="Nadaj przesykę kurierską InPost"
@@ -64,14 +64,14 @@
           </button>
         </ng-container>
 
-        <!--        <ng-container *ngIf="canGenerateShipmentLabel(order) | async">-->
-        <!--          <button-->
-        <!--            mat-icon-button-->
-        <!--            matTooltip="Wygeneruj list przewozowy"-->
-        <!--            (click)="generateShipmentLabel(order); $event.stopPropagation()">-->
-        <!--            <mat-icon class="material-icons-outlined" matListItemIcon>picture_as_pdf</mat-icon>-->
-        <!--          </button>-->
-        <!--        </ng-container>-->
+        <ng-container *ngIf="canRegisterDpdShipment(order) | async">
+          <button
+            mat-icon-button
+            matTooltip="Nadaj przesykę kurierską DPD"
+            (click)="registerDpdShipment(order); $event.stopPropagation()">
+            <mat-icon class="material-icons-outlined" matListItemIcon>add_box</mat-icon>
+          </button>
+        </ng-container>
       </div>
     </td>
   </ng-container>

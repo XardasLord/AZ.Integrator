@@ -1,4 +1,4 @@
-export interface CreateInpostShipmentCommand {
+export interface CreateShipmentCommand {
   sender: Sender;
   receiver: Receiver;
   parcels: Parcel[];

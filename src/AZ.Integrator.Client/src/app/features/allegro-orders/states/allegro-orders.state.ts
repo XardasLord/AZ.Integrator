@@ -16,12 +16,17 @@ import {
   RegisterInpostShipment,
   LoadReadyForShipment,
   LoadSent,
+  OpenRegisterDpdShipmentModal,
+  RegisterDpdShipment,
 } from './allegro-orders.action';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 import { InpostShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { DownloadService } from '../../../shared/services/download.service';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
+import { RegisterShipmentDataModel } from '../models/register-shipment-data.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { IntegratorError } from '../../../core/interceptor/error-handler.interceptor';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -153,10 +158,34 @@ export class AllegroOrdersState {
   @Action(OpenRegisterInPostShipmentModal)
   openRegisterInPostShipmentModal(ctx: StateContext<AllegroOrdersStateModel>, action: OpenRegisterInPostShipmentModal) {
     this.zone.run(() => {
-      this.dialogRef = this.dialog.open<RegisterParcelModalComponent, AllegroOrderDetailsModel>(
+      const data: RegisterShipmentDataModel = {
+        allegroOrder: action.order,
+        deliveryMethodType: 'INPOST',
+      };
+
+      this.dialogRef = this.dialog.open<RegisterParcelModalComponent, RegisterShipmentDataModel>(
         RegisterParcelModalComponent,
         {
-          data: <AllegroOrderDetailsModel>action.order,
+          data: <RegisterShipmentDataModel>data,
+          width: '50%',
+          height: '75%',
+        }
+      );
+    });
+  }
+
+  @Action(OpenRegisterDpdShipmentModal)
+  openRegisterDpdShipmentModal(ctx: StateContext<AllegroOrdersStateModel>, action: OpenRegisterInPostShipmentModal) {
+    this.zone.run(() => {
+      const data: RegisterShipmentDataModel = {
+        allegroOrder: action.order,
+        deliveryMethodType: 'DPD',
+      };
+
+      this.dialogRef = this.dialog.open<RegisterParcelModalComponent, RegisterShipmentDataModel>(
+        RegisterParcelModalComponent,
+        {
+          data: <RegisterShipmentDataModel>data,
           width: '50%',
           height: '75%',
         }
@@ -175,6 +204,26 @@ export class AllegroOrdersState {
       }),
       catchError(error => {
         this.zone.run(() => this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost'));
+        return throwError(error);
+      })
+    );
+  }
+
+  @Action(RegisterDpdShipment)
+  registerDpdShipment(ctx: StateContext<AllegroOrdersStateModel>, action: RegisterDpdShipment) {
+    return this.allegroOrderService.registerDpdShipment(action.command).pipe(
+      tap(() => {
+        this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w DPD', 'Przesyłka DPD'));
+        this.dialogRef?.close();
+
+        ctx.dispatch(new LoadInpostShipments());
+      }),
+      catchError((error: HttpErrorResponse) => {
+        const errorDetails: IntegratorError = error.error;
+
+        this.zone.run(() =>
+          this.toastService.error(`Błąd podczas rejestrowania przesyłki DPD - ${errorDetails.Message}`, 'Przesyłka DPD')
+        );
         return throwError(error);
       })
     );

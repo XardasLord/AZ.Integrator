@@ -9,6 +9,7 @@ import {
   LoadNew,
   LoadInpostShipments,
   OpenRegisterInPostShipmentModal,
+  OpenRegisterDpdShipmentModal,
 } from '../../states/allegro-orders.action';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 
@@ -31,6 +32,7 @@ export class AllegroOrdersListNewComponent implements OnInit {
   ];
   orders$ = this.store.select(AllegroOrdersState.getAllNewOrders);
   inpostShipments$ = this.store.select(AllegroOrdersState.getInpostShipments);
+  dpdShipments$ = this.store.select(AllegroOrdersState.getInpostShipments);
   totalItems$ = this.store.select(AllegroOrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
@@ -49,8 +51,18 @@ export class AllegroOrdersListNewComponent implements OnInit {
     this.store.dispatch(new OpenRegisterInPostShipmentModal(order));
   }
 
-  canRegisterShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
+  registerDpdShipment(order: AllegroOrderDetailsModel) {
+    this.store.dispatch(new OpenRegisterDpdShipmentModal(order));
+  }
+
+  canRegisterInpostShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
     return this.inpostShipments$.pipe(
+      map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
+    );
+  }
+
+  canRegisterDpdShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
+    return this.dpdShipments$.pipe(
       map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
     );
   }

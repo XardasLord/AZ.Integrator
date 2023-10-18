@@ -3,9 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.model';
-import { CreateInpostShipmentCommand, Parcel } from '../../models/commands/create-inpost-shipment.command';
+import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
 import { ParcelFromGroupModel, RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
-import { RegisterInpostShipment } from '../../states/allegro-orders.action';
+import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegro-orders.action';
+import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
 
 @Component({
   selector: 'app-register-parcel-modal',
@@ -17,10 +18,12 @@ export class RegisterParcelModalComponent {
 
   constructor(
     public dialogRef: MatDialogRef<RegisterParcelModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public allegroOrderDetails: AllegroOrderDetailsModel,
+    @Inject(MAT_DIALOG_DATA) public data: RegisterShipmentDataModel,
     private fb: FormBuilder,
     private store: Store
   ) {
+    const allegroOrderDetails = data.allegroOrder;
+
     this.form = this.fb.group<RegisterParcelFormGroupModel>({
       receiverName: new FormControl<string>(allegroOrderDetails.buyer.login, [Validators.required]),
       receiverCompanyName: new FormControl<string>(allegroOrderDetails.buyer.companyName, []),
@@ -44,7 +47,7 @@ export class RegisterParcelModalComponent {
       ]),
       insuranceActive: new FormControl<boolean>(false),
       insuranceAmount: new FormControl<number>({
-        value: this.allegroOrderDetails.summary.totalToPay.amount,
+        value: allegroOrderDetails.summary.totalToPay.amount,
         disabled: true,
       }),
       insuranceCurrency: new FormControl<string>({ value: 'PLN', disabled: true }),
@@ -96,6 +99,33 @@ export class RegisterParcelModalComponent {
       return;
     }
 
+    if (this.data.deliveryMethodType === 'INPOST') {
+      this.registerInpostShipment();
+    } else if (this.data.deliveryMethodType === 'DPD') {
+      this.registerDpdShipment();
+    }
+  }
+
+  addNewParcel() {
+    const parcel = this.fb.group<ParcelFromGroupModel>({
+      length: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
+      width: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
+      height: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
+      weight: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
+    });
+
+    this.parcels.push(parcel);
+  }
+
+  removeParcel(index: number) {
+    this.parcels.removeAt(index);
+  }
+
+  get parcels(): FormArray<FormGroup> {
+    return this.form.controls.parcels;
+  }
+
+  private registerInpostShipment() {
     const parcels: Parcel[] = [];
 
     for (let i = 0; i < this.form.value.parcels.length; i++) {
@@ -117,7 +147,7 @@ export class RegisterParcelModalComponent {
       });
     }
 
-    const command: CreateInpostShipmentCommand = {
+    const command: CreateShipmentCommand = {
       receiver: {
         name: this.form.value.receiverName!,
         company_name: this.form.value.receiverCompanyName!,
@@ -143,11 +173,11 @@ export class RegisterParcelModalComponent {
         : null,
       cod: this.form.value.codActive
         ? {
-            amount: this.allegroOrderDetails.summary.totalToPay.amount!,
+            amount: this.data.allegroOrder.summary.totalToPay.amount!,
             currency: 'PLN',
           }
         : undefined!,
-      reference: this.allegroOrderDetails.id,
+      reference: this.data.allegroOrder.id,
       comments: '',
       external_customer_id: '',
     };
@@ -155,22 +185,63 @@ export class RegisterParcelModalComponent {
     this.store.dispatch(new RegisterInpostShipment(command));
   }
 
-  addNewParcel() {
-    const parcel = this.fb.group<ParcelFromGroupModel>({
-      length: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      width: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      height: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      weight: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-    });
+  private registerDpdShipment() {
+    const parcels: Parcel[] = [];
 
-    this.parcels.push(parcel);
-  }
+    for (let i = 0; i < this.form.value.parcels.length; i++) {
+      const parcel = this.form.value.parcels[i];
 
-  removeParcel(index: number) {
-    this.parcels.removeAt(index);
-  }
+      parcels.push({
+        id: `${i + 1}/${this.form.value.parcels.length}`,
+        weight: {
+          amount: parcel.weight.toString(),
+          unit: 'kg',
+        },
+        dimensions: {
+          length: (parcel.length / 10).toString(),
+          width: (parcel.width / 10).toString(),
+          height: (parcel.height / 10).toString(),
+          unit: 'cm',
+        },
+        is_non_standard: false,
+      });
+    }
 
-  get parcels(): FormArray<FormGroup> {
-    return this.form.controls.parcels;
+    const command: CreateShipmentCommand = {
+      receiver: {
+        name: this.form.value.receiverName!,
+        company_name: this.form.value.receiverCompanyName!,
+        first_name: this.form.value.receiverFirstName!,
+        last_name: this.form.value.receiverLastName!,
+        email: this.form.value.receiverEmail!,
+        phone: this.form.value.receiverPhoneNumber!,
+        address: {
+          street: this.form.value.receiverAddressStreet!,
+          building_number: this.form.value.receiverAddressBuildingNumber!,
+          city: this.form.value.receiverAddressCity!,
+          post_code: this.form.value.receiverAddressPostCode!,
+          country_code: this.form.value.receiverAddressCountryCode!,
+        },
+      },
+      sender: undefined!,
+      parcels: parcels,
+      insurance: this.form.value.insuranceActive
+        ? {
+            amount: this.form.value.insuranceAmount!,
+            currency: this.form.value.insuranceCurrency!,
+          }
+        : null,
+      cod: this.form.value.codActive
+        ? {
+            amount: this.data.allegroOrder.summary.totalToPay.amount!,
+            currency: 'PLN',
+          }
+        : undefined!,
+      reference: this.data.allegroOrder.id,
+      comments: '',
+      external_customer_id: '',
+    };
+
+    this.store.dispatch(new RegisterDpdShipment(command));
   }
 }

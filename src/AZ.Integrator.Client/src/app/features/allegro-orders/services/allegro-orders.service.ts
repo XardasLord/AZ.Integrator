@@ -6,7 +6,7 @@ import { RemoteServiceBase } from '../../../shared/services/remote-service.base'
 import { environment } from '../../../../environments/environment';
 import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
-import { CreateInpostShipmentCommand } from '../models/commands/create-inpost-shipment.command';
+import { CreateShipmentCommand } from '../models/commands/create-shipment.command';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import {
   InpostShipmentViewModel,
@@ -44,8 +44,12 @@ export class AllegroOrdersService extends RemoteServiceBase {
   }
 
   // TODO: Move it to a new dedicated shipment service
-  registerInpostShipment(shipment: CreateInpostShipmentCommand): Observable<void> {
+  registerInpostShipment(shipment: CreateShipmentCommand): Observable<void> {
     return this.httpClient.post<void>(`${this.apiUrl}/inpostShipments/`, shipment);
+  }
+
+  registerDpdShipment(shipment: CreateShipmentCommand): Observable<void> {
+    return this.httpClient.post<void>(`${this.apiUrl}/dpdShipments/`, shipment);
   }
 
   getInpostShipments(

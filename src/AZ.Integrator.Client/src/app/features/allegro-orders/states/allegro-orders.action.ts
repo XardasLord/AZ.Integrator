@@ -1,5 +1,5 @@
 import { PageEvent } from '@angular/material/paginator';
-import { CreateInpostShipmentCommand } from '../models/commands/create-inpost-shipment.command';
+import { CreateShipmentCommand } from '../models/commands/create-shipment.command';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 
 const prefix = '[Allegro Orders]';
@@ -32,10 +32,22 @@ export class OpenRegisterInPostShipmentModal {
   constructor(public order: AllegroOrderDetailsModel) {}
 }
 
+export class OpenRegisterDpdShipmentModal {
+  static readonly type = `${prefix} ${OpenRegisterDpdShipmentModal.name}`;
+
+  constructor(public order: AllegroOrderDetailsModel) {}
+}
+
 export class RegisterInpostShipment {
   static readonly type = `${prefix} ${RegisterInpostShipment.name}`;
 
-  constructor(public command: CreateInpostShipmentCommand) {}
+  constructor(public command: CreateShipmentCommand) {}
+}
+
+export class RegisterDpdShipment {
+  static readonly type = `${prefix} ${RegisterDpdShipment.name}`;
+
+  constructor(public command: CreateShipmentCommand) {}
 }
 
 export class GenerateInpostLabel {
