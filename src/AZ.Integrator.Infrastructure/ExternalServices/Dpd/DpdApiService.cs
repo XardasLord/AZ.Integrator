@@ -23,27 +23,11 @@ public class DpdApiService : IDpdService
         var dpdClient = new DPDPackageObjServicesClient();
 
         var response = await dpdClient.generatePackagesNumbersV9Async(request.openUMLFeV11, request.pkgNumsGenerationPolicyV1, request.langCode, request.authDataV1);
-
+        
         if (response.@return.Status != "OK")
         {
-            var errorDetails = new List<string>();
-            
-            foreach (var packageResponse in response.@return.Packages)
-            {
-                if (packageResponse.ValidationDetails is not null && packageResponse.ValidationDetails.Any())
-                {
-                    errorDetails.AddRange(packageResponse.ValidationDetails.Select(x => x.Info));
-                }
-                
-                foreach (var parcelResponse in packageResponse.Parcels)
-                {
-                    if (parcelResponse.ValidationDetails is not null && parcelResponse.ValidationDetails.Any())
-                    {
-                        errorDetails.AddRange(parcelResponse.ValidationDetails.Select(x => x.Info));
-                    }
-                }
-            }
-            
+            var errorDetails = GetErrorDetails(response);
+
             throw new InvalidOperationException(string.Join(';', errorDetails));
         }
 
@@ -91,7 +75,6 @@ public class DpdApiService : IDpdService
                         company = shipment.Receiver.CompanyName,
                         phone = shipment.Receiver.Phone,
                         countryCode = "PL",
-                        // fid = _dpdOptions.MasterFid,
                         fidSpecified = false
                     },
                     sender = new packageAddressOpenUMLFeV1
@@ -109,20 +92,19 @@ public class DpdApiService : IDpdService
                     },
                     services = new servicesOpenUMLFeV11
                     {
-                        
-                        cod  = shipment.Cod is null ? null : new serviceCODOpenUMLFeV1 
+                        cod = shipment.Cod is null ? null : new serviceCODOpenUMLFeV1 
                         { 
                             amount = shipment.Cod.Amount.ToString(CultureInfo.InvariantCulture), 
                             currency = serviceCurrencyEnum.PLN, 
-                            currencySpecified = true 
-                        }, 
-                        codDedicatedAccount = shipment.Cod is null ? null : new serviceCODDedicatedAccountOpenUMLFeV1
-                        {
-                            amount = shipment.Cod.Amount.ToString(CultureInfo.InvariantCulture), 
-                            currency = serviceCurrencyEnum.PLN,
-                            currencySpecified = true,
-                            accountNumber = _dpdOptions.Sender.CodAccountNumber
+                            currencySpecified = true
                         },
+                        // codDedicatedAccount = shipment.Cod is null ? null : new serviceCODDedicatedAccountOpenUMLFeV1
+                        // {
+                        //     amount = shipment.Cod.Amount.ToString(CultureInfo.InvariantCulture), 
+                        //     currency = serviceCurrencyEnum.PLN,
+                        //     currencySpecified = true,
+                        //     accountNumber = _dpdOptions.Sender.CodAccountNumber
+                        // },
                         declaredValue = shipment.Insurance is null ? null : new serviceDeclaredValueOpenUMLFeV1 
                         { 
                             amount  = shipment.Insurance.Amount.ToString(CultureInfo.InvariantCulture), 
@@ -130,7 +112,6 @@ public class DpdApiService : IDpdService
                             currencySpecified = true 
                         }
                     },
-                    reference = shipment.Reference,
                     ref1 = shipment.Receiver.Email,
                     payerType = shipment.Cod is null ? payerTypeEnumOpenUMLFeV1.SENDER : payerTypeEnumOpenUMLFeV1.RECEIVER,
                     payerTypeSpecified = true,
@@ -142,7 +123,7 @@ public class DpdApiService : IDpdService
         return request;
     }
 
-    private CreateDpdShipmentResponse PrepareResponse(generatePackagesNumbersV9Response response)
+    private static CreateDpdShipmentResponse PrepareResponse(generatePackagesNumbersV9Response response)
     {
         var packagesResponse = new List<CreateDpdShipmentPackageResponse>();
         
@@ -175,5 +156,28 @@ public class DpdApiService : IDpdService
         return postalCode
             .Replace("-", "")
             .Replace(" ", "");
+    }
+
+    private static IEnumerable<string> GetErrorDetails(generatePackagesNumbersV9Response response)
+    {
+        var errorDetails = new List<string>();
+
+        foreach (var packageResponse in response.@return.Packages)
+        {
+            if (packageResponse.ValidationDetails is not null && packageResponse.ValidationDetails.Any())
+            {
+                errorDetails.AddRange(packageResponse.ValidationDetails.Select(x => x.Info));
+            }
+                
+            foreach (var parcelResponse in packageResponse.Parcels)
+            {
+                if (parcelResponse.ValidationDetails is not null && parcelResponse.ValidationDetails.Any())
+                {
+                    errorDetails.AddRange(parcelResponse.ValidationDetails.Select(x => x.Info));
+                }
+            }
+        }
+
+        return errorDetails;
     }
 }
