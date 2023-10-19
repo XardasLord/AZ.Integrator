@@ -1,5 +1,6 @@
 ﻿using AZ.Integrator.Application.Common.ExternalServices.ShipX.Models;
 using AZ.Integrator.Domain.Aggregates.InpostShipment.ValueObjects;
+using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 
 namespace AZ.Integrator.Application.Common.ExternalServices.ShipX;
 

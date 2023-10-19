@@ -1,19 +1,20 @@
 ﻿using AZ.Integrator.Application.Common.ExternalServices.Dpd;
+using AZ.Integrator.Application.Common.ExternalServices.Dpd.Models;
 using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Domain.Aggregates.InpostShipment;
+using AZ.Integrator.Domain.Aggregates.DpdShipment;
 using Mediator;
 
 namespace AZ.Integrator.Application.UseCases.Shipments.Commands.CreateDpdShipment;
 
-public class CreateDpdShipmentCommandHandler : ICommandHandler<CreateDpdShipmentCommand, object>
+public class CreateDpdShipmentCommandHandler : ICommandHandler<CreateDpdShipmentCommand, CreateDpdShipmentResponse>
 {
-    private readonly IAggregateRepository<InpostShipment> _shipmentRepository;
+    private readonly IAggregateRepository<DpdShipment> _shipmentRepository;
     private readonly IDpdService _dpdService;
     private readonly ICurrentUser _currentUser;
     private readonly ICurrentDateTime _currentDateTime;
 
     public CreateDpdShipmentCommandHandler(
-        IAggregateRepository<InpostShipment> shipmentRepository,
+        IAggregateRepository<DpdShipment> shipmentRepository,
         IDpdService dpdService,
         ICurrentUser currentUser,
         ICurrentDateTime currentDateTime)
@@ -24,12 +25,20 @@ public class CreateDpdShipmentCommandHandler : ICommandHandler<CreateDpdShipment
         _currentDateTime = currentDateTime;
     }
     
-    public async ValueTask<object> Handle(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
+    public async ValueTask<CreateDpdShipmentResponse> Handle(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
     {
         var response = await _dpdService.CreateShipment(command);
+
+        var packages = new List<DpdPackage>();
+        foreach (var packageResponse in response.Packages)
+        {
+            var parcels = packageResponse.Parcels.Select(parcelResponse => DpdParcel.Register(parcelResponse.ParcelId, parcelResponse.Waybill)).ToList();
+
+            packages.Add(DpdPackage.Register(packageResponse.PackageId, parcels));
+        }
         
-        // var inpostShipment = InpostShipment.Create(response.Id.ToString(), response.Reference, _currentUser, _currentDateTime);
-        // await _shipmentRepository.AddAsync(inpostShipment, cancellationToken);
+        var dpdShipment = DpdShipment.Create(response.SessionId, packages, command.Reference, _currentUser, _currentDateTime);
+        await _shipmentRepository.AddAsync(dpdShipment, cancellationToken);
 
         return response;
     }

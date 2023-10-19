@@ -1,5 +1,5 @@
 ﻿using Ardalis.Specification;
-using AZ.Integrator.Domain.Aggregates.InpostShipment.ValueObjects;
+using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 
 namespace AZ.Integrator.Domain.Aggregates.InpostShipment.Specifications;
 

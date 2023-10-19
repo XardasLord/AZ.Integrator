@@ -32,7 +32,6 @@ public class InpostShipment : Entity, IAggregateRoot
         var shipment = new InpostShipment(number, allegroAllegroOrderNumber, currentUser, currentDateTime);
         
         shipment.AddDomainEvent(new InpostShipmentRegistered(number, allegroAllegroOrderNumber));
-        // TODO: We can handle this event and check for Shipment Status to get Tracking Number and save it to DB - for further development features
         
         return shipment;
     }

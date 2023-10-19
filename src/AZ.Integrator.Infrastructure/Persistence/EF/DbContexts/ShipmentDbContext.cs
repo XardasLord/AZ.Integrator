@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Domain.Aggregates.InpostShipment;
+﻿using AZ.Integrator.Domain.Aggregates.DpdShipment;
+using AZ.Integrator.Domain.Aggregates.InpostShipment;
 using AZ.Integrator.Infrastructure.Mediator;
 using AZ.Integrator.Infrastructure.Persistence.EF.Configurations.Domain;
 using Mediator;
@@ -12,6 +13,8 @@ public class ShipmentDbContext : DbContext
     
     public virtual DbSet<InpostShipment> InpostShipments { get; set; }
     
+    public virtual DbSet<DpdShipment> DpdShipments { get; set; }
+    
     public ShipmentDbContext(DbContextOptions<ShipmentDbContext> options, IMediator mediator) : base(options)
     {
         _mediator = mediator;
@@ -20,6 +23,9 @@ public class ShipmentDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new InpostShipmentConfiguration());
+        modelBuilder.ApplyConfiguration(new DpdShipmentConfiguration());
+        modelBuilder.ApplyConfiguration(new DpdPackageConfiguration());
+        modelBuilder.ApplyConfiguration(new DpdParcelConfiguration());
     }
     
     public async Task SaveAggregateAsync(CancellationToken cancellationToken)

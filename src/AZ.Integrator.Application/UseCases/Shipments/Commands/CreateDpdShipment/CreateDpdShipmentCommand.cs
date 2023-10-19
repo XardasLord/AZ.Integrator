@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Application.Common.ExternalServices.ShipX.Models;
+﻿using AZ.Integrator.Application.Common.ExternalServices.Dpd.Models;
+using AZ.Integrator.Application.Common.ExternalServices.ShipX.Models;
 using Mediator;
 
 namespace AZ.Integrator.Application.UseCases.Shipments.Commands.CreateDpdShipment;
@@ -11,4 +12,4 @@ public record CreateDpdShipmentCommand(
     Cod Cod,
     string Reference,
     string Comments,
-    string ExternalCustomerId) : ICommand<object>;
+    string ExternalCustomerId) : ICommand<CreateDpdShipmentResponse>;
