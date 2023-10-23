@@ -1,6 +1,6 @@
 ﻿namespace AZ.Integrator.Infrastructure.Persistence.EF.Configurations.View.ViewModels;
 
-public class InpostShipmentViewModel
+public class DpdShipmentViewModel
 {
     public string ShipmentNumber { get; set; }
     public string AllegroOrderNumber { get; set; }

@@ -20,7 +20,8 @@ SELECT
   allegro_order_number,
   tracking_number,
   created_at
-FROM inpost_shipments;");
+FROM inpost_shipments;"
+                );
         }
 
         /// <inheritdoc />

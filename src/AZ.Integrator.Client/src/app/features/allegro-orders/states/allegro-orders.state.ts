@@ -233,7 +233,7 @@ export class AllegroOrdersState {
   generateInpostLabel(ctx: StateContext<AllegroOrdersStateModel>, action: GenerateInpostLabel) {
     const shipmentNumber = ctx
       .getState()
-      .inpostShipments.filter(x => x.allegroOrderNumber === action.allegroOrderNumber)[0].inpostShipmentNumber!;
+      .inpostShipments.filter(x => x.allegroOrderNumber === action.allegroOrderNumber)[0].shipmentNumber!;
 
     return this.downloadService.downloadFileFromApi(`/inpostShipments/${shipmentNumber}/label`).pipe(
       switchMap(resBlob => {

@@ -38,30 +38,86 @@ export type DateTimeOperationFilterInput = {
   nlte?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type DpdShipmentViewModel = {
+  __typename?: 'DpdShipmentViewModel';
+  allegroOrderNumber?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  shipmentNumber?: Maybe<Scalars['String']['output']>;
+  trackingNumber?: Maybe<Scalars['String']['output']>;
+};
+
+export type DpdShipmentViewModelFilterInput = {
+  allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  or?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
+  shipmentNumber?: InputMaybe<StringOperationFilterInput>;
+  trackingNumber?: InputMaybe<StringOperationFilterInput>;
+};
+
 export type InpostShipmentViewModel = {
   __typename?: 'InpostShipmentViewModel';
   allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
-  inpostShipmentNumber?: Maybe<Scalars['String']['output']>;
+  shipmentNumber?: Maybe<Scalars['String']['output']>;
+  trackingNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type InpostShipmentViewModelFilterInput = {
   allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<InpostShipmentViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
-  inpostShipmentNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InpostShipmentViewModelFilterInput>>;
+  shipmentNumber?: InputMaybe<StringOperationFilterInput>;
+  trackingNumber?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
+  allShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
+  dpdShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
   inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
+  shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
   test?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type IntegratorQueryAllShipmentsArgs = {
+  where?: InputMaybe<DpdShipmentViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryDpdShipmentsArgs = {
+  where?: InputMaybe<DpdShipmentViewModelFilterInput>;
 };
 
 
 export type IntegratorQueryInpostShipmentsArgs = {
   where?: InputMaybe<InpostShipmentViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryShipmentsArgs = {
+  where?: InputMaybe<ShipmentViewModelFilterInput>;
+};
+
+export type ShipmentViewModel = {
+  __typename?: 'ShipmentViewModel';
+  allegroOrderNumber?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  shipmentNumber?: Maybe<Scalars['String']['output']>;
+  shipmentProvider?: Maybe<Scalars['String']['output']>;
+  trackingNumber?: Maybe<Scalars['String']['output']>;
+};
+
+export type ShipmentViewModelFilterInput = {
+  allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<ShipmentViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  or?: InputMaybe<Array<ShipmentViewModelFilterInput>>;
+  shipmentNumber?: InputMaybe<StringOperationFilterInput>;
+  shipmentProvider?: InputMaybe<StringOperationFilterInput>;
+  trackingNumber?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type StringOperationFilterInput = {

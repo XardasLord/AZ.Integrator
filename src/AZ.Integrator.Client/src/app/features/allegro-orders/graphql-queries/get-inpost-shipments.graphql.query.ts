@@ -15,7 +15,7 @@ export class GetInpostShipmentsGQL extends Query<GraphQLResponseWithoutPaginatio
       result: ${nameof<IntegratorQuery>('inpostShipments')}(
         where: $where
       ) {
-            ${nameof<InpostShipmentViewModel>('inpostShipmentNumber')}
+            ${nameof<InpostShipmentViewModel>('shipmentNumber')}
             ${nameof<InpostShipmentViewModel>('allegroOrderNumber')}
             ${nameof<InpostShipmentViewModel>('createdAt')}
         }
