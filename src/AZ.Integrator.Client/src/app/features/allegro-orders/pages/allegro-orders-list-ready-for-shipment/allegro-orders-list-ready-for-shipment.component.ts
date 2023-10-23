@@ -8,9 +8,11 @@ import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
   GenerateInpostLabel,
-  LoadInpostShipments,
+  LoadShipments,
   LoadReadyForShipment,
+  GenerateDpdLabel,
 } from '../../states/allegro-orders.action';
+import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 
 @Component({
   selector: 'app-allegro-orders-list-ready-for-shipment',
@@ -29,7 +31,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     'actions',
   ];
   orders$ = this.store.select(AllegroOrdersState.getAllNewOrders);
-  inpostShipments$ = this.store.select(AllegroOrdersState.getInpostShipments);
+  shipments$ = this.store.select(AllegroOrdersState.getShipments);
   totalItems$ = this.store.select(AllegroOrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
@@ -37,7 +39,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new LoadReadyForShipment(), new LoadInpostShipments()]);
+    this.store.dispatch([new LoadReadyForShipment(), new LoadShipments()]);
   }
 
   pageChanged(event: PageEvent): void {
@@ -45,17 +47,23 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   }
 
   generateShipmentLabel(order: AllegroOrderDetailsModel) {
-    this.store.dispatch(new GenerateInpostLabel(order.id));
+    const shipment = this.store
+      .selectSnapshot(AllegroOrdersState.getShipments)
+      .filter(x => x.allegroOrderNumber === order.id)[0];
+
+    if (shipment.shipmentProvider === ShipmentProviderEnum.Inpost) {
+      this.store.dispatch(new GenerateInpostLabel(order.id));
+    } else if (shipment.shipmentProvider === ShipmentProviderEnum.Dpd) {
+      this.store.dispatch(new GenerateDpdLabel(order.id));
+    }
   }
 
   canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
-    return this.inpostShipments$.pipe(
-      map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id))
-    );
+    return this.shipments$.pipe(map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id)));
   }
 
   getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
-    return this.inpostShipments$.pipe(
+    return this.shipments$.pipe(
       map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0].shipmentNumber)
     );
   }

@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
-import { ChangePage, LoadInpostShipments, LoadSent } from '../../states/allegro-orders.action';
+import { ChangePage, LoadShipments, LoadSent } from '../../states/allegro-orders.action';
 
 @Component({
   selector: 'app-allegro-orders-list-sent',
@@ -31,7 +31,7 @@ export class AllegroOrdersListSentComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new LoadSent(), new LoadInpostShipments()]);
+    this.store.dispatch([new LoadSent(), new LoadShipments()]);
   }
 
   pageChanged(event: PageEvent): void {

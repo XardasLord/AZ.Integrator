@@ -8,13 +8,10 @@ import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-resp
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 import { CreateShipmentCommand } from '../models/commands/create-shipment.command';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
-import {
-  InpostShipmentViewModel,
-  IntegratorQueryInpostShipmentsArgs,
-} from '../../../shared/graphql/graphql-integrator.schema';
-import { GetInpostShipmentsGQL } from '../graphql-queries/get-inpost-shipments.graphql.query';
+import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
+import { GetShipmentsGQL } from '../graphql-queries/get-shipments.graphql.query';
 
 @Injectable()
 export class AllegroOrdersService extends RemoteServiceBase {
@@ -22,7 +19,7 @@ export class AllegroOrdersService extends RemoteServiceBase {
 
   constructor(
     httpClient: HttpClient,
-    private inpostShipmentsGqlQuery: GetInpostShipmentsGQL
+    private shipmentsGqlQuery: GetShipmentsGQL
   ) {
     super(httpClient);
   }
@@ -52,10 +49,10 @@ export class AllegroOrdersService extends RemoteServiceBase {
     return this.httpClient.post<void>(`${this.apiUrl}/dpdShipments/`, shipment);
   }
 
-  getInpostShipments(
-    filters: IntegratorQueryInpostShipmentsArgs
-  ): Observable<GraphQLResponseWithoutPaginationVo<InpostShipmentViewModel[]>> {
-    return this.inpostShipmentsGqlQuery
+  getShipments(
+    filters: IntegratorQueryShipmentsArgs
+  ): Observable<GraphQLResponseWithoutPaginationVo<ShipmentViewModel[]>> {
+    return this.shipmentsGqlQuery
       .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
       .valueChanges.pipe(map(x => x.data));
   }

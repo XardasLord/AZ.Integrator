@@ -16,8 +16,8 @@ export class LoadSent {
   static readonly type = `${prefix} ${LoadSent.name}`;
 }
 
-export class LoadInpostShipments {
-  static readonly type = `${prefix} ${LoadInpostShipments.name}`;
+export class LoadShipments {
+  static readonly type = `${prefix} ${LoadShipments.name}`;
 }
 
 export class ChangePage {
@@ -52,6 +52,12 @@ export class RegisterDpdShipment {
 
 export class GenerateInpostLabel {
   static readonly type = `${prefix} ${GenerateInpostLabel.name}`;
+
+  constructor(public allegroOrderNumber: string) {}
+}
+
+export class GenerateDpdLabel {
+  static readonly type = `${prefix} ${GenerateDpdLabel.name}`;
 
   constructor(public allegroOrderNumber: string) {}
 }

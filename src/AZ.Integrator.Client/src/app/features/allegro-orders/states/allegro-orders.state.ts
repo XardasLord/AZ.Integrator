@@ -11,22 +11,24 @@ import {
   ChangePage,
   GenerateInpostLabel,
   LoadNew,
-  LoadInpostShipments,
+  LoadShipments,
   OpenRegisterInPostShipmentModal,
   RegisterInpostShipment,
   LoadReadyForShipment,
   LoadSent,
   OpenRegisterDpdShipmentModal,
   RegisterDpdShipment,
+  GenerateDpdLabel,
 } from './allegro-orders.action';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
-import { InpostShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
+import { ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { DownloadService } from '../../../shared/services/download.service';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
 import { RegisterShipmentDataModel } from '../models/register-shipment-data.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IntegratorError } from '../../../core/interceptor/error-handler.interceptor';
+import { ShipmentProviderEnum } from '../models/shipment-provider.enum';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -36,7 +38,7 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
     restQuery: new RestQueryVo(),
     restQueryResponse: new RestQueryResponse<AllegroOrderDetailsModel[]>(),
     selectedOrderDetails: null,
-    inpostShipments: [],
+    shipments: [],
   },
 })
 @Injectable()
@@ -77,8 +79,18 @@ export class AllegroOrdersState {
   }
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
-  static getInpostShipments(state: AllegroOrdersStateModel): InpostShipmentViewModel[] {
-    return state.inpostShipments;
+  static getShipments(state: AllegroOrdersStateModel): ShipmentViewModel[] {
+    return state.shipments;
+  }
+
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
+  static getInpostShipments(state: AllegroOrdersStateModel): ShipmentViewModel[] {
+    return state.shipments.filter(x => x.shipmentProvider === ShipmentProviderEnum.Inpost);
+  }
+
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
+  static getDpdShipments(state: AllegroOrdersStateModel): ShipmentViewModel[] {
+    return state.shipments.filter(x => x.shipmentProvider === ShipmentProviderEnum.Dpd);
   }
 
   @Action(LoadNew)
@@ -132,17 +144,6 @@ export class AllegroOrdersState {
       );
   }
 
-  @Action(LoadInpostShipments)
-  loadInpostShipments(ctx: StateContext<AllegroOrdersStateModel>) {
-    return this.allegroOrderService.getInpostShipments({}).pipe(
-      tap(shipmentsResponse => {
-        ctx.patchState({
-          inpostShipments: shipmentsResponse.result,
-        });
-      })
-    );
-  }
-
   @Action(ChangePage)
   changePage(ctx: StateContext<AllegroOrdersStateModel>, action: ChangePage) {
     const customQuery = new RestQueryVo();
@@ -153,6 +154,17 @@ export class AllegroOrdersState {
     });
 
     return ctx.dispatch(new LoadNew());
+  }
+
+  @Action(LoadShipments)
+  loadInpostShipments(ctx: StateContext<AllegroOrdersStateModel>) {
+    return this.allegroOrderService.getShipments({}).pipe(
+      tap(shipmentsResponse => {
+        ctx.patchState({
+          shipments: shipmentsResponse.result,
+        });
+      })
+    );
   }
 
   @Action(OpenRegisterInPostShipmentModal)
@@ -200,7 +212,7 @@ export class AllegroOrdersState {
         this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w InPost', 'Przesyłka InPost'));
         this.dialogRef?.close();
 
-        ctx.dispatch(new LoadInpostShipments());
+        ctx.dispatch(new LoadShipments());
       }),
       catchError(error => {
         this.zone.run(() => this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost'));
@@ -216,7 +228,7 @@ export class AllegroOrdersState {
         this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w DPD', 'Przesyłka DPD'));
         this.dialogRef?.close();
 
-        ctx.dispatch(new LoadInpostShipments());
+        ctx.dispatch(new LoadShipments());
       }),
       catchError((error: HttpErrorResponse) => {
         const errorDetails: IntegratorError = error.error;
@@ -233,9 +245,34 @@ export class AllegroOrdersState {
   generateInpostLabel(ctx: StateContext<AllegroOrdersStateModel>, action: GenerateInpostLabel) {
     const shipmentNumber = ctx
       .getState()
-      .inpostShipments.filter(x => x.allegroOrderNumber === action.allegroOrderNumber)[0].shipmentNumber!;
+      .shipments.filter(
+        x => x.shipmentProvider === ShipmentProviderEnum.Inpost && x.allegroOrderNumber === action.allegroOrderNumber
+      )[0].shipmentNumber!;
 
     return this.downloadService.downloadFileFromApi(`/inpostShipments/${shipmentNumber}/label`).pipe(
+      switchMap(resBlob => {
+        this.downloadService.getFile(resBlob, 'ShipmentLabel.pdf');
+        this.toastService.success('List przewozowy został wygenerowany.', 'List przewozowy');
+
+        return of(null);
+      }),
+      catchError(() => {
+        this.toastService.error(`Błąd podczas pobierania raportu CSV`, 'Raport CSV');
+
+        return of(null);
+      })
+    );
+  }
+
+  @Action(GenerateDpdLabel)
+  generateDpdLabel(ctx: StateContext<AllegroOrdersStateModel>, action: GenerateDpdLabel) {
+    const shipmentNumber = ctx
+      .getState()
+      .shipments.filter(
+        x => x.shipmentProvider === ShipmentProviderEnum.Dpd && x.allegroOrderNumber === action.allegroOrderNumber
+      )[0].shipmentNumber!;
+
+    return this.downloadService.downloadFileFromApi(`/dpdShipments/${shipmentNumber}/label`).pipe(
       switchMap(resBlob => {
         this.downloadService.getFile(resBlob, 'ShipmentLabel.pdf');
         this.toastService.success('List przewozowy został wygenerowany.', 'List przewozowy');
