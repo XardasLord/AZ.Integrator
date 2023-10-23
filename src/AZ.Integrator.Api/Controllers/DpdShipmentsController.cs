@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Application.UseCases.Shipments.Commands.CreateDpdShipment;
+using AZ.Integrator.Application.UseCases.Shipments.Queries.GetDpdLabel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,5 +15,13 @@ public class DpdShipmentsController : ApiBaseController
         await Mediator.Send(command);
         
         return NoContent();
+    }
+    
+    [HttpGet("{sessionId}/label")]
+    public async Task<IActionResult> GetShipmentLabel(long sessionId)
+    {
+        var result = await Mediator.Send(new GetDpdLabelQuery(sessionId));
+
+        return File(result.ContentStream, result.ContentType, result.FileName);
     }
 }

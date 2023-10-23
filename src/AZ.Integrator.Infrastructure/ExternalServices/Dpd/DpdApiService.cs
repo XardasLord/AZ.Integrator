@@ -2,6 +2,7 @@
 using AZ.Integrator.Application.Common.ExternalServices.Dpd;
 using AZ.Integrator.Application.Common.ExternalServices.Dpd.Models;
 using AZ.Integrator.Application.UseCases.Shipments.Commands.CreateDpdShipment;
+using AZ.Integrator.Domain.Aggregates.DpdShipment.ValueObjects;
 using AZ.Integrator.Infrastructure.DPDPackageObjServicesService;
 using Microsoft.Extensions.Options;
 
@@ -18,11 +19,15 @@ public class DpdApiService : IDpdService
 
     public async Task<CreateDpdShipmentResponse> CreateShipment(CreateDpdShipmentCommand shipment)
     {
-        var request = PrepareRequest(shipment);
+        var request = PrepareRequestForPackagesGeneration(shipment);
 
         var dpdClient = new DPDPackageObjServicesClient();
 
-        var response = await dpdClient.generatePackagesNumbersV9Async(request.openUMLFeV11, request.pkgNumsGenerationPolicyV1, request.langCode, request.authDataV1);
+        var response = await dpdClient.generatePackagesNumbersV9Async(
+            request.openUMLFeV11,
+            request.pkgNumsGenerationPolicyV1,
+            request.langCode,
+            request.authDataV1);
         
         if (response.@return.Status != "OK")
         {
@@ -34,7 +39,24 @@ public class DpdApiService : IDpdService
         return PrepareResponse(response);
     }
 
-    private generatePackagesNumbersV9 PrepareRequest(CreateDpdShipmentCommand shipment)
+    public async Task<byte[]> GenerateLabel(SessionNumber sessionNumber)
+    {
+        var request = PrepareRequestForSpedLabelsGeneration(sessionNumber);
+        
+        var dpdClient = new DPDPackageObjServicesClient();
+
+        var response = await dpdClient.generateSpedLabelsV4Async(
+            request.dpdServicesParamsV1, 
+            request.outputDocFormatV1,
+            request.outputDocPageFormatV1,
+            request.outputLabelType,
+            request.labelVariant,
+            request.authDataV1);
+
+        return response.@return.documentData;
+    }
+
+    private generatePackagesNumbersV9 PrepareRequestForPackagesGeneration(CreateDpdShipmentCommand shipment)
     {
         var parcelList = new List<parcelOpenUMLFeV3>();
         
@@ -116,6 +138,37 @@ public class DpdApiService : IDpdService
                     payerType = shipment.Cod is null ? payerTypeEnumOpenUMLFeV1.SENDER : payerTypeEnumOpenUMLFeV1.RECEIVER,
                     payerTypeSpecified = true,
                     parcels = parcelList.ToArray()
+                }
+            }
+        };
+
+        return request;
+    }
+    
+    private generateSpedLabelsV4 PrepareRequestForSpedLabelsGeneration(SessionNumber sessionNumber)
+    {
+        var request = new generateSpedLabelsV4
+        {
+            authDataV1 = new authDataV1
+            {
+                login = _dpdOptions.Login,
+                password = _dpdOptions.Password,
+                masterFid = _dpdOptions.MasterFid,
+                masterFidSpecified = true
+            },
+            outputDocFormatV1 = outputDocFormatDSPEnumV1.PDF,
+            outputDocPageFormatV1 = outputDocPageFormatDSPEnumV1.A4,
+            outputLabelType = outputLabelTypeEnumV1.BIC3,
+            labelVariant = "",
+            dpdServicesParamsV1 = new dpdServicesParamsV1
+            {
+                session = new sessionDSPV1
+                {
+                    sessionId = sessionNumber.Value,
+                    sessionIdSpecified = true,
+                    sessionType = sessionTypeDSPEnumV1.DOMESTIC,
+                    sessionTypeSpecified = true,
+                    packages = null
                 }
             }
         };
