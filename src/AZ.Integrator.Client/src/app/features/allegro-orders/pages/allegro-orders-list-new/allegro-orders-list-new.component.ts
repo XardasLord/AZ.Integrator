@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
@@ -56,14 +56,18 @@ export class AllegroOrdersListNewComponent implements OnInit {
   }
 
   canRegisterInpostShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
-    return this.inpostShipments$.pipe(
-      map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
+    return (
+      of(order.delivery.method.name.toLowerCase().includes('inpost')) ||
+      this.inpostShipments$.pipe(
+        map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
+      )
     );
   }
 
   canRegisterDpdShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
-    return this.dpdShipments$.pipe(
-      map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
+    return (
+      of(order.delivery.method.name.toLowerCase().includes('dpd')) ||
+      this.dpdShipments$.pipe(map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id)))
     );
   }
 }
