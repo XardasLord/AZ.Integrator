@@ -18,6 +18,7 @@ export class AllegroOrdersListSentComponent implements OnInit {
     nameof<LineItemDetails>('boughtAt'),
     nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
+    'deliveryType',
     nameof<AllegroOrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),

@@ -25,6 +25,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     nameof<LineItemDetails>('boughtAt'),
     nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
+    'deliveryType',
     nameof<AllegroOrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
@@ -64,7 +65,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
 
   getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
     return this.shipments$.pipe(
-      map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0].shipmentNumber)
+      map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0]?.shipmentNumber)
     );
   }
 }
