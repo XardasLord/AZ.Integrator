@@ -40,7 +40,7 @@ export class AllegroOrdersListNewComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new LoadNew(), new LoadShipments()]);
+    this.store.dispatch([new LoadNew()]);
   }
 
   pageChanged(event: PageEvent): void {

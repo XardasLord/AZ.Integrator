@@ -32,7 +32,7 @@ export class AllegroOrdersListSentComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new LoadSent(), new LoadShipments()]);
+    this.store.dispatch([new LoadSent()]);
   }
 
   pageChanged(event: PageEvent): void {

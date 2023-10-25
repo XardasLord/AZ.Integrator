@@ -22,13 +22,14 @@ import {
 } from './allegro-orders.action';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
-import { ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
+import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { DownloadService } from '../../../shared/services/download.service';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
 import { RegisterShipmentDataModel } from '../models/register-shipment-data.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IntegratorError } from '../../../core/interceptor/error-handler.interceptor';
 import { ShipmentProviderEnum } from '../models/shipment-provider.enum';
+import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -99,13 +100,7 @@ export class AllegroOrdersState {
       .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.New)
       .pipe(
         tap(response => {
-          const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
-          customResponse.result = response.orders;
-          customResponse.totalCount = response.totalCount;
-
-          ctx.patchState({
-            restQueryResponse: customResponse,
-          });
+          this.handleAllegroOrdersResponse(ctx, response);
         })
       );
   }
@@ -116,13 +111,7 @@ export class AllegroOrdersState {
       .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.ReadyForShipment)
       .pipe(
         tap(response => {
-          const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
-          customResponse.result = response.orders;
-          customResponse.totalCount = response.totalCount;
-
-          ctx.patchState({
-            restQueryResponse: customResponse,
-          });
+          this.handleAllegroOrdersResponse(ctx, response);
         })
       );
   }
@@ -133,13 +122,7 @@ export class AllegroOrdersState {
       .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.Sent)
       .pipe(
         tap(response => {
-          const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
-          customResponse.result = response.orders;
-          customResponse.totalCount = response.totalCount;
-
-          ctx.patchState({
-            restQueryResponse: customResponse,
-          });
+          this.handleAllegroOrdersResponse(ctx, response);
         })
       );
   }
@@ -153,12 +136,24 @@ export class AllegroOrdersState {
       restQuery: customQuery,
     });
 
+    // TODO: Depends on the currently opened tab (New/ReadyForShipment/Sent)
     return ctx.dispatch(new LoadNew());
   }
 
   @Action(LoadShipments)
-  loadInpostShipments(ctx: StateContext<AllegroOrdersStateModel>) {
-    return this.allegroOrderService.getShipments({}).pipe(
+  loadInpostShipments(ctx: StateContext<AllegroOrdersStateModel>, action: LoadShipments) {
+    let filters: IntegratorQueryShipmentsArgs = {};
+
+    if (action.allegroOrderIds.length > 0) {
+      filters = {
+        where: {
+          allegroOrderNumber: {
+            in: action.allegroOrderIds,
+          },
+        },
+      };
+    }
+    return this.allegroOrderService.getShipments(filters).pipe(
       tap(shipmentsResponse => {
         ctx.patchState({
           shipments: shipmentsResponse.result,
@@ -285,5 +280,20 @@ export class AllegroOrdersState {
         return of(null);
       })
     );
+  }
+
+  private handleAllegroOrdersResponse(
+    ctx: StateContext<AllegroOrdersStateModel>,
+    response: GetAllegroOrdersResponseModel
+  ) {
+    ctx.dispatch(new LoadShipments(response.orders.map(x => x.id)));
+
+    const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
+    customResponse.result = response.orders;
+    customResponse.totalCount = response.totalCount;
+
+    ctx.patchState({
+      restQueryResponse: customResponse,
+    });
   }
 }

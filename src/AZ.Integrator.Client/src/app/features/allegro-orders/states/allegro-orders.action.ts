@@ -17,6 +17,8 @@ export class LoadSent {
 }
 
 export class LoadShipments {
+  constructor(public allegroOrderIds: string[] = []) {}
+
   static readonly type = `${prefix} ${LoadShipments.name}`;
 }
 

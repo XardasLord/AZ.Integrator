@@ -40,7 +40,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new LoadReadyForShipment(), new LoadShipments()]);
+    this.store.dispatch([new LoadReadyForShipment()]);
   }
 
   pageChanged(event: PageEvent): void {
