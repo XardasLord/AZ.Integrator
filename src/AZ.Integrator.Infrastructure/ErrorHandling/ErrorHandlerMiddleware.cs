@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using AZ.Integrator.Domain.SharedKernel.Exceptions;
+using AZ.Integrator.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using ApplicationException = AZ.Integrator.Application.Common.Exceptions.ApplicationException;
@@ -38,6 +39,8 @@ public class ErrorHandlerMiddleware
             DomainException exception => new ExceptionResponse(exception.Code, exception.Message,
                 HttpStatusCode.BadRequest, ex.InnerException?.Message),
             ApplicationException exception => new ExceptionResponse(exception.Code, exception.Message,
+                HttpStatusCode.BadRequest, ex.InnerException?.Message),
+            InfrastructureException exception => new ExceptionResponse(exception.Code, exception.Message,
                 HttpStatusCode.BadRequest, ex.InnerException?.Message),
             HttpRequestException exception => new ExceptionResponse("http_request_error", exception.Message, exception.StatusCode ?? HttpStatusCode.BadRequest, exception.InnerException?.Message),
             _ => new ExceptionResponse("unexpected_error", ex.Message, HttpStatusCode.InternalServerError, ex.InnerException?.Message)

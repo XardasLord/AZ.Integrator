@@ -52,4 +52,9 @@
     <PackageReference Include="System.ServiceModel.Security" Version="4.10.*" />
     <PackageReference Include="System.ServiceModel.Federation" Version="4.10.*" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Interop.InsERT">
+      <HintPath>DLL\Interop.InsERT.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
