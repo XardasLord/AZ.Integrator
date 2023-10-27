@@ -120,13 +120,6 @@ public class DpdApiService : IDpdService
                             currency = serviceCurrencyEnum.PLN, 
                             currencySpecified = true
                         },
-                        // codDedicatedAccount = shipment.Cod is null ? null : new serviceCODDedicatedAccountOpenUMLFeV1
-                        // {
-                        //     amount = shipment.Cod.Amount.ToString(CultureInfo.InvariantCulture), 
-                        //     currency = serviceCurrencyEnum.PLN,
-                        //     currencySpecified = true,
-                        //     accountNumber = _dpdOptions.Sender.CodAccountNumber
-                        // },
                         declaredValue = shipment.Insurance is null ? null : new serviceDeclaredValueOpenUMLFeV1 
                         { 
                             amount  = shipment.Insurance.Amount.ToString(CultureInfo.InvariantCulture), 
@@ -159,7 +152,7 @@ public class DpdApiService : IDpdService
             outputDocFormatV1 = outputDocFormatDSPEnumV1.PDF,
             outputDocPageFormatV1 = outputDocPageFormatDSPEnumV1.A4,
             outputLabelType = outputLabelTypeEnumV1.BIC3,
-            labelVariant = "",
+            labelVariant = null,
             dpdServicesParamsV1 = new dpdServicesParamsV1
             {
                 session = new sessionDSPV1
@@ -169,7 +162,9 @@ public class DpdApiService : IDpdService
                     sessionType = sessionTypeDSPEnumV1.DOMESTIC,
                     sessionTypeSpecified = true,
                     packages = null
-                }
+                },
+                policy = policyDSPEnumV1.STOP_ON_FIRST_ERROR,
+                policySpecified = true
             }
         };
 
