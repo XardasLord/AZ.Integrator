@@ -128,7 +128,7 @@ public class DpdApiService : IDpdService
                         }
                     },
                     ref1 = shipment.Receiver.Email,
-                    payerType = shipment.Cod is null ? payerTypeEnumOpenUMLFeV1.SENDER : payerTypeEnumOpenUMLFeV1.RECEIVER,
+                    payerType = payerTypeEnumOpenUMLFeV1.SENDER,
                     payerTypeSpecified = true,
                     parcels = parcelList.ToArray()
                 }
