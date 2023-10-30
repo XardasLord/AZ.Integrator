@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Infrastructure.ExternalServices.SubiektGT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,5 +20,15 @@ public class TestController : ApiBaseController
     public IActionResult Get()
     {
         return Ok(_currentUser.AllegroAccessToken);
+    }
+    
+    [HttpGet("subiekt")]
+    public IActionResult OpenSubiekt()
+    {
+        var subiektService = new SubiektService();
+        
+        subiektService.OpenSubiekt();
+
+        return Ok();
     }
 }
