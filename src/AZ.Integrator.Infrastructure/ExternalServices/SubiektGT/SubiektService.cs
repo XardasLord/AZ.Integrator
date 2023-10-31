@@ -1,24 +1,40 @@
-﻿using AZ.Integrator.Infrastructure.ExternalServices.SubiektGT.Exceptions;
+﻿using AZ.Integrator.Application.Common.ExternalServices.SubiektGT;
+using AZ.Integrator.Infrastructure.ExternalServices.SubiektGT.Exceptions;
 using InsERT;
+using Microsoft.Extensions.Options;
 
 namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
 {
-    public class SubiektService
+    internal class SubiektService : ISubiektService, IDisposable
     {
-        public SubiektService()
+        private readonly SubiektOptions _subiektOptions;
+        private Thread _subiektThread;
+
+        public SubiektService(IOptions<SubiektOptions> subiektSettings)
         {
-            
+            _subiektOptions = subiektSettings.Value;
         }
 
-        public void OpenSubiekt()
+        public Task<string> GenerateSaleDocument()
         {
-            var subiektThread = new Thread(() => RunSubiekt());
-
-            subiektThread.SetApartmentState(ApartmentState.STA);
-            subiektThread.Start();
-            subiektThread.Join();
+            if (_subiektThread is not null)
+                throw new SubiektOperationException("Subiekt's Thread is already running.");
             
-            // var subiekt = RunSubiekt();
+            _subiektThread = new Thread(() =>
+            {
+                var subiekt = RunSubiekt();
+            });
+
+            _subiektThread.SetApartmentState(ApartmentState.STA);
+            _subiektThread.Start();
+            _subiektThread.Join();
+
+            return Task.FromResult("Test");
+        }
+
+        public Task PrintSaleDocument(string documentNumber)
+        {
+            throw new NotImplementedException();
         }
 
         private Subiekt RunSubiekt()
@@ -26,20 +42,26 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
             var gt = new GT
             {
                 Produkt = ProduktEnum.gtaProduktSubiekt,
-                Serwer = "localhost\\SQLEXPRESS",
-                Baza = "TEST_GRATYFIKANT",
+                Serwer = _subiektOptions.Server,
+                Baza = _subiektOptions.Database,
                 Autentykacja = AutentykacjaEnum.gtaAutentykacjaWindows,
-                Uzytkownik = "sa",
-                Operator = "szef",
-                OperatorHaslo = ""
+                Uzytkownik = _subiektOptions.User,
+                Operator = _subiektOptions.Operator,
+                OperatorHaslo = _subiektOptions.OperatorPassword
             };
 
             if (gt.Uruchom((int)InsERT.UruchomDopasujEnum.gtaUruchomDopasuj, (int)UruchomEnum.gtaUruchom) is not Subiekt subiekt)
-                throw new SubiektOperationException("Subiekt cannot be opened");
-            
-            subiekt.Okno.Widoczne = true;
+                throw new SubiektOperationException("Subiekt cannot be opened.");
 
             return subiekt;
+        }
+
+        public void Dispose()
+        {
+            if (_subiektThread is null)
+                return;
+
+            _subiektThread = null;
         }
     }
 }
