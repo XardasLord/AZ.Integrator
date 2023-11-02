@@ -12,6 +12,7 @@ import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
 import { GetShipmentsGQL } from '../graphql-queries/get-shipments.graphql.query';
+import { GenerateInvoiceCommand } from '../models/commands/generate-invoice.command';
 
 @Injectable()
 export class AllegroOrdersService extends RemoteServiceBase {
@@ -55,5 +56,10 @@ export class AllegroOrdersService extends RemoteServiceBase {
     return this.shipmentsGqlQuery
       .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
       .valueChanges.pipe(map(x => x.data));
+  }
+
+  // TODO: Move it to a new dedicated invoice service
+  generateInvoice(command: GenerateInvoiceCommand): Observable<void> {
+    return this.httpClient.post<void>(`${this.apiUrl}/invoices`, command);
   }
 }

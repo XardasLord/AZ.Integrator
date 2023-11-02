@@ -54,7 +54,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>Akcje</th>
     <td mat-cell *matCellDef="let order">
-      <div class="table-action-buttons">
+      <div>
         <ng-container *ngIf="canRegisterInpostShipment(order) | async">
           <button
             mat-icon-button

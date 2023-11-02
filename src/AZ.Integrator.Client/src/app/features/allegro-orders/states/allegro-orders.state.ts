@@ -19,6 +19,7 @@ import {
   OpenRegisterDpdShipmentModal,
   RegisterDpdShipment,
   GenerateDpdLabel,
+  GenerateInvoice,
 } from './allegro-orders.action';
 import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
@@ -30,6 +31,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { IntegratorError } from '../../../core/interceptor/error-handler.interceptor';
 import { ShipmentProviderEnum } from '../models/shipment-provider.enum';
 import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
+import { GenerateInvoiceCommand } from '../models/commands/generate-invoice.command';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -278,6 +280,26 @@ export class AllegroOrdersState {
         this.toastService.error(`Błąd podczas pobierania raportu CSV`, 'Raport CSV');
 
         return of(null);
+      })
+    );
+  }
+
+  @Action(GenerateInvoice)
+  generateInvoice(ctx: StateContext<AllegroOrdersStateModel>, action: GenerateInvoice) {
+    const command: GenerateInvoiceCommand = {
+      allegroOrderNumber: action.allegroOrderNumber,
+    };
+
+    return this.allegroOrderService.generateInvoice(command).pipe(
+      tap(() => {
+        this.zone.run(() => this.toastService.success('Faktura VAT została wygenerowana', 'Faktura VAT'));
+        this.dialogRef?.close();
+
+        ctx.dispatch(new LoadShipments());
+      }),
+      catchError(error => {
+        this.zone.run(() => this.toastService.error('Błąd podczas generowania faktury VAT', 'Faktura VAT'));
+        return throwError(error);
       })
     );
   }

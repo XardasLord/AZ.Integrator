@@ -27,7 +27,7 @@ public class TestController : ApiBaseController
     [HttpGet("subiekt")]
     public async Task<IActionResult> OpenSubiekt()
     {
-        var test = await _subiektService.GenerateSaleDocument();
+        var test = await _subiektService.GenerateInvoice();
 
         return Ok(test);
     }

@@ -15,14 +15,32 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
             _subiektOptions = subiektSettings.Value;
         }
 
-        public Task<string> GenerateSaleDocument()
+        public Task<string> GenerateInvoice()
         {
             if (_subiektThread is not null)
                 throw new SubiektOperationException("Subiekt's Thread is already running.");
             
             _subiektThread = new Thread(() =>
             {
-                var subiekt = RunSubiekt();
+                try
+                {
+                    var subiekt = RunSubiekt();
+                
+                    var oneTimeClient = subiekt.KontrahenciManager.DodajKontrahentaJednorazowego();
+                    oneTimeClient.Nazwa = "Test kontrahent";
+                    oneTimeClient.Zapisz();
+                
+                    var invoice = subiekt.SuDokumentyManager.DodajFS();
+                    invoice.KontrahentId = oneTimeClient.Identyfikator;
+                
+                    invoice.Zapisz();
+                    invoice.Wyswietl();
+                    invoice.Zamknij();
+                }
+                catch (Exception e)
+                {
+                    throw new SubiektOperationException(e.Message);
+                }
             });
 
             _subiektThread.SetApartmentState(ApartmentState.STA);
@@ -32,7 +50,7 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
             return Task.FromResult("Test");
         }
 
-        public Task PrintSaleDocument(string documentNumber)
+        public Task PrintInvoice(string documentNumber)
         {
             throw new NotImplementedException();
         }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
@@ -11,6 +11,7 @@ import {
   LoadShipments,
   LoadReadyForShipment,
   GenerateDpdLabel,
+  GenerateInvoice,
 } from '../../states/allegro-orders.action';
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 
@@ -59,8 +60,16 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     }
   }
 
+  generateInvoice(order: AllegroOrderDetailsModel) {
+    this.store.dispatch(new GenerateInvoice(order.id));
+  }
+
   canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
     return this.shipments$.pipe(map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id)));
+  }
+
+  canGenerateInvoice(order: AllegroOrderDetailsModel): Observable<boolean> {
+    return of(true);
   }
 
   getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
