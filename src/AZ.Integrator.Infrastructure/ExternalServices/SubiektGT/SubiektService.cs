@@ -1,53 +1,102 @@
-﻿using AZ.Integrator.Application.Common.ExternalServices.SubiektGT;
+﻿using System.Globalization;
+using AZ.Integrator.Application.Common.ExternalServices.Allegro.Models;
+using AZ.Integrator.Application.Common.ExternalServices.SubiektGT;
 using AZ.Integrator.Infrastructure.ExternalServices.SubiektGT.Exceptions;
 using InsERT;
 using Microsoft.Extensions.Options;
 
 namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
 {
-    internal class SubiektService : ISubiektService, IDisposable
+    internal class SubiektService : ISubiektService
     {
         private readonly SubiektOptions _subiektOptions;
-        private Thread _subiektThread;
 
         public SubiektService(IOptions<SubiektOptions> subiektSettings)
         {
             _subiektOptions = subiektSettings.Value;
         }
 
-        public Task<string> GenerateInvoice()
+        public async Task<string> GenerateInvoice(string allegroOrderNumber, BuyerDetails buyerDetails, List<LineItemDetails> lineItems, SummaryDetails summary, PaymentDetails paymentDetails)
         {
-            if (_subiektThread is not null)
-                throw new SubiektOperationException("Subiekt's Thread is already running.");
-            
-            _subiektThread = new Thread(() =>
+            var invoiceNumber = await RunSTATask(() =>
             {
-                try
+                var subiekt = RunSubiekt();
+                
+                var oneTimeClient = subiekt.KontrahenciManager.DodajKontrahentaJednorazowego();
+                oneTimeClient.Nazwa = buyerDetails.CompanyName?.ToString() ?? $"{buyerDetails.FirstName} {buyerDetails.LastName}";
+                oneTimeClient.Ulica = buyerDetails.Address.Street;
+                oneTimeClient.Miejscowosc = buyerDetails.Address.City;
+                oneTimeClient.KodPocztowy = buyerDetails.Address.PostCode;
+                oneTimeClient.NIP = buyerDetails.PersonalIdentity ?? "";
+                oneTimeClient.Zapisz();
+                    
+                var invoice = subiekt.SuDokumentyManager.DodajFS();
+                invoice.KontrahentId = oneTimeClient.Identyfikator;
+
+                foreach (var lineItem in lineItems)
                 {
-                    var subiekt = RunSubiekt();
-                
-                    var oneTimeClient = subiekt.KontrahenciManager.DodajKontrahentaJednorazowego();
-                    oneTimeClient.Nazwa = "Test kontrahent";
-                    oneTimeClient.Zapisz();
-                
-                    var invoice = subiekt.SuDokumentyManager.DodajFS();
-                    invoice.KontrahentId = oneTimeClient.Identyfikator;
-                
-                    invoice.Zapisz();
-                    invoice.Wyswietl();
-                    invoice.Zamknij();
+                    Towar product;
+
+                    if (subiekt.TowaryManager.IstniejeWg(lineItem.Offer.Id, TowarParamWyszukEnum.gtaTowarWgSymbolu))
+                    {
+                        product = subiekt.TowaryManager.WczytajTowarWg(lineItem.Offer.Id, TowarParamWyszukEnum.gtaTowarWgSymbolu);
+                    }
+                    else
+                    {
+                        product = subiekt.TowaryManager.DodajTowar();
+                        product.Symbol = lineItem.Offer.Id;
+                        product.Nazwa = lineItem.Offer.Name;
+                        product.Opis = lineItem.Offer.External?.Id;
+                        product.Zapisz();
+                        product.Zamknij();
+                    }
+                        
+                    var pozycja = invoice.Pozycje.Dodaj(product) as SuPozycja;
+                    pozycja.IloscJm = lineItem.Quantity;
+                    pozycja.CenaBruttoPrzedRabatem = double.Parse(lineItem.Price.Amount, CultureInfo.InvariantCulture);
                 }
-                catch (Exception e)
+
+                invoice.Uwagi = $"Dotyczy zamówienia z Allegro nr {allegroOrderNumber}";
+
+                if (paymentDetails.Type == "CASH_ON_DELIVERY")
                 {
-                    throw new SubiektOperationException(e.Message);
+                    invoice.PlatnoscGotowkaKwota = 0;
+                    invoice.PlatnoscPrzelewKwota = 0;
                 }
+
+                if (paymentDetails.Type == "ONLINE")
+                {
+                    invoice.PlatnoscGotowkaKwota = 0;
+                    invoice.PlatnoscPrzelewKwota = double.Parse(summary.TotalToPay.Amount, CultureInfo.InvariantCulture);
+                }
+                
+                invoice.Zapisz();
+                invoice.Wyswietl(true);
+
+                var invoiceNumber = invoice.NumerPelny?.ToString();
+                invoice.Zamknij();
+
+                return invoiceNumber;
             });
 
-            _subiektThread.SetApartmentState(ApartmentState.STA);
-            _subiektThread.Start();
-            _subiektThread.Join();
+            return invoiceNumber;
+        }
 
-            return Task.FromResult("Test");
+        private static Task<T> RunSTATask<T>(Func<T> function)
+        {
+            var task = new Task<T>(function, TaskCreationOptions.DenyChildAttach);
+            var thread = new Thread(task.RunSynchronously)
+            {
+                IsBackground = true
+            };
+            
+#pragma warning disable CA1416
+            thread.SetApartmentState(ApartmentState.STA);
+#pragma warning restore CA1416
+            
+            thread.Start();
+            
+            return task;
         }
 
         public Task PrintInvoice(string documentNumber)
@@ -72,14 +121,6 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
                 throw new SubiektOperationException("Subiekt cannot be opened.");
 
             return subiekt;
-        }
-
-        public void Dispose()
-        {
-            if (_subiektThread is null)
-                return;
-
-            _subiektThread = null;
         }
     }
 }

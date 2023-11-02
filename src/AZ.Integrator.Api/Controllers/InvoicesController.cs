@@ -11,8 +11,6 @@ public class InvoicesController : ApiBaseController
     [HttpPost]
     public async Task<IActionResult> RegisterInvoice(RegisterInvoiceCommand command)
     {
-        await Mediator.Send(command);
-
-        return NoContent();
+        return Ok(await Mediator.Send(command));
     }
 }

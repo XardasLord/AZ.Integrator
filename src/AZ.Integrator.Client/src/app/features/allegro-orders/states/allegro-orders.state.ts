@@ -291,14 +291,20 @@ export class AllegroOrdersState {
     };
 
     return this.allegroOrderService.generateInvoice(command).pipe(
-      tap(() => {
-        this.zone.run(() => this.toastService.success('Faktura VAT została wygenerowana', 'Faktura VAT'));
+      tap(invoiceNumber => {
+        this.zone.run(() =>
+          this.toastService.success(`Faktura VAT została wygenerowana - ${invoiceNumber}`, 'Faktura VAT')
+        );
         this.dialogRef?.close();
 
         ctx.dispatch(new LoadShipments());
       }),
       catchError(error => {
-        this.zone.run(() => this.toastService.error('Błąd podczas generowania faktury VAT', 'Faktura VAT'));
+        const applicationError: IntegratorError = error.error;
+
+        this.zone.run(() =>
+          this.toastService.error(`Błąd podczas generowania faktury VAT - ${applicationError.Message}`, 'Faktura VAT')
+        );
         return throwError(error);
       })
     );

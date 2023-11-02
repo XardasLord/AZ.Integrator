@@ -59,7 +59,7 @@ export class AllegroOrdersService extends RemoteServiceBase {
   }
 
   // TODO: Move it to a new dedicated invoice service
-  generateInvoice(command: GenerateInvoiceCommand): Observable<void> {
-    return this.httpClient.post<void>(`${this.apiUrl}/invoices`, command);
+  generateInvoice(command: GenerateInvoiceCommand): Observable<string> {
+    return this.httpClient.post<string>(`${this.apiUrl}/invoices`, command);
   }
 }

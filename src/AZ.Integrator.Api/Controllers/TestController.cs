@@ -1,5 +1,4 @@
-﻿using AZ.Integrator.Application.Common.ExternalServices.SubiektGT;
-using AZ.Integrator.Domain.Abstractions;
+﻿using AZ.Integrator.Domain.Abstractions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +8,10 @@ namespace AZ.Integrator.Api.Controllers;
 public class TestController : ApiBaseController
 {
     private readonly ICurrentUser _currentUser;
-    private readonly ISubiektService _subiektService;
 
-    public TestController(ICurrentUser currentUser, ISubiektService subiektService)
+    public TestController(ICurrentUser currentUser)
     {
         _currentUser = currentUser;
-        _subiektService = subiektService;
     }
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -22,13 +19,5 @@ public class TestController : ApiBaseController
     public IActionResult Get()
     {
         return Ok(_currentUser.AllegroAccessToken);
-    }
-    
-    [HttpGet("subiekt")]
-    public async Task<IActionResult> OpenSubiekt()
-    {
-        var test = await _subiektService.GenerateInvoice();
-
-        return Ok(test);
     }
 }
