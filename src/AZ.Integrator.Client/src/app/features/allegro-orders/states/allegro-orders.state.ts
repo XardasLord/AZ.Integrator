@@ -21,7 +21,7 @@ import {
   GenerateDpdLabel,
   GenerateInvoice,
 } from './allegro-orders.action';
-import { RegisterParcelModalComponent } from '../pages/register-parcel-modal/register-parcel-modal.component';
+import { RegisterShipmentModalComponent } from '../pages/register-shipment-modal/register-shipment-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
 import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { DownloadService } from '../../../shared/services/download.service';
@@ -46,7 +46,7 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
 })
 @Injectable()
 export class AllegroOrdersState {
-  private dialogRef?: MatDialogRef<RegisterParcelModalComponent>;
+  private dialogRef?: MatDialogRef<RegisterShipmentModalComponent>;
 
   constructor(
     private allegroOrderService: AllegroOrdersService,
@@ -172,8 +172,8 @@ export class AllegroOrdersState {
         deliveryMethodType: 'INPOST',
       };
 
-      this.dialogRef = this.dialog.open<RegisterParcelModalComponent, RegisterShipmentDataModel>(
-        RegisterParcelModalComponent,
+      this.dialogRef = this.dialog.open<RegisterShipmentModalComponent, RegisterShipmentDataModel>(
+        RegisterShipmentModalComponent,
         {
           data: <RegisterShipmentDataModel>data,
           width: '50%',
@@ -191,8 +191,8 @@ export class AllegroOrdersState {
         deliveryMethodType: 'DPD',
       };
 
-      this.dialogRef = this.dialog.open<RegisterParcelModalComponent, RegisterShipmentDataModel>(
-        RegisterParcelModalComponent,
+      this.dialogRef = this.dialog.open<RegisterShipmentModalComponent, RegisterShipmentDataModel>(
+        RegisterShipmentModalComponent,
         {
           data: <RegisterShipmentDataModel>data,
           width: '50%',

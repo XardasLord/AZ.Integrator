@@ -6,7 +6,7 @@ import { AllegroOrdersComponent } from './pages/allegro-orders/allegro-orders.co
 import { AllegroOrdersListNewComponent } from './pages/allegro-orders-list-new/allegro-orders-list-new.component';
 import { AllegroOrdersState } from './states/allegro-orders.state';
 import { AllegroOrdersService } from './services/allegro-orders.service';
-import { RegisterParcelModalComponent } from './pages/register-parcel-modal/register-parcel-modal.component';
+import { RegisterShipmentModalComponent } from './pages/register-shipment-modal/register-shipment-modal.component';
 import { AllegroOrdersListReadyForShipmentComponent } from './pages/allegro-orders-list-ready-for-shipment/allegro-orders-list-ready-for-shipment.component';
 import { AllegroOrdersListSentComponent } from './pages/allegro-orders-list-sent/allegro-orders-list-sent.component';
 
@@ -15,7 +15,7 @@ import { AllegroOrdersListSentComponent } from './pages/allegro-orders-list-sent
     AllegroOrdersComponent,
     AllegroOrdersListNewComponent,
     AllegroOrdersListReadyForShipmentComponent,
-    RegisterParcelModalComponent,
+    RegisterShipmentModalComponent,
     AllegroOrdersListSentComponent,
   ],
   imports: [SharedModule, AllegroOrdersRoutingModule, NgxsModule.forFeature([AllegroOrdersState])],

@@ -2,22 +2,21 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.model';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
 import { ParcelFromGroupModel, RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegro-orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
 
 @Component({
-  selector: 'app-register-parcel-modal',
-  templateUrl: './register-parcel-modal.component.html',
-  styleUrls: ['./register-parcel-modal.component.scss'],
+  selector: 'app-register-shipment-modal',
+  templateUrl: './register-shipment-modal.component.html',
+  styleUrls: ['./register-shipment-modal.component.scss'],
 })
-export class RegisterParcelModalComponent {
+export class RegisterShipmentModalComponent {
   form: FormGroup<RegisterParcelFormGroupModel>;
 
   constructor(
-    public dialogRef: MatDialogRef<RegisterParcelModalComponent>,
+    public dialogRef: MatDialogRef<RegisterShipmentModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RegisterShipmentDataModel,
     private fb: FormBuilder,
     private store: Store
