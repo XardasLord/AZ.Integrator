@@ -26,6 +26,12 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
+
+        services.AddDbContext<InvoiceDbContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
+        });
         
         services.AddDbContext<ShipmentDataViewContext>(options =>
         {
