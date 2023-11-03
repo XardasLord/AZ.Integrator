@@ -2,4 +2,4 @@
 
 namespace AZ.Integrator.Application.UseCases.Invoices.Commands;
 
-public record RegisterInvoiceCommand(string AllegroOrderNumber): ICommand<string>;
+public record RegisterInvoiceCommand(string AllegroOrderNumber): ICommand;

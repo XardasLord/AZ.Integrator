@@ -4,7 +4,7 @@ using Mediator;
 
 namespace AZ.Integrator.Application.UseCases.Invoices.Commands;
 
-public class RegisterInvoiceCommandHandler : ICommandHandler<RegisterInvoiceCommand, string>
+public class RegisterInvoiceCommandHandler : ICommandHandler<RegisterInvoiceCommand>
 {
     private readonly ISubiektService _subiektService;
     private readonly IAllegroService _allegroService;
@@ -15,14 +15,14 @@ public class RegisterInvoiceCommandHandler : ICommandHandler<RegisterInvoiceComm
         _allegroService = allegroService;
     }
     
-    public async ValueTask<string> Handle(RegisterInvoiceCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(RegisterInvoiceCommand command, CancellationToken cancellationToken)
     {
         var orderDetails = await _allegroService.GetOrderDetails(Guid.Parse(command.AllegroOrderNumber));
         
         var invoiceNumber = await _subiektService.GenerateInvoice(orderDetails.Id, orderDetails.Buyer, orderDetails.LineItems, orderDetails.Summary, orderDetails.Payment);
         
         // TODO: Add invoiceNumber to domain model
-
-        return invoiceNumber;
+        
+        return Unit.Value;
     }
 }

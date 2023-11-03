@@ -291,10 +291,8 @@ export class AllegroOrdersState {
     };
 
     return this.allegroOrderService.generateInvoice(command).pipe(
-      tap(invoiceNumber => {
-        this.zone.run(() =>
-          this.toastService.success(`Faktura VAT została wygenerowana - ${invoiceNumber}`, 'Faktura VAT')
-        );
+      tap(() => {
+        this.zone.run(() => this.toastService.success(`Faktura VAT została wygenerowana`, 'Faktura VAT'));
         this.dialogRef?.close();
 
         ctx.dispatch(new LoadShipments());

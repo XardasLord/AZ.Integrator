@@ -51,9 +51,9 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
                         product.Zamknij();
                     }
                         
-                    var pozycja = invoice.Pozycje.Dodaj(product) as SuPozycja;
-                    pozycja.IloscJm = lineItem.Quantity;
-                    pozycja.CenaBruttoPrzedRabatem = double.Parse(lineItem.Price.Amount, CultureInfo.InvariantCulture);
+                    var invoiceItem = invoice.Pozycje.Dodaj(product) as SuPozycja;
+                    invoiceItem.IloscJm = lineItem.Quantity;
+                    invoiceItem.CenaBruttoPrzedRabatem = double.Parse(lineItem.Price.Amount, CultureInfo.InvariantCulture);
                 }
 
                 invoice.Uwagi = $"Dotyczy zamówienia z Allegro nr {allegroOrderNumber}";
@@ -71,9 +71,10 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
                 }
                 
                 invoice.Zapisz();
-                invoice.Wyswietl(true);
-
+                
                 var invoiceNumber = invoice.NumerPelny?.ToString();
+                
+                invoice.Drukuj(true);
                 invoice.Zamknij();
 
                 return invoiceNumber;
