@@ -25,6 +25,7 @@ internal static class Extensions
             .InitializeOnStartup()
             .AddAuthorization()
             .RegisterDbContext<ShipmentDataViewContext>()
+            .RegisterDbContext<InvoiceDataViewContext>()
             .AddQueryType(q => q.Name("IntegratorQuery"))
             .AddType<IntegratorQuery>()
             .AddProjections()

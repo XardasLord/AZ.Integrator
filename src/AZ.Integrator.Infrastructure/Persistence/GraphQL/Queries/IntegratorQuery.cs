@@ -14,42 +14,23 @@ internal class IntegratorQuery
         _currentUser = currentUser;
     }
 
-    public string GetTest()
-    {
-        return "Test";
-    }
+    [UseProjection]
+    [UseFiltering]
+    public IQueryable<InpostShipmentViewModel> GetInpostShipments([Service] ShipmentDataViewContext dataViewContext) 
+        => dataViewContext.InpostShipments.AsQueryable();
 
     [UseProjection]
     [UseFiltering]
-    public IQueryable<InpostShipmentViewModel> GetInpostShipments([Service] ShipmentDataViewContext dataViewContext)
-    {
-        return dataViewContext.InpostShipments
-            .AsQueryable();
-
-    }
+    public IQueryable<DpdShipmentViewModel> GetDpdShipments([Service] ShipmentDataViewContext dataViewContext) 
+        => dataViewContext.DpdShipments.AsQueryable();
 
     [UseProjection]
     [UseFiltering]
-    public IQueryable<ShipmentViewModel> GetShipments([Service] ShipmentDataViewContext dataViewContext)
-    {
-        return dataViewContext.Shipments
-            .AsQueryable();
-    }
+    public IQueryable<ShipmentViewModel> GetShipments([Service] ShipmentDataViewContext dataViewContext) 
+        => dataViewContext.Shipments.AsQueryable();
 
     [UseProjection]
     [UseFiltering]
-    public IQueryable<DpdShipmentViewModel> GetDpdShipments([Service] ShipmentDataViewContext dataViewContext)
-    {
-        return dataViewContext.DpdShipments
-            .AsQueryable();
-    }
-
-    [UseProjection]
-    [UseFiltering]
-    public IQueryable<DpdShipmentViewModel> GetAllShipments([Service] ShipmentDataViewContext dataViewContext)
-    {
-        return dataViewContext.DpdShipments
-            .AsQueryable();
-
-    }
+    public IQueryable<InvoiceViewModel> GetInvoices([Service] InvoiceDataViewContext dataViewContext) 
+        => dataViewContext.Invoices.AsQueryable();
 }

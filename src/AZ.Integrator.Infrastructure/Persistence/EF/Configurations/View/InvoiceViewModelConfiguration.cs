@@ -4,24 +4,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AZ.Integrator.Infrastructure.Persistence.EF.Configurations.View;
 
-public class ShipmentViewModelConfiguration : IEntityTypeConfiguration<ShipmentViewModel>
+public class InvoiceViewModelConfiguration : IEntityTypeConfiguration<InvoiceViewModel>
 {
-    public void Configure(EntityTypeBuilder<ShipmentViewModel> builder)
+    public void Configure(EntityTypeBuilder<InvoiceViewModel> builder)
     {
-        builder.ToView("shipments_view");
+        builder.ToView("invoices_view");
         builder.HasNoKey();
 
-        builder.Property(x => x.ShipmentNumber)
-            .HasColumnName("shipment_number");
+        builder.Property(x => x.InvoiceNumber)
+            .HasColumnName("invoice_number");
         
         builder.Property(x => x.AllegroOrderNumber)
             .HasColumnName("allegro_order_number");
-        
-        builder.Property(x => x.TrackingNumber)
-            .HasColumnName("tracking_number");
-
-        builder.Property(x => x.ShipmentProvider)
-            .HasColumnName("shipment_provider");
         
         builder.Property(x => x.CreatedAt)
             .HasColumnName("created_at");
