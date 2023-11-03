@@ -56,8 +56,6 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
                     invoiceItem.CenaBruttoPrzedRabatem = double.Parse(lineItem.Price.Amount, CultureInfo.InvariantCulture);
                 }
 
-                invoice.Uwagi = $"Dotyczy zamówienia z Allegro nr {allegroOrderNumber}";
-
                 if (paymentDetails.Type == "CASH_ON_DELIVERY")
                 {
                     invoice.PlatnoscGotowkaKwota = 0;
@@ -69,6 +67,8 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
                     invoice.PlatnoscGotowkaKwota = 0;
                     invoice.PlatnoscPrzelewKwota = double.Parse(summary.TotalToPay.Amount, CultureInfo.InvariantCulture);
                 }
+                
+                invoice.Uwagi = $"Dotyczy zamówienia z Allegro nr {allegroOrderNumber}";
                 
                 invoice.Zapisz();
                 
@@ -98,11 +98,6 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
             thread.Start();
             
             return task;
-        }
-
-        public Task PrintInvoice(string documentNumber)
-        {
-            throw new NotImplementedException();
         }
 
         private Subiekt RunSubiekt()
