@@ -63,10 +63,3 @@ export class GenerateDpdLabel {
 
   constructor(public allegroOrderNumber: string) {}
 }
-
-// TODO: Move to separate state!
-export class GenerateInvoice {
-  static readonly type = `${prefix} ${GenerateInvoice.name}`;
-
-  constructor(public allegroOrderNumber: string) {}
-}

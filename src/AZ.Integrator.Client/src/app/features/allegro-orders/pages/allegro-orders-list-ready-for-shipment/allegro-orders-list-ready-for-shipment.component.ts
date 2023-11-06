@@ -8,12 +8,11 @@ import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
   GenerateInpostLabel,
-  LoadShipments,
   LoadReadyForShipment,
   GenerateDpdLabel,
-  GenerateInvoice,
 } from '../../states/allegro-orders.action';
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
+import { GenerateInvoice } from '../../states/invoices.action';
 
 @Component({
   selector: 'app-allegro-orders-list-ready-for-shipment',

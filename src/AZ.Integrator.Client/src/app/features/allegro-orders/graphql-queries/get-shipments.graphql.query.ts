@@ -22,5 +22,5 @@ export class GetShipmentsGQL extends Query<GraphQLResponseWithoutPaginationVo<Sh
             ${nameof<ShipmentViewModel>('createdAt')}
         }
       }
-      `;
+    `;
 }

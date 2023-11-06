@@ -12,7 +12,7 @@ public class InvoiceViewModelConfiguration : IEntityTypeConfiguration<InvoiceVie
         builder.HasNoKey();
 
         builder.Property(x => x.InvoiceNumber)
-            .HasColumnName("invoice_number");
+            .HasColumnName("number");
         
         builder.Property(x => x.AllegroOrderNumber)
             .HasColumnName("allegro_order_number");

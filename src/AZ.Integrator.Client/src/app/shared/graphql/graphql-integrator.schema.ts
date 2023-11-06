@@ -74,16 +74,10 @@ export type InpostShipmentViewModelFilterInput = {
 
 export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
-  allShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
   dpdShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
   inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
+  invoices?: Maybe<Array<Maybe<InvoiceViewModel>>>;
   shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
-  test?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type IntegratorQueryAllShipmentsArgs = {
-  where?: InputMaybe<DpdShipmentViewModelFilterInput>;
 };
 
 
@@ -97,8 +91,28 @@ export type IntegratorQueryInpostShipmentsArgs = {
 };
 
 
+export type IntegratorQueryInvoicesArgs = {
+  where?: InputMaybe<InvoiceViewModelFilterInput>;
+};
+
+
 export type IntegratorQueryShipmentsArgs = {
   where?: InputMaybe<ShipmentViewModelFilterInput>;
+};
+
+export type InvoiceViewModel = {
+  __typename?: 'InvoiceViewModel';
+  allegroOrderNumber?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  invoiceNumber?: Maybe<Scalars['String']['output']>;
+};
+
+export type InvoiceViewModelFilterInput = {
+  allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  invoiceNumber?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
 };
 
 export type ShipmentViewModel = {
