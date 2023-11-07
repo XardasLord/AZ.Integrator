@@ -13,6 +13,7 @@ import {
 } from '../../states/allegro-orders.action';
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 import { GenerateInvoice } from '../../states/invoices.action';
+import { InvoicesState } from '../../states/invoices.state';
 
 @Component({
   selector: 'app-allegro-orders-list-ready-for-shipment',
@@ -22,6 +23,7 @@ import { GenerateInvoice } from '../../states/invoices.action';
 export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   displayedColumns: string[] = [
     'shipmentNumber',
+    'invoiceNumber',
     nameof<LineItemDetails>('boughtAt'),
     nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
@@ -33,6 +35,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   ];
   orders$ = this.store.select(AllegroOrdersState.getAllNewOrders);
   shipments$ = this.store.select(AllegroOrdersState.getShipments);
+  invoices$ = this.store.select(InvoicesState.getInvoices);
   totalItems$ = this.store.select(AllegroOrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
@@ -74,6 +77,12 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
     return this.shipments$.pipe(
       map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0]?.shipmentNumber)
+    );
+  }
+
+  getInvoiceNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
+    return this.invoices$.pipe(
+      map(invoices => invoices.filter(invoice => invoice.allegroOrderNumber === order.id)[0]?.invoiceNumber)
     );
   }
 }
