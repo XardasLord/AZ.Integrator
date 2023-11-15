@@ -97,12 +97,12 @@ internal static class Extensions
                     
                     var jwtTokenHandler = new JwtSecurityTokenHandler();
                     var jwtSecurityToken = new JwtSecurityToken(
-                        issuer: configuration["Infrastructure:Identity:Issuer"],
-                        audience: configuration["Infrastructure:Identity:Audience"],
+                        issuer: identityOptions.Issuer,
+                        audience: identityOptions.Audience,
                         claims: claims,
-                        expires: DateTime.UtcNow.AddHours(12),
+                        expires: DateTime.UtcNow.AddHours(identityOptions.ExpiresInHours),
                         signingCredentials: new SigningCredentials(
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Infrastructure:Identity:PrivateKey"]!)),
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(identityOptions.PrivateKey)),
                             SecurityAlgorithms.HmacSha256)
                     );
 
