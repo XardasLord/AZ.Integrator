@@ -32,7 +32,7 @@ public class RegisterInvoiceCommandHandler : ICommandHandler<RegisterInvoiceComm
     {
         var orderDetails = await _allegroService.GetOrderDetails(Guid.Parse(command.AllegroOrderNumber));
         
-        var invoiceNumber = await _subiektService.GenerateInvoice(orderDetails.Id, orderDetails.Buyer, orderDetails.LineItems, orderDetails.Summary, orderDetails.Payment);
+        var invoiceNumber = await _subiektService.GenerateInvoice(orderDetails.Id, orderDetails.Buyer, orderDetails.LineItems, orderDetails.Summary, orderDetails.Payment, orderDetails.Delivery);
         
         var invoice = Invoice.Create(invoiceNumber, command.AllegroOrderNumber, _currentUser, _currentDateTime);
         await _invoiceRepository.AddAsync(invoice, cancellationToken);

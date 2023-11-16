@@ -16,7 +16,13 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
             _subiektOptions = subiektSettings.Value;
         }
 
-        public async Task<string> GenerateInvoice(string allegroOrderNumber, BuyerDetails buyerDetails, List<LineItemDetails> lineItems, SummaryDetails summary, PaymentDetails paymentDetails)
+        public async Task<string> GenerateInvoice(
+            string allegroOrderNumber,
+            BuyerDetails buyerDetails,
+            List<LineItemDetails> lineItems,
+            SummaryDetails summary,
+            PaymentDetails paymentDetails,
+            DeliveryDetails deliveryDetails)
         {
             var invoiceNumber = await RunSTATask(() =>
             {
@@ -32,43 +38,11 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
                     
                 var invoice = subiekt.SuDokumentyManager.DodajFS();
                 invoice.KontrahentId = oneTimeClient.Identyfikator;
-
-                foreach (var lineItem in lineItems)
-                {
-                    Towar product;
-
-                    if (subiekt.TowaryManager.IstniejeWg(lineItem.Offer.Id, TowarParamWyszukEnum.gtaTowarWgSymbolu))
-                    {
-                        product = subiekt.TowaryManager.WczytajTowarWg(lineItem.Offer.Id, TowarParamWyszukEnum.gtaTowarWgSymbolu);
-                    }
-                    else
-                    {
-                        product = subiekt.TowaryManager.DodajTowar();
-                        product.Symbol = lineItem.Offer.Id;
-                        product.Nazwa = lineItem.Offer.Name;
-                        product.Opis = lineItem.Offer.External?.Id;
-                        product.Zapisz();
-                        product.Zamknij();
-                    }
-                        
-                    var invoiceItem = invoice.Pozycje.Dodaj(product) as SuPozycja;
-                    invoiceItem.IloscJm = lineItem.Quantity;
-                    invoiceItem.CenaBruttoPrzedRabatem = double.Parse(lineItem.Price.Amount, CultureInfo.InvariantCulture);
-                }
-
-                if (paymentDetails.Type == "CASH_ON_DELIVERY")
-                {
-                    invoice.PlatnoscGotowkaKwota = 0;
-                    invoice.PlatnoscPrzelewKwota = 0;
-                }
-
-                if (paymentDetails.Type == "ONLINE")
-                {
-                    invoice.PlatnoscGotowkaKwota = 0;
-                    invoice.PlatnoscPrzelewKwota = double.Parse(summary.TotalToPay.Amount, CultureInfo.InvariantCulture);
-                }
-                
                 invoice.Uwagi = $"Dotyczy zamówienia z Allegro nr {allegroOrderNumber}";
+
+                AddInvoiceItems(subiekt, invoice, lineItems);
+                AddDeliveryCost(subiekt, invoice, deliveryDetails);
+                SetPayment(subiekt, invoice, paymentDetails, summary);
                 
                 invoice.Zapisz();
                 
@@ -81,6 +55,73 @@ namespace AZ.Integrator.Infrastructure.ExternalServices.SubiektGT
             });
 
             return invoiceNumber;
+        }
+
+        private static void AddInvoiceItems(Subiekt subiekt, SuDokument invoice, List<LineItemDetails> lineItems)
+        {
+            foreach (var lineItem in lineItems)
+            {
+                Towar product;
+
+                if (subiekt.TowaryManager.IstniejeWg(lineItem.Offer.Id, TowarParamWyszukEnum.gtaTowarWgSymbolu))
+                {
+                    product = subiekt.TowaryManager.WczytajTowarWg(lineItem.Offer.Id, TowarParamWyszukEnum.gtaTowarWgSymbolu);
+                }
+                else
+                {
+                    product = subiekt.TowaryManager.DodajTowar();
+                    product.Symbol = lineItem.Offer.Id;
+                    product.Nazwa = lineItem.Offer.Name;
+                    product.Opis = lineItem.Offer.External?.Id;
+                    product.Zapisz();
+                    product.Zamknij();
+                }
+                        
+                var invoiceItem = invoice.Pozycje.Dodaj(product) as SuPozycja;
+                invoiceItem.IloscJm = lineItem.Quantity;
+                invoiceItem.CenaBruttoPrzedRabatem = double.Parse(lineItem.Price.Amount, CultureInfo.InvariantCulture);
+            }
+        }
+
+        private static void AddDeliveryCost(Subiekt subiekt, SuDokument invoice, DeliveryDetails deliveryDetails)
+        {
+            if (deliveryDetails.Cost is null || double.Parse(deliveryDetails.Cost.Amount, CultureInfo.InvariantCulture) == 0)
+                return;
+            
+            Towar product;
+
+            if (subiekt.TowaryManager.IstniejeWg("KURIER", TowarParamWyszukEnum.gtaTowarWgSymbolu))
+            {
+                product = subiekt.TowaryManager.WczytajTowarWg("KURIER", TowarParamWyszukEnum.gtaTowarWgSymbolu);
+            }
+            else
+            {
+                product = subiekt.TowaryManager.DodajUsluge();
+                product.Symbol = "KURIER";
+                product.Nazwa = deliveryDetails.Method.Name;
+                product.Opis = deliveryDetails.Method.Name;
+                product.Zapisz();
+                product.Zamknij();
+            }
+                        
+            var invoiceItem = invoice.Pozycje.Dodaj(product) as SuPozycja;
+            invoiceItem.IloscJm = 1;
+            invoiceItem.CenaBruttoPrzedRabatem = double.Parse(deliveryDetails.Cost.Amount, CultureInfo.InvariantCulture);
+        }
+
+        private static void SetPayment(Subiekt subiekt, SuDokument invoice, PaymentDetails paymentDetails, SummaryDetails summary)
+        {
+            switch (paymentDetails.Type)
+            {
+                case "CASH_ON_DELIVERY":
+                    invoice.PlatnoscGotowkaKwota = 0;
+                    invoice.PlatnoscPrzelewKwota = 0;
+                    break;
+                case "ONLINE":
+                    invoice.PlatnoscGotowkaKwota = 0;
+                    invoice.PlatnoscPrzelewKwota = double.Parse(summary.TotalToPay.Amount, CultureInfo.InvariantCulture);
+                    break;
+            }
         }
 
         private static Task<T> RunSTATask<T>(Func<T> function)
