@@ -12,6 +12,7 @@ import {
   OpenRegisterDpdShipmentModal,
 } from '../../states/allegro-orders.action';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
+import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper';
 
 @Component({
   selector: 'app-allegro-orders-list-new',
@@ -28,6 +29,7 @@ export class AllegroOrdersListNewComponent implements OnInit {
     nameof<AllegroOrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
+    'totalToPay',
     'actions',
   ];
   orders$ = this.store.select(AllegroOrdersState.getAllNewOrders);
@@ -69,5 +71,9 @@ export class AllegroOrdersListNewComponent implements OnInit {
       of(order.delivery.method.name.toLowerCase().includes('dpd')) ||
       this.dpdShipments$.pipe(map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id)))
     );
+  }
+
+  getPaymentType(order: AllegroOrderDetailsModel) {
+    return getPaymentTypeForAllegroOrder(order);
   }
 }

@@ -14,6 +14,7 @@ import {
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 import { GenerateInvoice } from '../../states/invoices.action';
 import { InvoicesState } from '../../states/invoices.state';
+import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper';
 
 @Component({
   selector: 'app-allegro-orders-list-ready-for-shipment',
@@ -27,10 +28,12 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     nameof<LineItemDetails>('boughtAt'),
     nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
+    'paymentType',
     'deliveryType',
     nameof<AllegroOrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
+    'totalToPay',
     'actions',
   ];
   orders$ = this.store.select(AllegroOrdersState.getAllNewOrders);
@@ -84,5 +87,9 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     return this.invoices$.pipe(
       map(invoices => invoices.filter(invoice => invoice.allegroOrderNumber === order.id)[0]?.invoiceNumber)
     );
+  }
+
+  getPaymentType(order: AllegroOrderDetailsModel) {
+    return getPaymentTypeForAllegroOrder(order);
   }
 }
