@@ -7,6 +7,8 @@
     "build": "ng build",
     "build-dev": "ng build --configuration development",
     "build-test": "ng build --configuration test",
+    "deploy-dev-iis": "ng build --watch --base-href /",
+    "deploy-prod-iis": "ng build --watch --base-href / --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
