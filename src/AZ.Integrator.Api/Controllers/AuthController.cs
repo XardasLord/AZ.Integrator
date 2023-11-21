@@ -97,7 +97,7 @@ public class AuthController : ControllerBase
     {
         return Challenge(new AuthenticationProperties
         {
-           RedirectUri = $"http://localhost:8000/access_token={await HttpContext.GetTokenAsync("integrator_access_token")}"
+           RedirectUri = $"http://localhost:8000?access_token={await HttpContext.GetTokenAsync("integrator_access_token")}"
         }, "allegro");
     }
 }

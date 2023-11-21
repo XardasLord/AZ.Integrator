@@ -56,7 +56,7 @@ public static class Extensions
         }
         else
         {
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
         }
         
         app.UseCors(builder =>

@@ -86,12 +86,12 @@ internal static class Extensions
                 options.Events.OnCreatingTicket = ctx =>
                 {
                     var allegroAccessToken = ctx.AccessToken;
-                    var allegroRefreshToken = ctx.RefreshToken;
+                    // var allegroRefreshToken = ctx.RefreshToken;
                     
                     var claims = new List<Claim>
                     {
                         new(UserClaimType.AllegroAccessToken, allegroAccessToken),
-                        new(UserClaimType.AllegroRefreshToken, allegroRefreshToken),
+                        // new(UserClaimType.AllegroRefreshToken, allegroRefreshToken),
                         new(UserClaimType.ShipXOrganizationId, configuration["Infrastructure:ShipX:OrganizationId"])
                     };
                     
