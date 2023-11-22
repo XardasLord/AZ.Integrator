@@ -8,7 +8,7 @@ public class ShipmentResponse
     public string Href { get; set; }
 
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
 
     [JsonPropertyName("status")]
     public string Status { get; set; }
@@ -85,7 +85,7 @@ public class ShipmentResponse
 public class AddressResponse
 {
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
 
     [JsonPropertyName("street")]
     public string Street { get; set; }
@@ -112,7 +112,7 @@ public class AddressResponse
 public class Mpk
 {
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
 
     [JsonPropertyName("name")]
     public string Name { get; set; }
@@ -163,7 +163,7 @@ public class DimensionsResponse
 public class ParcelResponse
 {
     [JsonPropertyName("unit")]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
     
     [JsonPropertyName("identify_number")]
     public string IdentifyNumber { get; set; }
@@ -187,7 +187,7 @@ public class ParcelResponse
 public class SenderResponse
 {
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
     
     [JsonPropertyName("name")]
     public string Name { get; set; }
@@ -214,7 +214,7 @@ public class SenderResponse
 public class ReceiverResponse
 {
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
     
     [JsonPropertyName("name")]
     public string Name { get; set; }
