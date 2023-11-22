@@ -5,7 +5,7 @@
   </div>
 </div>
 <mat-divider></mat-divider>
-<div mat-dialog-content class="!pb-1">
+<div mat-dialog-content>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <div class="text-lg mt-4 items-center">Dane odbiorcy</div>
     <mat-divider></mat-divider>
@@ -144,6 +144,7 @@
     </div>
 
     <div class="text-lg mt-4 items-center">Pobranie</div>
+
     <mat-divider></mat-divider>
 
     <div class="flex mt-4">
@@ -151,7 +152,9 @@
     </div>
   </form>
 </div>
+
 <mat-divider></mat-divider>
+
 <div mat-dialog-actions align="end">
   <button mat-flat-button [disabled]="form.invalid" color="primary" (click)="onSubmit()">Nadaj przesyłkę</button>
   <button mat-stroked-button color="primary" mat-dialog-close>Anuluj</button>

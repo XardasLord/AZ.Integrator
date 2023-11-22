@@ -84,7 +84,7 @@
             mat-icon-button
             matTooltip="Wygeneruj list przewozowy"
             (click)="generateShipmentLabel(order); $event.stopPropagation()">
-            <mat-icon class="material-icons-outlined" matListItemIcon>picture_as_pdf</mat-icon>
+            <mat-icon class="text-red-800">picture_as_pdf</mat-icon>
           </button>
         </ng-container>
 
@@ -93,7 +93,7 @@
             mat-icon-button
             matTooltip="Wygeneruj fakturę"
             (click)="generateInvoice(order); $event.stopPropagation()">
-            <mat-icon class="material-icons-outlined" matListItemIcon>receipt_long</mat-icon>
+            <mat-icon class="text-blue-700">receipt_long</mat-icon>
           </button>
         </ng-container>
       </div>
