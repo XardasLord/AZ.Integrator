@@ -6,7 +6,10 @@
 
   <ng-container matColumnDef="invoiceNumber">
     <th mat-header-cell *matHeaderCellDef>Numer faktury</th>
-    <td mat-cell *matCellDef="let order">{{ getInvoiceNumber(order) | async }}</td>
+    <td mat-cell *matCellDef="let order">
+      <span *ngIf="getInvoiceNumber(order) | async">{{ getInvoiceNumber(order) | async }}</span>
+      <mat-icon *ngIf="(getInvoiceNumber(order) | async) === undefined" class="text-red-600">close</mat-icon>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="boughtAt">
