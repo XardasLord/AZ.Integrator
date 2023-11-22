@@ -1,5 +1,5 @@
-﻿using AZ.Integrator.Application.UseCases.Shipments.Commands.CreateInpostShipment;
-using AZ.Integrator.Application.UseCases.Shipments.Queries.GetInpostLabel;
+﻿using AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateInpostShipment;
+using AZ.Integrator.Shipments.Application.UseCases.Shipments.Queries.GetInpostLabel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

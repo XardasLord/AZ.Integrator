@@ -1,5 +1,5 @@
-﻿using AZ.Integrator.Application.UseCases.Shipments.Commands.CreateDpdShipment;
-using AZ.Integrator.Application.UseCases.Shipments.Queries.GetDpdLabel;
+﻿using AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateDpdShipment;
+using AZ.Integrator.Shipments.Application.UseCases.Shipments.Queries.GetDpdLabel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-﻿using AZ.Integrator.Application.UseCases.Invoices.Commands;
+﻿using AZ.Integrator.Invoices.Application.UseCases.Invoices.Commands;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

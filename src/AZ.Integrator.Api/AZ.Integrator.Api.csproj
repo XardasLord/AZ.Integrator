@@ -27,7 +27,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AZ.Integrator.Infrastructure\AZ.Integrator.Infrastructure.csproj" />
+      <ProjectReference Include="..\AZ.Integrator.Shared.Infrastructure\AZ.Integrator.Shared.Infrastructure.csproj" />
+      <ProjectReference Include="..\Invoices\AZ.Integrator.Invoices.Application\AZ.Integrator.Invoices.Application.csproj" />
+      <ProjectReference Include="..\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
+      <ProjectReference Include="..\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
     </ItemGroup>
 
 </Project>

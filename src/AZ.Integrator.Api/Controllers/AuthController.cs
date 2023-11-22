@@ -1,5 +1,5 @@
-﻿using AZ.Integrator.Infrastructure.Identity;
-using AZ.Integrator.Infrastructure.Persistence.EF.DbContexts;
+﻿using AZ.Integrator.Shared.Infrastructure.Identity;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
