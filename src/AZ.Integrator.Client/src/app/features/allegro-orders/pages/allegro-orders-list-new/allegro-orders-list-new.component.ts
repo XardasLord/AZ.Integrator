@@ -7,7 +7,6 @@ import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
   LoadNew,
-  LoadShipments,
   OpenRegisterInPostShipmentModal,
   OpenRegisterDpdShipmentModal,
 } from '../../states/allegro-orders.action';
