@@ -139,7 +139,14 @@ export class AllegroOrdersState {
     });
 
     // TODO: Depends on the currently opened tab (New/ReadyForShipment/Sent)
-    return ctx.dispatch(new LoadNew());
+    switch (action.currentTab) {
+      case 'New':
+        return ctx.dispatch(new LoadNew());
+      case 'ReadyForShipment':
+        return ctx.dispatch(new LoadReadyForShipment());
+      case 'Sent':
+        return ctx.dispatch(new LoadSent());
+    }
   }
 
   @Action(LoadShipments)
@@ -177,7 +184,7 @@ export class AllegroOrdersState {
         {
           data: <RegisterShipmentDataModel>data,
           width: '50%',
-          height: '75%',
+          height: '85%',
         }
       );
     });
@@ -196,7 +203,7 @@ export class AllegroOrdersState {
         {
           data: <RegisterShipmentDataModel>data,
           width: '50%',
-          height: '75%',
+          height: '85%',
         }
       );
     });

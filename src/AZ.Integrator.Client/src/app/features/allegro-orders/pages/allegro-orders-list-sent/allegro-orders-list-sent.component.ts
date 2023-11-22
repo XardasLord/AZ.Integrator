@@ -36,7 +36,7 @@ export class AllegroOrdersListSentComponent implements OnInit {
   }
 
   pageChanged(event: PageEvent): void {
-    this.store.dispatch(new ChangePage(event));
+    this.store.dispatch(new ChangePage(event, 'Sent'));
   }
 
   getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {

@@ -50,7 +50,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   }
 
   pageChanged(event: PageEvent): void {
-    this.store.dispatch(new ChangePage(event));
+    this.store.dispatch(new ChangePage(event, 'ReadyForShipment'));
   }
 
   generateShipmentLabel(order: AllegroOrderDetailsModel) {

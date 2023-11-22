@@ -45,7 +45,7 @@ export class AllegroOrdersListNewComponent implements OnInit {
   }
 
   pageChanged(event: PageEvent): void {
-    this.store.dispatch(new ChangePage(event));
+    this.store.dispatch(new ChangePage(event, 'New'));
   }
 
   registerInPostShipment(order: AllegroOrderDetailsModel) {
