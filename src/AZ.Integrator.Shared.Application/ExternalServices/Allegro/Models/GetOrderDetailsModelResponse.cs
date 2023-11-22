@@ -53,7 +53,7 @@ public class PaymentDetails
     public string Id { get; set; }
     public string Type { get; set; }
     public string Provider { get; set; }
-    public DateTime FinishedAt { get; set; }
+    public DateTime? FinishedAt { get; set; }
     public AmountDetails PaidAmount { get; set; }
     public AmountDetails Reconciliation { get; set; }
 }
@@ -102,8 +102,8 @@ public class PickupPointDetails
 
 public class TimeDetails
 {
-    public DateTime From { get; set; }
-    public DateTime To { get; set; }
+    public DateTime? From { get; set; }
+    public DateTime? To { get; set; }
     public GuaranteedDetails Guaranteed { get; set; }
     public DispatchDetails Dispatch { get; set; }
 }

@@ -34,7 +34,7 @@ public class AllegroApiService : IAllegroService
         return orderEvents.Events;
     }
 
-    public async Task<GetNewOrdersModelResponse> GetNewOrders(Shared.Application.ExternalServices.Allegro.Models.GetAllQueryFilters filters)
+    public async Task<GetNewOrdersModelResponse> GetNewOrders(GetAllQueryFilters filters)
     {
         var queryParams = ApplyFilters(filters);
 
@@ -47,7 +47,7 @@ public class AllegroApiService : IAllegroService
         return orders;
     }
 
-    private static string ApplyFilters(Shared.Application.ExternalServices.Allegro.Models.GetAllQueryFilters filters)
+    private static string ApplyFilters(GetAllQueryFilters filters)
     {
         var queryParamsDictionary = new Dictionary<string, string>
         {

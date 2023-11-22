@@ -46,7 +46,7 @@ export interface PaymentDetails {
   id: string;
   type: 'CASH_ON_DELIVERY' | 'ONLINE' | string;
   provider: string;
-  finishedAt: Date;
+  finishedAt: Date | null;
   paidAmount: AmountDetails;
   reconciliation: AmountDetails;
 }
@@ -88,8 +88,8 @@ export interface PickupPointDetails {
 }
 
 export interface TimeDetails {
-  from: Date;
-  to: Date;
+  from: Date | null;
+  to: Date | null;
   guaranteed: GuaranteedDetails;
   dispatch: DispatchDetails;
 }
@@ -148,7 +148,7 @@ export interface SurchargeDetails {
   id: string;
   type: string;
   provider: string;
-  finishedAt: Date;
+  finishedAt: Date | null;
   paidAmount: AmountDetails;
   reconciliation: AmountDetails;
 }
