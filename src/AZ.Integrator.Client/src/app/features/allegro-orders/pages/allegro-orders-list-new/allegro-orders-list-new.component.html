@@ -22,8 +22,8 @@
   <ng-container matColumnDef="isPaid">
     <th mat-header-cell *matHeaderCellDef>Zapłacono?</th>
     <td mat-cell *matCellDef="let order">
-      <mat-icon *ngIf="!order?.payment?.finishedAt" class="text-red-600">close</mat-icon>
-      <mat-icon *ngIf="order?.payment?.finishedAt" class="text-green-600">done</mat-icon>
+      <mat-icon *ngIf="!order?.payment?.paidAmount" class="text-red-600">close</mat-icon>
+      <mat-icon *ngIf="order?.payment?.paidAmount" class="text-green-600">done</mat-icon>
     </td>
   </ng-container>
 
