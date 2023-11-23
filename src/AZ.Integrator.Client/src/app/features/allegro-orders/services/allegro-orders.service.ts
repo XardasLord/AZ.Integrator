@@ -32,9 +32,9 @@ export class AllegroOrdersService extends RemoteServiceBase {
     let params = new HttpParams().set('take', pageInfo.pageSize).set('skip', pageInfo.pageIndex * pageInfo.pageSize);
 
     orderFulfillmentStatuses.forEach(status => {
-      params = params.set('orderFulfillmentStatus', status);
+      params = params.append('orderFulfillmentStatus', status);
     });
-
+    console.warn(params);
     return this.httpClient.get<GetAllegroOrdersResponseModel>(`${this.apiUrl}/allegroOrders`, { params });
   }
 

@@ -10,4 +10,26 @@ public static class DictionaryExtensions
 
         return queryString;
     }
+    
+    public static string ToHttpQueryString(this Dictionary<string, object> queryParamsDict)
+    {
+        var queryString = new List<string>();
+
+        foreach (var kvp in queryParamsDict)
+        {
+            if (kvp.Value is string strValue)
+            {
+                queryString.Add($"{HttpUtility.UrlEncode(kvp.Key)}={HttpUtility.UrlEncode(strValue)}");
+            }
+            else if (kvp.Value is IEnumerable<string> enumerableValues)
+            {
+                foreach (var value in enumerableValues)
+                {
+                    queryString.Add($"{HttpUtility.UrlEncode(kvp.Key)}={HttpUtility.UrlEncode(value)}");
+                }
+            }
+        }
+
+        return string.Join("&", queryString);
+    }
 }

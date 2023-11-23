@@ -49,7 +49,7 @@ public class AllegroApiService : IAllegroService
 
     private static string ApplyFilters(GetAllQueryFilters filters)
     {
-        var queryParamsDictionary = new Dictionary<string, string>
+        var queryParamsDictionary = new Dictionary<string, object>
         {
             { "limit", filters.Take.ToString() }, 
             { "offset", filters.Skip.ToString() }, 
