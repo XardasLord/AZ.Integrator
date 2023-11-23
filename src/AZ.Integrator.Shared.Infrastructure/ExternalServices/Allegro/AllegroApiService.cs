@@ -34,7 +34,7 @@ public class AllegroApiService : IAllegroService
         return orderEvents.Events;
     }
 
-    public async Task<GetNewOrdersModelResponse> GetNewOrders(GetAllQueryFilters filters)
+    public async Task<GetNewOrdersModelResponse> GetOrders(GetAllQueryFilters filters)
     {
         var queryParams = ApplyFilters(filters);
 
@@ -54,9 +54,7 @@ public class AllegroApiService : IAllegroService
             { "limit", filters.Take.ToString() }, 
             { "offset", filters.Skip.ToString() }, 
             { "fulfillment.status", filters.OrderFulfillmentStatus }
-        };  
-        
-        // TODO: Handle rest of parameters like skip, etc.
+        };
 
         return queryParamsDictionary.ToHttpQueryString();
     }

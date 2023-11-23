@@ -14,7 +14,7 @@ public class GetAllQueryHandler : IRequestHandler<GetAllQuery, GetAllQueryRespon
     
     public async Task<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        var ordersResponse = await _allegroService.GetNewOrders(query.Filters);
+        var ordersResponse = await _allegroService.GetOrders(query.Filters);
 
         return new GetAllQueryResponse(ordersResponse.CheckoutForms, ordersResponse.Count, ordersResponse.TotalCount);
     }

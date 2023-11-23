@@ -5,7 +5,7 @@ namespace AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 public interface IAllegroService
 {
     Task<IEnumerable<OrderEvent>> GetOrderEvents();
-    Task<GetNewOrdersModelResponse> GetNewOrders(GetAllQueryFilters filters);
+    Task<GetNewOrdersModelResponse> GetOrders(GetAllQueryFilters filters);
     Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId);
     Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatusEnum, string allegroAccessToken);
 }
