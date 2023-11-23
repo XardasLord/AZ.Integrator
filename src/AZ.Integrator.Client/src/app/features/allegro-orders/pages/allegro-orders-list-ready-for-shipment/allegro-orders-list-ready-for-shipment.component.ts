@@ -10,6 +10,7 @@ import {
   GenerateInpostLabel,
   LoadReadyForShipment,
   GenerateDpdLabel,
+  LoadNew,
 } from '../../states/allegro-orders.action';
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 import { GenerateInvoice } from '../../states/invoices.action';
@@ -46,7 +47,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch([new LoadReadyForShipment()]);
+    this.store.dispatch(new LoadReadyForShipment());
   }
 
   pageChanged(event: PageEvent): void {
