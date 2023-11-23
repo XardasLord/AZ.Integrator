@@ -29,7 +29,7 @@ export class RegisterShipmentModalComponent {
       receiverFirstName: new FormControl<string>(allegroOrderDetails.buyer.firstName, [Validators.required]),
       receiverLastName: new FormControl<string>(allegroOrderDetails.buyer.lastName, [Validators.required]),
       receiverEmail: new FormControl<string>(allegroOrderDetails.buyer.email, [Validators.required, Validators.email]),
-      receiverPhoneNumber: new FormControl<string>(allegroOrderDetails.buyer.phoneNumber, [
+      receiverPhoneNumber: new FormControl<string>(this.normalizePhoneNumber(allegroOrderDetails.buyer.phoneNumber), [
         Validators.required,
         Validators.pattern('[0-9]{9}'),
       ]),
@@ -242,5 +242,9 @@ export class RegisterShipmentModalComponent {
     };
 
     this.store.dispatch(new RegisterDpdShipment(command));
+  }
+
+  private normalizePhoneNumber(phoneNumber: string) {
+    return phoneNumber.replace('+48', '').replace(/ /g, '');
   }
 }

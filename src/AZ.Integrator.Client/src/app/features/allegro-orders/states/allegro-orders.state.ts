@@ -141,7 +141,6 @@ export class AllegroOrdersState {
       restQuery: customQuery,
     });
 
-    // TODO: Depends on the currently opened tab (New/ReadyForShipment/Sent)
     switch (action.currentTab) {
       case 'New':
         return ctx.dispatch(new LoadNew());
@@ -187,7 +186,7 @@ export class AllegroOrdersState {
         {
           data: <RegisterShipmentDataModel>data,
           width: '50%',
-          height: '85%',
+          height: '82%',
         }
       );
     });
@@ -206,7 +205,7 @@ export class AllegroOrdersState {
         {
           data: <RegisterShipmentDataModel>data,
           width: '50%',
-          height: '85%',
+          height: '82%',
         }
       );
     });
