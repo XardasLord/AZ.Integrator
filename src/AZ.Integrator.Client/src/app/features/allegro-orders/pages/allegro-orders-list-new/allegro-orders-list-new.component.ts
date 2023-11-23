@@ -58,7 +58,6 @@ export class AllegroOrdersListNewComponent implements OnInit {
   }
 
   canRegisterInpostShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
-    console.warn(order.delivery.method.name);
     return (
       // of(order.delivery.method.name.toLowerCase().includes('inpost')) ||
       this.inpostShipments$.pipe(

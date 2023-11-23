@@ -85,7 +85,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>Akcje</th>
     <td mat-cell *matCellDef="let order">
-      <div>
+      <div class="grid grid-cols-2">
         <ng-container *ngIf="canGenerateShipmentLabel(order) | async">
           <button
             mat-icon-button

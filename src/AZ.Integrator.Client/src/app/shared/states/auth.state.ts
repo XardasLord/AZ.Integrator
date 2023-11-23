@@ -41,7 +41,6 @@ export class AuthState implements NgxsOnInit {
 
     if (regExp && regExp[2]) {
       const accessToken = regExp[2];
-      console.warn(accessToken);
 
       const authUser = UserAuthHelper.parseAccessToken(accessToken);
 
