@@ -9,16 +9,16 @@ import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
 import {
   ChangePage,
+  GenerateDpdLabel,
   GenerateInpostLabel,
   LoadNew,
-  LoadShipments,
-  OpenRegisterInPostShipmentModal,
-  RegisterInpostShipment,
   LoadReadyForShipment,
   LoadSent,
+  LoadShipments,
   OpenRegisterDpdShipmentModal,
+  OpenRegisterInPostShipmentModal,
   RegisterDpdShipment,
-  GenerateDpdLabel,
+  RegisterInpostShipment,
 } from './allegro-orders.action';
 import { RegisterShipmentModalComponent } from '../pages/register-shipment-modal/register-shipment-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
@@ -98,7 +98,10 @@ export class AllegroOrdersState {
   @Action(LoadNew)
   loadNewOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService
-      .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.New)
+      .load(ctx.getState().restQuery.currentPage, [
+        AllegroOrderFulfillmentStatusEnum.New,
+        AllegroOrderFulfillmentStatusEnum.Processing,
+      ])
       .pipe(
         tap(response => {
           this.handleAllegroOrdersResponse(ctx, response);
@@ -109,7 +112,7 @@ export class AllegroOrdersState {
   @Action(LoadReadyForShipment)
   loadReadyForShipmentOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService
-      .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.ReadyForShipment)
+      .load(ctx.getState().restQuery.currentPage, [AllegroOrderFulfillmentStatusEnum.ReadyForShipment])
       .pipe(
         tap(response => {
           this.handleAllegroOrdersResponse(ctx, response);
@@ -121,7 +124,7 @@ export class AllegroOrdersState {
   @Action(LoadSent)
   loadSentOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService
-      .load(ctx.getState().restQuery.currentPage, AllegroOrderFulfillmentStatusEnum.Sent)
+      .load(ctx.getState().restQuery.currentPage, [AllegroOrderFulfillmentStatusEnum.Sent])
       .pipe(
         tap(response => {
           this.handleAllegroOrdersResponse(ctx, response);
