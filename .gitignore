@@ -351,3 +351,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 src/AZ.Integrator.Api/appsettings.Production.json
+src/AZ.Integrator.Api/appsettings.Development.Copy.json
+src/AZ.Integrator.Api/appsettings.Development.Prod.json
