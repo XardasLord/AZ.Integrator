@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
           }),
           defaultOptions: {
             watchQuery: {
-              fetchPolicy: 'no-cache',
+              fetchPolicy: 'network-only',
             },
           },
         };
