@@ -17,6 +17,7 @@ export interface RegisterParcelFormGroupModel {
   insuranceCurrency: FormControl<string | null>;
   codActive: FormControl<boolean | null>;
   parcels: FormArray;
+  additionalInfo: FormControl<string | null>;
 }
 
 export interface ParcelFromGroupModel {

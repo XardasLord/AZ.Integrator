@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
@@ -6,20 +6,25 @@ import { CreateShipmentCommand, Parcel } from '../../models/commands/create-ship
 import { ParcelFromGroupModel, RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegro-orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
+import { AllegroOrdersService } from '../../services/allegro-orders.service';
+import { Subscription } from 'rxjs';
+import { data } from 'autoprefixer';
 
 @Component({
   selector: 'app-register-shipment-modal',
   templateUrl: './register-shipment-modal.component.html',
   styleUrls: ['./register-shipment-modal.component.scss'],
 })
-export class RegisterShipmentModalComponent {
+export class RegisterShipmentModalComponent implements OnDestroy {
   form: FormGroup<RegisterParcelFormGroupModel>;
+  subscriptions: Subscription = new Subscription();
 
   constructor(
     public dialogRef: MatDialogRef<RegisterShipmentModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RegisterShipmentDataModel,
     private fb: FormBuilder,
-    private store: Store
+    private store: Store,
+    private allegroService: AllegroOrdersService
   ) {
     const allegroOrderDetails = data.allegroOrder;
 
@@ -52,6 +57,7 @@ export class RegisterShipmentModalComponent {
       insuranceCurrency: new FormControl<string>({ value: 'PLN', disabled: true }),
       codActive: new FormControl<boolean>(false),
       parcels: this.fb.array<FormGroup>([], [Validators.required]),
+      additionalInfo: new FormControl<string>(''),
     });
 
     this.addNewParcel();
@@ -91,6 +97,16 @@ export class RegisterShipmentModalComponent {
     if (allegroOrderDetails.payment.type === 'CASH_ON_DELIVERY') {
       this.form.controls.codActive.setValue(true);
     }
+
+    this.subscriptions.add(
+      this.allegroService.getOrderTags(data.allegroOrder.id).subscribe(tags => {
+        this.form.controls.additionalInfo.setValue(tags.join(', '));
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   onSubmit() {
@@ -176,9 +192,10 @@ export class RegisterShipmentModalComponent {
             currency: 'PLN',
           }
         : undefined!,
-      reference: this.data.allegroOrder.id,
-      comments: '',
+      reference: '',
+      comments: this.form.value.additionalInfo!,
       external_customer_id: '',
+      allegroOrderId: this.data.allegroOrder.id!,
     };
 
     this.store.dispatch(new RegisterInpostShipment(command));
@@ -236,9 +253,10 @@ export class RegisterShipmentModalComponent {
             currency: 'PLN',
           }
         : undefined!,
-      reference: this.data.allegroOrder.id,
-      comments: '',
+      reference: '',
+      comments: this.form.value.additionalInfo!,
       external_customer_id: '',
+      allegroOrderId: this.data.allegroOrder.id!,
     };
 
     this.store.dispatch(new RegisterDpdShipment(command));

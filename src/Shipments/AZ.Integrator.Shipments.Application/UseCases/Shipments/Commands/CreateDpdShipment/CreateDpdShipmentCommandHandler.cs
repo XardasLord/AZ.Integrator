@@ -37,7 +37,7 @@ public class CreateDpdShipmentCommandHandler : IRequestHandler<CreateDpdShipment
             packages.Add(DpdPackage.Register(packageResponse.PackageId, parcels));
         }
         
-        var dpdShipment = DpdShipment.Create(response.SessionId, packages, command.Reference, _currentUser, _currentDateTime);
+        var dpdShipment = DpdShipment.Create(response.SessionId, packages, command.AllegroOrderId, _currentUser, _currentDateTime);
         await _shipmentRepository.AddAsync(dpdShipment, cancellationToken);
 
         return response;

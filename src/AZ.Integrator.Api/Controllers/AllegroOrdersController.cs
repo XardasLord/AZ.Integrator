@@ -1,5 +1,6 @@
 ﻿using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetDetails;
+using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetOrderProductTags;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -20,5 +21,11 @@ public class AllegroOrdersController : ApiBaseController
     public async Task<OkObjectResult> GetOrderDetails(Guid orderId)
     {
         return Ok(await Mediator.Send(new GetDetailsQuery(orderId)));
+    }
+    
+    [HttpGet("{orderId}/tags")]
+    public async Task<OkObjectResult> GetOrderProductTags(Guid orderId)
+    {
+        return Ok(await Mediator.Send(new GetOrderProductTagsQuery(orderId)));
     }
 }

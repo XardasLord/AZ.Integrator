@@ -12,4 +12,5 @@ public record CreateDpdShipmentCommand(
     Cod Cod,
     string Reference,
     string Comments,
-    string ExternalCustomerId) : IRequest<CreateDpdShipmentResponse>;
+    string ExternalCustomerId,
+    string AllegroOrderId) : IRequest<CreateDpdShipmentResponse>;

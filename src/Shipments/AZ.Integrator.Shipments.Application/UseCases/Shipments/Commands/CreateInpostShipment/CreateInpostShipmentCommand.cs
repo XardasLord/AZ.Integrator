@@ -11,4 +11,5 @@ public record CreateInpostShipmentCommand(
     Cod Cod,
     string Reference,
     string Comments,
-    string ExternalCustomerId) : IRequest<ShipmentResponse>;
+    string ExternalCustomerId,
+    string AllegroOrderId) : IRequest<ShipmentResponse>;
