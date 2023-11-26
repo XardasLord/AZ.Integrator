@@ -133,6 +133,11 @@
       </mat-form-field>
     </div>
 
+    <div class="flex ml-4" *ngIf="data?.allegroOrder?.messageToSeller">
+      <mat-icon class="text-blue-500 text-center align-middle" matTooltip="Wiadomość od kupującego">info</mat-icon>
+      <span class="ml-1">{{ data?.allegroOrder?.messageToSeller }}</span>
+    </div>
+
     <div class="text-lg mt-4 items-center">Dodatkowe</div>
     <mat-divider></mat-divider>
 
