@@ -2,9 +2,9 @@
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using MediatR;
 
-namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.ChangeStatus;
+namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignShipmentNumbers;
 
-public class ChangeStatusJobCommandHandler : MediatR.IRequestHandler<ChangeStatusJobCommand>
+public class ChangeStatusJobCommandHandler : MediatR.IRequestHandler<AssignShipmentNumbersJobCommand>
 {
     private readonly IAllegroService _allegroService;
 
@@ -13,7 +13,7 @@ public class ChangeStatusJobCommandHandler : MediatR.IRequestHandler<ChangeStatu
         _allegroService = allegroService;
     }
     
-    public async Task<Unit> Handle(ChangeStatusJobCommand command, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(AssignShipmentNumbersJobCommand command, CancellationToken cancellationToken)
     {
         await _allegroService.ChangeStatus(command.OrderNumber, AllegroFulfillmentStatusEnum.ReadyForShipment, command.AllegroAccessToken);
         

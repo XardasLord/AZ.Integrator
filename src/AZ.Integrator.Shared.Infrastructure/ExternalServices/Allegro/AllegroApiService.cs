@@ -81,6 +81,17 @@ public class AllegroApiService : IAllegroService
         return productTags;
     }
 
+    public async Task<GetOrderProductTagsResponse> GetRegisteredOffers()
+    {
+        using var response = await _httpClient.GetAsync($"sale/offer-tags");
+        
+        response.EnsureSuccessStatusCode();
+
+        var tags = await response.Content.ReadFromJsonAsync<GetOrderProductTagsResponse>();
+
+        return tags;
+    }
+
     public async Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatusEnum, string allegroAccessToken)
     {
         var payload = new ChangeStatusRequestPayload

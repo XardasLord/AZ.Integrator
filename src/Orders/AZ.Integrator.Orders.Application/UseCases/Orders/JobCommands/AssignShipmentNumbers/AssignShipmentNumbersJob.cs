@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Orders.Application.Common.BackgroundJobs;
 using MediatR;
 
-namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.ChangeStatus;
+namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignShipmentNumbers;
 
 public class ChangeStatusJob : JobBase<ChangeStatusJobCommand>
 {
