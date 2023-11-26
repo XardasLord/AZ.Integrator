@@ -66,7 +66,7 @@ export class AllegroOrdersState {
   }
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
-  static getOrdersWithRegisteredShipmentCount(state: AllegroOrdersStateModel): number {
+  static getNotFinishedOrdersWithRegisteredShipmentCount(state: AllegroOrdersStateModel): number {
     return state.restQueryResponse.totalCount;
   }
 
@@ -98,10 +98,7 @@ export class AllegroOrdersState {
   @Action(LoadNew)
   loadNewOrders(ctx: StateContext<AllegroOrdersStateModel>) {
     return this.allegroOrderService
-      .load(ctx.getState().restQuery.currentPage, [
-        AllegroOrderFulfillmentStatusEnum.New,
-        AllegroOrderFulfillmentStatusEnum.Processing,
-      ])
+      .load(ctx.getState().restQuery.currentPage, [AllegroOrderFulfillmentStatusEnum.Processing])
       .pipe(
         tap(response => {
           this.handleAllegroOrdersResponse(ctx, response);
