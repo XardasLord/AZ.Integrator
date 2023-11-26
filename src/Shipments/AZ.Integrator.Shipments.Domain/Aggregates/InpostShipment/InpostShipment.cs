@@ -31,15 +31,15 @@ public class InpostShipment : Entity, IAggregateRoot
     {
         var shipment = new InpostShipment(number, allegroAllegroOrderNumber, currentUser, currentDateTime);
         
-        shipment.AddDomainEvent(new InpostShipmentRegistered(number, allegroAllegroOrderNumber));
+        shipment.AddDomainEvent(new InpostShipmentRegistered(number, allegroAllegroOrderNumber, currentUser.AllegroAccessToken));
         
         return shipment;
     }
 
-    public void SetTrackingNumber(TrackingNumber trackingNumber)
+    public void SetTrackingNumber(TrackingNumber trackingNumber, string allegroAccessToken)
     {
         _trackingNumber = trackingNumber;
         
-        AddDomainEvent(new InpostTrackingNumberAssigned(Number, TrackingNumber));
+        AddDomainEvent(new InpostTrackingNumberAssigned(Number, TrackingNumber, _allegroAllegroOrderNumber, allegroAccessToken));
     }
 }

@@ -3,9 +3,9 @@ using MediatR;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignShipmentNumbers;
 
-public class ChangeStatusJob : JobBase<ChangeStatusJobCommand>
+public class AssignTrackingNumberJob : JobBase<AssignTrackingNumberJobCommand>
 {
-    public ChangeStatusJob(IMediator mediator) : base(mediator)
+    public AssignTrackingNumberJob(IMediator mediator) : base(mediator)
     {
     }
 }

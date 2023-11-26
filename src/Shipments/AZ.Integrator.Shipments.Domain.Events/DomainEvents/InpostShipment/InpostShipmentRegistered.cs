@@ -2,4 +2,4 @@
 
 namespace AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
 
-public record InpostShipmentRegistered(string ShipmentNumber, string AllegroOrderNumber) : INotification;
+public record InpostShipmentRegistered(string ShipmentNumber, string AllegroOrderNumber, string AllegroAccessToken) : INotification;

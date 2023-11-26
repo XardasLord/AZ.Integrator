@@ -102,13 +102,35 @@ public class AllegroApiService : IAllegroService
                 LineItemsSent = ShipmentSummaryLineItemsSentEnum.All.Name
             }
         };
-        var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
-        var payloadContent = new StringContent(payloadJson, Encoding.UTF8, "application/vnd.allegro.public.v1+json");
+        var payloadContent = PrepareContentRequest(payload);
         
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", allegroAccessToken);
         
         using var response = await _httpClient.PutAsync($"order/checkout-forms/{orderNumber}/fulfillment", payloadContent);
 
         response.EnsureSuccessStatusCode();
+    }
+
+    public async Task AssignTrackingNumber(Guid orderNumber, string trackingNumber, string allegroAccessToken)
+    {
+        var payload = new AssignTrackingNumberRequestPayload
+        {
+            CarrierId = "INPOST",
+            TrackingNumber = trackingNumber
+        };
+        var payloadContent = PrepareContentRequest(payload);
+
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", allegroAccessToken);
+        
+        using var response = await _httpClient.PostAsync($"order/checkout-forms/{orderNumber}/shipments", payloadContent);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    private static StringContent PrepareContentRequest(object payload)
+    {
+        var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
+        var payloadContent = new StringContent(payloadJson, Encoding.UTF8, "application/vnd.allegro.public.v1+json");
+        return payloadContent;
     }
 }

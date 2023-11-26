@@ -29,7 +29,7 @@ public class SetInpostTrackingNumberJobCommandHandler : IRequestHandler<SetInpos
         if (details.TrackingNumber is null)
             throw new InpostTrackingNumberNotFoundException();
 
-        shipping.SetTrackingNumber(details.TrackingNumber.ToString());
+        shipping.SetTrackingNumber(details.TrackingNumber.ToString(), command.AllegroAccessToken);
 
         await _inpostShippingRepository.SaveChangesAsync(cancellationToken);
         

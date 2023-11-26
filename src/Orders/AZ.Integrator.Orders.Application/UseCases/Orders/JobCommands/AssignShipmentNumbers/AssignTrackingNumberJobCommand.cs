@@ -2,8 +2,9 @@
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignShipmentNumbers;
 
-public class ChangeStatusJobCommand : JobCommandBase
+public class AssignTrackingNumberJobCommand : JobCommandBase
 {
     public Guid OrderNumber { get; set; }
+    public string TrackingNumber { get; set; }
     public string AllegroAccessToken { get; set; }
 }

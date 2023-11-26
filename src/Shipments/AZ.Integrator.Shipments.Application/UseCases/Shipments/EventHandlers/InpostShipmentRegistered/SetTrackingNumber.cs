@@ -19,7 +19,8 @@ public class SetTrackingNumber : INotificationHandler<InpostShipmentRegisteredEv
         _backgroundJobClient.Enqueue<SetInpostTrackingNumberJob>(
             job => job.Execute(new SetInpostTrackingNumberJobCommand
             {
-                ShippingNumber = notification.ShipmentNumber
+                ShippingNumber = notification.ShipmentNumber,
+                AllegroAccessToken = notification.AllegroAccessToken
             }, null));
         
         return Task.CompletedTask;
