@@ -14,9 +14,10 @@ import { DictionaryState } from './states/dictionary.state';
 import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
 import { ProgressSpinnerService } from './services/progress-spinner.service';
 import { DownloadService } from './services/download.service';
+import { DebounceDirective } from './directives/debounce.directive';
 
 @NgModule({
-  declarations: [AuthScopeAllowDirective, ProgressSpinnerComponent],
+  declarations: [AuthScopeAllowDirective, ProgressSpinnerComponent, DebounceDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -37,6 +38,7 @@ import { DownloadService } from './services/download.service';
     AuthScopeAllowDirective,
     ProgressSpinnerComponent,
     NgOptimizedImage,
+    DebounceDirective,
   ],
   providers: [
     ErrorService,

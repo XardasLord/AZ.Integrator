@@ -11,6 +11,7 @@ import { AllegroOrdersListReadyForShipmentComponent } from './pages/allegro-orde
 import { AllegroOrdersListSentComponent } from './pages/allegro-orders-list-sent/allegro-orders-list-sent.component';
 import { InvoicesService } from './services/invoices.service';
 import { InvoicesState } from './states/invoices.state';
+import { AllegroOrdersFiltersComponent } from './pages/allegro-orders-filters/allegro-orders-filters.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { InvoicesState } from './states/invoices.state';
     AllegroOrdersListReadyForShipmentComponent,
     RegisterShipmentModalComponent,
     AllegroOrdersListSentComponent,
+    AllegroOrdersFiltersComponent,
   ],
   imports: [SharedModule, AllegroOrdersRoutingModule, NgxsModule.forFeature([AllegroOrdersState, InvoicesState])],
   providers: [AllegroOrdersService, InvoicesService],

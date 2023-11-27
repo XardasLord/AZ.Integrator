@@ -25,10 +25,19 @@ export class LoadShipments {
 export class ChangePage {
   static readonly type = `${prefix} ${ChangePage.name}`;
 
-  constructor(
-    public event: PageEvent,
-    public currentTab: 'New' | 'ReadyForShipment' | 'Sent'
-  ) {}
+  constructor(public event: PageEvent) {}
+}
+
+export class ApplyFilter {
+  static readonly type = `${prefix} ${ApplyFilter.name}`;
+
+  constructor(public searchPhrase: string) {}
+}
+
+export class SetCurrentTab {
+  static readonly type = `${prefix} ${SetCurrentTab.name}`;
+
+  constructor(public currentTab: 'New' | 'ReadyForShipment' | 'Sent') {}
 }
 
 export class OpenRegisterInPostShipmentModal {

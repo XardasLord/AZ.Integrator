@@ -3,7 +3,7 @@ import { RestQueryHelper } from './rest.helper';
 
 export class RestQueryVo {
   public currentPage: PageEvent = RestQueryHelper.getInitialPageEvent();
-  public searchText?: string;
+  public searchText: string = '';
 
   constructor(init?: Partial<RestQueryVo>) {
     Object.assign(this, { ...init });

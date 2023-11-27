@@ -1,13 +1,15 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { catchError, of, switchMap, tap, throwError } from 'rxjs';
+import { catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { AllegroOrdersStateModel } from './allegro-orders.state.model';
 import { AllegroOrdersService } from '../services/allegro-orders.service';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
 import {
+  ApplyFilter,
   ChangePage,
   GenerateDpdLabel,
   GenerateInpostLabel,
@@ -19,6 +21,7 @@ import {
   OpenRegisterInPostShipmentModal,
   RegisterDpdShipment,
   RegisterInpostShipment,
+  SetCurrentTab,
 } from './allegro-orders.action';
 import { RegisterShipmentModalComponent } from '../pages/register-shipment-modal/register-shipment-modal.component';
 import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
@@ -26,7 +29,6 @@ import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared
 import { DownloadService } from '../../../shared/services/download.service';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
 import { RegisterShipmentDataModel } from '../models/register-shipment-data.model';
-import { HttpErrorResponse } from '@angular/common/http';
 import { IntegratorError } from '../../../core/interceptor/error-handler.interceptor';
 import { ShipmentProviderEnum } from '../models/shipment-provider.enum';
 import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
@@ -41,6 +43,7 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
     restQueryResponse: new RestQueryResponse<AllegroOrderDetailsModel[]>(),
     selectedOrderDetails: null,
     shipments: [],
+    currentTab: 'New',
   },
 })
 @Injectable()
@@ -81,6 +84,11 @@ export class AllegroOrdersState {
   }
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
+  static getSearchText(state: AllegroOrdersStateModel): string {
+    return state.restQuery.searchText;
+  }
+
+  @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
   static getShipments(state: AllegroOrdersStateModel): ShipmentViewModel[] {
     return state.shipments;
   }
@@ -97,8 +105,10 @@ export class AllegroOrdersState {
 
   @Action(LoadNew)
   loadNewOrders(ctx: StateContext<AllegroOrdersStateModel>) {
+    const query = ctx.getState().restQuery;
+
     return this.allegroOrderService
-      .load(ctx.getState().restQuery.currentPage, [AllegroOrderFulfillmentStatusEnum.Processing])
+      .load(query.currentPage, [AllegroOrderFulfillmentStatusEnum.Processing], query.searchText)
       .pipe(
         tap(response => {
           this.handleAllegroOrdersResponse(ctx, response);
@@ -108,8 +118,10 @@ export class AllegroOrdersState {
 
   @Action(LoadReadyForShipment)
   loadReadyForShipmentOrders(ctx: StateContext<AllegroOrdersStateModel>) {
+    const query = ctx.getState().restQuery;
+
     return this.allegroOrderService
-      .load(ctx.getState().restQuery.currentPage, [AllegroOrderFulfillmentStatusEnum.ReadyForShipment])
+      .load(query.currentPage, [AllegroOrderFulfillmentStatusEnum.ReadyForShipment], query.searchText)
       .pipe(
         tap(response => {
           this.handleAllegroOrdersResponse(ctx, response);
@@ -120,8 +132,10 @@ export class AllegroOrdersState {
 
   @Action(LoadSent)
   loadSentOrders(ctx: StateContext<AllegroOrdersStateModel>) {
+    const query = ctx.getState().restQuery;
+
     return this.allegroOrderService
-      .load(ctx.getState().restQuery.currentPage, [AllegroOrderFulfillmentStatusEnum.Sent])
+      .load(query.currentPage, [AllegroOrderFulfillmentStatusEnum.Sent], query.searchText)
       .pipe(
         tap(response => {
           this.handleAllegroOrdersResponse(ctx, response);
@@ -138,14 +152,26 @@ export class AllegroOrdersState {
       restQuery: customQuery,
     });
 
-    switch (action.currentTab) {
-      case 'New':
-        return ctx.dispatch(new LoadNew());
-      case 'ReadyForShipment':
-        return ctx.dispatch(new LoadReadyForShipment());
-      case 'Sent':
-        return ctx.dispatch(new LoadSent());
-    }
+    return this.loadData(ctx);
+  }
+
+  @Action(ApplyFilter)
+  applyFilter(ctx: StateContext<AllegroOrdersStateModel>, action: ApplyFilter): Observable<void> {
+    const updatedQuery = { ...ctx.getState().restQuery };
+    updatedQuery.searchText = action.searchPhrase;
+
+    ctx.patchState({
+      restQuery: updatedQuery,
+    });
+
+    return this.loadData(ctx);
+  }
+
+  @Action(SetCurrentTab)
+  setCurrentTab(ctx: StateContext<AllegroOrdersStateModel>, action: SetCurrentTab) {
+    ctx.patchState({
+      currentTab: action.currentTab,
+    });
   }
 
   @Action(LoadShipments)
@@ -303,5 +329,16 @@ export class AllegroOrdersState {
     ctx.patchState({
       restQueryResponse: customResponse,
     });
+  }
+
+  private loadData(ctx: StateContext<AllegroOrdersStateModel>) {
+    switch (ctx.getState().currentTab) {
+      case 'New':
+        return ctx.dispatch(new LoadNew());
+      case 'ReadyForShipment':
+        return ctx.dispatch(new LoadReadyForShipment());
+      case 'Sent':
+        return ctx.dispatch(new LoadSent());
+    }
   }
 }

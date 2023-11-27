@@ -27,14 +27,19 @@ export class AllegroOrdersService extends RemoteServiceBase {
 
   load(
     pageInfo: PageEvent,
-    orderFulfillmentStatuses: AllegroOrderFulfillmentStatusEnum[]
+    orderFulfillmentStatuses: AllegroOrderFulfillmentStatusEnum[],
+    searchText: string
   ): Observable<GetAllegroOrdersResponseModel> {
     let params = new HttpParams().set('take', pageInfo.pageSize).set('skip', pageInfo.pageIndex * pageInfo.pageSize);
 
     orderFulfillmentStatuses.forEach(status => {
       params = params.append('orderFulfillmentStatus', status);
     });
-    console.warn(params);
+
+    if (searchText?.length > 0) {
+      params = params.set('searchText', searchText);
+    }
+
     return this.httpClient.get<GetAllegroOrdersResponseModel>(`${this.apiUrl}/allegroOrders`, { params });
   }
 

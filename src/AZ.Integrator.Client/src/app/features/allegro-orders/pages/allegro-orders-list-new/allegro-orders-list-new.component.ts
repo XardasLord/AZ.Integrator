@@ -9,6 +9,7 @@ import {
   LoadNew,
   OpenRegisterInPostShipmentModal,
   OpenRegisterDpdShipmentModal,
+  SetCurrentTab,
 } from '../../states/allegro-orders.action';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper';
@@ -42,11 +43,12 @@ export class AllegroOrdersListNewComponent implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
+    this.store.dispatch(new SetCurrentTab('New'));
     this.store.dispatch(new LoadNew());
   }
 
   pageChanged(event: PageEvent): void {
-    this.store.dispatch(new ChangePage(event, 'New'));
+    this.store.dispatch(new ChangePage(event));
   }
 
   registerInPostShipment(order: AllegroOrderDetailsModel) {

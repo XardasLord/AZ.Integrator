@@ -8,4 +8,5 @@ export interface AllegroOrdersStateModel {
   restQueryResponse: RestQueryResponse<AllegroOrderDetailsModel[]>;
   selectedOrderDetails: AllegroOrderDetailsModel | null;
   shipments: ShipmentViewModel[];
+  currentTab: 'New' | 'ReadyForShipment' | 'Sent';
 }

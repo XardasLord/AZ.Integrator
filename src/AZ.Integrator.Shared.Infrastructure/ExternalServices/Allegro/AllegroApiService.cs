@@ -56,6 +56,11 @@ public class AllegroApiService : IAllegroService
             { "fulfillment.status", filters.OrderFulfillmentStatus }
         };
 
+        if (filters.SearchText?.Length > 0)
+        {
+            queryParamsDictionary.Add("buyer.login", filters.SearchText);
+        }
+
         return queryParamsDictionary.ToHttpQueryString();
     }
 
