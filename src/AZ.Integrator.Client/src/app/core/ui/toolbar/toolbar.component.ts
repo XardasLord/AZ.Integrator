@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Logout } from '../../../shared/states/auth.action';
 import { AuthState } from '../../../shared/states/auth.state';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-toolbar',
@@ -21,5 +22,19 @@ export class ToolbarComponent {
 
   logout(): void {
     this.store.dispatch(new Logout());
+  }
+
+  azTeamLogin() {
+    this.store.dispatch(new Logout());
+
+    const authUrl = `${environment.allegroLoginEndpointForAzTeamTenant}`;
+    window.location.href = authUrl;
+  }
+
+  myLogin() {
+    this.store.dispatch(new Logout());
+
+    const authUrl = `${environment.allegroLoginEndpointForMyTestTenant}`;
+    window.location.href = authUrl;
   }
 }

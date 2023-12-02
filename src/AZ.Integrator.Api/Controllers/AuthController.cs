@@ -89,11 +89,14 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("login-allegro")]
-    public async Task<IActionResult> LoginViaAllegro()
+    public async Task<IActionResult> LoginViaAllegro([FromQuery] string tenantId)
     {
+        var authenticationScheme = $"allegro-{tenantId}";
+        var tokenName = "integrator_access_token";
+        
         return Challenge(new AuthenticationProperties
         {
-           RedirectUri = $"http://localhost:8000?access_token={await HttpContext.GetTokenAsync("integrator_access_token")}"
-        }, "allegro");
+           RedirectUri = $"http://localhost:8000?access_token={await HttpContext.GetTokenAsync(authenticationScheme, tokenName)}"
+        }, authenticationScheme);
     }
 }

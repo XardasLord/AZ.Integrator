@@ -47,7 +47,7 @@ export class AuthState implements NgxsOnInit {
       ctx.dispatch(new LoginCompleted(authUser!));
     } else {
       console.warn('BRAK TOKENU - wymagane zalogowanie');
-      ctx.dispatch(new Login());
+      // ctx.dispatch(new Login());
     }
 
     // const user = AuthState.getUser(ctx.getState());
@@ -85,7 +85,7 @@ export class AuthState implements NgxsOnInit {
 
   @Action(Login)
   login(ctx: StateContext<AuthStateModel>, _: Login) {
-    const authUrl = `${environment.allegroLoginEndpoint}`;
+    const authUrl = `${environment.allegroLoginEndpointForAzTeamTenant}`;
     window.location.href = authUrl;
     // return this.authService.login(action.login, action.password).pipe(
     //   map((user: User) => {
@@ -128,7 +128,7 @@ export class AuthState implements NgxsOnInit {
           user: null,
         });
 
-        ctx.dispatch(new Login());
+        // ctx.dispatch(new Login());
         // ctx.dispatch(new Navigate([RoutePaths.Login]));
       })
     );

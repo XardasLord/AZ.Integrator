@@ -6,6 +6,7 @@ using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,21 +29,36 @@ internal static class Extensions
             
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+        var azTeamTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-az-team";
+        var myTestTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-my-test";
+        
+        var azTeamTenantOAuthAuthenticationScheme = "allegro-az-team";
+        var myTestTenantOAuthAuthenticationScheme = "allegro-my-test";
         
         services
             .AddAuthentication(sharedOptions =>
             {
-                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultChallengeScheme = "allegro";
+                sharedOptions.DefaultScheme = azTeamTenantCookieAuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = azTeamTenantOAuthAuthenticationScheme;
             })
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            .AddCookie(azTeamTenantCookieAuthenticationScheme, options =>
             {
                 // add an instance of the patched manager to the options:
-                options.CookieManager = new ChunkingCookieManager();
-
-                options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.None;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                // options.CookieManager = new ChunkingCookieManager();
+                //
+                // options.Cookie.HttpOnly = true;
+                // options.Cookie.SameSite = SameSiteMode.None;
+                // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            })
+            .AddCookie(myTestTenantCookieAuthenticationScheme, options =>
+            {
+                // add an instance of the patched manager to the options:
+                // options.CookieManager = new ChunkingCookieManager();
+                //
+                // options.Cookie.HttpOnly = true;
+                // options.Cookie.SameSite = SameSiteMode.None;
+                // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
@@ -66,58 +82,102 @@ internal static class Extensions
                     ValidAudience = identityOptions.Audience
                 };
             })
-            .AddOAuth("allegro", options =>
+            .AddOAuth(azTeamTenantOAuthAuthenticationScheme, options =>
             {
-                options.ClientId = allegroOptions.ClientId;
-                options.ClientSecret = allegroOptions.ClientSecret;
-                options.CallbackPath = new PathString("/auth/allegro-auth-callback");
-                options.AuthorizationEndpoint = allegroOptions.AuthorizationEndpoint;
-                options.TokenEndpoint = allegroOptions.TokenEndpoint;
-
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.SaveTokens = true;
+                options.ClientId = allegroOptions.AzTeamTenant.ClientId;
+                options.ClientSecret = allegroOptions.AzTeamTenant.ClientSecret;
+                options.CallbackPath = new PathString(allegroOptions.AzTeamTenant.RedirectUri);
+                options.SignInScheme = azTeamTenantCookieAuthenticationScheme;
                 
-                options.CorrelationCookie.HttpOnly = true;
-                options.CorrelationCookie.SameSite = SameSiteMode.Lax;
+                ConfigureCommonOAuthOptions(configuration, options, allegroOptions, identityOptions);
+            })
+            .AddOAuth(myTestTenantOAuthAuthenticationScheme, options =>
+            {
+                options.ClientId = allegroOptions.MyTestTenant.ClientId;
+                options.ClientSecret = allegroOptions.MyTestTenant.ClientSecret;
+                options.CallbackPath = new PathString(allegroOptions.MyTestTenant.RedirectUri);
+                options.SignInScheme = myTestTenantCookieAuthenticationScheme;
                 
-                var innerHandler = new HttpClientHandler();
-                options.BackchannelHttpHandler = new TokenExchangeAuthorizingHandler(innerHandler, options);
-                
-                options.Events.OnCreatingTicket = ctx =>
-                {
-                    var allegroAccessToken = ctx.AccessToken;
-                    // var allegroRefreshToken = ctx.RefreshToken;
-                    
-                    var claims = new List<Claim>
-                    {
-                        new(UserClaimType.AllegroAccessToken, allegroAccessToken),
-                        // new(UserClaimType.AllegroRefreshToken, allegroRefreshToken),
-                        new(UserClaimType.ShipXOrganizationId, configuration["Infrastructure:ShipX:OrganizationId"])
-                    };
-                    
-                    var jwtTokenHandler = new JwtSecurityTokenHandler();
-                    var jwtSecurityToken = new JwtSecurityToken(
-                        issuer: identityOptions.Issuer,
-                        audience: identityOptions.Audience,
-                        claims: claims,
-                        expires: DateTime.UtcNow.AddHours(identityOptions.ExpiresInHours),
-                        signingCredentials: new SigningCredentials(
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(identityOptions.PrivateKey)),
-                            SecurityAlgorithms.HmacSha256)
-                    );
-
-                    ctx.Properties.StoreTokens(new[]
-                    {
-                        new AuthenticationToken
-                        {
-                            Name = "integrator_access_token",
-                            Value = jwtTokenHandler.WriteToken(jwtSecurityToken)
-                        }
-                    });
-                    return Task.CompletedTask;
-                };
+                ConfigureCommonOAuthOptions(configuration, options, allegroOptions, identityOptions);
             });
         
         return services;
+    }
+
+    private static void ConfigureCommonOAuthOptions(
+        IConfiguration configuration,
+        OAuthOptions options,
+        AllegroOptions allegroOptions,
+        IdentityOptions identityOptions)
+    {
+        options.AuthorizationEndpoint = allegroOptions.AuthorizationEndpoint;
+        options.TokenEndpoint = allegroOptions.TokenEndpoint;
+
+        options.SaveTokens = true;
+                
+        // options.CorrelationCookie.HttpOnly = true;
+        // options.CorrelationCookie.SameSite = SameSiteMode.Lax;
+                
+        var innerHandler = new HttpClientHandler();
+        options.BackchannelHttpHandler = new TokenExchangeAuthorizingHandler(innerHandler, options);
+
+        options.Events.OnRedirectToAuthorizationEndpoint = ctx =>
+        {
+            ctx.RedirectUri = $"{ctx.RedirectUri}&prompt=confirm&state=";
+
+            ctx.HttpContext.Response.Redirect(ctx.RedirectUri);
+            
+            return Task.FromResult(0);
+        };
+
+        options.Events.OnAccessDenied = ctx =>
+        {
+            ctx.HttpContext.Response.Redirect(ctx.ReturnUrl);
+
+            return Task.CompletedTask;
+        };
+
+        options.Events.OnRemoteFailure = ctx =>
+        {
+            // ctx.HttpContext.Response.Redirect;
+
+            return Task.CompletedTask;
+        };
+                
+        options.Events.OnCreatingTicket = ctx =>
+        {
+            var allegroAccessToken = ctx.AccessToken;
+            // var allegroRefreshToken = ctx.RefreshToken;
+            var tenantId = ctx.Identity?.AuthenticationType;
+                    
+            var claims = new List<Claim>
+            {
+                new(UserClaimType.AllegroAccessToken, allegroAccessToken),
+                // new(UserClaimType.AllegroRefreshToken, allegroRefreshToken),
+                new(UserClaimType.ShipXOrganizationId, configuration["Infrastructure:ShipX:OrganizationId"]),
+                new(UserClaimType.TenantId, tenantId),
+            };
+                    
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = new JwtSecurityToken(
+                issuer: identityOptions.Issuer,
+                audience: identityOptions.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(identityOptions.ExpiresInHours),
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(identityOptions.PrivateKey)),
+                    SecurityAlgorithms.HmacSha256)
+            );
+
+            ctx.Properties.StoreTokens(new[]
+            {
+                new AuthenticationToken
+                {
+                    Name = "integrator_access_token",
+                    Value = jwtTokenHandler.WriteToken(jwtSecurityToken)
+                }
+            });
+            return Task.CompletedTask;
+        };
     }
 }
