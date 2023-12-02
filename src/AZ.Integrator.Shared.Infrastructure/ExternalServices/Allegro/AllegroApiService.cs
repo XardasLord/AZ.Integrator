@@ -97,11 +97,11 @@ public class AllegroApiService : IAllegroService
         return tags;
     }
 
-    public async Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatusEnum, string allegroAccessToken)
+    public async Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatus, string allegroAccessToken)
     {
         var payload = new ChangeStatusRequestPayload
         {
-            Status = allegroFulfillmentStatusEnum.Name,
+            Status = allegroFulfillmentStatus.Name,
             ShipmentSummary = new ShipmentSummary
             {
                 LineItemsSent = ShipmentSummaryLineItemsSentEnum.All.Name

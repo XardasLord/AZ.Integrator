@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using MediatR;
 
-namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignShipmentNumbers;
+namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignTrackingNumbers;
 
 public class AssignTrackingNumberJobCommandHandler : MediatR.IRequestHandler<AssignTrackingNumberJobCommand>
 {

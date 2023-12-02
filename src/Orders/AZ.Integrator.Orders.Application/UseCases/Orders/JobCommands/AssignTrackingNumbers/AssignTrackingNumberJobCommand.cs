@@ -1,6 +1,6 @@
 ﻿using AZ.Integrator.Orders.Application.Common.BackgroundJobs;
 
-namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignShipmentNumbers;
+namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignTrackingNumbers;
 
 public class AssignTrackingNumberJobCommand : JobCommandBase
 {
