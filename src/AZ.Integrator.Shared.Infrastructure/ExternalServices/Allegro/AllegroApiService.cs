@@ -47,23 +47,6 @@ public class AllegroApiService : IAllegroService
         return orders;
     }
 
-    private static string ApplyFilters(GetAllQueryFilters filters)
-    {
-        var queryParamsDictionary = new Dictionary<string, object>
-        {
-            { "limit", filters.Take.ToString() }, 
-            { "offset", filters.Skip.ToString() }, 
-            { "fulfillment.status", filters.OrderFulfillmentStatus }
-        };
-
-        if (filters.SearchText?.Length > 0)
-        {
-            queryParamsDictionary.Add("buyer.login", filters.SearchText);
-        }
-
-        return queryParamsDictionary.ToHttpQueryString();
-    }
-
     public async Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId)
     {
         using var response = await _httpClient.GetAsync($"order/checkout-forms/{orderId}");
@@ -86,7 +69,7 @@ public class AllegroApiService : IAllegroService
         return productTags;
     }
 
-    public async Task<GetOrderProductTagsResponse> GetRegisteredOffers()
+    public async Task<GetOrderProductTagsResponse> GetRegisteredTags()
     {
         using var response = await _httpClient.GetAsync($"sale/offer-tags");
         
@@ -130,6 +113,23 @@ public class AllegroApiService : IAllegroService
         using var response = await _httpClient.PostAsync($"order/checkout-forms/{orderNumber}/shipments", payloadContent);
 
         response.EnsureSuccessStatusCode();
+    }
+
+    private static string ApplyFilters(GetAllQueryFilters filters)
+    {
+        var queryParamsDictionary = new Dictionary<string, object>
+        {
+            { "limit", filters.Take.ToString() }, 
+            { "offset", filters.Skip.ToString() }, 
+            { "fulfillment.status", filters.OrderFulfillmentStatus }
+        };
+
+        if (filters.SearchText?.Length > 0)
+        {
+            queryParamsDictionary.Add("buyer.login", filters.SearchText);
+        }
+
+        return queryParamsDictionary.ToHttpQueryString();
     }
 
     private static StringContent PrepareContentRequest(object payload)
