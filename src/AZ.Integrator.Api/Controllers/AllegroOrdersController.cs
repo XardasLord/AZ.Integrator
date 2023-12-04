@@ -31,8 +31,8 @@ public class AllegroOrdersController : ApiBaseController
     }
     
     [HttpGet("tags")]
-    public async Task<OkObjectResult> GetTags()
+    public async Task<OkObjectResult> GetTags([FromQuery] GetProductTagsQueryFilters filters)
     {
-        return Ok(await Mediator.Send(new GetTagsQuery()));
+        return Ok(await Mediator.Send(new GetTagsQuery(filters)));
     }
 }
