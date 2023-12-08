@@ -30,6 +30,26 @@ export class PackageTemplatesState {
     return state.restQueryResponse.result;
   }
 
+  @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
+  static getProductTagsCount(state: PackageTemplatesStateModel): number {
+    return state.restQueryResponse.totalCount;
+  }
+
+  @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
+  static getCurrentPage(state: PackageTemplatesStateModel): number {
+    return state.restQuery.currentPage.pageIndex;
+  }
+
+  @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
+  static getPageSize(state: PackageTemplatesStateModel): number {
+    return state.restQuery.currentPage.pageSize;
+  }
+
+  @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
+  static getSearchText(state: PackageTemplatesStateModel): string {
+    return state.restQuery.searchText;
+  }
+
   @Action(LoadProductTags)
   loadInvoices(ctx: StateContext<PackageTemplatesStateModel>) {
     const state = ctx.getState();
