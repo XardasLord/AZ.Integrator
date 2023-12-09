@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Dpd;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices.SubiektGT;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +15,6 @@ public static class Extensions
             .AddAllegro(configuration)
             .AddShipX(configuration)
             .AddDpd(configuration)
-            .AddSubiekt(configuration);
+            .AddFakturownia(configuration);
     }
 }
