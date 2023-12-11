@@ -11,3 +11,12 @@ export class GenerateInvoice {
 
   constructor(public allegroOrderNumber: string) {}
 }
+
+export class DownloadInvoice {
+  static readonly type = `${prefix} ${DownloadInvoice.name}`;
+
+  constructor(
+    public invoiceId: number,
+    public invoiceNumber: string
+  ) {}
+}

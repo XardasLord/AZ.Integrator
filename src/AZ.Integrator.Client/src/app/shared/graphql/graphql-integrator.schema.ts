@@ -15,6 +15,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** The `DateTime` scalar represents an ISO-8601 compliant date time type. */
   DateTime: { input: any; output: any; }
+  /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: { input: any; output: any; }
 };
 
 export enum ApplyPolicy {
@@ -104,6 +106,7 @@ export type InvoiceViewModel = {
   __typename?: 'InvoiceViewModel';
   allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  invoiceId: Scalars['Long']['output'];
   invoiceNumber?: Maybe<Scalars['String']['output']>;
 };
 
@@ -111,8 +114,24 @@ export type InvoiceViewModelFilterInput = {
   allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  invoiceId?: InputMaybe<LongOperationFilterInput>;
   invoiceNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
+};
+
+export type LongOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Long']['input']>;
+  gt?: InputMaybe<Scalars['Long']['input']>;
+  gte?: InputMaybe<Scalars['Long']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Long']['input']>>>;
+  lt?: InputMaybe<Scalars['Long']['input']>;
+  lte?: InputMaybe<Scalars['Long']['input']>;
+  neq?: InputMaybe<Scalars['Long']['input']>;
+  ngt?: InputMaybe<Scalars['Long']['input']>;
+  ngte?: InputMaybe<Scalars['Long']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Long']['input']>>>;
+  nlt?: InputMaybe<Scalars['Long']['input']>;
+  nlte?: InputMaybe<Scalars['Long']['input']>;
 };
 
 export type ShipmentViewModel = {

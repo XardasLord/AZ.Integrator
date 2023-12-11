@@ -103,6 +103,15 @@
             <mat-icon class="text-blue-700">receipt_long</mat-icon>
           </button>
         </ng-container>
+
+        <ng-container *ngIf="canDownloadInvoice(order) | async">
+          <button
+            mat-icon-button
+            matTooltip="Pobierz fakturę"
+            (click)="downloadInvoice(order); $event.stopPropagation()">
+            <mat-icon class="text-blue-700">download</mat-icon>
+          </button>
+        </ng-container>
       </div>
     </td>
   </ng-container>

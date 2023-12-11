@@ -4,6 +4,7 @@ using System.Text;
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.Extensions.Options;
 
 namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia;
@@ -53,6 +54,24 @@ public class FakturowniaService : IInvoiceService
         var invoiceResponse = await response.Content.ReadFromJsonAsync<CreateInvoiceResponse>();
 
         return invoiceResponse;
+    }
+
+    public async Task<byte[]> Download(long invoiceId)
+    {
+        var queryParams = new Dictionary<string, string>
+        {
+            { "api_token", _options.ApiKey },
+        }.ToHttpQueryString();
+        
+        using var response = await _httpClient.GetAsync($"invoices/{invoiceId}.pdf?{queryParams}");
+        
+        response.EnsureSuccessStatusCode();
+
+        await using var resultStream = await response.Content.ReadAsStreamAsync();
+
+        var label = await resultStream.ReadAsByteArrayAsync();
+
+        return label;
     }
 
     private static void AddInvoiceItems(List<LineItemDetails> lineItems, CreateInvoicePayload payload)

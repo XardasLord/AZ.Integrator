@@ -10,4 +10,6 @@ public interface IInvoiceService
         List<LineItemDetails> lineItems,
         PaymentDetails paymentDetails,
         DeliveryDetails deliveryDetails);
+    
+    Task<byte[]> Download(long invoiceId);
 }

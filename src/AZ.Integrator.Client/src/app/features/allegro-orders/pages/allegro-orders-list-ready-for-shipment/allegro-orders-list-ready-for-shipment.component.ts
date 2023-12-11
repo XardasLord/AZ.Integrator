@@ -7,13 +7,13 @@ import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
+  GenerateDpdLabel,
   GenerateInpostLabel,
   LoadReadyForShipment,
-  GenerateDpdLabel,
   SetCurrentTab,
 } from '../../states/allegro-orders.action';
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
-import { GenerateInvoice } from '../../states/invoices.action';
+import { DownloadInvoice, GenerateInvoice } from '../../states/invoices.action';
 import { InvoicesState } from '../../states/invoices.state';
 import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper';
 
@@ -71,12 +71,23 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     this.store.dispatch(new GenerateInvoice(order.id));
   }
 
+  downloadInvoice(order: AllegroOrderDetailsModel) {
+    const invoices = this.store.selectSnapshot(InvoicesState.getInvoices);
+    const invoiceData = invoices.filter(x => x.allegroOrderNumber === order.id)[0];
+
+    this.store.dispatch(new DownloadInvoice(invoiceData.invoiceId, invoiceData.invoiceNumber!));
+  }
+
   canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
     return this.shipments$.pipe(map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id)));
   }
 
   canGenerateInvoice(order: AllegroOrderDetailsModel): Observable<boolean> {
     return of(true);
+  }
+
+  canDownloadInvoice(order: AllegroOrderDetailsModel): Observable<boolean> {
+    return this.invoices$.pipe(map(invoices => invoices.some(invoice => invoice.allegroOrderNumber === order.id)));
   }
 
   getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {

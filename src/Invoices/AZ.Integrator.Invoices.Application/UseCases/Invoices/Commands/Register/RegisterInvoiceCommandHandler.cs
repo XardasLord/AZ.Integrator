@@ -4,7 +4,7 @@ using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using MediatR;
 
-namespace AZ.Integrator.Invoices.Application.UseCases.Invoices.Commands;
+namespace AZ.Integrator.Invoices.Application.UseCases.Invoices.Commands.Register;
 
 public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceCommand>
 {
