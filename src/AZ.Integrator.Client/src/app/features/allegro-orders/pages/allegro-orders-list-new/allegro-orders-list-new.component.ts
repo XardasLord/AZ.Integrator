@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
-import { Observable, map, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
   LoadNew,
-  OpenRegisterInPostShipmentModal,
   OpenRegisterDpdShipmentModal,
+  OpenRegisterInPostShipmentModal,
   SetCurrentTab,
 } from '../../states/allegro-orders.action';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
@@ -22,7 +22,6 @@ import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper
 export class AllegroOrdersListNewComponent implements OnInit {
   displayedColumns: string[] = [
     nameof<LineItemDetails>('boughtAt'),
-    nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
     'isPaid',
     'paymentType',

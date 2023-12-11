@@ -16,7 +16,6 @@ export class AllegroOrdersListSentComponent implements OnInit {
   displayedColumns: string[] = [
     'shipmentNumber',
     nameof<LineItemDetails>('boughtAt'),
-    nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
     'deliveryType',
     nameof<AllegroOrderDetailsModel>('lineItems'),

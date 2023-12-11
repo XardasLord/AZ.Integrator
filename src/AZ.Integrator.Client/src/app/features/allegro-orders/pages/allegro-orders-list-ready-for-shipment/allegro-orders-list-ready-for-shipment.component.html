@@ -17,11 +17,6 @@
     <td mat-cell *matCellDef="let order">{{ order.updatedAt | date: 'dd.MM.yyyy, HH:mm:ss' }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>Numer zamówienia</th>
-    <td mat-cell *matCellDef="let order">{{ order.id }}</td>
-  </ng-container>
-
   <ng-container matColumnDef="buyer">
     <th mat-header-cell *matHeaderCellDef>Dane kupującego</th>
     <td mat-cell *matCellDef="let order">

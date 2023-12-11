@@ -27,7 +27,6 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     'shipmentNumber',
     'invoiceNumber',
     nameof<LineItemDetails>('boughtAt'),
-    nameof<AllegroOrderDetailsModel>('id'),
     nameof<AllegroOrderDetailsModel>('buyer'),
     'paymentType',
     'deliveryType',
