@@ -19,7 +19,7 @@ public class FakturowniaService : IInvoiceService
         _options = fakturowniaOptions.Value;
     }
     
-    public async Task<string> GenerateInvoice(BuyerDetails buyerDetails, List<LineItemDetails> lineItems, PaymentDetails paymentDetails, DeliveryDetails deliveryDetails)
+    public async Task<CreateInvoiceResponse> GenerateInvoice(BuyerDetails buyerDetails, List<LineItemDetails> lineItems, PaymentDetails paymentDetails, DeliveryDetails deliveryDetails)
     {
         var payload = new CreateInvoicePayload
         {
@@ -50,7 +50,7 @@ public class FakturowniaService : IInvoiceService
         
         response.EnsureSuccessStatusCode();
 
-        var invoiceResponse = await response.Content.ReadFromJsonAsync<dynamic>();
+        var invoiceResponse = await response.Content.ReadFromJsonAsync<CreateInvoiceResponse>();
 
         return invoiceResponse;
     }

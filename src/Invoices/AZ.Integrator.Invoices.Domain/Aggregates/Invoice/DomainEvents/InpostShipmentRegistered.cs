@@ -4,4 +4,4 @@ using MediatR;
 
 namespace AZ.Integrator.Invoices.Domain.Aggregates.Invoice.DomainEvents;
 
-public record InvoiceCreated(InvoiceNumber InvoiceNumber, AllegroOrderNumber AllegroOrderNumber) : INotification;
+public record InvoiceCreated(InvoiceExternalId InvoiceExternalId, InvoiceNumber InvoiceNumber, AllegroOrderNumber AllegroOrderNumber) : INotification;

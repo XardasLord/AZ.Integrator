@@ -13,7 +13,11 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
         builder.ToTable("invoices");
 
         builder.Ignore(e => e.Events);
-        builder.HasKey(e => e.Number);
+        builder.HasKey(e => e.ExternalId);
+
+        builder.Property(e => e.ExternalId)
+            .HasColumnName("external_id")
+            .HasConversion(id => id.Value, id => new InvoiceExternalId(id));
 
         builder.Property(e => e.Number)
             .HasColumnName("number")

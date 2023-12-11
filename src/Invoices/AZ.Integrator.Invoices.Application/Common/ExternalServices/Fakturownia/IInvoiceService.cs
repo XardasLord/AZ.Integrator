@@ -1,10 +1,11 @@
-﻿using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+﻿using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.Models;
+using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 
 namespace AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
 
 public interface IInvoiceService
 {
-    Task<string> GenerateInvoice(
+    Task<CreateInvoiceResponse> GenerateInvoice(
         BuyerDetails buyerDetails,
         List<LineItemDetails> lineItems,
         PaymentDetails paymentDetails,
