@@ -28,14 +28,15 @@ public class FakturowniaService : IInvoiceService
             {
                 Kind = "vat",
                 Number = null,
-                SellDate = paymentDetails.FinishedAt ?? DateTime.UtcNow,
-                IssueDate = DateTime.UtcNow,
-                PaymentTo = paymentDetails.FinishedAt ?? DateTime.UtcNow,
+                SellDate = paymentDetails.FinishedAt?.ToString("yyyy-MM-dd") ?? DateTime.UtcNow.ToString("yyyy-MM-dd"),
+                IssueDate = DateTime.UtcNow.ToString("yyyy-MM-dd"),
+                PaymentTo = paymentDetails.FinishedAt?.ToString("yyyy-MM-dd") ?? DateTime.UtcNow.ToString("yyyy-MM-dd"),
                 SellerName = "",
                 SellerTaxNo = "",
                 BuyerName = buyerDetails.CompanyName?.ToString() ?? $"{buyerDetails.FirstName} {buyerDetails.LastName}",
                 BuyerEmail = buyerDetails.Email,
-                BuyerTaxNo = buyerDetails.PersonalIdentity
+                BuyerTaxNo = buyerDetails.PersonalIdentity,
+                Positions = new List<InvoicePosition>()
             }
         };
         
