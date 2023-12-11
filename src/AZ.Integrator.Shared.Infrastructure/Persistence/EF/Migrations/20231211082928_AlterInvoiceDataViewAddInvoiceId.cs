@@ -2,18 +2,21 @@
 
 #nullable disable
 
-namespace AZ.Integrator.Infrastructure.Persistence.EF.Migrations
+namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.Migrations
 {
     /// <inheritdoc />
-    public partial class InvoicesViewInit : Migration
+    public partial class AlterInvoiceDataViewAddInvoiceId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("DROP VIEW invoices_view;");
+            
             migrationBuilder.Sql($@"
 CREATE VIEW invoices_view
 AS
 SELECT
+  external_id,
   number,
   allegro_order_number,
   created_at

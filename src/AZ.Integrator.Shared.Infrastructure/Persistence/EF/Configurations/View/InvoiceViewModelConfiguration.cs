@@ -11,6 +11,9 @@ public class InvoiceViewModelConfiguration : IEntityTypeConfiguration<InvoiceVie
         builder.ToView("invoices_view");
         builder.HasNoKey();
 
+        builder.Property(x => x.InvoiceId)
+            .HasColumnName("external_id");
+
         builder.Property(x => x.InvoiceNumber)
             .HasColumnName("number");
         
