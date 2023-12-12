@@ -7,5 +7,5 @@ public class ChangeAllegroOrderStatusJobCommand : JobCommandBase
 {
     public Guid OrderNumber { get; set; }
     public AllegroFulfillmentStatusEnum OrderStatus { get; set; }
-    public string AllegroAccessToken { get; set; }
+    public string TenantId { get; set; }
 }

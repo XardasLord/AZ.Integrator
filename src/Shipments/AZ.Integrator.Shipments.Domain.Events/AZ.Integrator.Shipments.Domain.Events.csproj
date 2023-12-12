@@ -10,4 +10,8 @@
         <PackageReference Include="MediatR" Version="11.1.0" />
     </ItemGroup>
     
+    <ItemGroup>
+      <ProjectReference Include="..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
+    </ItemGroup>
+    
 </Project>

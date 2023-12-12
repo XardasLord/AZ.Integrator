@@ -14,7 +14,7 @@ public class AssignTrackingNumberJobCommandHandler : MediatR.IRequestHandler<Ass
     
     public async Task<Unit> Handle(AssignTrackingNumberJobCommand command, CancellationToken cancellationToken)
     {
-        await _allegroService.AssignTrackingNumber(command.OrderNumber, command.TrackingNumber, command.AllegroAccessToken);
+        await _allegroService.AssignTrackingNumber(command.OrderNumber, command.TrackingNumber, command.TenantId);
         
         return Unit.Value;
     }

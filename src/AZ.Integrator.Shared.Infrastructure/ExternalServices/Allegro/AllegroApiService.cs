@@ -3,21 +3,30 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Web;
 using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 
 public class AllegroApiService : IAllegroService
 {
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly AllegroAccountDataViewContext _dataViewContext;
+    private readonly ICurrentUser _currentUser;
 
-    public AllegroApiService(IHttpClientFactory httpClientFactory, ICurrentUser currentUser)
+    public AllegroApiService(
+        IHttpClientFactory httpClientFactory,
+        AllegroAccountDataViewContext dataViewContext,
+        ICurrentUser currentUser)
     {
-        _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", currentUser.AllegroAccessToken);
+        _httpClientFactory = httpClientFactory;
+        _dataViewContext = dataViewContext;
+        _currentUser = currentUser;
     }
 
     public async Task<IEnumerable<OrderEvent>> GetOrderEvents()
@@ -25,7 +34,8 @@ public class AllegroApiService : IAllegroService
         var orderTypes = new[] { AllegroOrderTypesEnum.ReadyForProcessing.Name };
         var queryString = string.Join("&", orderTypes.Select(type => $"type={HttpUtility.UrlEncode(type)}"));
         
-        using var response = await _httpClient.GetAsync($"order/events?{queryString}");
+        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        using var response = await httpClient.GetAsync($"order/events?{queryString}");
         
         response.EnsureSuccessStatusCode();
 
@@ -38,7 +48,8 @@ public class AllegroApiService : IAllegroService
     {
         var queryParams = ApplyFilters(filters);
 
-        using var response = await _httpClient.GetAsync($"order/checkout-forms?{queryParams}");
+        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        using var response = await httpClient.GetAsync($"order/checkout-forms?{queryParams}");
         
         response.EnsureSuccessStatusCode();
 
@@ -49,7 +60,8 @@ public class AllegroApiService : IAllegroService
 
     public async Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId)
     {
-        using var response = await _httpClient.GetAsync($"order/checkout-forms/{orderId}");
+        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        using var response = await httpClient.GetAsync($"order/checkout-forms/{orderId}");
         
         response.EnsureSuccessStatusCode();
 
@@ -60,7 +72,8 @@ public class AllegroApiService : IAllegroService
 
     public async Task<GetOrderProductTagsResponse> GetOfferTags(string offerId)
     {
-        using var response = await _httpClient.GetAsync($"sale/offers/{offerId}/tags");
+        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        using var response = await httpClient.GetAsync($"sale/offers/{offerId}/tags");
         
         response.EnsureSuccessStatusCode();
 
@@ -71,7 +84,8 @@ public class AllegroApiService : IAllegroService
 
     public async Task<GetOrderProductTagsResponse> GetRegisteredTags()
     {
-        using var response = await _httpClient.GetAsync($"sale/offer-tags");
+        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        using var response = await httpClient.GetAsync($"sale/offer-tags");
         
         response.EnsureSuccessStatusCode();
 
@@ -80,7 +94,7 @@ public class AllegroApiService : IAllegroService
         return tags;
     }
 
-    public async Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatus, string allegroAccessToken)
+    public async Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatus, string tenantId)
     {
         var payload = new ChangeStatusRequestPayload
         {
@@ -92,14 +106,13 @@ public class AllegroApiService : IAllegroService
         };
         var payloadContent = PrepareContentRequest(payload);
         
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", allegroAccessToken);
-        
-        using var response = await _httpClient.PutAsync($"order/checkout-forms/{orderNumber}/fulfillment", payloadContent);
+        var httpClient = await PrepareHttpClient(tenantId);
+        using var response = await httpClient.PutAsync($"order/checkout-forms/{orderNumber}/fulfillment", payloadContent);
 
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task AssignTrackingNumber(Guid orderNumber, string trackingNumber, string allegroAccessToken)
+    public async Task AssignTrackingNumber(Guid orderNumber, string trackingNumber, string tenantId)
     {
         var payload = new AssignTrackingNumberRequestPayload
         {
@@ -108,9 +121,8 @@ public class AllegroApiService : IAllegroService
         };
         var payloadContent = PrepareContentRequest(payload);
 
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", allegroAccessToken);
-        
-        using var response = await _httpClient.PostAsync($"order/checkout-forms/{orderNumber}/shipments", payloadContent);
+        var httpClient = await PrepareHttpClient(tenantId);
+        using var response = await httpClient.PostAsync($"order/checkout-forms/{orderNumber}/shipments", payloadContent);
 
         response.EnsureSuccessStatusCode();
     }
@@ -137,5 +149,20 @@ public class AllegroApiService : IAllegroService
         var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
         var payloadContent = new StringContent(payloadJson, Encoding.UTF8, "application/vnd.allegro.public.v1+json");
         return payloadContent;
+    }
+
+    private async Task<HttpClient> PrepareHttpClient(TenantId tenantId)
+    {
+        var httpClient = _httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessToken(tenantId));
+
+        return httpClient;
+    } 
+
+    private async Task<string> GetAccessToken(TenantId tenantId)
+    {
+        var tenantAccount = await _dataViewContext.AllegroAccounts.SingleAsync(x => x.TenantId == tenantId.Value);
+
+        return tenantAccount.AccessToken;
     }
 }

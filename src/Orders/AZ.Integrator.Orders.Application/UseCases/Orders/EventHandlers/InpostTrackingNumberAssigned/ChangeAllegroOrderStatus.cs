@@ -22,7 +22,7 @@ public class ChangeAllegroOrderStatus : INotificationHandler<InpostTrackingNumbe
             {
                 OrderNumber = Guid.Parse(notification.AllegroOrderNumber),
                 OrderStatus = AllegroFulfillmentStatusEnum.ReadyForShipment,
-                AllegroAccessToken = notification.AllegroAccessToken
+                TenantId = notification.TenantId
             }, null));
         
         return Task.CompletedTask;

@@ -20,9 +20,7 @@ public class CurrentUser : ICurrentUser
     public Guid UserId => GetClaimValue(UserClaimType.UserId) is null ? Guid.Empty : Guid.Parse(GetClaimValue(UserClaimType.UserId));
     public string UserName => GetClaimValue(UserClaimType.UserName) ?? System;
     public string Role => GetClaimValue(UserClaimType.Role) ?? System;
-
-    public string AllegroAccessToken => GetClaimValue(UserClaimType.AllegroAccessToken) ?? "";
-    public string AllegroRefreshToken => GetClaimValue(UserClaimType.AllegroRefreshToken) ?? "";
+    public string TenantId => GetClaimValue(UserClaimType.TenantId);
     public int ShipXOrganizationId => GetClaimValueAsNumber(UserClaimType.ShipXOrganizationId) ?? -1;
 
     public IReadOnlyCollection<string> AppScopes => _httpContextAccessor.HttpContext?.User.Claims

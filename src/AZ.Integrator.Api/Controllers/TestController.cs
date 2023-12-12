@@ -15,9 +15,9 @@ public class TestController : ApiBaseController
     }
     
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet]
-    public IActionResult Get()
+    [HttpGet("tenant")]
+    public IActionResult GetTenantId()
     {
-        return Ok(_currentUser.AllegroAccessToken);
+        return Ok(_currentUser.TenantId);
     }
 }

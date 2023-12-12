@@ -5,5 +5,5 @@ namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.JobCommands.Set
 public class SetInpostTrackingNumberJobCommand : JobCommandBase
 {
     public string ShippingNumber { get; set; }
-    public string AllegroAccessToken { get; set; }
+    public string TenantId { get; set; }
 }

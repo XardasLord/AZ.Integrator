@@ -21,7 +21,7 @@ public class AssignTrackingNumberInAllegro : INotificationHandler<InpostTracking
             {
                 OrderNumber = Guid.Parse(notification.AllegroOrderNumber),
                 TrackingNumber = notification.TrackingNumber,
-                AllegroAccessToken = notification.AllegroAccessToken
+                TenantId = notification.TenantId
             }, null));
         
         return Task.CompletedTask;
