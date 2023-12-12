@@ -32,6 +32,12 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
+
+        services.AddDbContext<AllegroAccountDbContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
+        });
         
         services.AddDbContext<ShipmentDataViewContext>(options =>
         {
@@ -42,6 +48,14 @@ internal static class Extensions
         });
         
         services.AddDbContext<InvoiceDataViewContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            // .UseSnakeCaseNamingConvention();
+        });
+        
+        services.AddDbContext<AllegroAccountDataViewContext>(options =>
         {
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)
