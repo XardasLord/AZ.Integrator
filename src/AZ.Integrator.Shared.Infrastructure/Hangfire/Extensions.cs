@@ -12,7 +12,7 @@ public static class Extensions
 {
     private const string OptionsSectionName = "Infrastructure:Postgres";
     
-    public static IServiceCollection AddIntegratorHangfire(this IServiceCollection services, IConfiguration configuration)
+    public static IntegratorJobConfiguration AddIntegratorJobManager(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<PostgresOptions>(configuration.GetRequiredSection(OptionsSectionName));
 
@@ -24,17 +24,28 @@ public static class Extensions
             .UseRecommendedSerializerSettings()
             .UseConsole()
             .UsePostgreSqlStorage(c => c.UseNpgsqlConnection(postgresOptions.ConnectionStringHangfire)));
-        
-        services.AddHangfireServer();
 
-        return services;
+        services.AddHangfireServer();
+            
+        services.AddSingleton<IntegratorRecurringJobManager>();
+
+        return new IntegratorJobConfiguration(services);
+    }
+
+    public static IApplicationBuilder StartIntegratorRecurringJobs(this IApplicationBuilder app)
+    {
+        var manager = app.ApplicationServices.CreateScope().ServiceProvider.GetService<IntegratorRecurringJobManager>();
+        manager.Start();
+        
+        return app;
     }
     
     public static IApplicationBuilder UseIntegratorHangfire(this IApplicationBuilder app)
     {
         return app.UseHangfireDashboard("/hangfire", new DashboardOptions()
         {
-            Authorization = new[] { new DashboardNoAuthorizationFilter() }
+            Authorization = new[] { new DashboardNoAuthorizationFilter() },
+            IgnoreAntiforgeryToken = true
         });
     }
 }

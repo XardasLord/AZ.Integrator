@@ -5,11 +5,13 @@ using AZ.Integrator.Shared.Infrastructure.DomainServices;
 using AZ.Integrator.Shared.Infrastructure.ErrorHandling;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using AZ.Integrator.Shared.Infrastructure.Hangfire;
+using AZ.Integrator.Shared.Infrastructure.Hangfire.RecurringJobs;
 using AZ.Integrator.Shared.Infrastructure.Identity;
 using AZ.Integrator.Shared.Infrastructure.OpenApi;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,20 +32,23 @@ public static class Extensions
         services.AddControllers();
         services.AddHttpContextAccessor();
         services.AddHttpClient();
+        services.AddCors();
         
         services.AddIntegratorAuthentication(configuration);
         services.AddIntegratorAuthorization(configuration);
         services.AddIntegratorIdentity(configuration);
         
         services.AddPostgres(configuration);
-        services.AddIntegratorHangfire(configuration);
         services.AddIntegratorGraphQl(configuration);
         services.AddIntegratorOpenApi(configuration);
         
         services.AddDomainServices();
         services.AddExternalServices(configuration);
 
-        services.AddCors();
+        services.AddMediatR(typeof(Extensions).Assembly);
+        
+        services.AddIntegratorJobManager(configuration)
+            .AddRecurringJob<RefreshTenantAccessTokensRecurringJob>();
         
         return services;
     }
@@ -54,10 +59,6 @@ public static class Extensions
         {
             app.UseIntegratorOpenApi();
         }
-        // else
-        // {
-        //     app.UseHttpsRedirection();
-        // }
         
         app.UseCors(builder =>
         {
@@ -86,6 +87,8 @@ public static class Extensions
             endpoints.MapControllers();
             endpoints.MapHealthChecks("api/healthz");
         });
+
+        app.StartIntegratorRecurringJobs();
         
         return app;
     }

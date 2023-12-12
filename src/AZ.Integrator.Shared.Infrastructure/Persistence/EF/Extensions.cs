@@ -33,7 +33,7 @@ internal static class Extensions
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
 
-        services.AddDbContext<AllegroAccountDbContext>(options =>
+        services.AddDbContext<AllegroAccountDataViewContext>(options =>
         {
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
