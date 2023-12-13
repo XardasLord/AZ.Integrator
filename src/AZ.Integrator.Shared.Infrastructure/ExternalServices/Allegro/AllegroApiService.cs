@@ -157,7 +157,7 @@ public class AllegroApiService : IAllegroService
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessToken(tenantId));
 
         return httpClient;
-    } 
+    }
 
     private async Task<string> GetAccessToken(TenantId tenantId)
     {

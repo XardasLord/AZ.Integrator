@@ -3,6 +3,7 @@ using System;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,10 +11,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.Migrations
 {
-    [DbContext(typeof(AllegroAccountDbContext))]
-    partial class AllegroAccountDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(AllegroAccountDataViewContext))]
+    [Migration("20231212115552_AdjustAllegroAccountsViewAddClientOAuthRelatedData")]
+    partial class AdjustAllegroAccountsViewAddClientOAuthRelatedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +27,6 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.Migrations
 
             modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels.AllegroAccountViewModel", b =>
                 {
-                    b.Property<string>("TenantId")
-                        .HasColumnType("text")
-                        .HasColumnName("tenant_id");
-
                     b.Property<string>("AccessToken")
                         .IsRequired()
                         .HasColumnType("text")
@@ -57,9 +56,14 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.Migrations
                         .HasColumnType("text")
                         .HasColumnName("refresh_token");
 
-                    b.HasKey("TenantId");
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_id");
 
-                    b.ToTable("allegro_accounts", (string)null);
+                    b.ToTable((string)null);
+
+                    b.ToView("allegro_accounts_view", (string)null);
                 });
 #pragma warning restore 612, 618
         }
