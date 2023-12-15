@@ -1,5 +1,4 @@
 ﻿using AZ.Integrator.Shared.Application.BackgroundJobs;
-using AZ.Integrator.Shared.Infrastructure.Hangfire.Jobs;
 using AZ.Integrator.Shared.Infrastructure.Hangfire.Jobs.RefreshTenantAccessToken;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Hangfire;
