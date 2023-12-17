@@ -3,6 +3,7 @@
 public class AllegroOptions
 {
     public OAuthClientSecrets AzTeamTenant { get; set; }
+    public OAuthClientSecrets MebleplTenant { get; set; }
     public OAuthClientSecrets MyTestTenant { get; set; }
     public string AuthorizationEndpoint { get; set; }
     public string TokenEndpoint { get; set; }

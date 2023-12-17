@@ -36,9 +36,11 @@ internal static class Extensions
         JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
         const string azTeamTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-az-team";
+        const string mebleplTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-meblepl";
         const string myTestTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-my-test";
         
         const string azTeamTenantOAuthAuthenticationScheme = "allegro-az-team";
+        const string mebleplTenantOAuthAuthenticationScheme = "allegro-meblepl";
         const string myTestTenantOAuthAuthenticationScheme = "allegro-my-test";
         
         services
@@ -48,6 +50,7 @@ internal static class Extensions
                 sharedOptions.DefaultChallengeScheme = azTeamTenantOAuthAuthenticationScheme;
             })
             .AddCookie(azTeamTenantCookieAuthenticationScheme)
+            .AddCookie(mebleplTenantCookieAuthenticationScheme)
             .AddCookie(myTestTenantCookieAuthenticationScheme)
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
@@ -88,6 +91,15 @@ internal static class Extensions
                 options.SignInScheme = myTestTenantCookieAuthenticationScheme;
                 
                 ConfigureCommonOAuthOptions(options, allegroOptions, identityOptions, shipXOptions);
+            })
+            .AddOAuth(mebleplTenantOAuthAuthenticationScheme, options =>
+            {
+                options.ClientId = allegroOptions.MebleplTenant.ClientId;
+                options.ClientSecret = allegroOptions.MebleplTenant.ClientSecret;
+                options.CallbackPath = new PathString(allegroOptions.MebleplTenant.RedirectUri);
+                options.SignInScheme = mebleplTenantCookieAuthenticationScheme;
+                
+                ConfigureCommonOAuthOptions(options, allegroOptions, identityOptions, shipXOptions);
             });
         
         return services;
@@ -103,7 +115,7 @@ internal static class Extensions
         options.TokenEndpoint = allegroOptions.TokenEndpoint;
 
         options.SaveTokens = true;
-                
+        
         var innerHandler = new HttpClientHandler();
         options.BackchannelHttpHandler = new TokenExchangeAuthorizingHandler(innerHandler, options);
 

@@ -31,7 +31,14 @@ export class ToolbarComponent {
     window.location.href = authUrl;
   }
 
-  myLogin() {
+  mebleplLogin() {
+    this.store.dispatch(new Logout());
+
+    const authUrl = `${environment.allegroLoginEndpointForMebleplTenant}`;
+    window.location.href = authUrl;
+  }
+
+  myTestLogin() {
     this.store.dispatch(new Logout());
 
     const authUrl = `${environment.allegroLoginEndpointForMyTestTenant}`;
