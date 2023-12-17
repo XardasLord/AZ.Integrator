@@ -14,34 +14,21 @@ export class ToolbarComponent {
   toggleSideNav: EventEmitter<boolean> = new EventEmitter();
   user$ = this.store.select(AuthState.getUser);
 
+  azTeamTenantUrl = environment.allegroLoginEndpointForAzTeamTenant;
+  meblePlTenantUrl = environment.allegroLoginEndpointForMebleplTenant;
+  myTestTenantUrl = environment.allegroLoginEndpointForMyTestTenant;
+
   constructor(private store: Store) {}
 
   toggleMenu(): void {
     this.toggleSideNav.emit(true);
   }
 
-  logout(): void {
-    this.store.dispatch(new Logout());
-  }
-
-  azTeamLogin() {
+  login(tenantLoginUrl: any) {
     this.store.dispatch(new Logout());
 
-    const authUrl = `${environment.allegroLoginEndpointForAzTeamTenant}`;
-    window.location.href = authUrl;
-  }
-
-  mebleplLogin() {
-    this.store.dispatch(new Logout());
-
-    const authUrl = `${environment.allegroLoginEndpointForMebleplTenant}`;
-    window.location.href = authUrl;
-  }
-
-  myTestLogin() {
-    this.store.dispatch(new Logout());
-
-    const authUrl = `${environment.allegroLoginEndpointForMyTestTenant}`;
+    console.log(tenantLoginUrl);
+    const authUrl = `${tenantLoginUrl}`;
     window.location.href = authUrl;
   }
 }

@@ -5,19 +5,23 @@
     </button>
     <span>AZ Integrator</span>
 
-    <span>&nbsp; Zalogowany jako: {{ (user$ | async)?.tenant_id }}</span>
-
     <span class="spacer"></span>
+
+    <mat-form-field class="mt-5">
+      <mat-label>Zaloguj jako</mat-label>
+      <mat-select (selectionChange)="login($event.value)">
+        <mat-option [value]="azTeamTenantUrl">AZ TEAM</mat-option>
+        <mat-option [value]="meblePlTenantUrl">meblepl_24</mat-option>
+        <mat-option [value]="myTestTenantUrl">MY TEST</mat-option>
+      </mat-select>
+    </mat-form-field>
 
     <span class="right-section">
       <span class="section user-info">
-        <button (click)="azTeamLogin()">AZ TEAM</button>
-        <button (click)="mebleplLogin()">&nbsp;meblepl_24</button>
-        <button (click)="myTestLogin()">&nbsp;MY TEST</button>
-        <!--        <span class="name">{{ (user$ | async)?.unique_name }} ({{ (user$ | async)?.role }})</span>-->
-        <!--        <button mat-icon-button>-->
-        <!--          <mat-icon>face</mat-icon>-->
-        <!--        </button>-->
+        <span class="name">{{ (user$ | async)?.tenant_id }}</span>
+        <button mat-icon-button>
+          <mat-icon>face</mat-icon>
+        </button>
       </span>
 
       <!--      <button mat-icon-button matTooltip="Wyloguj" (click)="logout()">-->
