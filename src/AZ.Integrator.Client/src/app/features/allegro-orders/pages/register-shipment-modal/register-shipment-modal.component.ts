@@ -3,12 +3,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
-import { ParcelFromGroupModel, RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
+import { RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegro-orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
 import { AllegroOrdersService } from '../../services/allegro-orders.service';
 import { Subscription } from 'rxjs';
-import { data } from 'autoprefixer';
+import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
 
 @Component({
   selector: 'app-register-shipment-modal',

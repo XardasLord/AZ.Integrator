@@ -4,9 +4,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
+import { SaveParcelTemplateCommand } from '../models/commands/save-parcel-template.command';
 
 @Injectable()
-export class PackageTemplatesService extends RemoteServiceBase {
+export class ParcelTemplatesService extends RemoteServiceBase {
   private apiUrl = environment.apiEndpoint;
 
   constructor(httpClient: HttpClient) {
@@ -21,5 +22,9 @@ export class PackageTemplatesService extends RemoteServiceBase {
     }
 
     return this.httpClient.get<string[]>(`${this.apiUrl}/allegroOrders/tags`, { params });
+  }
+
+  saveTemplate(command: SaveParcelTemplateCommand): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/parcelTemplates/${command.tag}`, command);
   }
 }

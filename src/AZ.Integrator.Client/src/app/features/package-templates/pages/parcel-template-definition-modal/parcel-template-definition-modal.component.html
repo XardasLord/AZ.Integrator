@@ -1,0 +1,65 @@
+<div mat-dialog-title>
+  <div class="flex justify-between items-center text-xl">
+    <div>
+      Szablon przesyłek dla tagu: <span class="font-bold">{{ data.tag }}</span>
+    </div>
+    <mat-icon class="cursor-pointer" mat-dialog-close>close</mat-icon>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <div class="flex text-lg mt-4 items-center">
+      Paczki
+      <button mat-icon-button type="button" (click)="addNewParcel()" matTooltip="Dodaj nową paczkę">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+    <ng-container formArrayName="parcels">
+      <ng-container *ngFor="let parcel of parcels.controls; let i = index">
+        <div [formGroupName]="i" class="flex mt-4">
+          <mat-form-field class="w-full flex-auto ml-4">
+            <mat-label>Długość [mm]</mat-label>
+            <input type="number" matInput formControlName="length" />
+            <mat-error *ngIf="parcels.controls[i].get('length')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="w-full flex-auto ml-4">
+            <mat-label>Szerokość [mm]</mat-label>
+            <input type="number" matInput formControlName="width" />
+            <mat-error *ngIf="parcels.controls[i].get('width')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="w-full flex-auto ml-4">
+            <mat-label>Wysokość [mm]</mat-label>
+            <input type="number" matInput formControlName="height" />
+            <mat-error *ngIf="parcels.controls[i].get('height')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="w-full flex-auto ml-4">
+            <mat-label>Waga [kg]</mat-label>
+            <input type="number" matInput formControlName="weight" />
+            <mat-error *ngIf="parcels.controls[i].get('weight')?.hasError('min')">
+              Wartość musi być większa niż 0
+            </mat-error>
+          </mat-form-field>
+          <button mat-icon-button type="button" (click)="removeParcel(i)" matTooltip="Usuń paczkę">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </ng-container>
+  </form>
+</div>
+
+<mat-divider></mat-divider>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button [disabled]="form.invalid" color="primary" (click)="onSubmit()">Zapisz szablon</button>
+  <button mat-stroked-button color="primary" mat-dialog-close>Anuluj</button>
+</div>

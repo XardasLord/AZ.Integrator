@@ -19,10 +19,3 @@ export interface RegisterParcelFormGroupModel {
   parcels: FormArray;
   additionalInfo: FormControl<string | null>;
 }
-
-export interface ParcelFromGroupModel {
-  length: FormControl<number | null>;
-  width: FormControl<number | null>;
-  height: FormControl<number | null>;
-  weight: FormControl<number | null>;
-}

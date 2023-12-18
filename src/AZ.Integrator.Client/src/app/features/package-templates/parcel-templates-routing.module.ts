@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PackageTemplatesComponent } from './pages/package-templates/package-templates.component';
+import { ParcelTemplatesComponent } from './pages/parcel-templates/parcel-templates.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: PackageTemplatesComponent,
+    component: ParcelTemplatesComponent,
   },
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PackageTemplatesRoutingModule {}
+export class ParcelTemplatesRoutingModule {}

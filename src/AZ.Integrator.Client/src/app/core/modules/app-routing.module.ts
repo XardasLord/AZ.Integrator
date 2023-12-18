@@ -6,7 +6,7 @@ export const RoutePaths = {
   Auth: 'auth',
   Login: 'login',
   AllegroOrders: 'allegro-orders',
-  PackageTemplates: 'package-templates',
+  ParcelTemplates: 'parcel-templates',
 };
 
 const routes: Routes = [
@@ -26,9 +26,9 @@ const routes: Routes = [
         // canActivate: mapToCanActivate([AuthGuard]),
       },
       {
-        path: RoutePaths.PackageTemplates,
+        path: RoutePaths.ParcelTemplates,
         loadChildren: () =>
-          import('../../features/package-templates/package-templates.module').then(m => m.PackageTemplatesModule),
+          import('../../features/package-templates/parcel-templates.module').then(m => m.ParcelTemplatesModule),
         // canActivate: mapToCanActivate([AuthGuard]),
       },
     ],
