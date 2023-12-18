@@ -139,3 +139,14 @@
   [pageSizeOptions]="[5, 10, 25, 50, 100]"
   (page)="pageChanged($event)">
 </mat-paginator>
+
+<div class="fixed bottom-8 right-24 z-50">
+  <button
+    mat-fab
+    color="primary"
+    matTooltip="Wygeneruj listy przewozowe dla zaznaczonych"
+    [disabled]="selection.selected.length < 1"
+    (click)="generateShipmentLabelForSelected()">
+    <mat-icon>download</mat-icon>
+  </button>
+</div>

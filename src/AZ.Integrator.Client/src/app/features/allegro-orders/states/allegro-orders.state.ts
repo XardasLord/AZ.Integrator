@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,7 @@ import {
   ChangePage,
   GenerateDpdLabel,
   GenerateInpostLabel,
+  GenerateInpostLabels,
   LoadNew,
   LoadReadyForShipment,
   LoadSent,
@@ -286,7 +287,39 @@ export class AllegroOrdersState {
         return of(null);
       }),
       catchError(() => {
-        this.toastService.error(`Błąd podczas pobierania raportu CSV`, 'Raport CSV');
+        this.toastService.error(`Błąd podczas pobierania listu przewozowego`, 'List przewozowy');
+
+        return of(null);
+      })
+    );
+  }
+
+  @Action(GenerateInpostLabels)
+  generateInpostLabels(ctx: StateContext<AllegroOrdersStateModel>, action: GenerateInpostLabels) {
+    const shipmentNumbers = ctx
+      .getState()
+      .shipments.filter(
+        x =>
+          x.shipmentProvider === ShipmentProviderEnum.Inpost &&
+          action.allegroOrderNumbers.includes(x.allegroOrderNumber!)
+      )
+      .map(x => x.shipmentNumber!);
+
+    let params = new HttpParams();
+
+    shipmentNumbers.forEach(shipmentNumber => {
+      params = params.append('shipmentNumber', shipmentNumber);
+    });
+
+    return this.downloadService.downloadFileFromApi(`/inpostShipments/label`, params).pipe(
+      switchMap(resBlob => {
+        this.downloadService.getFile(resBlob, 'ShipmentLabel.pdf');
+        this.toastService.success('List przewozowy został wygenerowany.', 'List przewozowy');
+
+        return of(null);
+      }),
+      catchError(() => {
+        this.toastService.error(`Błąd podczas pobierania listu przewozowego`, 'List przewozowy');
 
         return of(null);
       })

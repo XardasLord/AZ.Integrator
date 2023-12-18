@@ -9,6 +9,7 @@ import {
   ChangePage,
   GenerateDpdLabel,
   GenerateInpostLabel,
+  GenerateInpostLabels,
   LoadReadyForShipment,
   SetCurrentTab,
 } from '../../states/allegro-orders.action';
@@ -68,6 +69,16 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     } else if (shipment.shipmentProvider === ShipmentProviderEnum.Dpd) {
       this.store.dispatch(new GenerateDpdLabel(order.id));
     }
+  }
+
+  generateShipmentLabelForSelected() {
+    if (this.selection.selected.length < 1) {
+      return;
+    }
+
+    const shipmentIds = this.selection.selected.map(x => x.id);
+
+    this.store.dispatch(new GenerateInpostLabels(shipmentIds));
   }
 
   generateInvoice(order: AllegroOrderDetailsModel) {

@@ -52,6 +52,29 @@ public class ShipXApiService : IShipXService
         return label;
     }
 
+    public async Task<byte[]> GenerateLabel(IEnumerable<ShipmentNumber> numbers)
+    {
+        var queryParams = new Dictionary<string, string>()
+        {
+            { "format", "Pdf" },
+            { "type", "A6" }
+        };
+        
+        numbers.ToList().ForEach(number => queryParams.Add("shipment_ids[]", number));
+
+        var httpParams = queryParams.ToHttpQueryString();
+        
+        using var response = await _httpClient.GetAsync($"v1/organizations/{_currentUser.ShipXOrganizationId}/shipments/labels?{httpParams}");
+        
+        response.EnsureSuccessStatusCode();
+
+        await using var resultStream = await response.Content.ReadAsStreamAsync();
+
+        var label = await resultStream.ReadAsByteArrayAsync();
+
+        return label;
+    }
+
     public async Task<ShipmentResponse> GetDetails(ShipmentNumber number)
     {
         using var response = await _httpClient.GetAsync($"v1/shipments/{number.Value}");

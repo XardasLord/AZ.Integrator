@@ -70,6 +70,12 @@ export class GenerateInpostLabel {
   constructor(public allegroOrderNumber: string) {}
 }
 
+export class GenerateInpostLabels {
+  static readonly type = `${prefix} ${GenerateInpostLabels.name}`;
+
+  constructor(public allegroOrderNumbers: string[]) {}
+}
+
 export class GenerateDpdLabel {
   static readonly type = `${prefix} ${GenerateDpdLabel.name}`;
 
