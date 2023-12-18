@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
-import { map, Observable, of } from 'rxjs';
+import { map, Observable, of, take } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
@@ -16,6 +16,7 @@ import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 import { DownloadInvoice, GenerateInvoice } from '../../states/invoices.action';
 import { InvoicesState } from '../../states/invoices.state';
 import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-allegro-orders-list-ready-for-shipment',
@@ -24,6 +25,7 @@ import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper
 })
 export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   displayedColumns: string[] = [
+    'select',
     'shipmentNumber',
     'invoiceNumber',
     nameof<LineItemDetails>('boughtAt'),
@@ -42,6 +44,8 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   totalItems$ = this.store.select(AllegroOrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
+
+  selection = new SelectionModel<AllegroOrderDetailsModel>(true, []);
 
   constructor(private store: Store) {}
 
@@ -75,6 +79,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     const invoiceData = invoices.filter(x => x.allegroOrderNumber === order.id)[0];
 
     this.store.dispatch(new DownloadInvoice(invoiceData.invoiceId, invoiceData.invoiceNumber!));
+    console.warn(this.selection);
   }
 
   canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
@@ -103,5 +108,32 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
 
   getPaymentType(order: AllegroOrderDetailsModel) {
     return getPaymentTypeForAllegroOrder(order);
+  }
+
+  isAllSelected(): Observable<boolean> {
+    return this.orders$.pipe(
+      map(orders => {
+        const numSelected = this.selection.selected.length;
+        return numSelected === orders.length;
+      })
+    );
+  }
+
+  masterToggle() {
+    this.isAllSelected()
+      .pipe(take(1))
+      .subscribe(allSelected => {
+        if (allSelected) {
+          this.selection.clear();
+        } else {
+          this.orders$.pipe(take(1)).subscribe(orders => {
+            orders.forEach(row => this.selection.select(row));
+          });
+        }
+      });
+  }
+
+  toggleSelection(row: AllegroOrderDetailsModel) {
+    this.selection.toggle(row);
   }
 }

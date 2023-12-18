@@ -1,4 +1,21 @@
 <table mat-table [dataSource]="(orders$ | async)!" class="mat-elevation-z3">
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox
+        (change)="masterToggle()"
+        [checked]="(isAllSelected() | async)!"
+        [indeterminate]="selection.hasValue() && !(isAllSelected() | async)">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox
+        (click)="$event.stopPropagation()"
+        (change)="toggleSelection(row)"
+        [checked]="selection.isSelected(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="shipmentNumber">
     <th mat-header-cell *matHeaderCellDef>Numer przesyłki</th>
     <td mat-cell *matCellDef="let order">{{ getShipmentNumber(order) | async }}</td>
