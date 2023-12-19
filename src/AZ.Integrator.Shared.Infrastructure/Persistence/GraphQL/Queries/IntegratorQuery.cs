@@ -4,7 +4,7 @@ using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 
-[ExtendObjectType(Name = "IntegratorQuery")]
+[ExtendObjectType(Name = nameof(IntegratorQuery))]
 internal class IntegratorQuery
 {
     private readonly ICurrentUser _currentUser;
@@ -33,4 +33,9 @@ internal class IntegratorQuery
     [UseFiltering]
     public IQueryable<InvoiceViewModel> GetInvoices([Service] InvoiceDataViewContext dataViewContext) 
         => dataViewContext.Invoices.AsQueryable();
+
+    [UseProjection]
+    [UseFiltering]
+    public IQueryable<TagParcelTemplateViewModel> GetTagParcelTemplates([Service] TagParcelTemplateDataViewContext dataViewContext) 
+        => dataViewContext.TagParcelTemplates.AsQueryable();
 }
