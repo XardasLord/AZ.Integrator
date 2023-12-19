@@ -61,5 +61,6 @@
     <ProjectReference Include="..\Invoices\AZ.Integrator.Invoices.Domain\AZ.Integrator.Invoices.Domain.csproj" />
     <ProjectReference Include="..\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
     <ProjectReference Include="..\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
+    <ProjectReference Include="..\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Domain\AZ.Integrator.TagParcelTemplates.Domain.csproj" />
   </ItemGroup>
 </Project>

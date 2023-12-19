@@ -1,6 +1,6 @@
-using AZ.Integrator.Infrastructure;
 using AZ.Integrator.Invoices.Application;
 using AZ.Integrator.Orders.Application;
+using AZ.Integrator.TagParcelTemplates.Application;
 using AZ.Integrator.Shared.Infrastructure;
 using AZ.Integrator.Shipments.Application;
 
@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOrdersModuleApplication(builder.Configuration);
 builder.Services.AddShipmentsModuleApplication(builder.Configuration);
 builder.Services.AddInvoicesModuleApplication(builder.Configuration);
+builder.Services.AddTagParcelTemplatesModuleApplication(builder.Configuration);
 
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 

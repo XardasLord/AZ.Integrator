@@ -43,6 +43,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Orders.Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Shared.Application", "AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj", "{9F9F6322-78A0-48A5-B4C7-5B371546E82F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TagParcelTemplates", "TagParcelTemplates", "{A78791CF-DB1C-4382-82A5-E3A792F464FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.TagParcelTemplates.Application", "TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Application\AZ.Integrator.TagParcelTemplates.Application.csproj", "{1782C76E-952D-40F2-B1D9-F2671B629243}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.TagParcelTemplates.Domain", "TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Domain\AZ.Integrator.TagParcelTemplates.Domain.csproj", "{DFFE0023-160D-43A5-B58D-02F21B9697F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +119,14 @@ Global
 		{9F9F6322-78A0-48A5-B4C7-5B371546E82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F9F6322-78A0-48A5-B4C7-5B371546E82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F9F6322-78A0-48A5-B4C7-5B371546E82F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1782C76E-952D-40F2-B1D9-F2671B629243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1782C76E-952D-40F2-B1D9-F2671B629243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1782C76E-952D-40F2-B1D9-F2671B629243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1782C76E-952D-40F2-B1D9-F2671B629243}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFFE0023-160D-43A5-B58D-02F21B9697F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFFE0023-160D-43A5-B58D-02F21B9697F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFFE0023-160D-43A5-B58D-02F21B9697F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFFE0023-160D-43A5-B58D-02F21B9697F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,5 +143,7 @@ Global
 		{B6DEDA42-9054-4E66-BAF0-A23B900EC012} = {3015700F-0F86-49D7-8DE7-2A8CAD39202F}
 		{36E1A782-20C7-4B56-AF22-5551C70B8A3D} = {4F3FDA55-588A-4702-8CEF-B0DE277668EC}
 		{15946C10-3D66-4639-8CF2-D3637C87C183} = {BCF47A2C-C937-414E-BC62-F92919A698BA}
+		{1782C76E-952D-40F2-B1D9-F2671B629243} = {A78791CF-DB1C-4382-82A5-E3A792F464FA}
+		{DFFE0023-160D-43A5-B58D-02F21B9697F8} = {A78791CF-DB1C-4382-82A5-E3A792F464FA}
 	EndGlobalSection
 EndGlobal

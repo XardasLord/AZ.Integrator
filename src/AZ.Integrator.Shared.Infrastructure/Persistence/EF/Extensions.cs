@@ -38,6 +38,12 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
+
+        services.AddDbContext<TagParcelTemplateDbContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
+        });
         
         services.AddDbContext<ShipmentDataViewContext>(options =>
         {
