@@ -30,7 +30,13 @@ export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
       additionalInfo: new FormControl<string>(''),
     });
 
-    this.addNewParcel();
+    if (data?.template?.parcels && data?.template?.parcels?.length > 0) {
+      data.template?.parcels?.forEach(parcel => {
+        this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
+      });
+    } else {
+      this.addNewParcel();
+    }
 
     this.form.markAllAsTouched();
   }
@@ -47,12 +53,12 @@ export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
     this.savePackageTemplate();
   }
 
-  addNewParcel() {
+  addNewParcel(length = 0, width = 0, height = 0, weight = 0) {
     const parcel = this.fb.group<ParcelFromGroupModel>({
-      length: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      width: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      height: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      weight: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
+      length: new FormControl<number>(length, [Validators.required, Validators.min(1)]),
+      width: new FormControl<number>(width, [Validators.required, Validators.min(1)]),
+      height: new FormControl<number>(height, [Validators.required, Validators.min(1)]),
+      weight: new FormControl<number>(weight, [Validators.required, Validators.min(1)]),
     });
 
     this.parcels.push(parcel);

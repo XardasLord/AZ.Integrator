@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { catchError, tap, throwError } from 'rxjs';
+import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
+import { catchError, map, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { ParcelTemplatesStateModel } from './parcel-templates.state.model';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
@@ -10,6 +10,10 @@ import { ParcelTemplateDefinitionModalComponent } from '../pages/parcel-template
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ParcelTemplateDefinitionDataModel } from '../models/parcel-template-definition-data.model';
 import { LoadProductTags, OpenPackageTemplateDefinitionModal, SavePackageTemplate } from './parcel-templates.action';
+import { GetTagParcelTemplatesGQL } from '../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
+import { IntegratorQueryTagParcelTemplatesArgs } from '../../../shared/graphql/graphql-integrator.schema';
+import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
+import { AuthState } from '../../../shared/states/auth.state';
 
 const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>('packageTemplates');
 
@@ -25,7 +29,9 @@ export class ParcelTemplatesState {
   private dialogRef?: MatDialogRef<ParcelTemplateDefinitionModalComponent>;
 
   constructor(
+    private store: Store,
     private packageTemplatesService: ParcelTemplatesService,
+    private getTagParcelTemplatesGql: GetTagParcelTemplatesGQL,
     private zone: NgZone,
     private dialog: MatDialog,
     private toastService: ToastrService
@@ -78,18 +84,35 @@ export class ParcelTemplatesState {
     action: OpenPackageTemplateDefinitionModal
   ) {
     this.zone.run(() => {
-      const data: ParcelTemplateDefinitionDataModel = {
-        tag: action.tag,
+      const query: IntegratorQueryTagParcelTemplatesArgs = {
+        where: {
+          tag: {
+            eq: action.tag,
+          },
+          tenantId: {
+            eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
+          },
+        },
       };
 
-      this.dialogRef = this.dialog.open<ParcelTemplateDefinitionModalComponent, ParcelTemplateDefinitionDataModel>(
-        ParcelTemplateDefinitionModalComponent,
-        {
-          data: <ParcelTemplateDefinitionDataModel>data,
-          width: '50%',
-          height: '70%',
-        }
-      );
+      this.getTagParcelTemplatesGql
+        .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
+        .valueChanges.pipe(map(x => x.data.result))
+        .subscribe(results => {
+          const data: ParcelTemplateDefinitionDataModel = {
+            tag: action.tag,
+            template: results[0] ?? null,
+          };
+
+          this.dialogRef = this.dialog.open<ParcelTemplateDefinitionModalComponent, ParcelTemplateDefinitionDataModel>(
+            ParcelTemplateDefinitionModalComponent,
+            {
+              data: <ParcelTemplateDefinitionDataModel>data,
+              width: '50%',
+              height: '70%',
+            }
+          );
+        });
     });
   }
 

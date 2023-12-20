@@ -57,6 +57,21 @@ export type DpdShipmentViewModelFilterInput = {
   trackingNumber?: InputMaybe<StringOperationFilterInput>;
 };
 
+export type FloatOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Float']['input']>;
+  gt?: InputMaybe<Scalars['Float']['input']>;
+  gte?: InputMaybe<Scalars['Float']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
+  lt?: InputMaybe<Scalars['Float']['input']>;
+  lte?: InputMaybe<Scalars['Float']['input']>;
+  neq?: InputMaybe<Scalars['Float']['input']>;
+  ngt?: InputMaybe<Scalars['Float']['input']>;
+  ngte?: InputMaybe<Scalars['Float']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
+  nlt?: InputMaybe<Scalars['Float']['input']>;
+  nlte?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type InpostShipmentViewModel = {
   __typename?: 'InpostShipmentViewModel';
   allegroOrderNumber?: Maybe<Scalars['String']['output']>;
@@ -74,12 +89,28 @@ export type InpostShipmentViewModelFilterInput = {
   trackingNumber?: InputMaybe<StringOperationFilterInput>;
 };
 
+export type IntOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Int']['input']>;
+  gt?: InputMaybe<Scalars['Int']['input']>;
+  gte?: InputMaybe<Scalars['Int']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  lt?: InputMaybe<Scalars['Int']['input']>;
+  lte?: InputMaybe<Scalars['Int']['input']>;
+  neq?: InputMaybe<Scalars['Int']['input']>;
+  ngt?: InputMaybe<Scalars['Int']['input']>;
+  ngte?: InputMaybe<Scalars['Int']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  nlt?: InputMaybe<Scalars['Int']['input']>;
+  nlte?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
   dpdShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
   inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
   invoices?: Maybe<Array<Maybe<InvoiceViewModel>>>;
   shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
+  tagParcelTemplates?: Maybe<Array<Maybe<TagParcelTemplateViewModel>>>;
 };
 
 
@@ -102,6 +133,11 @@ export type IntegratorQueryShipmentsArgs = {
   where?: InputMaybe<ShipmentViewModelFilterInput>;
 };
 
+
+export type IntegratorQueryTagParcelTemplatesArgs = {
+  where?: InputMaybe<TagParcelTemplateViewModelFilterInput>;
+};
+
 export type InvoiceViewModel = {
   __typename?: 'InvoiceViewModel';
   allegroOrderNumber?: Maybe<Scalars['String']['output']>;
@@ -117,6 +153,13 @@ export type InvoiceViewModelFilterInput = {
   invoiceId?: InputMaybe<LongOperationFilterInput>;
   invoiceNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
+};
+
+export type ListFilterInputTypeOfTagParcelViewModelFilterInput = {
+  all?: InputMaybe<TagParcelViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<TagParcelViewModelFilterInput>;
+  some?: InputMaybe<TagParcelViewModelFilterInput>;
 };
 
 export type LongOperationFilterInput = {
@@ -166,4 +209,40 @@ export type StringOperationFilterInput = {
   nstartsWith?: InputMaybe<Scalars['String']['input']>;
   or?: InputMaybe<Array<StringOperationFilterInput>>;
   startsWith?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TagParcelTemplateViewModel = {
+  __typename?: 'TagParcelTemplateViewModel';
+  parcels?: Maybe<Array<Maybe<TagParcelViewModel>>>;
+  tag?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['String']['output']>;
+};
+
+export type TagParcelTemplateViewModelFilterInput = {
+  and?: InputMaybe<Array<TagParcelTemplateViewModelFilterInput>>;
+  or?: InputMaybe<Array<TagParcelTemplateViewModelFilterInput>>;
+  parcels?: InputMaybe<ListFilterInputTypeOfTagParcelViewModelFilterInput>;
+  tag?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type TagParcelViewModel = {
+  __typename?: 'TagParcelViewModel';
+  height: Scalars['Float']['output'];
+  id: Scalars['Int']['output'];
+  length: Scalars['Float']['output'];
+  tag?: Maybe<Scalars['String']['output']>;
+  weight: Scalars['Float']['output'];
+  width: Scalars['Float']['output'];
+};
+
+export type TagParcelViewModelFilterInput = {
+  and?: InputMaybe<Array<TagParcelViewModelFilterInput>>;
+  height?: InputMaybe<FloatOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  length?: InputMaybe<FloatOperationFilterInput>;
+  or?: InputMaybe<Array<TagParcelViewModelFilterInput>>;
+  tag?: InputMaybe<StringOperationFilterInput>;
+  weight?: InputMaybe<FloatOperationFilterInput>;
+  width?: InputMaybe<FloatOperationFilterInput>;
 };
