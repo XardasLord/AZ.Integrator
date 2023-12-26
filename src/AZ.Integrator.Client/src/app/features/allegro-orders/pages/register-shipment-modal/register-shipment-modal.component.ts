@@ -2,13 +2,17 @@ import { Component, Inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { map, Subscription } from 'rxjs';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
 import { RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegro-orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
 import { AllegroOrdersService } from '../../services/allegro-orders.service';
-import { Subscription } from 'rxjs';
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
+import { GetTagParcelTemplatesGQL } from '../../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
+import { IntegratorQueryTagParcelTemplatesArgs } from '../../../../shared/graphql/graphql-integrator.schema';
+import { AuthState } from '../../../../shared/states/auth.state';
+import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
 
 @Component({
   selector: 'app-register-shipment-modal',
@@ -24,7 +28,8 @@ export class RegisterShipmentModalComponent implements OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: RegisterShipmentDataModel,
     private fb: FormBuilder,
     private store: Store,
-    private allegroService: AllegroOrdersService
+    private allegroService: AllegroOrdersService,
+    private tagParcelTemplatesGql: GetTagParcelTemplatesGQL
   ) {
     const allegroOrderDetails = data.allegroOrder;
 
@@ -101,6 +106,32 @@ export class RegisterShipmentModalComponent implements OnDestroy {
     this.subscriptions.add(
       this.allegroService.getOrderTags(data.allegroOrder.id).subscribe(tags => {
         this.form.controls.additionalInfo.setValue(tags.join(', '));
+
+        if (tags.length === 0 || tags.length > 1) return;
+
+        const query: IntegratorQueryTagParcelTemplatesArgs = {
+          where: {
+            tag: {
+              eq: tags[0],
+            },
+            tenantId: {
+              eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
+            },
+          },
+        };
+
+        this.tagParcelTemplatesGql
+          .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
+          .valueChanges.pipe(map(x => x.data.result))
+          .subscribe(results => {
+            if (!results[0]) return;
+
+            this.removeAllParcels();
+
+            results[0].parcels?.forEach(parcel => {
+              this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
+            });
+          });
       })
     );
   }
@@ -121,12 +152,12 @@ export class RegisterShipmentModalComponent implements OnDestroy {
     }
   }
 
-  addNewParcel() {
+  addNewParcel(length = 0, width = 0, height = 0, weight = 0) {
     const parcel = this.fb.group<ParcelFromGroupModel>({
-      length: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      width: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      height: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
-      weight: new FormControl<number>(0, [Validators.required, Validators.min(1)]),
+      length: new FormControl<number>(length, [Validators.required, Validators.min(1)]),
+      width: new FormControl<number>(width, [Validators.required, Validators.min(1)]),
+      height: new FormControl<number>(height, [Validators.required, Validators.min(1)]),
+      weight: new FormControl<number>(weight, [Validators.required, Validators.min(1)]),
     });
 
     this.parcels.push(parcel);
@@ -134,6 +165,12 @@ export class RegisterShipmentModalComponent implements OnDestroy {
 
   removeParcel(index: number) {
     this.parcels.removeAt(index);
+  }
+
+  removeAllParcels() {
+    while (this.parcels.length !== 0) {
+      this.removeParcel(0);
+    }
   }
 
   get parcels(): FormArray<FormGroup> {
