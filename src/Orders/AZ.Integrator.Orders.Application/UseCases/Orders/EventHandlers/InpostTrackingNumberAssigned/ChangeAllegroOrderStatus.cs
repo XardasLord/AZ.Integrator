@@ -21,7 +21,7 @@ public class ChangeAllegroOrderStatus : INotificationHandler<InpostTrackingNumbe
             job => job.Execute(new ChangeAllegroOrderStatusJobCommand
             {
                 OrderNumber = Guid.Parse(notification.AllegroOrderNumber),
-                OrderStatus = AllegroFulfillmentStatusEnum.ReadyForShipment,
+                OrderStatus = AllegroFulfillmentStatusEnum.ReadyForShipment.Value,
                 TenantId = notification.TenantId
             }, null));
         

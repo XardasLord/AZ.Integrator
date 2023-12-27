@@ -15,7 +15,7 @@ public class ChangeAllegroOrderStatusJobCommandHandler : IRequestHandler<ChangeA
     
     public async Task<Unit> Handle(ChangeAllegroOrderStatusJobCommand command, CancellationToken cancellationToken)
     {
-        await _allegroService.ChangeStatus(command.OrderNumber, command.OrderStatus, command.TenantId);
+        await _allegroService.ChangeStatus(command.OrderNumber, AllegroFulfillmentStatusEnum.FromValue(command.OrderStatus), command.TenantId);
         
         return Unit.Value;
     }

@@ -6,6 +6,6 @@ namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.ChangeAll
 public class ChangeAllegroOrderStatusJobCommand : JobCommandBase
 {
     public Guid OrderNumber { get; set; }
-    public AllegroFulfillmentStatusEnum OrderStatus { get; set; }
+    public int OrderStatus { get; set; }
     public string TenantId { get; set; }
 }
