@@ -12,7 +12,7 @@
       <mat-select (selectionChange)="login($event.value)">
         <mat-option [value]="azTeamTenantUrl">AZ TEAM</mat-option>
         <mat-option [value]="meblePlTenantUrl">meblepl_24</mat-option>
-        <mat-option [value]="myTestTenantUrl">MY TEST</mat-option>
+        <mat-option *ngIf="environment.showMyTestAllegroAccount" [value]="myTestTenantUrl">MY TEST</mat-option>
       </mat-select>
     </mat-form-field>
 

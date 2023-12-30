@@ -90,7 +90,6 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     const invoiceData = invoices.filter(x => x.allegroOrderNumber === order.id)[0];
 
     this.store.dispatch(new DownloadInvoice(invoiceData.invoiceId, invoiceData.invoiceNumber!));
-    console.warn(this.selection);
   }
 
   canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {

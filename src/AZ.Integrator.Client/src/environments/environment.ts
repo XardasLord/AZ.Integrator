@@ -8,4 +8,6 @@ export const environment = {
   allegroLoginEndpointForAzTeamTenant: 'http://localhost:6010/auth/login-allegro?tenantId=az-team',
   allegroLoginEndpointForMebleplTenant: 'http://localhost:6010/auth/login-allegro?tenantId=meblepl',
   allegroLoginEndpointForMyTestTenant: 'http://localhost:6010/auth/login-allegro?tenantId=my-test',
+
+  showMyTestAllegroAccount: true,
 };

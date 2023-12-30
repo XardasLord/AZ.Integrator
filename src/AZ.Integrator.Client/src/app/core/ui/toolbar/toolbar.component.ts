@@ -27,8 +27,9 @@ export class ToolbarComponent {
   login(tenantLoginUrl: any) {
     this.store.dispatch(new Logout());
 
-    console.log(tenantLoginUrl);
     const authUrl = `${tenantLoginUrl}`;
     window.location.href = authUrl;
   }
+
+  protected readonly environment = environment;
 }
