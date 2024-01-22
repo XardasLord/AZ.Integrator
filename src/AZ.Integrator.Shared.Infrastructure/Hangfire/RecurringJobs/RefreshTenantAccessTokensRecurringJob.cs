@@ -29,7 +29,9 @@ public class RefreshTenantAccessTokensRecurringJob : IIntegratorRecurringJob
         
         var allegroAccountDataViewContext = scope.ServiceProvider.GetService<AllegroAccountDataViewContext>();
 
-        var tenantAccounts = await allegroAccountDataViewContext.AllegroAccounts.ToListAsync(cancellationToken);
+        var tenantAccounts = await allegroAccountDataViewContext.AllegroAccounts
+            .Where(x => x.RefreshToken.Length > 0)
+            .ToListAsync(cancellationToken);
         
         tenantAccounts.ForEach(tenant =>
             _backgroundJobClient.Enqueue<RefreshTenantAccessTokenCommandJob>(

@@ -113,9 +113,9 @@ internal static class Extensions
     {
         options.AuthorizationEndpoint = allegroOptions.AuthorizationEndpoint;
         options.TokenEndpoint = allegroOptions.TokenEndpoint;
-
-        options.SaveTokens = true;
         
+        options.SaveTokens = true;
+
         var innerHandler = new HttpClientHandler();
         options.BackchannelHttpHandler = new TokenExchangeAuthorizingHandler(innerHandler, options);
 
@@ -127,7 +127,7 @@ internal static class Extensions
             
             return Task.FromResult(0);
         };
-                
+
         options.Events.OnCreatingTicket = ctx =>
         {
             var tenantId = ctx.Identity?.AuthenticationType;
