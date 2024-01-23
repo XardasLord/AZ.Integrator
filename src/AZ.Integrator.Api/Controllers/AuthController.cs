@@ -13,12 +13,14 @@ public class AuthController : ControllerBase
     private readonly UserManager<IdentityUser> _userManager;
     private readonly UserDbContext _context;
     private readonly TokenService _tokenService;
+    private readonly IConfiguration _configuration;
 
-    public AuthController(UserManager<IdentityUser> userManager, UserDbContext context, TokenService tokenService)
+    public AuthController(UserManager<IdentityUser> userManager, UserDbContext context, TokenService tokenService, IConfiguration configuration)
     {
         _userManager = userManager;
         _context = context;
         _tokenService = tokenService;
+        _configuration = configuration;
     }
     
     [HttpPost]
@@ -96,7 +98,7 @@ public class AuthController : ControllerBase
         
         return Challenge(new AuthenticationProperties
         {
-           RedirectUri = $"http://localhost:8000?access_token={await HttpContext.GetTokenAsync(authenticationScheme, tokenName)}"
+           RedirectUri = $"{_configuration["Application:ClientAppUrl"]}?access_token={await HttpContext.GetTokenAsync(authenticationScheme, tokenName)}"
         }, authenticationScheme);
     }
 }
