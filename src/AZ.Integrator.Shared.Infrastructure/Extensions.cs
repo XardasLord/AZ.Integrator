@@ -13,7 +13,6 @@ using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -75,7 +74,7 @@ public static class Extensions
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseCookiePolicy(new CookiePolicyOptions()
+        app.UseCookiePolicy(new CookiePolicyOptions
         {
             MinimumSameSitePolicy = SameSiteMode.Lax
         });

@@ -4,6 +4,7 @@ using System.Text;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,6 +32,8 @@ internal static class Extensions
         
         services.Configure<ShipXOptions>(configuration.GetRequiredSection(ShipXOptionsSectionName));
         var shipXOptions = configuration.GetOptions<ShipXOptions>(ShipXOptionsSectionName);
+
+        var clientUrlAppRedirect = configuration["Application:ClientAppUrl"];
             
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
@@ -81,7 +84,7 @@ internal static class Extensions
                 options.CallbackPath = new PathString(allegroOptions.AzTeamTenant.RedirectUri);
                 options.SignInScheme = azTeamTenantCookieAuthenticationScheme;
                 
-                ConfigureCommonOAuthOptions(options, allegroOptions, identityOptions, shipXOptions);
+                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
             })
             .AddOAuth(myTestTenantOAuthAuthenticationScheme, options =>
             {
@@ -90,7 +93,7 @@ internal static class Extensions
                 options.CallbackPath = new PathString(allegroOptions.MyTestTenant.RedirectUri);
                 options.SignInScheme = myTestTenantCookieAuthenticationScheme;
                 
-                ConfigureCommonOAuthOptions(options, allegroOptions, identityOptions, shipXOptions);
+                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
             })
             .AddOAuth(mebleplTenantOAuthAuthenticationScheme, options =>
             {
@@ -99,17 +102,19 @@ internal static class Extensions
                 options.CallbackPath = new PathString(allegroOptions.MebleplTenant.RedirectUri);
                 options.SignInScheme = mebleplTenantCookieAuthenticationScheme;
                 
-                ConfigureCommonOAuthOptions(options, allegroOptions, identityOptions, shipXOptions);
+                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
             });
         
         return services;
     }
 
     private static void ConfigureCommonOAuthOptions(
+        IServiceCollection services,
         OAuthOptions options,
         AllegroOptions allegroOptions,
         IdentityOptions identityOptions,
-        ShipXOptions shipXOptions)
+        ShipXOptions shipXOptions,
+        string clientUrlAppRedirect)
     {
         options.AuthorizationEndpoint = allegroOptions.AuthorizationEndpoint;
         options.TokenEndpoint = allegroOptions.TokenEndpoint;
@@ -121,43 +126,82 @@ internal static class Extensions
 
         options.Events.OnRedirectToAuthorizationEndpoint = ctx =>
         {
-            ctx.RedirectUri = $"{ctx.RedirectUri}&prompt=confirm";
+            var serviceProvider = services.BuildServiceProvider();
+            var dbViewContext = serviceProvider.GetRequiredService<AllegroAccountDataViewContext>();
 
-            ctx.HttpContext.Response.Redirect(ctx.RedirectUri);
+            var tenantId = $"allegro-{ctx.Request.Query["tenantId"].ToString()}";
+
+            var allegroAccount = dbViewContext.AllegroAccounts.SingleOrDefault(x => x.TenantId == tenantId);
+            if (allegroAccount is null)
+            {
+                // Account does not exist in the system
+                ctx.RedirectUri = $"{ctx.RedirectUri}&prompt=confirm";
+
+                ctx.HttpContext.Response.Redirect(ctx.RedirectUri);
             
-            return Task.FromResult(0);
+                return Task.FromResult(0);
+            }
+            else
+            {
+                // Account exists, so we don't need to force login
+                var jwtToken = GenerateJwtToken(tenantId, identityOptions, shipXOptions);
+                
+                ctx.Properties.StoreTokens(new[]
+                {
+                    new AuthenticationToken
+                    {
+                        Name = "integrator_access_token",
+                        Value = jwtToken
+                    }
+                });
+                
+                ctx.HttpContext.Response.Redirect($"{clientUrlAppRedirect}?access_token={jwtToken}");
+                
+                return Task.CompletedTask;
+            }
         };
 
         options.Events.OnCreatingTicket = ctx =>
         {
+            // TODO: Here comes a new account that does not exist in DB in the system, so at the end of this event we need to create a new tenant account in the system
             var tenantId = ctx.Identity?.AuthenticationType;
                     
-            var claims = new List<Claim>
-            {
-                new(UserClaimType.ShipXOrganizationId, shipXOptions.OrganizationId.ToString()),
-                new(UserClaimType.TenantId, tenantId),
-            };
-                    
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = new JwtSecurityToken(
-                issuer: identityOptions.Issuer,
-                audience: identityOptions.Audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(identityOptions.ExpiresInHours),
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(identityOptions.PrivateKey)),
-                    SecurityAlgorithms.HmacSha256)
-            );
+            var jwtToken = GenerateJwtToken(tenantId, identityOptions, shipXOptions);
 
             ctx.Properties.StoreTokens(new[]
             {
                 new AuthenticationToken
                 {
                     Name = "integrator_access_token",
-                    Value = jwtTokenHandler.WriteToken(jwtSecurityToken)
+                    Value = jwtToken
                 }
             });
+            
+            // TODO: We should save new account in DB
+            
             return Task.CompletedTask;
         };
+    }
+
+    private static string GenerateJwtToken(string tenantId, IdentityOptions identityOptions, ShipXOptions shipXOptions)
+    {
+        var claims = new List<Claim>
+        {
+            new(UserClaimType.ShipXOrganizationId, shipXOptions.OrganizationId.ToString()),
+            new(UserClaimType.TenantId, tenantId),
+        };
+                
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+        var jwtSecurityToken = new JwtSecurityToken(
+            issuer: identityOptions.Issuer,
+            audience: identityOptions.Audience,
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(identityOptions.ExpiresInHours),
+            signingCredentials: new SigningCredentials(
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(identityOptions.PrivateKey)),
+                SecurityAlgorithms.HmacSha256)
+        );
+
+        return jwtTokenHandler.WriteToken(jwtSecurityToken);
     }
 }
