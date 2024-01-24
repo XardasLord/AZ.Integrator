@@ -34,6 +34,7 @@ import { IntegratorError } from '../../../core/interceptor/error-handler.interce
 import { ShipmentProviderEnum } from '../models/shipment-provider.enum';
 import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
 import { LoadInvoices } from './invoices.action';
+import { RestQueryHelper } from '../../../shared/models/pagination/rest.helper';
 
 const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('allegro_orders');
 
@@ -160,6 +161,7 @@ export class AllegroOrdersState {
   applyFilter(ctx: StateContext<AllegroOrdersStateModel>, action: ApplyFilter): Observable<void> {
     const updatedQuery = { ...ctx.getState().restQuery };
     updatedQuery.searchText = action.searchPhrase;
+    updatedQuery.currentPage = RestQueryHelper.getInitialPageEvent();
 
     ctx.patchState({
       restQuery: updatedQuery,
