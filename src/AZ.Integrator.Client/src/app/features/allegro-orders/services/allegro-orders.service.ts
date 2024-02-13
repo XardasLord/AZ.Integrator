@@ -47,10 +47,6 @@ export class AllegroOrdersService extends RemoteServiceBase {
     return this.httpClient.get<AllegroOrderDetailsModel>(`${this.apiUrl}/allegroOrders/${orderId}`);
   }
 
-  getOrderTags(orderId: string): Observable<string[]> {
-    return this.httpClient.get<string[]>(`${this.apiUrl}/allegroOrders/${orderId}/tags`);
-  }
-
   // TODO: Move it to a new dedicated shipment service
   registerInpostShipment(shipment: CreateShipmentCommand): Observable<void> {
     return this.httpClient.post<void>(`${this.apiUrl}/inpostShipments/`, shipment);

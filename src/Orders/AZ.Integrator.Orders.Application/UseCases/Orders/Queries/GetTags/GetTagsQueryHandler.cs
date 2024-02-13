@@ -14,8 +14,10 @@ public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, IEnumerable<str
     
     public async Task<IEnumerable<string>> Handle(GetTagsQuery query, CancellationToken cancellationToken)
     {
-        var registeredTags = await _allegroService.GetRegisteredTags();
+        var offers = await _allegroService.GetOffers();
 
-        return registeredTags.Tags.Select(x => x.Name);
+        return offers.Offers
+            .Where(x => x.External is not null)
+            .Select(x => x.External.Id);
     }
 }

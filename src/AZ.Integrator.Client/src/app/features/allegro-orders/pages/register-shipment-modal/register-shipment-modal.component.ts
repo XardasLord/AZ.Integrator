@@ -13,6 +13,7 @@ import { GetTagParcelTemplatesGQL } from '../../../../shared/graphql/queries/get
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../../shared/graphql/graphql-integrator.schema';
 import { AuthState } from '../../../../shared/states/auth.state';
 import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
+import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.model';
 
 @Component({
   selector: 'app-register-shipment-modal',
@@ -103,37 +104,39 @@ export class RegisterShipmentModalComponent implements OnDestroy {
       this.form.controls.codActive.setValue(true);
     }
 
-    this.subscriptions.add(
-      this.allegroService.getOrderTags(data.allegroOrder.id).subscribe(tags => {
-        this.form.controls.additionalInfo.setValue(tags.join(', '));
+    this.getPredefinedParcelsForTag(allegroOrderDetails);
+  }
 
-        if (tags.length === 0 || tags.length > 1) return;
+  private getPredefinedParcelsForTag(allegroOrderDetails: AllegroOrderDetailsModel) {
+    const tags = allegroOrderDetails.lineItems.filter(x => x.offer.external).map(x => x.offer.external?.id);
 
-        const query: IntegratorQueryTagParcelTemplatesArgs = {
-          where: {
-            tag: {
-              eq: tags[0],
-            },
-            tenantId: {
-              eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
-            },
-          },
-        };
+    this.form.controls.additionalInfo.setValue(tags.join(', '));
 
-        this.tagParcelTemplatesGql
-          .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-          .valueChanges.pipe(map(x => x.data.result))
-          .subscribe(results => {
-            if (!results[0]) return;
+    if (tags.length === 0 || tags.length > 1) return;
 
-            this.removeAllParcels();
+    const query: IntegratorQueryTagParcelTemplatesArgs = {
+      where: {
+        tag: {
+          eq: tags[0],
+        },
+        tenantId: {
+          eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
+        },
+      },
+    };
 
-            results[0].parcels?.forEach(parcel => {
-              this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
-            });
-          });
-      })
-    );
+    this.tagParcelTemplatesGql
+      .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
+      .valueChanges.pipe(map(x => x.data.result))
+      .subscribe(results => {
+        if (!results[0]) return;
+
+        this.removeAllParcels();
+
+        results[0].parcels?.forEach(parcel => {
+          this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
+        });
+      });
   }
 
   ngOnDestroy(): void {
