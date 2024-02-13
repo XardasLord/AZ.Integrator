@@ -1,13 +1,12 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { map, Subscription } from 'rxjs';
+import { map } from 'rxjs';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
 import { RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegro-orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
-import { AllegroOrdersService } from '../../services/allegro-orders.service';
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
 import { GetTagParcelTemplatesGQL } from '../../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../../shared/graphql/graphql-integrator.schema';
@@ -20,16 +19,14 @@ import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.mod
   templateUrl: './register-shipment-modal.component.html',
   styleUrls: ['./register-shipment-modal.component.scss'],
 })
-export class RegisterShipmentModalComponent implements OnDestroy {
+export class RegisterShipmentModalComponent {
   form: FormGroup<RegisterParcelFormGroupModel>;
-  subscriptions: Subscription = new Subscription();
 
   constructor(
     public dialogRef: MatDialogRef<RegisterShipmentModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RegisterShipmentDataModel,
     private fb: FormBuilder,
     private store: Store,
-    private allegroService: AllegroOrdersService,
     private tagParcelTemplatesGql: GetTagParcelTemplatesGQL
   ) {
     const allegroOrderDetails = data.allegroOrder;
@@ -137,10 +134,6 @@ export class RegisterShipmentModalComponent implements OnDestroy {
           this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
         });
       });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   onSubmit() {
