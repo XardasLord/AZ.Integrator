@@ -13,14 +13,14 @@
       </mat-list-item>
     </mat-nav-list>
 
-    <div class="bottom-stick">
+    <div class="absolute bottom-[10px] left-[50px]">
       <mat-list-item>
-        <span mat-line class="app-version">v.{{ appVersion }}</span>
+        <span mat-line class="text-white">v.{{ appVersion }}</span>
       </mat-list-item>
     </div>
   </mat-sidenav>
 
-  <mat-sidenav-content id="main-content">
+  <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
