@@ -18,11 +18,3 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!bg-gray-300"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-200"></tr>
 </table>
-<mat-paginator
-  class="mat-elevation-z3"
-  [length]="(totalItems$ | async)!"
-  [pageIndex]="(currentPage$ | async)!"
-  [pageSize]="(pageSize$ | async)!"
-  [pageSizeOptions]="[5, 10, 25, 50, 100]"
-  (page)="pageChanged($event)">
-</mat-paginator>

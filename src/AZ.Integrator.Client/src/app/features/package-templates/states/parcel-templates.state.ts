@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -7,7 +8,6 @@ import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
 import { ParcelTemplatesService } from '../services/parcel-templates.service';
 import { ParcelTemplateDefinitionModalComponent } from '../pages/parcel-template-definition-modal/parcel-template-definition-modal.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ParcelTemplateDefinitionDataModel } from '../models/parcel-template-definition-data.model';
 import { LoadProductTags, OpenPackageTemplateDefinitionModal, SavePackageTemplate } from './parcel-templates.action';
 import { GetTagParcelTemplatesGQL } from '../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
@@ -45,16 +45,6 @@ export class ParcelTemplatesState {
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
   static getProductTagsCount(state: ParcelTemplatesStateModel): number {
     return state.restQueryResponse.totalCount;
-  }
-
-  @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
-  static getCurrentPage(state: ParcelTemplatesStateModel): number {
-    return state.restQuery.currentPage.pageIndex;
-  }
-
-  @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
-  static getPageSize(state: ParcelTemplatesStateModel): number {
-    return state.restQuery.currentPage.pageSize;
   }
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
