@@ -18,6 +18,7 @@ public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, IEnumerable<str
 
         return offers.Offers
             .Where(x => x.External is not null)
-            .Select(x => x.External.Id);
+            .Select(x => x.External.Id)
+            .Distinct();
     }
 }
