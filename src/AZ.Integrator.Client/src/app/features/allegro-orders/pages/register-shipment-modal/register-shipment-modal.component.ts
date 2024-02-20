@@ -1,34 +1,32 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { map, Subscription } from 'rxjs';
+import { map } from 'rxjs';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
 import { RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegro-orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
-import { AllegroOrdersService } from '../../services/allegro-orders.service';
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
 import { GetTagParcelTemplatesGQL } from '../../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../../shared/graphql/graphql-integrator.schema';
 import { AuthState } from '../../../../shared/states/auth.state';
 import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
+import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.model';
 
 @Component({
   selector: 'app-register-shipment-modal',
   templateUrl: './register-shipment-modal.component.html',
   styleUrls: ['./register-shipment-modal.component.scss'],
 })
-export class RegisterShipmentModalComponent implements OnDestroy {
+export class RegisterShipmentModalComponent {
   form: FormGroup<RegisterParcelFormGroupModel>;
-  subscriptions: Subscription = new Subscription();
 
   constructor(
     public dialogRef: MatDialogRef<RegisterShipmentModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: RegisterShipmentDataModel,
     private fb: FormBuilder,
     private store: Store,
-    private allegroService: AllegroOrdersService,
     private tagParcelTemplatesGql: GetTagParcelTemplatesGQL
   ) {
     const allegroOrderDetails = data.allegroOrder;
@@ -103,41 +101,39 @@ export class RegisterShipmentModalComponent implements OnDestroy {
       this.form.controls.codActive.setValue(true);
     }
 
-    this.subscriptions.add(
-      this.allegroService.getOrderTags(data.allegroOrder.id).subscribe(tags => {
-        this.form.controls.additionalInfo.setValue(tags.join(', '));
-
-        if (tags.length === 0 || tags.length > 1) return;
-
-        const query: IntegratorQueryTagParcelTemplatesArgs = {
-          where: {
-            tag: {
-              eq: tags[0],
-            },
-            tenantId: {
-              eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
-            },
-          },
-        };
-
-        this.tagParcelTemplatesGql
-          .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-          .valueChanges.pipe(map(x => x.data.result))
-          .subscribe(results => {
-            if (!results[0]) return;
-
-            this.removeAllParcels();
-
-            results[0].parcels?.forEach(parcel => {
-              this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
-            });
-          });
-      })
-    );
+    this.getPredefinedParcelsForTag(allegroOrderDetails);
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+  private getPredefinedParcelsForTag(allegroOrderDetails: AllegroOrderDetailsModel) {
+    const tags = allegroOrderDetails.lineItems.filter(x => x.offer.external).map(x => x.offer.external?.id);
+
+    this.form.controls.additionalInfo.setValue(tags.join(', '));
+
+    if (tags.length === 0 || tags.length > 1) return;
+
+    const query: IntegratorQueryTagParcelTemplatesArgs = {
+      where: {
+        tag: {
+          eq: tags[0],
+        },
+        tenantId: {
+          eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
+        },
+      },
+    };
+
+    this.tagParcelTemplatesGql
+      .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
+      .valueChanges.pipe(map(x => x.data.result))
+      .subscribe(results => {
+        if (!results[0]) return;
+
+        this.removeAllParcels();
+
+        results[0].parcels?.forEach(parcel => {
+          this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
+        });
+      });
   }
 
   onSubmit() {
