@@ -3,4 +3,4 @@ using MediatR;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetTags;
 
-public record GetTagsQuery(GetProductTagsQueryFilters Filters) : IRequest<IEnumerable<string>>;
+public record GetTagsQuery(GetProductTagsQueryFilters Filters) : IRequest<GetTagsResponse>;

@@ -1,4 +1,5 @@
 import { SaveParcelTemplateCommand } from '../models/commands/save-parcel-template.command';
+import { PageEvent } from '@angular/material/paginator';
 
 const prefix = '[Package Templates]';
 
@@ -10,6 +11,12 @@ export class OpenPackageTemplateDefinitionModal {
   static readonly type = `${prefix} ${OpenPackageTemplateDefinitionModal.name}`;
 
   constructor(public tag: string) {}
+}
+
+export class ChangePage {
+  static readonly type = `${prefix} ${ChangePage.name}`;
+
+  constructor(public event: PageEvent) {}
 }
 
 export class SavePackageTemplate {

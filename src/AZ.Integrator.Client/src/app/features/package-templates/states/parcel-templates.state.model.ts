@@ -3,5 +3,11 @@ import { RestQueryResponse } from '../../../shared/models/pagination/rest.respon
 
 export interface ParcelTemplatesStateModel {
   restQuery: RestQueryVo;
-  restQueryResponse: RestQueryResponse<string[]>;
+  restQueryResponse: RestQueryResponse<GetOfferSignaturesResponse>;
+}
+
+export interface GetOfferSignaturesResponse {
+  signatures: string[];
+  count: number;
+  totalCount: number;
 }
