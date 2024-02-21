@@ -27,6 +27,7 @@ const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>(
   defaults: {
     restQuery: new RestQueryVo(),
     restQueryResponse: new RestQueryResponse<GetOfferSignaturesResponse>(),
+    signatures: [],
   },
 })
 @Injectable()
@@ -44,7 +45,7 @@ export class ParcelTemplatesState {
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
   static getProductTags(state: ParcelTemplatesStateModel): string[] {
-    return state.restQueryResponse.result.signatures;
+    return state.signatures;
   }
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
@@ -74,6 +75,7 @@ export class ParcelTemplatesState {
     return this.packageTemplatesService.loadProductTags(state.restQuery.currentPage, state.restQuery.searchText).pipe(
       tap(response => {
         ctx.patchState({
+          signatures: response.signatures,
           restQueryResponse: {
             result: response,
             totalCount: response.totalCount,

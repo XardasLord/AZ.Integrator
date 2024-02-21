@@ -4,6 +4,7 @@ import { RestQueryResponse } from '../../../shared/models/pagination/rest.respon
 export interface ParcelTemplatesStateModel {
   restQuery: RestQueryVo;
   restQueryResponse: RestQueryResponse<GetOfferSignaturesResponse>;
+  signatures: string[];
 }
 
 export interface GetOfferSignaturesResponse {

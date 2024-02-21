@@ -10,7 +10,7 @@ import { ChangePage, LoadProductTags, OpenPackageTemplateDefinitionModal } from 
   styleUrls: ['./parcel-templates-list.component.scss'],
 })
 export class ParcelTemplatesListComponent implements OnInit {
-  displayedColumns: string[] = ['tags', 'actions'];
+  displayedColumns: string[] = ['signatures', 'actions'];
   productTags$ = this.store.select(ParcelTemplatesState.getProductTags);
   totalItems$ = this.store.select(ParcelTemplatesState.getProductTagsCount);
   currentPage$ = this.store.select(ParcelTemplatesState.getCurrentPage);
