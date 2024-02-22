@@ -211,7 +211,7 @@ export class AllegroOrdersState {
         RegisterShipmentModalComponent,
         {
           data: <RegisterShipmentDataModel>data,
-          width: '50%',
+          width: '60%',
           height: '82%',
         }
       );
