@@ -53,11 +53,13 @@ export class RegisterShipmentModalComponent {
         [Validators.required, Validators.pattern('[0-9]{9}')]
       ),
       receiverAddressStreet: new FormControl<string>(
-        allegroOrderDetails.delivery?.address?.street ?? allegroOrderDetails.delivery.address.street,
+        this.extractStreetName(allegroOrderDetails.delivery?.address?.street) ??
+          this.extractStreetName(allegroOrderDetails.delivery.address.street),
         [Validators.required]
       ),
       receiverAddressBuildingNumber: new FormControl<string>(
-        allegroOrderDetails.delivery?.address?.street ?? allegroOrderDetails.delivery.address.street,
+        this.extractBuildingNumber(allegroOrderDetails.delivery?.address?.street) ??
+          this.extractBuildingNumber(allegroOrderDetails.delivery.address.street),
         [Validators.required]
       ),
       receiverAddressCity: new FormControl<string>(
@@ -317,5 +319,18 @@ export class RegisterShipmentModalComponent {
 
   private normalizePhoneNumber(phoneNumber: string) {
     return phoneNumber.replace('+48', '').replace(/ /g, '');
+  }
+
+  private extractStreetName(address: string): string {
+    const regex = /^(.*?)(?=\s*\d+\w*(\/\w+)?$)/;
+    const match = address.match(regex);
+    return match ? match[1].trim() : address;
+  }
+
+  private extractBuildingNumber(address: string): string {
+    const regex = /\d+\w*/;
+    const match = address.match(regex);
+
+    return match ? match[0] : '';
   }
 }
