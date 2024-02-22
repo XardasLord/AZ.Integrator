@@ -66,13 +66,24 @@ export interface ShipmentSummaryDetails {
 }
 
 export interface DeliveryDetails {
-  address: AddressDetails;
+  address: DeliveryAddressDetails;
   method: MethodDetails;
   pickupPoint: PickupPointDetails;
   cost: AmountDetails;
   time: TimeDetails;
   smart: boolean;
   calculatedNumberOfPackages: number;
+}
+
+export interface DeliveryAddressDetails {
+  firstName: string;
+  lastName: string;
+  street: string;
+  city: string;
+  zipCode: string;
+  countryCode: string;
+  companyName: string;
+  phoneNumber: string;
 }
 
 export interface MethodDetails {
