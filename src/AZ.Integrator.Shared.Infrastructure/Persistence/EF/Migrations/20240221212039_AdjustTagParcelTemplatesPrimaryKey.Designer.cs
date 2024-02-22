@@ -3,17 +3,20 @@ using System;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.Migrations
+namespace AZ.Integrator.Shared.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(TagParcelTemplateDbContext))]
-    partial class TagParcelTemplateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221212039_AdjustTagParcelTemplatesPrimaryKey")]
+    partial class AdjustTagParcelTemplatesPrimaryKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

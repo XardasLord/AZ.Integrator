@@ -10,7 +10,7 @@ public sealed class TagParcelTemplateByTagAndTenantSpec : Specification<TagParce
     {
         Query
             .Where(x => x.Tag == tag.Value)
-            .Where(x => x.CreationInformation.TenantId == tenantId.Value)
+            .Where(x => x.TenantId == tenantId.Value)
             .Include(x => x.Parcels);
     }
 }

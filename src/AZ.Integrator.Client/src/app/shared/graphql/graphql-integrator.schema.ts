@@ -232,6 +232,7 @@ export type TagParcelViewModel = {
   id: Scalars['Int']['output'];
   length: Scalars['Float']['output'];
   tag?: Maybe<Scalars['String']['output']>;
+  tenantId?: Maybe<Scalars['String']['output']>;
   weight: Scalars['Float']['output'];
   width: Scalars['Float']['output'];
 };
@@ -243,6 +244,7 @@ export type TagParcelViewModelFilterInput = {
   length?: InputMaybe<FloatOperationFilterInput>;
   or?: InputMaybe<Array<TagParcelViewModelFilterInput>>;
   tag?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<StringOperationFilterInput>;
   weight?: InputMaybe<FloatOperationFilterInput>;
   width?: InputMaybe<FloatOperationFilterInput>;
 };

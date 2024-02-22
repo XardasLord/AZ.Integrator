@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
 import { SaveParcelTemplateCommand } from '../models/commands/save-parcel-template.command';
+import { GetOfferSignaturesResponse } from '../states/parcel-templates.state.model';
 
 @Injectable()
 export class ParcelTemplatesService extends RemoteServiceBase {
@@ -14,14 +15,14 @@ export class ParcelTemplatesService extends RemoteServiceBase {
     super(httpClient);
   }
 
-  loadProductTags(pageInfo: PageEvent, searchText: string): Observable<string[]> {
+  loadProductTags(pageInfo: PageEvent, searchText: string): Observable<GetOfferSignaturesResponse> {
     let params = new HttpParams().set('take', pageInfo.pageSize).set('skip', pageInfo.pageIndex * pageInfo.pageSize);
 
     if (searchText?.length > 0) {
       params = params.set('searchText', searchText);
     }
 
-    return this.httpClient.get<string[]>(`${this.apiUrl}/allegroOrders/tags`, { params });
+    return this.httpClient.get<GetOfferSignaturesResponse>(`${this.apiUrl}/allegroOrders/tags`, { params });
   }
 
   saveTemplate(command: SaveParcelTemplateCommand): Observable<void> {

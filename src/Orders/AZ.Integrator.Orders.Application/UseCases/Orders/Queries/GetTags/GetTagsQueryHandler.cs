@@ -3,7 +3,7 @@ using MediatR;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetTags;
 
-public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, IEnumerable<string>>
+public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, GetTagsResponse>
 {
     private readonly IAllegroService _allegroService;
 
@@ -12,12 +12,14 @@ public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, IEnumerable<str
         _allegroService = allegroService;
     }
     
-    public async Task<IEnumerable<string>> Handle(GetTagsQuery query, CancellationToken cancellationToken)
+    public async Task<GetTagsResponse> Handle(GetTagsQuery query, CancellationToken cancellationToken)
     {
-        var offers = await _allegroService.GetOffers();
+        var offers = await _allegroService.GetOffers(query.Filters);
 
-        return offers.Offers
+        var signatures = offers.Offers
             .Where(x => x.External is not null)
             .Select(x => x.External.Id);
+
+        return new GetTagsResponse(signatures, offers.TotalCount);
     }
 }

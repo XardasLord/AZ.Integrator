@@ -1,15 +1,20 @@
 import { Injectable, NgZone } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { ParcelTemplatesStateModel } from './parcel-templates.state.model';
+import { GetOfferSignaturesResponse, ParcelTemplatesStateModel } from './parcel-templates.state.model';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
 import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
 import { ParcelTemplatesService } from '../services/parcel-templates.service';
 import { ParcelTemplateDefinitionModalComponent } from '../pages/parcel-template-definition-modal/parcel-template-definition-modal.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ParcelTemplateDefinitionDataModel } from '../models/parcel-template-definition-data.model';
-import { LoadProductTags, OpenPackageTemplateDefinitionModal, SavePackageTemplate } from './parcel-templates.action';
+import {
+  ChangePage,
+  LoadProductTags,
+  OpenPackageTemplateDefinitionModal,
+  SavePackageTemplate,
+} from './parcel-templates.action';
 import { GetTagParcelTemplatesGQL } from '../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
@@ -21,7 +26,8 @@ const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>(
   name: PACKAGE_TEMPLATES_STATE_TOKEN,
   defaults: {
     restQuery: new RestQueryVo(),
-    restQueryResponse: new RestQueryResponse<string[]>(),
+    restQueryResponse: new RestQueryResponse<GetOfferSignaturesResponse>(),
+    signatures: [],
   },
 })
 @Injectable()
@@ -39,7 +45,7 @@ export class ParcelTemplatesState {
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
   static getProductTags(state: ParcelTemplatesStateModel): string[] {
-    return state.restQueryResponse.result;
+    return state.signatures;
   }
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
@@ -69,13 +75,26 @@ export class ParcelTemplatesState {
     return this.packageTemplatesService.loadProductTags(state.restQuery.currentPage, state.restQuery.searchText).pipe(
       tap(response => {
         ctx.patchState({
+          signatures: response.signatures,
           restQueryResponse: {
             result: response,
-            totalCount: response.length,
+            totalCount: response.totalCount,
           },
         });
       })
     );
+  }
+
+  @Action(ChangePage)
+  changePage(ctx: StateContext<ParcelTemplatesStateModel>, action: ChangePage) {
+    const customQuery = new RestQueryVo();
+    customQuery.currentPage = action.event;
+
+    ctx.patchState({
+      restQuery: customQuery,
+    });
+
+    return ctx.dispatch(new LoadProductTags());
   }
 
   @Action(OpenPackageTemplateDefinitionModal)

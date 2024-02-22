@@ -70,10 +70,18 @@ public class AllegroApiService : IAllegroService
         return orderDetails;
     }
 
-    public async Task<GetOffersResponse> GetOffers()
+    public async Task<GetOffersResponse> GetOffers(GetProductTagsQueryFilters filters)
     {
+        var queryParamsDictionary = new Dictionary<string, object>
+        {
+            { "limit", filters.Take.ToString() },
+            { "offset", filters.Skip.ToString() }
+        };
+
+        var queryParams = queryParamsDictionary.ToHttpQueryString();
+        
         var httpClient = await PrepareHttpClient(_currentUser.TenantId);
-        using var response = await httpClient.GetAsync("sale/offers");
+        using var response = await httpClient.GetAsync($"sale/offers?{queryParams}");
         
         response.EnsureSuccessStatusCode();
 
