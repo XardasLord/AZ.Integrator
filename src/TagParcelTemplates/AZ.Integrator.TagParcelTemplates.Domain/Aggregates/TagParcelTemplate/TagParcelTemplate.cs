@@ -8,11 +8,13 @@ namespace AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 public class TagParcelTemplate : Entity, IAggregateRoot
 {
     private Tag _tag;
-    private CreationInformationWithTenant _creationInformation;
+    private TenantId _tenantId;
+    private CreationInformation _creationInformation;
     private List<TagParcel> _parcels;
 
     public Tag Tag => _tag;
-    public CreationInformationWithTenant CreationInformation => _creationInformation;
+    public TenantId TenantId => _tenantId;
+    public CreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<TagParcel> Parcels => _parcels;
 
     private TagParcelTemplate()
@@ -23,15 +25,14 @@ public class TagParcelTemplate : Entity, IAggregateRoot
     private TagParcelTemplate(Tag tag, IEnumerable<TagParcel> parcels, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _tag = tag;
-        _creationInformation = new CreationInformationWithTenant(currentDateTime.CurrentDate(), currentUser.UserId, currentUser.TenantId);
+        _tenantId = currentUser.TenantId;
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
         _parcels = parcels.ToList();
     }
 
     public static TagParcelTemplate Create(Tag tag, IEnumerable<TagParcel> parcels, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         var template = new TagParcelTemplate(tag, parcels, currentUser, currentDateTime);
-        
-        // template.AddDomainEvent(new InpostShipmentRegistered(number, allegroAllegroOrderNumber, currentUser.TenantId));
         
         return template;
     }
