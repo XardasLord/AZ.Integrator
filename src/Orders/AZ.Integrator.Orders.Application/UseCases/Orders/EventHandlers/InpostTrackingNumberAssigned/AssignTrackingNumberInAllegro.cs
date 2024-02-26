@@ -1,11 +1,11 @@
 ﻿using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignTrackingNumbers;
+using AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
 using Hangfire;
 using MediatR;
-using InpostTrackingNumberAssignedEvent = AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment.InpostTrackingNumberAssigned;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.EventHandlers.InpostTrackingNumberAssigned;
 
-public class AssignTrackingNumberInAllegro : INotificationHandler<InpostTrackingNumberAssignedEvent>
+public class AssignTrackingNumberInAllegro : INotificationHandler<InpostTrackingNumbersAssigned>
 {
     private readonly IBackgroundJobClient _backgroundJobClient;
 
@@ -14,13 +14,13 @@ public class AssignTrackingNumberInAllegro : INotificationHandler<InpostTracking
         _backgroundJobClient = backgroundJobClient;
     }
     
-    public Task Handle(InpostTrackingNumberAssignedEvent notification, CancellationToken cancellationToken)
+    public Task Handle(InpostTrackingNumbersAssigned notification, CancellationToken cancellationToken)
     {
         _backgroundJobClient.Enqueue<AssignTrackingNumberJob>(
-            job => job.Execute(new AssignTrackingNumberJobCommand
+            job => job.Execute(new AssignTrackingNumbersJobCommand
             {
                 OrderNumber = Guid.Parse(notification.AllegroOrderNumber),
-                TrackingNumber = notification.TrackingNumber,
+                TrackingNumbers = notification.TrackingNumbers,
                 TenantId = notification.TenantId
             }, null));
         

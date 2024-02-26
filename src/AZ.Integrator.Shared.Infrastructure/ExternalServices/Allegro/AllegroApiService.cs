@@ -108,19 +108,22 @@ public class AllegroApiService : IAllegroService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task AssignTrackingNumber(Guid orderNumber, string trackingNumber, string tenantId)
+    public async Task AssignTrackingNumber(Guid orderNumber, IEnumerable<string> trackingNumbers, string tenantId)
     {
-        var payload = new AssignTrackingNumberRequestPayload
+        foreach (var trackingNumber in trackingNumbers)
         {
-            CarrierId = "INPOST",
-            TrackingNumber = trackingNumber
-        };
-        var payloadContent = PrepareContentRequest(payload);
+            var payload = new AssignTrackingNumberRequestPayload
+            {
+                CarrierId = "INPOST",
+                TrackingNumber = trackingNumber
+            };
+            var payloadContent = PrepareContentRequest(payload);
 
-        var httpClient = await PrepareHttpClient(tenantId);
-        using var response = await httpClient.PostAsync($"order/checkout-forms/{orderNumber}/shipments", payloadContent);
+            var httpClient = await PrepareHttpClient(tenantId);
+            using var response = await httpClient.PostAsync($"order/checkout-forms/{orderNumber}/shipments", payloadContent);
 
-        response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
+        }
     }
 
     private static string ApplyFilters(GetAllQueryFilters filters)

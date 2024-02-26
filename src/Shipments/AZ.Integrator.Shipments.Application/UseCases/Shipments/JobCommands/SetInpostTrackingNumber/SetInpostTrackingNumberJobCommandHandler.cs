@@ -3,6 +3,7 @@ using AZ.Integrator.Shipments.Application.Common.Exceptions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.Specifications;
+using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.ValueObjects;
 using MediatR;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.JobCommands.SetInpostTrackingNumber;
@@ -29,7 +30,9 @@ public class SetInpostTrackingNumberJobCommandHandler : IRequestHandler<SetInpos
         if (details.TrackingNumber is null)
             throw new InpostTrackingNumberNotFoundException();
 
-        shipping.SetTrackingNumber(details.TrackingNumber.ToString(), command.TenantId);
+        var trackingNumbers = details.Parcels.Select(x => new TrackingNumber(x.TrackingNumber.ToString()));
+            
+        shipping.SetTrackingNumber(trackingNumbers.ToList(), command.TenantId);
 
         await _inpostShippingRepository.SaveChangesAsync(cancellationToken);
         

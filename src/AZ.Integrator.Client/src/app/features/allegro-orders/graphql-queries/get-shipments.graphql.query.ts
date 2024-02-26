@@ -17,7 +17,6 @@ export class GetShipmentsGQL extends Query<GraphQLResponseWithoutPaginationVo<Sh
       ) {
             ${nameof<ShipmentViewModel>('shipmentNumber')}
             ${nameof<ShipmentViewModel>('allegroOrderNumber')}
-            ${nameof<ShipmentViewModel>('trackingNumber')}
             ${nameof<ShipmentViewModel>('shipmentProvider')}
             ${nameof<ShipmentViewModel>('createdAt')}
         }

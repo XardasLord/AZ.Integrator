@@ -17,9 +17,6 @@ public class InpostShipmentViewModelConfiguration : IEntityTypeConfiguration<Inp
         builder.Property(x => x.AllegroOrderNumber)
             .HasColumnName("allegro_order_number");
         
-        builder.Property(x => x.TrackingNumber)
-            .HasColumnName("tracking_number");
-        
         builder.Property(x => x.CreatedAt)
             .HasColumnName("created_at");
     }

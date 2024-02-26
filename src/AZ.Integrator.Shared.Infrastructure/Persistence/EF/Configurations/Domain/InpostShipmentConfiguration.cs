@@ -22,10 +22,6 @@ public class InpostShipmentConfiguration : IEntityTypeConfiguration<InpostShipme
         builder.Property(e => e.AllegroAllegroOrderNumber)
             .HasColumnName("allegro_order_number")
             .HasConversion(number => number.Value, number => new AllegroOrderNumber(number));
-
-        builder.Property(e => e.TrackingNumber)
-            .HasColumnName("tracking_number")
-            .HasConversion(number => number.Value, number => new TrackingNumber(number));
         
         builder.OwnsOne(e => e.CreationInformation, ci =>
         {
@@ -34,5 +30,9 @@ public class InpostShipmentConfiguration : IEntityTypeConfiguration<InpostShipme
         });
 
         builder.Navigation(e => e.CreationInformation).IsRequired();
+
+        builder.HasMany(e => e.Parcels)
+            .WithOne()
+            .HasForeignKey("_shipmentNumber");
     }
 }

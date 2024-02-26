@@ -16,8 +16,6 @@ public class DpdShipmentViewModelConfiguration : IEntityTypeConfiguration<DpdShi
         
         builder.Property(x => x.AllegroOrderNumber)
             .HasColumnName("allegro_order_number");
-
-        builder.Ignore(x => x.TrackingNumber);
         
         builder.Property(x => x.CreatedAt)
             .HasColumnName("created_at");
