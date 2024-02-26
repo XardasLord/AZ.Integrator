@@ -77,13 +77,25 @@ public class ShipmentSummaryDetails
 
 public class DeliveryDetails
 {
-    public AddressDetails Address { get; set; }
+    public DeliveryAddressDetails Address { get; set; }
     public MethodDetails Method { get; set; }
     public PickupPointDetails PickupPoint { get; set; }
     public AmountDetails Cost { get; set; }
     public TimeDetails Time { get; set; }
     public bool Smart { get; set; }
     public int CalculatedNumberOfPackages { get; set; }
+}
+
+public class DeliveryAddressDetails
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Street { get; set; }
+    public string City { get; set; }
+    public string ZipCode { get; set; }
+    public string CountryCode { get; set; }
+    public string CompanyName { get; set; }
+    public string PhoneNumber { get; set; }
 }
 
 public class MethodDetails

@@ -33,25 +33,47 @@ export class RegisterShipmentModalComponent {
 
     this.form = this.fb.group<RegisterParcelFormGroupModel>({
       receiverName: new FormControl<string>(allegroOrderDetails.buyer.login, [Validators.required]),
-      receiverCompanyName: new FormControl<string>(allegroOrderDetails.buyer.companyName, []),
-      receiverFirstName: new FormControl<string>(allegroOrderDetails.buyer.firstName, [Validators.required]),
-      receiverLastName: new FormControl<string>(allegroOrderDetails.buyer.lastName, [Validators.required]),
+      receiverCompanyName: new FormControl<string>(
+        allegroOrderDetails.delivery?.address?.companyName ?? allegroOrderDetails.buyer.companyName,
+        []
+      ),
+      receiverFirstName: new FormControl<string>(
+        allegroOrderDetails.delivery?.address?.firstName ?? allegroOrderDetails.buyer.firstName,
+        [Validators.required]
+      ),
+      receiverLastName: new FormControl<string>(
+        allegroOrderDetails.delivery?.address?.lastName ?? allegroOrderDetails.buyer.lastName,
+        [Validators.required]
+      ),
       receiverEmail: new FormControl<string>(allegroOrderDetails.buyer.email, [Validators.required, Validators.email]),
-      receiverPhoneNumber: new FormControl<string>(this.normalizePhoneNumber(allegroOrderDetails.buyer.phoneNumber), [
-        Validators.required,
-        Validators.pattern('[0-9]{9}'),
-      ]),
-      receiverAddressStreet: new FormControl<string>(allegroOrderDetails.buyer.address.street, [Validators.required]),
-      receiverAddressBuildingNumber: new FormControl<string>(allegroOrderDetails.buyer.address.street, [
-        Validators.required,
-      ]),
-      receiverAddressCity: new FormControl<string>(allegroOrderDetails.buyer.address.city, [Validators.required]),
-      receiverAddressPostCode: new FormControl<string>(allegroOrderDetails.buyer.address.postCode, [
-        Validators.required,
-      ]),
-      receiverAddressCountryCode: new FormControl<string>(allegroOrderDetails.buyer.address.countryCode, [
-        Validators.required,
-      ]),
+      receiverPhoneNumber: new FormControl<string>(
+        this.normalizePhoneNumber(
+          allegroOrderDetails.delivery?.address?.phoneNumber ?? allegroOrderDetails.buyer.phoneNumber
+        ),
+        [Validators.required, Validators.pattern('[0-9]{9}')]
+      ),
+      receiverAddressStreet: new FormControl<string>(
+        this.extractStreetName(allegroOrderDetails.delivery?.address?.street) ??
+          this.extractStreetName(allegroOrderDetails.delivery.address.street),
+        [Validators.required]
+      ),
+      receiverAddressBuildingNumber: new FormControl<string>(
+        this.extractBuildingNumber(allegroOrderDetails.delivery?.address?.street) ??
+          this.extractBuildingNumber(allegroOrderDetails.delivery.address.street),
+        [Validators.required]
+      ),
+      receiverAddressCity: new FormControl<string>(
+        allegroOrderDetails.delivery?.address?.city ?? allegroOrderDetails.delivery.address.city,
+        [Validators.required]
+      ),
+      receiverAddressPostCode: new FormControl<string>(
+        allegroOrderDetails.delivery?.address?.zipCode ?? allegroOrderDetails.delivery.address.zipCode,
+        [Validators.required]
+      ),
+      receiverAddressCountryCode: new FormControl<string>(
+        allegroOrderDetails.delivery?.address?.countryCode ?? allegroOrderDetails.delivery.address.countryCode,
+        [Validators.required]
+      ),
       insuranceActive: new FormControl<boolean>(false),
       insuranceAmount: new FormControl<number>({
         value: allegroOrderDetails.summary.totalToPay.amount,
@@ -297,5 +319,18 @@ export class RegisterShipmentModalComponent {
 
   private normalizePhoneNumber(phoneNumber: string) {
     return phoneNumber.replace('+48', '').replace(/ /g, '');
+  }
+
+  private extractStreetName(address: string): string {
+    const regex = /^(.*?)(?=\s*\d+\w*(\/\w+)?$)/;
+    const match = address.match(regex);
+    return match ? match[1].trim() : address;
+  }
+
+  private extractBuildingNumber(address: string): string {
+    const regex = /\d+\w*/;
+    const match = address.match(regex);
+
+    return match ? match[0] : '';
   }
 }

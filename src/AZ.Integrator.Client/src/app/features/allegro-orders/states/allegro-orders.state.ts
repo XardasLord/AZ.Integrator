@@ -211,7 +211,7 @@ export class AllegroOrdersState {
         RegisterShipmentModalComponent,
         {
           data: <RegisterShipmentDataModel>data,
-          width: '50%',
+          width: '60%',
           height: '82%',
         }
       );
@@ -315,13 +315,13 @@ export class AllegroOrdersState {
 
     return this.downloadService.downloadFileFromApi(`/inpostShipments/label`, params).pipe(
       switchMap(resBlob => {
-        this.downloadService.getFile(resBlob, 'ShipmentLabel.pdf');
-        this.toastService.success('List przewozowy został wygenerowany.', 'List przewozowy');
+        this.downloadService.getFile(resBlob, 'ShipmentLabel.zip');
+        this.toastService.success('Listy przewozowe zostały wygenerowane.', 'Listy przewozowe');
 
         return of(null);
       }),
       catchError(() => {
-        this.toastService.error(`Błąd podczas pobierania listu przewozowego`, 'List przewozowy');
+        this.toastService.error(`Błąd podczas pobierania listów przewozowych`, 'Listy przewozowe');
 
         return of(null);
       })
