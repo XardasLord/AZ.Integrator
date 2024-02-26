@@ -9,5 +9,5 @@ public interface IAllegroService
     Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId);
     Task<GetOffersResponse> GetOffers(GetProductTagsQueryFilters filters);
     Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatus, string tenantId);
-    Task AssignTrackingNumber(Guid orderNumber, string trackingNumber, string tenantId);
+    Task AssignTrackingNumber(Guid orderNumber, IEnumerable<string> trackingNumbers, string tenantId);
 }

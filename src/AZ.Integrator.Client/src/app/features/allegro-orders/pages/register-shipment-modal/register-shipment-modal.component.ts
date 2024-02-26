@@ -322,13 +322,13 @@ export class RegisterShipmentModalComponent {
   }
 
   private extractStreetName(address: string): string {
-    const regex = /^(.*?)(?=\s*\d+\w*(\/\w+)?$)/;
+    const regex = /^(.*?)(?=\s+\d[\w\/]*$)/;
     const match = address.match(regex);
     return match ? match[1].trim() : address;
   }
 
   private extractBuildingNumber(address: string): string {
-    const regex = /\d+\w*/;
+    const regex = /\s+\d[\w\/]*$/;
     const match = address.match(regex);
 
     return match ? match[0] : '';

@@ -23,6 +23,7 @@ public class ShipmentDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new InpostShipmentConfiguration());
+        modelBuilder.ApplyConfiguration(new InpostParcelConfiguration());
         modelBuilder.ApplyConfiguration(new DpdShipmentConfiguration());
         modelBuilder.ApplyConfiguration(new DpdPackageConfiguration());
         modelBuilder.ApplyConfiguration(new DpdParcelConfiguration());

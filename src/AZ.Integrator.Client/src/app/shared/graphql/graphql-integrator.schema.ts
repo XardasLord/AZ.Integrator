@@ -45,7 +45,6 @@ export type DpdShipmentViewModel = {
   allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   shipmentNumber?: Maybe<Scalars['String']['output']>;
-  trackingNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type DpdShipmentViewModelFilterInput = {
@@ -54,7 +53,6 @@ export type DpdShipmentViewModelFilterInput = {
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   or?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
-  trackingNumber?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type FloatOperationFilterInput = {
@@ -77,7 +75,6 @@ export type InpostShipmentViewModel = {
   allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   shipmentNumber?: Maybe<Scalars['String']['output']>;
-  trackingNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type InpostShipmentViewModelFilterInput = {
@@ -86,7 +83,6 @@ export type InpostShipmentViewModelFilterInput = {
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   or?: InputMaybe<Array<InpostShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
-  trackingNumber?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type IntOperationFilterInput = {
@@ -183,7 +179,6 @@ export type ShipmentViewModel = {
   createdAt: Scalars['DateTime']['output'];
   shipmentNumber?: Maybe<Scalars['String']['output']>;
   shipmentProvider?: Maybe<Scalars['String']['output']>;
-  trackingNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type ShipmentViewModelFilterInput = {
@@ -193,7 +188,6 @@ export type ShipmentViewModelFilterInput = {
   or?: InputMaybe<Array<ShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
   shipmentProvider?: InputMaybe<StringOperationFilterInput>;
-  trackingNumber?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type StringOperationFilterInput = {

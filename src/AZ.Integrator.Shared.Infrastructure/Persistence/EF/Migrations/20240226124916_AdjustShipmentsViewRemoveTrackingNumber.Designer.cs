@@ -3,17 +3,20 @@ using System;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace AZ.Integrator.Infrastructure.Persistence.EF.Migrations
+namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.Migrations
 {
     [DbContext(typeof(ShipmentDataViewContext))]
-    partial class ShipmentDataViewContextModelSnapshot : ModelSnapshot
+    [Migration("20240226124916_AdjustShipmentsViewRemoveTrackingNumber")]
+    partial class AdjustShipmentsViewRemoveTrackingNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

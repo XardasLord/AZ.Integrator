@@ -11,14 +11,17 @@ public class InpostShipment : Entity, IAggregateRoot
     private ShipmentNumber _number;
     private AllegroOrderNumber _allegroAllegroOrderNumber;
     private CreationInformation _creationInformation;
-    private TrackingNumber _trackingNumber;
+    private List<Parcel> _parcels;
 
     public ShipmentNumber Number => _number;
     public AllegroOrderNumber AllegroAllegroOrderNumber => _allegroAllegroOrderNumber;
     public CreationInformation CreationInformation => _creationInformation;
-    public TrackingNumber TrackingNumber => _trackingNumber;
-    
-    private InpostShipment() { }
+    public IReadOnlyCollection<Parcel> Parcels => _parcels;
+
+    private InpostShipment()
+    {
+        _parcels = new List<Parcel>();
+    }
 
     private InpostShipment(ShipmentNumber number, AllegroOrderNumber allegroAllegroOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
@@ -36,10 +39,15 @@ public class InpostShipment : Entity, IAggregateRoot
         return shipment;
     }
 
-    public void SetTrackingNumber(TrackingNumber trackingNumber, TenantId tenantId)
+    public void SetTrackingNumber(List<TrackingNumber> trackingNumbers, TenantId tenantId)
     {
-        _trackingNumber = trackingNumber;
+        trackingNumbers.ForEach(number =>
+        {
+            var parcel = Parcel.Create(tenantId, number);
+            
+            _parcels.Add(parcel);
+        });
         
-        AddDomainEvent(new InpostTrackingNumberAssigned(Number, TrackingNumber, _allegroAllegroOrderNumber, tenantId));
+        AddDomainEvent(new InpostTrackingNumbersAssigned(Number, trackingNumbers.Select(x => x.Value).ToArray(), _allegroAllegroOrderNumber, tenantId));
     }
 }

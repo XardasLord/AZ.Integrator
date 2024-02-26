@@ -51,7 +51,7 @@ public class ShipmentMapper : Profile
             .ForMember(dest => dest.Service, opt => opt.MapFrom(src => "inpost_courier_standard"))
             .ForMember(dest => dest.AdditionalServices, opt => opt.MapFrom(src => new List<string>
             {
-                "email", "sms"
+                "sms"
             }));
     }
 }
