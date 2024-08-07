@@ -5,7 +5,14 @@ import { map, Observable } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
-import { ChangePage, LoadSent, SetCurrentTab } from '../../states/allegro-orders.action';
+import {
+  ChangePage,
+  GenerateDpdLabel,
+  GenerateInpostLabel,
+  LoadSent,
+  SetCurrentTab,
+} from '../../states/allegro-orders.action';
+import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 
 @Component({
   selector: 'app-allegro-orders-list-sent',
@@ -21,9 +28,10 @@ export class AllegroOrdersListSentComponent implements OnInit {
     nameof<AllegroOrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
+    'actions',
   ];
   orders$ = this.store.select(AllegroOrdersState.getAllNewOrders);
-  inpostShipments$ = this.store.select(AllegroOrdersState.getInpostShipments);
+  shipments$ = this.store.select(AllegroOrdersState.getShipments);
   totalItems$ = this.store.select(AllegroOrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
@@ -40,8 +48,24 @@ export class AllegroOrdersListSentComponent implements OnInit {
   }
 
   getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
-    return this.inpostShipments$.pipe(
-      map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0].shipmentNumber)
+    return this.shipments$.pipe(
+      map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0]?.shipmentNumber)
     );
+  }
+
+  canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
+    return this.shipments$.pipe(map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id)));
+  }
+
+  generateShipmentLabel(order: AllegroOrderDetailsModel) {
+    const shipment = this.store
+      .selectSnapshot(AllegroOrdersState.getShipments)
+      .filter(x => x.allegroOrderNumber === order.id)[0];
+
+    if (shipment.shipmentProvider === ShipmentProviderEnum.Inpost) {
+      this.store.dispatch(new GenerateInpostLabel(order.id));
+    } else if (shipment.shipmentProvider === ShipmentProviderEnum.Dpd) {
+      this.store.dispatch(new GenerateDpdLabel(order.id));
+    }
   }
 }

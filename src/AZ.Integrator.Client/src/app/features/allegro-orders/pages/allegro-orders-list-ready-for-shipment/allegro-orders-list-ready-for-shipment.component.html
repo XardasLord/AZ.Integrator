@@ -101,7 +101,7 @@
         <ng-container *ngIf="canGenerateShipmentLabel(order) | async">
           <button
             mat-icon-button
-            matTooltip="Wygeneruj list przewozowy"
+            matTooltip="Pobierz list przewozowy"
             (click)="generateShipmentLabel(order); $event.stopPropagation()">
             <mat-icon class="text-red-800">picture_as_pdf</mat-icon>
           </button>

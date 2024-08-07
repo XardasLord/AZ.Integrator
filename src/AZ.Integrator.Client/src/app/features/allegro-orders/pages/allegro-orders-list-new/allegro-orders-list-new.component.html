@@ -73,7 +73,7 @@
   </ng-container>
 
   <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>Akcje</th>
+    <th mat-header-cell *matHeaderCellDef class="w-[150px]">Akcje</th>
     <td mat-cell *matCellDef="let order">
       <div>
         <ng-container *ngIf="canRegisterInpostShipment(order) | async">
