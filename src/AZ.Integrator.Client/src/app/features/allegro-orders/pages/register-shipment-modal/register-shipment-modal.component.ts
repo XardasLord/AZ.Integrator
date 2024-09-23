@@ -9,7 +9,10 @@ import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/allegr
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
 import { GetTagParcelTemplatesGQL } from '../../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
-import { IntegratorQueryTagParcelTemplatesArgs } from '../../../../shared/graphql/graphql-integrator.schema';
+import {
+  IntegratorQueryTagParcelTemplatesArgs,
+  TagParcelTemplateViewModel,
+} from '../../../../shared/graphql/graphql-integrator.schema';
 import { AuthState } from '../../../../shared/states/auth.state';
 import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
 import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.model';
@@ -131,12 +134,12 @@ export class RegisterShipmentModalComponent {
 
     this.form.controls.additionalInfo.setValue(tags.join(', '));
 
-    if (tags.length === 0 || tags.length > 1) return;
+    if (tags.length === 0) return;
 
     const query: IntegratorQueryTagParcelTemplatesArgs = {
       where: {
         tag: {
-          eq: tags[0],
+          in: tags,
         },
         tenantId: {
           eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
@@ -148,12 +151,25 @@ export class RegisterShipmentModalComponent {
       .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
       .valueChanges.pipe(map(x => x.data.result))
       .subscribe(results => {
-        if (!results[0]) return;
+        if (results.length < 1 && !results[0]) return;
 
         this.removeAllParcels();
 
-        results[0].parcels?.forEach(parcel => {
-          this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
+        results.forEach((tagParcelTemplate: TagParcelTemplateViewModel) => {
+          const totalQuantityOfBoughtProduct = allegroOrderDetails.lineItems
+            .filter(x => x.offer.external?.id === tagParcelTemplate?.tag)
+            .reduce((ty, u) => ty + u.quantity, 0);
+
+          for (let i = 0; i < totalQuantityOfBoughtProduct; i++) {
+            tagParcelTemplate?.parcels?.forEach(parcelTemplate => {
+              this.addNewParcel(
+                parcelTemplate?.length,
+                parcelTemplate?.width,
+                parcelTemplate?.height,
+                parcelTemplate?.weight
+              );
+            });
+          }
         });
       });
   }
