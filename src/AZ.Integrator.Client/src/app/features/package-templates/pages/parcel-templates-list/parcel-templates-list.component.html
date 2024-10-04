@@ -24,6 +24,6 @@
   [length]="(totalItems$ | async)!"
   [pageIndex]="(currentPage$ | async)!"
   [pageSize]="(pageSize$ | async)!"
-  [pageSizeOptions]="[5, 10, 25, 50, 100]"
+  [pageSizeOptions]="[5, 10, 25, 50, 100, 200, 500, 1000]"
   (page)="pageChanged($event)">
 </mat-paginator>
