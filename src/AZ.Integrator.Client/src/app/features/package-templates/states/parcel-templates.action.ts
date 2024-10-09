@@ -19,6 +19,12 @@ export class ChangePage {
   constructor(public event: PageEvent) {}
 }
 
+export class ApplyFilter {
+  static readonly type = `${prefix} ${ApplyFilter.name}`;
+
+  constructor(public searchPhrase: string) {}
+}
+
 export class SavePackageTemplate {
   static readonly type = `${prefix} ${SavePackageTemplate.name}`;
 

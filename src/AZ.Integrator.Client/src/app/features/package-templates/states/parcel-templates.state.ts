@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { GetOfferSignaturesResponse, ParcelTemplatesStateModel } from './parcel-templates.state.model';
 import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
@@ -10,6 +10,7 @@ import { ParcelTemplatesService } from '../services/parcel-templates.service';
 import { ParcelTemplateDefinitionModalComponent } from '../pages/parcel-template-definition-modal/parcel-template-definition-modal.component';
 import { ParcelTemplateDefinitionDataModel } from '../models/parcel-template-definition-data.model';
 import {
+  ApplyFilter,
   ChangePage,
   LoadProductTags,
   OpenPackageTemplateDefinitionModal,
@@ -19,6 +20,7 @@ import { GetTagParcelTemplatesGQL } from '../../../shared/graphql/queries/get-ta
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import { AuthState } from '../../../shared/states/auth.state';
+import { RestQueryHelper } from '../../../shared/models/pagination/rest.helper';
 
 const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>('packageTemplates');
 
@@ -97,8 +99,21 @@ export class ParcelTemplatesState {
     return ctx.dispatch(new LoadProductTags());
   }
 
+  @Action(ApplyFilter)
+  applyFilter(ctx: StateContext<ParcelTemplatesStateModel>, action: ApplyFilter): Observable<void> {
+    const updatedQuery = { ...ctx.getState().restQuery };
+    updatedQuery.searchText = action.searchPhrase;
+    updatedQuery.currentPage = RestQueryHelper.getInitialPageEvent();
+
+    ctx.patchState({
+      restQuery: updatedQuery,
+    });
+
+    return ctx.dispatch(new LoadProductTags());
+  }
+
   @Action(OpenPackageTemplateDefinitionModal)
-  openRegisterDpdShipmentModal(
+  openPackageTemplateDefinitionModal(
     ctx: StateContext<ParcelTemplatesStateModel>,
     action: OpenPackageTemplateDefinitionModal
   ) {
