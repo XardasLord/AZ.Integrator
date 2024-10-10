@@ -19,6 +19,8 @@ public class AllegroApiService : IAllegroService
     private readonly AllegroAccountDataViewContext _dataViewContext;
     private readonly ICurrentUser _currentUser;
 
+    private const string AllegroMediaType = "application/vnd.allegro.public.v1+json";
+
     public AllegroApiService(
         IHttpClientFactory httpClientFactory,
         AllegroAccountDataViewContext dataViewContext,
@@ -77,6 +79,11 @@ public class AllegroApiService : IAllegroService
             { "limit", filters.Take.ToString() },
             { "offset", filters.Skip.ToString() }
         };
+
+        if (!string.IsNullOrWhiteSpace(filters.SearchText))
+        {
+            queryParamsDictionary.Add("external.id", filters.SearchText);
+        }
 
         var queryParams = queryParamsDictionary.ToHttpQueryString();
         
@@ -146,7 +153,7 @@ public class AllegroApiService : IAllegroService
     private static StringContent PrepareContentRequest(object payload)
     {
         var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
-        var payloadContent = new StringContent(payloadJson, Encoding.UTF8, "application/vnd.allegro.public.v1+json");
+        var payloadContent = new StringContent(payloadJson, Encoding.UTF8, AllegroMediaType);
         return payloadContent;
     }
 
@@ -154,7 +161,7 @@ public class AllegroApiService : IAllegroService
     {
         var httpClient = _httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessToken(tenantId));
-        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.allegro.public.v1+json"));
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AllegroMediaType));
 
         return httpClient;
     }
