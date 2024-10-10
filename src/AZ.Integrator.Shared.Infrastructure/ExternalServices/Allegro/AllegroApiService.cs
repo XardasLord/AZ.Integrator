@@ -80,9 +80,9 @@ public class AllegroApiService : IAllegroService
             { "offset", filters.Skip.ToString() }
         };
 
-        if (string.IsNullOrWhiteSpace(filters.SearchText))
+        if (!string.IsNullOrWhiteSpace(filters.SearchText))
         {
-            queryParamsDictionary.Add("external.id", HttpUtility.UrlEncode(filters.SearchText));
+            queryParamsDictionary.Add("external.id", filters.SearchText);
         }
 
         var queryParams = queryParamsDictionary.ToHttpQueryString();
