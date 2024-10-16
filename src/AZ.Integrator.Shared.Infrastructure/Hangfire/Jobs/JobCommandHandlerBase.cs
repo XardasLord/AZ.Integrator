@@ -1,4 +1,4 @@
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shared.Infrastructure.Hangfire.Jobs;
 
@@ -8,10 +8,10 @@ public abstract class JobCommandHandlerBase<T> : IRequestHandler<T> where T : Jo
 
 	protected JobCommandHandlerBase() { }
 
-	public virtual Task<Unit> Handle(T command, CancellationToken cancellationToken)
+	public virtual ValueTask<Unit> Handle(T command, CancellationToken cancellationToken)
 	{
 		_request = command;
 
-		return Task.FromResult(Unit.Value);
+		return new ValueTask<Unit>();
 	}
 }

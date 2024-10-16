@@ -1,5 +1,5 @@
 ﻿using Hangfire.Server;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shared.Infrastructure.Hangfire.Jobs;
 

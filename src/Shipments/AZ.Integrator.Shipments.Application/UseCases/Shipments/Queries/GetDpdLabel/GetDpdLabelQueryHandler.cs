@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Queries.GetDpdLabel;
 
@@ -12,7 +12,7 @@ public class GetDpdLabelQueryHandler : IRequestHandler<GetDpdLabelQuery, GetDocu
         _dpdService = dpdService;
     }
     
-    public async Task<GetDocumentResponse> Handle(GetDpdLabelQuery query, CancellationToken cancellationToken)
+    public async ValueTask<GetDocumentResponse> Handle(GetDpdLabelQuery query, CancellationToken cancellationToken)
     {
         var response = await _dpdService.GenerateLabel(query.SessionNumber);
 

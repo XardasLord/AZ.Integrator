@@ -1,6 +1,6 @@
 ﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.ChangeAllegroOrderStatus;
 
@@ -13,7 +13,7 @@ public class ChangeAllegroOrderStatusJobCommandHandler : IRequestHandler<ChangeA
         _allegroService = allegroService;
     }
     
-    public async Task<Unit> Handle(ChangeAllegroOrderStatusJobCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(ChangeAllegroOrderStatusJobCommand command, CancellationToken cancellationToken)
     {
         await _allegroService.ChangeStatus(command.OrderNumber, AllegroFulfillmentStatusEnum.FromValue(command.OrderStatus), command.TenantId);
         

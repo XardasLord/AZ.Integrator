@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 
 namespace AZ.Integrator.Invoices.Application.UseCases.Invoices.Commands.Register;
 

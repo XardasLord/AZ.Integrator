@@ -2,7 +2,7 @@
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.Domain;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;

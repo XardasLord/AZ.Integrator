@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Invoices.Application.UseCases.Invoices.Queries.Download;
 
@@ -12,7 +12,7 @@ public class DownloadQueryHandler : IRequestHandler<DownloadQuery, GetDocumentRe
         _invoiceService = invoiceService;
     }
     
-    public async Task<GetDocumentResponse> Handle(DownloadQuery query, CancellationToken cancellationToken)
+    public async ValueTask<GetDocumentResponse> Handle(DownloadQuery query, CancellationToken cancellationToken)
     {
         var response = await _invoiceService.Download(query.InvoiceId);
 

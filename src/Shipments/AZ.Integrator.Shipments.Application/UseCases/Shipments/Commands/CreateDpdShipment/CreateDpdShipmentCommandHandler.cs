@@ -2,7 +2,7 @@
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd.Models;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateDpdShipment;
 
@@ -25,7 +25,7 @@ public class CreateDpdShipmentCommandHandler : IRequestHandler<CreateDpdShipment
         _currentDateTime = currentDateTime;
     }
     
-    public async Task<CreateDpdShipmentResponse> Handle(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
+    public async ValueTask<CreateDpdShipmentResponse> Handle(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
     {
         var response = await _dpdService.CreateShipment(command);
 

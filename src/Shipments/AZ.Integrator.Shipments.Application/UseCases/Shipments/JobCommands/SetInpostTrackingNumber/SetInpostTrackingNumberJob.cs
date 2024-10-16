@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Shipments.Application.Common.BackgroundJobs;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.JobCommands.SetInpostTrackingNumber;
 

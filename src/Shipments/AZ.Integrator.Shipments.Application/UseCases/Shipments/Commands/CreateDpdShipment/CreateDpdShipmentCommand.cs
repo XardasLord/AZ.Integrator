@@ -1,6 +1,6 @@
 ﻿using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd.Models;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateDpdShipment;
 
