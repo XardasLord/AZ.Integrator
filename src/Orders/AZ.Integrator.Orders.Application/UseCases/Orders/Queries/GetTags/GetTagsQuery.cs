@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetTags;
 

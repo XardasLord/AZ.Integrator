@@ -4,7 +4,7 @@ using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.Specifications;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.ValueObjects;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.JobCommands.SetInpostTrackingNumber;
 
@@ -19,7 +19,7 @@ public class SetInpostTrackingNumberJobCommandHandler : IRequestHandler<SetInpos
         _shipXService = shipXService;
     }
     
-    public async Task<Unit> Handle(SetInpostTrackingNumberJobCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SetInpostTrackingNumberJobCommand command, CancellationToken cancellationToken)
     {
         var spec = new InpostShipmentByNumberSpec(command.ShippingNumber);
         var shipping = await _inpostShippingRepository.SingleOrDefaultAsync(spec, cancellationToken)

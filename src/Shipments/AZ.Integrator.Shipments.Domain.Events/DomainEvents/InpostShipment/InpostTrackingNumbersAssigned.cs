@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Mediator;
 
 namespace AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
 

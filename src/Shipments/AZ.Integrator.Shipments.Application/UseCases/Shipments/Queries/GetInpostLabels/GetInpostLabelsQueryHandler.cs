@@ -1,6 +1,6 @@
 ﻿using System.IO.Compression;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Queries.GetInpostLabels;
 
@@ -13,7 +13,7 @@ public class GetInpostLabelQueryHandler : IRequestHandler<GetInpostLabelsQuery, 
         _shipXService = shipXService;
     }
     
-    public async Task<GetDocumentResponse> Handle(GetInpostLabelsQuery query, CancellationToken cancellationToken)
+    public async ValueTask<GetDocumentResponse> Handle(GetInpostLabelsQuery query, CancellationToken cancellationToken)
     {
         // var response = await _shipXService.GenerateLabel(query.ShipmentNumber.Select(x => new ShipmentNumber(x))); // Old way, where all labels are generated in one file
         // return new GetDocumentResponse(true, "ShipmentLabel.pdf", new MemoryStream(response), "application/pdf");

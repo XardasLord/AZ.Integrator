@@ -1,6 +1,6 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Invoices.Domain.Aggregates.Invoice.DomainEvents;
 

@@ -1,5 +1,5 @@
 ﻿using Hangfire.Server;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.Common.BackgroundJobs;
 

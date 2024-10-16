@@ -2,7 +2,7 @@
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Invoices.Application.UseCases.Invoices.Commands.Register;
 
@@ -28,7 +28,7 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         _currentDateTime = currentDateTime;
     }
     
-    public async Task<Unit> Handle(RegisterInvoiceCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(RegisterInvoiceCommand command, CancellationToken cancellationToken)
     {
         var orderDetails = await _allegroService.GetOrderDetails(Guid.Parse(command.AllegroOrderNumber));
         
@@ -36,7 +36,7 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         
         var invoice = Invoice.Create(response.Id, response.Number, command.AllegroOrderNumber, _currentUser, _currentDateTime);
         await _invoiceRepository.AddAsync(invoice, cancellationToken);
-        
+
         return Unit.Value;
     }
 }

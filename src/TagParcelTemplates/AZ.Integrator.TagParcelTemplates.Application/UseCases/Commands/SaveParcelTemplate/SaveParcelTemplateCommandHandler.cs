@@ -3,7 +3,7 @@ using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate.Specifications;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate.ValueObjects;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.TagParcelTemplates.Application.UseCases.Commands.SaveParcelTemplate;
 
@@ -26,7 +26,7 @@ public class SaveParcelTemplateCommandHandler : IRequestHandler<SaveParcelTempla
         _currentDateTime = currentDateTime;
     }
     
-    public async Task<Unit> Handle(SaveParcelTemplateCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(SaveParcelTemplateCommand command, CancellationToken cancellationToken)
     {
         var spec = new TagParcelTemplateByTagAndTenantSpec(command.Tag, _currentUser.TenantId);
         
@@ -47,7 +47,7 @@ public class SaveParcelTemplateCommandHandler : IRequestHandler<SaveParcelTempla
             
             await _repository.SaveChangesAsync(cancellationToken);
         }
-
-        return new Unit();
+        
+        return Unit.Value;
     }
 }

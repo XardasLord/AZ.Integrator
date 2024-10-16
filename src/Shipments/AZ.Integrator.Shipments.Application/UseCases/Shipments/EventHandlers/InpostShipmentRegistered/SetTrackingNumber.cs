@@ -1,6 +1,6 @@
 ﻿using AZ.Integrator.Shipments.Application.UseCases.Shipments.JobCommands.SetInpostTrackingNumber;
 using Hangfire;
-using MediatR;
+using Mediator;
 using InpostShipmentRegisteredEvent = AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment.InpostShipmentRegistered;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.EventHandlers.InpostShipmentRegistered;
@@ -14,7 +14,7 @@ public class SetTrackingNumber : INotificationHandler<InpostShipmentRegisteredEv
         _backgroundJobClient = backgroundJobClient;
     }
     
-    public Task Handle(InpostShipmentRegisteredEvent notification, CancellationToken cancellationToken)
+    public ValueTask Handle(InpostShipmentRegisteredEvent notification, CancellationToken cancellationToken)
     {
         _backgroundJobClient.Enqueue<SetInpostTrackingNumberJob>(
             job => job.Execute(new SetInpostTrackingNumberJobCommand
@@ -23,6 +23,6 @@ public class SetTrackingNumber : INotificationHandler<InpostShipmentRegisteredEv
                 TenantId = notification.TenantId
             }, null));
         
-        return Task.CompletedTask;
+        return new ValueTask();
     }
 }

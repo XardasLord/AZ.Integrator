@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 
@@ -12,7 +12,7 @@ public class GetAllQueryHandler : IRequestHandler<GetAllQuery, GetAllQueryRespon
         _allegroService = allegroService;
     }
     
-    public async Task<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
+    public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
         var ordersResponse = await _allegroService.GetOrders(query.Filters);
 

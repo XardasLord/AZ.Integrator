@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Mediator;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.Domain;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;

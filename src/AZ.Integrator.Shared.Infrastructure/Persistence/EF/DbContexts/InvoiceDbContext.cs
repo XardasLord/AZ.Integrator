@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 using AZ.Integrator.Shared.Infrastructure.Mediator;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;

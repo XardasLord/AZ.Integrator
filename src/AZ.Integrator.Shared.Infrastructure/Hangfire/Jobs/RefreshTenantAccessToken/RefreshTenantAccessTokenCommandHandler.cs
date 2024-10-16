@@ -4,7 +4,7 @@ using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -27,7 +27,7 @@ public class RefreshTenantAccessTokenCommandHandler : JobCommandHandlerBase<Refr
         _allegroOptions = allegroOptions;
     }
 
-    public override async Task<Unit> Handle(RefreshTenantAccessTokenCommand command, CancellationToken cancellationToken)
+    public override async ValueTask<Unit> Handle(RefreshTenantAccessTokenCommand command, CancellationToken cancellationToken)
     {
         await base.Handle(command, cancellationToken);
         

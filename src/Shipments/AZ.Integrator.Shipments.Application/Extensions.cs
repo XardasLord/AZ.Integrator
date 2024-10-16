@@ -2,7 +2,6 @@
 using AZ.Integrator.Shipments.Application.Common.AutoMapper;
 using AZ.Integrator.Shipments.Application.Common.Configurations;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -18,7 +17,6 @@ public static class Extensions
         services.Configure<InpostSenderOptions>(configuration.GetSection(OptionsSectionName));
         
         services
-            .AddMediatR(typeof(Extensions).Assembly)
             .AddAutoMapper(config =>
             {
                 config.AddProfile(new ShipmentMapper(services.BuildServiceProvider().GetRequiredService<IOptions<InpostSenderOptions>>()));

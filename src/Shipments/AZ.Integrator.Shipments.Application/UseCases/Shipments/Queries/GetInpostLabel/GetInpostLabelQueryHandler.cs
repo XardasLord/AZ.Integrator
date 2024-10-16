@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Queries.GetInpostLabel;
 
@@ -12,7 +12,7 @@ public class GetInpostLabelQueryHandler : IRequestHandler<GetInpostLabelQuery, G
         _shipXService = shipXService;
     }
     
-    public async Task<GetDocumentResponse> Handle(GetInpostLabelQuery query, CancellationToken cancellationToken)
+    public async ValueTask<GetDocumentResponse> Handle(GetInpostLabelQuery query, CancellationToken cancellationToken)
     {
         var response = await _shipXService.GenerateLabel(query.ShipmentNumber);
 

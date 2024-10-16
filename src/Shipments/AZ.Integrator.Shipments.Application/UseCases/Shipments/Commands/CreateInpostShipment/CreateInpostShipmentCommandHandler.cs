@@ -3,7 +3,7 @@ using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateInpostShipment;
 
@@ -29,7 +29,7 @@ public class CreateInpostShipmentCommandHandler : IRequestHandler<CreateInpostSh
         _currentDateTime = currentDateTime;
     }
     
-    public async Task<ShipmentResponse> Handle(CreateInpostShipmentCommand command, CancellationToken cancellationToken)
+    public async ValueTask<ShipmentResponse> Handle(CreateInpostShipmentCommand command, CancellationToken cancellationToken)
     {
         var shipment = _mapper.Map<Shipment>(command);
 

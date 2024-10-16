@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Orders.Application.Common.BackgroundJobs;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.ChangeAllegroOrderStatus;
 

@@ -2,7 +2,7 @@
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
 using Hangfire;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.EventHandlers.InpostTrackingNumberAssigned;
 
@@ -15,7 +15,7 @@ public class ChangeAllegroOrderStatus : INotificationHandler<InpostTrackingNumbe
         _backgroundJobClient = backgroundJobClient;
     }
     
-    public Task Handle(InpostTrackingNumbersAssigned notification, CancellationToken cancellationToken)
+    public ValueTask Handle(InpostTrackingNumbersAssigned notification, CancellationToken cancellationToken)
     {
         _backgroundJobClient.Enqueue<ChangeAllegroOrderStatusJob>(
             job => job.Execute(new ChangeAllegroOrderStatusJobCommand
@@ -25,6 +25,6 @@ public class ChangeAllegroOrderStatus : INotificationHandler<InpostTrackingNumbe
                 TenantId = notification.TenantId
             }, null));
         
-        return Task.CompletedTask;
+        return new ValueTask();
     }
 }

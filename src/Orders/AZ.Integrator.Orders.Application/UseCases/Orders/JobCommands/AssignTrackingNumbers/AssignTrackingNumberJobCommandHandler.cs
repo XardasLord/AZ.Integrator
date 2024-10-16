@@ -1,9 +1,9 @@
 ﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.AssignTrackingNumbers;
 
-public class AssignTrackingNumberJobCommandHandler : MediatR.IRequestHandler<AssignTrackingNumbersJobCommand>
+public class AssignTrackingNumberJobCommandHandler : IRequestHandler<AssignTrackingNumbersJobCommand>
 {
     private readonly IAllegroService _allegroService;
 
@@ -12,7 +12,7 @@ public class AssignTrackingNumberJobCommandHandler : MediatR.IRequestHandler<Ass
         _allegroService = allegroService;
     }
     
-    public async Task<Unit> Handle(AssignTrackingNumbersJobCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Unit> Handle(AssignTrackingNumbersJobCommand command, CancellationToken cancellationToken)
     {
         await _allegroService.AssignTrackingNumber(command.OrderNumber, command.TrackingNumbers, command.TenantId);
         

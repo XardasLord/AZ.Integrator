@@ -2,7 +2,7 @@
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Shared.Infrastructure.Mediator;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.Repositories;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetDetails;
 
@@ -16,7 +16,7 @@ public class GetDetailsQueryHandler : IRequestHandler<GetDetailsQuery, OrderDeta
         _mapper = mapper;
     }
     
-    public async Task<OrderDetailsDto> Handle(GetDetailsQuery query, CancellationToken cancellationToken)
+    public async ValueTask<OrderDetailsDto> Handle(GetDetailsQuery query, CancellationToken cancellationToken)
     {
         var orderDetails = await _allegroService.GetOrderDetails(query.OrderId);
 

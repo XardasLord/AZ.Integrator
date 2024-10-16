@@ -1,5 +1,5 @@
 ﻿using Hangfire.Server;
-using MediatR;
+using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.Common.BackgroundJobs;
 
@@ -18,5 +18,5 @@ public class JobBase<T> where T : JobCommandBase, IRequest
         await ExecuteCommand(command);
     }
 
-    protected virtual Task<Unit> ExecuteCommand(T command) => Mediator.Send(command);
+    protected virtual ValueTask<Unit> ExecuteCommand(T command) => Mediator.Send(command);
 }
