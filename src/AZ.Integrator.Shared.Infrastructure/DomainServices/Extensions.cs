@@ -1,6 +1,7 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;

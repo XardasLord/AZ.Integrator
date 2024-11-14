@@ -1,6 +1,7 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Authentication;
 using AZ.Integrator.Shared.Infrastructure.Identity;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

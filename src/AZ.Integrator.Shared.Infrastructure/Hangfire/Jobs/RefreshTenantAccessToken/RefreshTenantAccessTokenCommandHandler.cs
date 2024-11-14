@@ -3,6 +3,7 @@ using System.Text;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Mediator;
 using Microsoft.EntityFrameworkCore;

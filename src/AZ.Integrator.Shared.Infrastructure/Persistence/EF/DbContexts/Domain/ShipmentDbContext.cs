@@ -5,7 +5,7 @@ using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain;
 
 public class ShipmentDbContext : DbContext
 {

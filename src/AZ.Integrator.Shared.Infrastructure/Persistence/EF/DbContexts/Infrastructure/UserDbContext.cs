@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
 
 public class UserDbContext : IdentityUserContext<IdentityUser>
 {

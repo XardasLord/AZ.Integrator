@@ -2,7 +2,7 @@
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
 
 public class InvoiceDataViewContext : DbContext
 {

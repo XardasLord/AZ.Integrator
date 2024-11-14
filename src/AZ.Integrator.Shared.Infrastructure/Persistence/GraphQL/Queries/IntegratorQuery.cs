@@ -1,5 +1,6 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 

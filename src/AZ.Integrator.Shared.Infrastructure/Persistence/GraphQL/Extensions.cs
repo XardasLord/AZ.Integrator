@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using HotChocolate.AspNetCore;
 using HotChocolate.Types.Pagination;

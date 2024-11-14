@@ -4,7 +4,7 @@ using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain;
 
 public class TagParcelTemplateDbContext : DbContext
 {
