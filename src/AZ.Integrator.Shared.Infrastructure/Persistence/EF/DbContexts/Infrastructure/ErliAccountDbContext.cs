@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
 
-public class AllegroAccountDbContext(DbContextOptions<AllegroAccountDbContext> options) : DbContext(options)
+public class ErliAccountDbContext(DbContextOptions<ErliAccountDbContext> options) : DbContext(options)
 {
-    public virtual DbSet<AllegroAccountViewModel> AllegroAccounts { get; set; }
+    public virtual DbSet<ErliAccountViewModel> ErliAccounts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new AllegroAccountConfiguration());
+        modelBuilder.ApplyConfiguration(new ErliAccountConfiguration());
     }
 }

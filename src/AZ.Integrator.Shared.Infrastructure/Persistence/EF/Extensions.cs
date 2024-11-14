@@ -36,6 +36,12 @@ internal static class Extensions
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
 
+        services.AddDbContext<ErliAccountDbContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
+        });
+
         services.AddDbContext<AllegroAccountDbContext>(options =>
         {
             options.EnableDetailedErrors();
