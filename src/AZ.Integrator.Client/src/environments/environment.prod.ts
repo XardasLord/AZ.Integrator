@@ -5,9 +5,15 @@ export const environment = {
   apiEndpoint: 'http://SERWER:6010/api',
   graphqlEndpoint: 'http://SERWER:6010/api/graphql',
   defaultPageSize: 10,
-  allegroLoginEndpointForAzTeamTenant: 'http://SERWER:6010/auth/login-allegro?tenantId=az-team',
-  allegroLoginEndpointForMebleplTenant: 'http://SERWER:6010/auth/login-allegro?tenantId=meblepl',
-  allegroLoginEndpointForMyTestTenant: 'http://SERWER:6010/auth/login-allegro?tenantId=my-test',
 
-  showMyTestAllegroAccount: false,
+  // Tenants
+  allegroLoginEndpoint: 'http://SERWER:6010/api/auth/login-allegro?tenantId=',
+  erliLoginEndpoint: 'http://SERWER:6010/api/auth/login-erli?tenantId=',
+
+  allegroAzTeamTenantId: 'az-team',
+  allegroMebleplTenantId: 'meblepl',
+  allegroMyTestTenantId: 'my-test',
+  erliAzTeamTenantId: 'az-team',
+
+  showMyTestAccounts: false,
 };

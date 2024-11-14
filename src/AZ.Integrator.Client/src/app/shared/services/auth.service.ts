@@ -50,6 +50,12 @@ export class AuthService implements OnDestroy {
     return this.httpClient.post<User>(`${apiEndpoint}/auth/login`, payload);
   }
 
+  loginViaErli(tenantId: string): Observable<{ access_token: string }> {
+    const apiEndpoint = environment.apiEndpoint;
+
+    return this.httpClient.get<{ access_token: string }>(`${apiEndpoint}/auth/login-erli?tenantId=${tenantId}`);
+  }
+
   logout(): Observable<any> {
     // localStorage.removeItem('access_token');
     // localStorage.removeItem('user');
