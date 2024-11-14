@@ -5,13 +5,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
     </PropertyGroup>
-
+    
     <ItemGroup>
-      <ProjectReference Include="..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
+      <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
-    </ItemGroup>
-
+    
 </Project>

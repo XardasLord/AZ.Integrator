@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ardalis.SmartEnum" Version="8.1.0" />
+      <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj" />
+      <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
     </ItemGroup>
 
 </Project>

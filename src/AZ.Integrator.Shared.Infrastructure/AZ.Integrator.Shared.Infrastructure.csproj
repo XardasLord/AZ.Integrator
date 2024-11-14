@@ -55,10 +55,10 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Invoices\AZ.Integrator.Invoices.Application\AZ.Integrator.Invoices.Application.csproj" />
-    <ProjectReference Include="..\Invoices\AZ.Integrator.Invoices.Domain\AZ.Integrator.Invoices.Domain.csproj" />
-    <ProjectReference Include="..\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
-    <ProjectReference Include="..\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
-    <ProjectReference Include="..\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Domain\AZ.Integrator.TagParcelTemplates.Domain.csproj" />
+    <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Application\AZ.Integrator.Invoices.Application.csproj" />
+    <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Domain\AZ.Integrator.Invoices.Domain.csproj" />
+    <ProjectReference Include="..\Modules\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
+    <ProjectReference Include="..\Modules\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
+    <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Domain\AZ.Integrator.TagParcelTemplates.Domain.csproj" />
   </ItemGroup>
 </Project>

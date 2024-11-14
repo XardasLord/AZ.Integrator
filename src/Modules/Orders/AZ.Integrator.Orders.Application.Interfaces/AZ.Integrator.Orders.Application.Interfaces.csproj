@@ -5,9 +5,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
+      <PackageReference Include="Ardalis.SmartEnum" Version="8.1.0" />
     </ItemGroup>
-    
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj" />
+    </ItemGroup>
+
 </Project>

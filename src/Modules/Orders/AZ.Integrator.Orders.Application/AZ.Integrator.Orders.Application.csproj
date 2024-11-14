@@ -20,8 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
-      <ProjectReference Include="..\..\AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj" />
+      <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
+      <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj" />
       <ProjectReference Include="..\..\Shipments\AZ.Integrator.Shipments.Domain.Events\AZ.Integrator.Shipments.Domain.Events.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Orders.Application.Interfaces\AZ.Integrator.Orders.Application.Interfaces.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Orders.Domain\AZ.Integrator.Orders.Domain.csproj" />
