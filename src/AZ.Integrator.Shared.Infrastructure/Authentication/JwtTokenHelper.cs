@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,7 +16,7 @@ public static class JwtTokenHelper
         {
             new(UserClaimType.ShipXOrganizationId, configuration.GetSection("Infrastructure:ShipX")["OrganizationId"]),
             new(UserClaimType.TenantId, tenantId),
-            new(UserClaimType.AuthorizationProviderType, AuthorizationProviderType.Erli.ToString())
+            new(UserClaimType.AuthorizationProviderType, ShopProviderType.Erli.ToString())
         };
 
         var identityOptions = configuration.GetSection("Infrastructure:Identity");

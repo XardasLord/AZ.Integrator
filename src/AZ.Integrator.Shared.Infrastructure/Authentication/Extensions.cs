@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
@@ -190,7 +191,7 @@ internal static class Extensions
         {
             new(UserClaimType.ShipXOrganizationId, shipXOptions.OrganizationId.ToString()),
             new(UserClaimType.TenantId, tenantId),
-            new(UserClaimType.AuthorizationProviderType, AuthorizationProviderType.Allegro.ToString())
+            new(UserClaimType.AuthorizationProviderType, ShopProviderType.Allegro.ToString())
         };
                 
         var jwtTokenHandler = new JwtSecurityTokenHandler();

@@ -8,5 +8,30 @@ public class OrderDetailsDtoMapper : Profile
     public OrderDetailsDtoMapper()
     {
         CreateMap<GetOrderDetailsModelResponse, OrderDetailsDto>();
+        CreateMap<BuyerDetails, BuyerDetailsDto>();
+        CreateMap<PreferencesDetails, PreferencesDetailsDto>();
+        CreateMap<AddressDetails, AddressDetailsDto>();
+        CreateMap<PaymentDetails, PaymentDetailsDto>();
+        CreateMap<AmountDetails, AmountDetailsDto>();
+        CreateMap<FulfillmentDetails, FulfillmentDetailsDto>();
+        CreateMap<ShipmentSummaryDetails, ShipmentSummaryDetailsDto>();
+        CreateMap<DeliveryDetails, DeliveryDetailsDto>();
+        CreateMap<DeliveryAddressDetails, DeliveryAddressDetailsDto>();
+        CreateMap<MethodDetails, MethodDetailsDto>();
+        CreateMap<PickupPointDetails, PickupPointDetailsDto>();
+        CreateMap<TimeDetails, TimeDetailsDto>();
+        CreateMap<GuaranteedDetails, GuaranteedDetailsDto>();
+        CreateMap<DispatchDetails, DispatchDetailsDto>();
+        CreateMap<InvoiceDetails, InvoiceDetailsDto>();
+        CreateMap<LineItemDetails, LineItemDetailsDto>();
+        CreateMap<OfferDetails, OfferDetailsDto>();
+        CreateMap<ExternalDetails, ExternalDetailsDto>();
+        CreateMap<ReconciliationDetails, ReconciliationDetailsDto>();
+        CreateMap<AdditionalServiceDetails, AdditionalServiceDetailsDto>();
+        CreateMap<SurchargeDetails, SurchargeDetailsDto>();
+        CreateMap<DiscountDetails, DiscountDetailsDto>();
+        CreateMap<NoteDetails, NoteDetailsDto>();
+        CreateMap<MarketplaceDetails, MarketplaceDetailsDto>();
+        CreateMap<SummaryDetails, SummaryDetailsDto>();
     }
 }

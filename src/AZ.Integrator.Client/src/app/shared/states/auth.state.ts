@@ -5,11 +5,12 @@ import { tap } from 'rxjs';
 import { UserAuthModel } from '../auth/models/user-auth.model';
 import { AuthScopes } from '../auth/models/auth.scopes';
 import { Login, LoginCompleted, LoginViaErli, Logout, Relog } from './auth.action';
-import { RoutePaths } from '../../core/modules/app-routing.module';
 import { AuthService } from '../services/auth.service';
 import { AuthStateModel } from './auth.state.model';
 import { UserAuthHelper } from '../auth/helpers/user-auth.helper';
 import { DOCUMENT } from '@angular/common';
+import { RoutePaths } from '../../core/modules/app-routing.module';
+import { ApplyFilter } from '../../features/allegro-orders/states/allegro-orders.action';
 
 export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 
@@ -97,7 +98,7 @@ export class AuthState implements NgxsOnInit {
   }
 
   @Action(LoginCompleted)
-  loginCompleted(ctx: StateContext<AuthStateModel>, action: LoginCompleted): void {
+  loginCompleted(ctx: StateContext<AuthStateModel>, action: LoginCompleted) {
     ctx.patchState({
       user: action.user,
     });
@@ -106,6 +107,7 @@ export class AuthState implements NgxsOnInit {
     localStorage.setItem('user', JSON.stringify(action.user));
 
     ctx.dispatch(new Navigate([RoutePaths.AllegroOrders]));
+    ctx.dispatch(new ApplyFilter('')); // This is temporary solution to reload list of orders
   }
 
   @Action(LoginViaErli)

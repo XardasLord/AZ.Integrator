@@ -6,6 +6,7 @@ using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;

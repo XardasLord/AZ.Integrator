@@ -1,5 +1,6 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Dpd;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ public static class Extensions
     {
         return services
             .AddAllegro(configuration)
+            .AddErli(configuration)
             .AddShipX(configuration)
             .AddDpd(configuration)
             .AddFakturownia(configuration);
