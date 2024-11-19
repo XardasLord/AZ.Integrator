@@ -9,7 +9,7 @@ namespace AZ.Integrator.Api.Controllers;
 public class ParcelTemplatesController : ApiBaseController
 {
     [HttpPut("{*tag}")]
-    public async Task<IActionResult> RegisterShipment(string tag, [FromBody] SaveParcelTemplateCommand command)
+    public async Task<IActionResult> RegisterTemplate(string tag, [FromBody] SaveParcelTemplateCommand command)
     {
         command = command with
         {
