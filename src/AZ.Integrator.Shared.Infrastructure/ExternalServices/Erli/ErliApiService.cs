@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text;
+using System.Text.Json;
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
@@ -19,19 +20,35 @@ namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
 public class ErliApiService(
     IHttpClientFactory httpClientFactory,
     ErliAccountDbContext dataViewContext, // TODO: Create DataViewContext for ErliAccounts
-    ICurrentUser currentUser) : IErliService
+    ICurrentUser currentUser)
+    : IErliService
 {
+    private static readonly JsonSerializerOptions JsonSerializerDefaultOptions = new()
+    {
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+    };
+
     public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters)
     {
         var request = new GetOrdersFiltersRequestPayload
         {
             Pagination = new Pagination
             {
-                SortField = "created",
-                Order = "DESC",
+                SortField = OrderPaginationHelper.CreatedAtSortField,
+                Order = OrderPaginationHelper.DescOrderField,
                 Limit = 200 // 200 is max
             }
         };
+
+        if (!string.IsNullOrWhiteSpace(filters.SearchText))
+        {
+            request.Filter = new Filter
+            {
+                Field = OrderFilterHelper.UserEmailField,
+                Operator = "=",
+                Value = filters.SearchText
+            };
+        }
         
         var payloadContent = PrepareContentRequest(request);
 
@@ -45,16 +62,18 @@ public class ErliApiService(
         // TODO: Filter orders based on status in filters and return based on Skip/Take values in filters
         if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.New.Name || status == AllegroFulfillmentStatusEnum.Processing.Name))
         {
-            // TODO: Get only new, not send yet
             orders = orders
                 .Where(x => x.DeliveryTracking is null)
                 .ToList();
         }
-        else if (filters.OrderFulfillmentStatus.IsIn([AllegroFulfillmentStatusEnum.ReadyForShipment.Name]))
+        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.ReadyForShipment.Name))
         {
-            // TODO: Get those with ready for shipment
+            orders = orders
+                .Where(x => x.DeliveryTracking?.Status is "readyToSend")
+                .ToList();
+            
         }
-        else if (filters.OrderFulfillmentStatus.IsIn([AllegroFulfillmentStatusEnum.Sent.Name]))
+        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.Sent.Name))
         {
             orders = orders
                 .Where(x => x.DeliveryTracking?.Status is "send" or "delivered")
@@ -79,7 +98,7 @@ public class ErliApiService(
 
     private static StringContent PrepareContentRequest(object payload)
     {
-        var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
+        var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload, JsonSerializerDefaultOptions);
         var payloadContent = new StringContent(payloadJson, Encoding.UTF8, MediaTypeNames.Application.Json);
         
         return payloadContent;
