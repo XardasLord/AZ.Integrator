@@ -1,4 +1,4 @@
-export interface AllegroOrderDetailsModel {
+export interface OrderDetailsModel {
   id: string;
   messageToSeller: string;
   buyer: BuyerDetails;

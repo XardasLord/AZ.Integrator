@@ -9,32 +9,32 @@ namespace AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
 public class InpostShipment : Entity, IAggregateRoot
 {
     private ShipmentNumber _number;
-    private AllegroOrderNumber _allegroAllegroOrderNumber;
+    private ExternalOrderNumber _externalOrderNumber;
     private CreationInformation _creationInformation;
     private List<Parcel> _parcels;
 
     public ShipmentNumber Number => _number;
-    public AllegroOrderNumber AllegroAllegroOrderNumber => _allegroAllegroOrderNumber;
+    public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
     public CreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<Parcel> Parcels => _parcels;
 
     private InpostShipment()
     {
-        _parcels = new List<Parcel>();
+        _parcels = [];
     }
 
-    private InpostShipment(ShipmentNumber number, AllegroOrderNumber allegroAllegroOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private InpostShipment(ShipmentNumber number, ExternalOrderNumber externalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _number = number;
-        _allegroAllegroOrderNumber = allegroAllegroOrderNumber;
+        _externalOrderNumber = externalOrderNumber;
         _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
     }
 
-    public static InpostShipment Create(ShipmentNumber number, AllegroOrderNumber allegroAllegroOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static InpostShipment Create(ShipmentNumber number, ExternalOrderNumber externalExternalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var shipment = new InpostShipment(number, allegroAllegroOrderNumber, currentUser, currentDateTime);
+        var shipment = new InpostShipment(number, externalExternalOrderNumber, currentUser, currentDateTime);
         
-        shipment.AddDomainEvent(new InpostShipmentRegistered(number, allegroAllegroOrderNumber, currentUser.TenantId));
+        shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalExternalOrderNumber, currentUser.TenantId));
         
         return shipment;
     }
@@ -48,6 +48,6 @@ public class InpostShipment : Entity, IAggregateRoot
             _parcels.Add(parcel);
         });
         
-        AddDomainEvent(new InpostTrackingNumbersAssigned(Number, trackingNumbers.Select(x => x.Value).ToArray(), _allegroAllegroOrderNumber, tenantId));
+        AddDomainEvent(new InpostTrackingNumbersAssigned(Number, trackingNumbers.Select(x => x.Value).ToArray(), _externalOrderNumber, tenantId));
     }
 }

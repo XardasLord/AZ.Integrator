@@ -14,8 +14,8 @@ public class DpdShipmentViewModelConfiguration : IEntityTypeConfiguration<DpdShi
         builder.Property(x => x.ShipmentNumber)
             .HasColumnName("session_id");
         
-        builder.Property(x => x.AllegroOrderNumber)
-            .HasColumnName("allegro_order_number");
+        builder.Property(x => x.ExternalOrderNumber)
+            .HasColumnName("external_order_number");
         
         builder.Property(x => x.CreatedAt)
             .HasColumnName("created_at");

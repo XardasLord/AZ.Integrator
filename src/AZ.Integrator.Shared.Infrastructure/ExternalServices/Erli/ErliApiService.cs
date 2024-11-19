@@ -59,7 +59,6 @@ public class ErliApiService(
 
         var orders = await response.Content.ReadFromJsonAsync<List<Order>>();
 
-        // TODO: Filter orders based on status in filters and return based on Skip/Take values in filters
         if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.New.Name || status == AllegroFulfillmentStatusEnum.Processing.Name))
         {
             orders = orders

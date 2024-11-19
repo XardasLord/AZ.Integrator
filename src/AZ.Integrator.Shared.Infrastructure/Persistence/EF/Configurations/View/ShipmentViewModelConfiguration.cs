@@ -14,8 +14,8 @@ public class ShipmentViewModelConfiguration : IEntityTypeConfiguration<ShipmentV
         builder.Property(x => x.ShipmentNumber)
             .HasColumnName("shipment_number");
         
-        builder.Property(x => x.AllegroOrderNumber)
-            .HasColumnName("allegro_order_number");
+        builder.Property(x => x.ExternalOrderNumber)
+            .HasColumnName("external_order_number");
 
         builder.Property(x => x.ShipmentProvider)
             .HasColumnName("shipment_provider");

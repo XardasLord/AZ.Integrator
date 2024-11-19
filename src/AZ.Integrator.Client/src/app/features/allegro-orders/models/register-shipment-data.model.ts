@@ -1,6 +1,6 @@
-import { AllegroOrderDetailsModel } from './allegro-order-details.model';
+import { OrderDetailsModel } from './order-details.model';
 
 export interface RegisterShipmentDataModel {
-  allegroOrder: AllegroOrderDetailsModel;
+  allegroOrder: OrderDetailsModel;
   deliveryMethodType: 'DPD' | 'INPOST';
 }

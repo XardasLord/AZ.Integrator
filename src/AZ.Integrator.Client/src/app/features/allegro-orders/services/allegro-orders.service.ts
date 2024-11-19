@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import { RemoteServiceBase } from '../../../shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
 import { GetAllegroOrdersResponseModel } from '../models/get-allegro-orders-response.model';
-import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
+import { OrderDetailsModel } from '../models/order-details.model';
 import { CreateShipmentCommand } from '../models/commands/create-shipment.command';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
@@ -43,8 +43,8 @@ export class AllegroOrdersService extends RemoteServiceBase {
     return this.httpClient.get<GetAllegroOrdersResponseModel>(`${this.apiUrl}/allegroOrders`, { params });
   }
 
-  getDetails(orderId: string): Observable<AllegroOrderDetailsModel> {
-    return this.httpClient.get<AllegroOrderDetailsModel>(`${this.apiUrl}/allegroOrders/${orderId}`);
+  getDetails(orderId: string): Observable<OrderDetailsModel> {
+    return this.httpClient.get<OrderDetailsModel>(`${this.apiUrl}/allegroOrders/${orderId}`);
   }
 
   // TODO: Move it to a new dedicated shipment service

@@ -10,29 +10,29 @@ public class Invoice : Entity, IAggregateRoot
 {
     private InvoiceExternalId _externalId;
     private InvoiceNumber _number;
-    private AllegroOrderNumber _allegroAllegroOrderNumber;
+    private ExternalOrderNumber _externalOrderNumber;
     private CreationInformation _creationInformation;
 
     public InvoiceExternalId ExternalId => _externalId;
     public InvoiceNumber Number => _number;
-    public AllegroOrderNumber AllegroAllegroOrderNumber => _allegroAllegroOrderNumber;
+    public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
     public CreationInformation CreationInformation => _creationInformation;
     
     private Invoice() { }
 
-    private Invoice(InvoiceExternalId externalId, InvoiceNumber number, AllegroOrderNumber allegroAllegroOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private Invoice(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _externalId = externalId;
         _number = number;
-        _allegroAllegroOrderNumber = allegroAllegroOrderNumber;
+        _externalOrderNumber = externalOrderNumber;
         _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
     }
 
-    public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, AllegroOrderNumber allegroAllegroOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalExternalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var invoice = new Invoice(externalId, number, allegroAllegroOrderNumber, currentUser, currentDateTime);
+        var invoice = new Invoice(externalId, number, externalExternalOrderNumber, currentUser, currentDateTime);
         
-        invoice.AddDomainEvent(new InvoiceCreated(externalId, number, allegroAllegroOrderNumber));
+        invoice.AddDomainEvent(new InvoiceCreated(externalId, number, externalExternalOrderNumber));
         
         return invoice;
     }

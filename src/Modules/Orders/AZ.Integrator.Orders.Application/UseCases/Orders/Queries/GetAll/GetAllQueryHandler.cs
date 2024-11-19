@@ -61,7 +61,7 @@ public class GetAllQueryHandler(
             
             orderDtos.Add(new OrderDetailsDto
             {
-                // Id = order.Id, // TODO: ID 
+                Id = order.Id,
                 Status = order.Status,
                 UpdatedAt = order.Created,
                 Buyer = new BuyerDetailsDto

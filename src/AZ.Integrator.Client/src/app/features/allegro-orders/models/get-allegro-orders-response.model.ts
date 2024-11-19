@@ -1,7 +1,7 @@
-import { AllegroOrderDetailsModel } from './allegro-order-details.model';
+import { OrderDetailsModel } from './order-details.model';
 
 export interface GetAllegroOrdersResponseModel {
-  orders: AllegroOrderDetailsModel[];
+  orders: OrderDetailsModel[];
   count: number;
   totalCount: number;
 }

@@ -51,7 +51,7 @@ internal static class Extensions
         services
             .AddAuthentication(sharedOptions =>
             {
-                sharedOptions.DefaultScheme = allegroAzTeamTenantCookieAuthenticationScheme;
+                sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 sharedOptions.DefaultChallengeScheme = allegroAzTeamTenantOAuthAuthenticationScheme;
             })
             .AddCookie(allegroAzTeamTenantCookieAuthenticationScheme)

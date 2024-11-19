@@ -19,7 +19,6 @@ import {
 import { GetTagParcelTemplatesGQL } from '../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
-import { AuthState } from '../../../shared/states/auth.state';
 import { RestQueryHelper } from '../../../shared/models/pagination/rest.helper';
 
 const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>('packageTemplates');
@@ -122,9 +121,6 @@ export class ParcelTemplatesState {
         where: {
           tag: {
             eq: action.tag,
-          },
-          tenantId: {
-            eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
           },
         },
       };

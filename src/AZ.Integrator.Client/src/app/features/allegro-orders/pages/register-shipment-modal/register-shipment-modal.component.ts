@@ -13,9 +13,8 @@ import {
   IntegratorQueryTagParcelTemplatesArgs,
   TagParcelTemplateViewModel,
 } from '../../../../shared/graphql/graphql-integrator.schema';
-import { AuthState } from '../../../../shared/states/auth.state';
 import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
-import { AllegroOrderDetailsModel } from '../../models/allegro-order-details.model';
+import { OrderDetailsModel } from '../../models/order-details.model';
 
 @Component({
   selector: 'app-register-shipment-modal',
@@ -129,7 +128,7 @@ export class RegisterShipmentModalComponent {
     this.getPredefinedParcelsForTag(allegroOrderDetails);
   }
 
-  private getPredefinedParcelsForTag(allegroOrderDetails: AllegroOrderDetailsModel) {
+  private getPredefinedParcelsForTag(allegroOrderDetails: OrderDetailsModel) {
     const tags = allegroOrderDetails.lineItems.filter(x => x.offer.external).map(x => x.offer.external?.id);
 
     this.form.controls.additionalInfo.setValue(tags.join(', '));
@@ -140,9 +139,6 @@ export class RegisterShipmentModalComponent {
       where: {
         tag: {
           in: tags,
-        },
-        tenantId: {
-          eq: this.store.selectSnapshot(AuthState.getUser)?.tenant_id,
         },
       },
     };
@@ -266,7 +262,7 @@ export class RegisterShipmentModalComponent {
       reference: '',
       comments: this.form.value.additionalInfo!,
       external_customer_id: '',
-      allegroOrderId: this.data.allegroOrder.id!,
+      externalOrderId: this.data.allegroOrder.id!,
     };
 
     this.store.dispatch(new RegisterInpostShipment(command));
@@ -327,7 +323,7 @@ export class RegisterShipmentModalComponent {
       reference: '',
       comments: this.form.value.additionalInfo!,
       external_customer_id: '',
-      allegroOrderId: this.data.allegroOrder.id!,
+      externalOrderId: this.data.allegroOrder.id!,
     };
 
     this.store.dispatch(new RegisterDpdShipment(command));

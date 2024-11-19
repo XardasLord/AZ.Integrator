@@ -1,6 +1,6 @@
-import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
+import { OrderDetailsModel } from '../models/order-details.model';
 
-export function getPaymentTypeForAllegroOrder(order: AllegroOrderDetailsModel) {
+export function getPaymentTypeForAllegroOrder(order: OrderDetailsModel) {
   if (order.payment.type === 'ONLINE') {
     return 'Płatność przelewem';
   }

@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { map, Observable, of, take } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
-import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
+import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
@@ -30,10 +30,10 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     'shipmentNumber',
     'invoiceNumber',
     nameof<LineItemDetails>('boughtAt'),
-    nameof<AllegroOrderDetailsModel>('buyer'),
+    nameof<OrderDetailsModel>('buyer'),
     'paymentType',
     'deliveryType',
-    nameof<AllegroOrderDetailsModel>('lineItems'),
+    nameof<OrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
     'totalToPay',
@@ -46,7 +46,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
   currentPage$ = this.store.select(AllegroOrdersState.getCurrentPage);
   pageSize$ = this.store.select(AllegroOrdersState.getPageSize);
 
-  selection = new SelectionModel<AllegroOrderDetailsModel>(true, []);
+  selection = new SelectionModel<OrderDetailsModel>(true, []);
 
   constructor(private store: Store) {}
 
@@ -59,10 +59,10 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     this.store.dispatch(new ChangePage(event));
   }
 
-  generateShipmentLabel(order: AllegroOrderDetailsModel) {
+  generateShipmentLabel(order: OrderDetailsModel) {
     const shipment = this.store
       .selectSnapshot(AllegroOrdersState.getShipments)
-      .filter(x => x.allegroOrderNumber === order.id)[0];
+      .filter(x => x.externalOrderNumber === order.id)[0];
 
     if (shipment.shipmentProvider === ShipmentProviderEnum.Inpost) {
       this.store.dispatch(new GenerateInpostLabel(order.id));
@@ -81,42 +81,44 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
     this.store.dispatch(new GenerateInpostLabels(shipmentIds));
   }
 
-  generateInvoice(order: AllegroOrderDetailsModel) {
+  generateInvoice(order: OrderDetailsModel) {
     this.store.dispatch(new GenerateInvoice(order.id));
   }
 
-  downloadInvoice(order: AllegroOrderDetailsModel) {
+  downloadInvoice(order: OrderDetailsModel) {
     const invoices = this.store.selectSnapshot(InvoicesState.getInvoices);
-    const invoiceData = invoices.filter(x => x.allegroOrderNumber === order.id)[0];
+    const invoiceData = invoices.filter(x => x.externalOrderNumber === order.id)[0];
 
     this.store.dispatch(new DownloadInvoice(invoiceData.invoiceId, invoiceData.invoiceNumber!));
   }
 
-  canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
-    return this.shipments$.pipe(map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id)));
+  canGenerateShipmentLabel(order: OrderDetailsModel): Observable<boolean> {
+    return this.shipments$.pipe(
+      map(shipments => shipments.some(shipment => shipment.externalOrderNumber === order.id))
+    );
   }
 
-  canGenerateInvoice(order: AllegroOrderDetailsModel): Observable<boolean> {
+  canGenerateInvoice(order: OrderDetailsModel): Observable<boolean> {
     return of(true);
   }
 
-  canDownloadInvoice(order: AllegroOrderDetailsModel): Observable<boolean> {
-    return this.invoices$.pipe(map(invoices => invoices.some(invoice => invoice.allegroOrderNumber === order.id)));
+  canDownloadInvoice(order: OrderDetailsModel): Observable<boolean> {
+    return this.invoices$.pipe(map(invoices => invoices.some(invoice => invoice.externalOrderNumber === order.id)));
   }
 
-  getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
+  getShipmentNumber(order: OrderDetailsModel): Observable<string | undefined | null> {
     return this.shipments$.pipe(
-      map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0]?.shipmentNumber)
+      map(shipments => shipments.filter(shipment => shipment.externalOrderNumber === order.id)[0]?.shipmentNumber)
     );
   }
 
-  getInvoiceNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
+  getInvoiceNumber(order: OrderDetailsModel): Observable<string | undefined | null> {
     return this.invoices$.pipe(
-      map(invoices => invoices.filter(invoice => invoice.allegroOrderNumber === order.id)[0]?.invoiceNumber)
+      map(invoices => invoices.filter(invoice => invoice.externalOrderNumber === order.id)[0]?.invoiceNumber)
     );
   }
 
-  getPaymentType(order: AllegroOrderDetailsModel) {
+  getPaymentType(order: OrderDetailsModel) {
     return getPaymentTypeForAllegroOrder(order);
   }
 
@@ -143,7 +145,7 @@ export class AllegroOrdersListReadyForShipmentComponent implements OnInit {
       });
   }
 
-  toggleSelection(row: AllegroOrderDetailsModel) {
+  toggleSelection(row: OrderDetailsModel) {
     this.selection.toggle(row);
   }
 }

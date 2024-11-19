@@ -2,7 +2,7 @@
 
 public class OrderDetailsDto
 {
-    public Guid Id { get; set; } // TODO: Would need to be changed to string
+    public string Id { get; set; } // TODO: Would need to be changed to string
     public string MessageToSeller { get; set; }
     public BuyerDetailsDto Buyer { get; set; }
     public PaymentDetailsDto Payment { get; set; }

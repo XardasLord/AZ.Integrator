@@ -17,7 +17,7 @@ export class GetInvoicesGQL extends Query<GraphQLResponseWithoutPaginationVo<Inv
       ) {
             ${nameof<InvoiceViewModel>('invoiceId')}
             ${nameof<InvoiceViewModel>('invoiceNumber')}
-            ${nameof<InvoiceViewModel>('allegroOrderNumber')}
+            ${nameof<InvoiceViewModel>('externalOrderNumber')}
             ${nameof<InvoiceViewModel>('createdAt')}
         }
       }

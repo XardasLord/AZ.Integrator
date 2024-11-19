@@ -11,7 +11,7 @@ import {
   OpenRegisterInPostShipmentModal,
   SetCurrentTab,
 } from '../../states/allegro-orders.action';
-import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
+import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper';
 
 @Component({
@@ -22,11 +22,11 @@ import { getPaymentTypeForAllegroOrder } from '../../helpers/payment-type.helper
 export class AllegroOrdersListNewComponent implements OnInit {
   displayedColumns: string[] = [
     nameof<LineItemDetails>('boughtAt'),
-    nameof<AllegroOrderDetailsModel>('buyer'),
+    nameof<OrderDetailsModel>('buyer'),
     'isPaid',
     'paymentType',
     'deliveryType',
-    nameof<AllegroOrderDetailsModel>('lineItems'),
+    nameof<OrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
     'totalToPay',
@@ -50,31 +50,31 @@ export class AllegroOrdersListNewComponent implements OnInit {
     this.store.dispatch(new ChangePage(event));
   }
 
-  registerInPostShipment(order: AllegroOrderDetailsModel) {
+  registerInPostShipment(order: OrderDetailsModel) {
     this.store.dispatch(new OpenRegisterInPostShipmentModal(order));
   }
 
-  registerDpdShipment(order: AllegroOrderDetailsModel) {
+  registerDpdShipment(order: OrderDetailsModel) {
     this.store.dispatch(new OpenRegisterDpdShipmentModal(order));
   }
 
-  canRegisterInpostShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
+  canRegisterInpostShipment(order: OrderDetailsModel): Observable<boolean> {
     return (
       // of(order.delivery.method.name.toLowerCase().includes('inpost')) ||
       this.inpostShipments$.pipe(
-        map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id))
+        map(shipments => shipments.every(shipment => shipment.externalOrderNumber !== order.id))
       )
     );
   }
 
-  canRegisterDpdShipment(order: AllegroOrderDetailsModel): Observable<boolean> {
+  canRegisterDpdShipment(order: OrderDetailsModel): Observable<boolean> {
     return (
       of(order.delivery.method.name.toLowerCase().includes('dpd')) ||
-      this.dpdShipments$.pipe(map(shipments => shipments.every(shipment => shipment.allegroOrderNumber !== order.id)))
+      this.dpdShipments$.pipe(map(shipments => shipments.every(shipment => shipment.externalOrderNumber !== order.id)))
     );
   }
 
-  getPaymentType(order: AllegroOrderDetailsModel) {
+  getPaymentType(order: OrderDetailsModel) {
     return getPaymentTypeForAllegroOrder(order);
   }
 }

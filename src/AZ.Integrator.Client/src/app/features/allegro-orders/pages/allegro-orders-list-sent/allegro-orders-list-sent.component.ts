@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { map, Observable } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
-import { AllegroOrderDetailsModel, LineItemDetails } from '../../models/allegro-order-details.model';
+import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { AllegroOrdersState } from '../../states/allegro-orders.state';
 import {
   ChangePage,
@@ -23,9 +23,9 @@ export class AllegroOrdersListSentComponent implements OnInit {
   displayedColumns: string[] = [
     'shipmentNumber',
     nameof<LineItemDetails>('boughtAt'),
-    nameof<AllegroOrderDetailsModel>('buyer'),
+    nameof<OrderDetailsModel>('buyer'),
     'deliveryType',
-    nameof<AllegroOrderDetailsModel>('lineItems'),
+    nameof<OrderDetailsModel>('lineItems'),
     nameof<LineItemDetails>('quantity'),
     nameof<LineItemDetails>('price'),
     'actions',
@@ -47,20 +47,22 @@ export class AllegroOrdersListSentComponent implements OnInit {
     this.store.dispatch(new ChangePage(event));
   }
 
-  getShipmentNumber(order: AllegroOrderDetailsModel): Observable<string | undefined | null> {
+  getShipmentNumber(order: OrderDetailsModel): Observable<string | undefined | null> {
     return this.shipments$.pipe(
-      map(shipments => shipments.filter(shipment => shipment.allegroOrderNumber === order.id)[0]?.shipmentNumber)
+      map(shipments => shipments.filter(shipment => shipment.externalOrderNumber === order.id)[0]?.shipmentNumber)
     );
   }
 
-  canGenerateShipmentLabel(order: AllegroOrderDetailsModel): Observable<boolean> {
-    return this.shipments$.pipe(map(shipments => shipments.some(shipment => shipment.allegroOrderNumber === order.id)));
+  canGenerateShipmentLabel(order: OrderDetailsModel): Observable<boolean> {
+    return this.shipments$.pipe(
+      map(shipments => shipments.some(shipment => shipment.externalOrderNumber === order.id))
+    );
   }
 
-  generateShipmentLabel(order: AllegroOrderDetailsModel) {
+  generateShipmentLabel(order: OrderDetailsModel) {
     const shipment = this.store
       .selectSnapshot(AllegroOrdersState.getShipments)
-      .filter(x => x.allegroOrderNumber === order.id)[0];
+      .filter(x => x.externalOrderNumber === order.id)[0];
 
     if (shipment.shipmentProvider === ShipmentProviderEnum.Inpost) {
       this.store.dispatch(new GenerateInpostLabel(order.id));

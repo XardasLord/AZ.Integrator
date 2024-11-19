@@ -7,7 +7,7 @@ export interface CreateShipmentCommand {
   reference: string;
   comments: string;
   external_customer_id: string;
-  allegroOrderId: string;
+  externalOrderId: string;
 }
 
 export interface Address {

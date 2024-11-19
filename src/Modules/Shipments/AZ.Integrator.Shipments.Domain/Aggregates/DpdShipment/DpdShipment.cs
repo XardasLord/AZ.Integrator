@@ -9,12 +9,12 @@ namespace AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
 public class DpdShipment : Entity, IAggregateRoot
 {
     private SessionNumber _sessionNumber;
-    private AllegroOrderNumber _allegroAllegroOrderNumber;
+    private ExternalOrderNumber _externalOrderNumber;
     private CreationInformation _creationInformation;
     private List<DpdPackage> _packages;
 
     public SessionNumber SessionNumber => _sessionNumber;
-    public AllegroOrderNumber AllegroAllegroOrderNumber => _allegroAllegroOrderNumber;
+    public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
     public CreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<DpdPackage> Packages => _packages;
 
@@ -23,20 +23,20 @@ public class DpdShipment : Entity, IAggregateRoot
         _packages = new List<DpdPackage>();
     }
 
-    private DpdShipment(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, AllegroOrderNumber allegroAllegroOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
+    private DpdShipment(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, ExternalOrderNumber externalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
         : this()
     {
         _sessionNumber = sessionNumber;
-        _allegroAllegroOrderNumber = allegroAllegroOrderNumber;
+        _externalOrderNumber = externalOrderNumber;
         _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
         _packages.AddRange(packages);
     }
 
-    public static DpdShipment Create(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, AllegroOrderNumber allegroAllegroOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static DpdShipment Create(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, ExternalOrderNumber externalExternalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var shipment = new DpdShipment(sessionNumber, packages, allegroAllegroOrderNumber, currentUser, currentDateTime);
+        var shipment = new DpdShipment(sessionNumber, packages, externalExternalOrderNumber, currentUser, currentDateTime);
         
-        shipment.AddDomainEvent(new DpdShipmentRegistered(sessionNumber, allegroAllegroOrderNumber));
+        shipment.AddDomainEvent(new DpdShipmentRegistered(sessionNumber, externalExternalOrderNumber));
         
         return shipment;
     }

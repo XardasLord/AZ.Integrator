@@ -1,8 +1,8 @@
 import { PageEvent } from '@angular/material/paginator';
 import { CreateShipmentCommand } from '../models/commands/create-shipment.command';
-import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
+import { OrderDetailsModel } from '../models/order-details.model';
 
-const prefix = '[Allegro Orders]';
+const prefix = '[Orders]';
 
 export class LoadNew {
   static readonly type = `${prefix} ${LoadNew.name}`;
@@ -17,7 +17,7 @@ export class LoadSent {
 }
 
 export class LoadShipments {
-  constructor(public allegroOrderIds: string[] = []) {}
+  constructor(public orderIds: string[] = []) {}
 
   static readonly type = `${prefix} ${LoadShipments.name}`;
 }
@@ -43,13 +43,13 @@ export class SetCurrentTab {
 export class OpenRegisterInPostShipmentModal {
   static readonly type = `${prefix} ${OpenRegisterInPostShipmentModal.name}`;
 
-  constructor(public order: AllegroOrderDetailsModel) {}
+  constructor(public order: OrderDetailsModel) {}
 }
 
 export class OpenRegisterDpdShipmentModal {
   static readonly type = `${prefix} ${OpenRegisterDpdShipmentModal.name}`;
 
-  constructor(public order: AllegroOrderDetailsModel) {}
+  constructor(public order: OrderDetailsModel) {}
 }
 
 export class RegisterInpostShipment {
@@ -67,17 +67,17 @@ export class RegisterDpdShipment {
 export class GenerateInpostLabel {
   static readonly type = `${prefix} ${GenerateInpostLabel.name}`;
 
-  constructor(public allegroOrderNumber: string) {}
+  constructor(public orderNumber: string) {}
 }
 
 export class GenerateInpostLabels {
   static readonly type = `${prefix} ${GenerateInpostLabels.name}`;
 
-  constructor(public allegroOrderNumbers: string[]) {}
+  constructor(public orderNumbers: string[]) {}
 }
 
 export class GenerateDpdLabel {
   static readonly type = `${prefix} ${GenerateDpdLabel.name}`;
 
-  constructor(public allegroOrderNumber: string) {}
+  constructor(public orderNumber: string) {}
 }

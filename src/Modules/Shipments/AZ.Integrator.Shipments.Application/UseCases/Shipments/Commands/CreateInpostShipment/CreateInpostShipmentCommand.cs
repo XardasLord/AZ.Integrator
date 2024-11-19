@@ -12,4 +12,4 @@ public record CreateInpostShipmentCommand(
     string Reference,
     string Comments,
     string ExternalCustomerId,
-    string AllegroOrderId) : IRequest<ShipmentResponse>;
+    string ExternalOrderId) : IRequest<ShipmentResponse>;

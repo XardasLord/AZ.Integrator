@@ -37,11 +37,11 @@ export class InvoicesState {
   loadInvoices(ctx: StateContext<InvoicesStateModel>, action: LoadInvoices) {
     let filters: IntegratorQueryInvoicesArgs = {};
 
-    if (action.allegroOrderIds.length > 0) {
+    if (action.orderIds.length > 0) {
       filters = {
         where: {
-          allegroOrderNumber: {
-            in: action.allegroOrderIds,
+          externalOrderNumber: {
+            in: action.orderIds,
           },
         },
       };
@@ -58,7 +58,7 @@ export class InvoicesState {
   @Action(GenerateInvoice)
   generateInvoice(ctx: StateContext<InvoicesStateModel>, action: GenerateInvoice) {
     const command: GenerateInvoiceCommand = {
-      allegroOrderNumber: action.allegroOrderNumber,
+      allegroOrderNumber: action.orderNumber,
     };
 
     return this.invoicesService.generateInvoice(command).pipe(

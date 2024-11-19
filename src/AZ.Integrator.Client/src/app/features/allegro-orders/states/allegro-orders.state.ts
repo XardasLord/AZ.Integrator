@@ -25,7 +25,7 @@ import {
   SetCurrentTab,
 } from './allegro-orders.action';
 import { RegisterShipmentModalComponent } from '../pages/register-shipment-modal/register-shipment-modal.component';
-import { AllegroOrderDetailsModel } from '../models/allegro-order-details.model';
+import { OrderDetailsModel } from '../models/order-details.model';
 import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { DownloadService } from '../../../shared/services/download.service';
 import { AllegroOrderFulfillmentStatusEnum } from '../models/allegro-order-fulfillment-status.enum';
@@ -42,7 +42,7 @@ const ALLEGRO_ORDERS_STATE_TOKEN = new StateToken<AllegroOrdersStateModel>('alle
   name: ALLEGRO_ORDERS_STATE_TOKEN,
   defaults: {
     restQuery: new RestQueryVo(),
-    restQueryResponse: new RestQueryResponse<AllegroOrderDetailsModel[]>(),
+    restQueryResponse: new RestQueryResponse<OrderDetailsModel[]>(),
     selectedOrderDetails: null,
     shipments: [],
     currentTab: 'New',
@@ -61,7 +61,7 @@ export class AllegroOrdersState {
   ) {}
 
   @Selector([ALLEGRO_ORDERS_STATE_TOKEN])
-  static getAllNewOrders(state: AllegroOrdersStateModel): AllegroOrderDetailsModel[] {
+  static getAllNewOrders(state: AllegroOrdersStateModel): OrderDetailsModel[] {
     return state.restQueryResponse.result;
   }
 
@@ -181,11 +181,11 @@ export class AllegroOrdersState {
   loadInpostShipments(ctx: StateContext<AllegroOrdersStateModel>, action: LoadShipments) {
     let filters: IntegratorQueryShipmentsArgs = {};
 
-    if (action.allegroOrderIds.length > 0) {
+    if (action.orderIds.length > 0) {
       filters = {
         where: {
-          allegroOrderNumber: {
-            in: action.allegroOrderIds,
+          externalOrderNumber: {
+            in: action.orderIds,
           },
         },
       };
@@ -278,7 +278,7 @@ export class AllegroOrdersState {
     const shipmentNumber = ctx
       .getState()
       .shipments.filter(
-        x => x.shipmentProvider === ShipmentProviderEnum.Inpost && x.allegroOrderNumber === action.allegroOrderNumber
+        x => x.shipmentProvider === ShipmentProviderEnum.Inpost && x.externalOrderNumber === action.orderNumber
       )[0].shipmentNumber!;
 
     return this.downloadService.downloadFileFromApi(`/inpostShipments/${shipmentNumber}/label`).pipe(
@@ -301,9 +301,7 @@ export class AllegroOrdersState {
     const shipmentNumbers = ctx
       .getState()
       .shipments.filter(
-        x =>
-          x.shipmentProvider === ShipmentProviderEnum.Inpost &&
-          action.allegroOrderNumbers.includes(x.allegroOrderNumber!)
+        x => x.shipmentProvider === ShipmentProviderEnum.Inpost && action.orderNumbers.includes(x.externalOrderNumber!)
       )
       .map(x => x.shipmentNumber!);
 
@@ -333,7 +331,7 @@ export class AllegroOrdersState {
     const shipmentNumber = ctx
       .getState()
       .shipments.filter(
-        x => x.shipmentProvider === ShipmentProviderEnum.Dpd && x.allegroOrderNumber === action.allegroOrderNumber
+        x => x.shipmentProvider === ShipmentProviderEnum.Dpd && x.externalOrderNumber === action.orderNumber
       )[0].shipmentNumber!;
 
     return this.downloadService.downloadFileFromApi(`/dpdShipments/${shipmentNumber}/label`).pipe(
@@ -357,7 +355,7 @@ export class AllegroOrdersState {
   ) {
     ctx.dispatch(new LoadShipments(response.orders.map(x => x.id)));
 
-    const customResponse = new RestQueryResponse<AllegroOrderDetailsModel[]>();
+    const customResponse = new RestQueryResponse<OrderDetailsModel[]>();
     customResponse.result = response.orders;
     customResponse.totalCount = response.totalCount;
 

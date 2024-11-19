@@ -23,9 +23,9 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
             .HasColumnName("number")
             .HasConversion(number => number.Value, number => new InvoiceNumber(number));
 
-        builder.Property(e => e.AllegroAllegroOrderNumber)
-            .HasColumnName("allegro_order_number")
-            .HasConversion(number => number.Value, number => new AllegroOrderNumber(number))
+        builder.Property(e => e.ExternalOrderNumber)
+            .HasColumnName("external_order_number")
+            .HasConversion(number => number.Value, number => new ExternalOrderNumber(number))
             .IsRequired();
         
         builder.OwnsOne(e => e.CreationInformation, ci =>
