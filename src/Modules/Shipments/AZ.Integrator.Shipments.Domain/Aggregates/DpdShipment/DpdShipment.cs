@@ -20,7 +20,7 @@ public class DpdShipment : Entity, IAggregateRoot
 
     private DpdShipment()
     {
-        _packages = new List<DpdPackage>();
+        _packages = [];
     }
 
     private DpdShipment(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, ExternalOrderNumber externalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
@@ -28,7 +28,7 @@ public class DpdShipment : Entity, IAggregateRoot
     {
         _sessionNumber = sessionNumber;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, currentUser.TenantId);
         _packages.AddRange(packages);
     }
 

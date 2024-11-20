@@ -27,14 +27,14 @@ public class InpostShipment : Entity, IAggregateRoot
     {
         _number = number;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, currentUser.TenantId);
     }
 
-    public static InpostShipment Create(ShipmentNumber number, ExternalOrderNumber externalExternalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static InpostShipment Create(ShipmentNumber number, ExternalOrderNumber externalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var shipment = new InpostShipment(number, externalExternalOrderNumber, currentUser, currentDateTime);
+        var shipment = new InpostShipment(number, externalOrderNumber, currentUser, currentDateTime);
         
-        shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalExternalOrderNumber, currentUser.TenantId));
+        shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalOrderNumber, currentUser.TenantId));
         
         return shipment;
     }

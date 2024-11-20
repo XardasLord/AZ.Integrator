@@ -10,6 +10,7 @@ using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.EntityFrameworkCore;
 

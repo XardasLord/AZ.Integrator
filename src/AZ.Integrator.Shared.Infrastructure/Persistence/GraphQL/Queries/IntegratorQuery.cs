@@ -1,6 +1,9 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ParcelTemplate;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 

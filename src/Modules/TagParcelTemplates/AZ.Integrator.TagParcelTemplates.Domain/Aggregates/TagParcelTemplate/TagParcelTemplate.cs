@@ -19,14 +19,14 @@ public class TagParcelTemplate : Entity, IAggregateRoot
 
     private TagParcelTemplate()
     {
-        _parcels = new List<TagParcel>();
+        _parcels = [];
     }
 
     private TagParcelTemplate(Tag tag, IEnumerable<TagParcel> parcels, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _tag = tag;
         _tenantId = currentUser.TenantId;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, currentUser.TenantId);
         _parcels = parcels.ToList();
     }
 

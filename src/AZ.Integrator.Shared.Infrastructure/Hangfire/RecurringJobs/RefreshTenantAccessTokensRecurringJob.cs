@@ -2,6 +2,7 @@
 using AZ.Integrator.Shared.Infrastructure.Hangfire.Jobs.RefreshTenantAccessToken;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

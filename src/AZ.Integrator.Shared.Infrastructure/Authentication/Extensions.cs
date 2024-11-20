@@ -7,6 +7,7 @@ using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

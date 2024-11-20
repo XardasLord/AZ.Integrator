@@ -25,7 +25,7 @@ public class Invoice : Entity, IAggregateRoot
         _externalId = externalId;
         _number = number;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, currentUser.TenantId);
     }
 
     public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalExternalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
