@@ -34,7 +34,7 @@ public class InpostShipment : Entity, IAggregateRoot
     {
         var shipment = new InpostShipment(number, externalOrderNumber, currentUser, currentDateTime);
         
-        shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalOrderNumber, currentUser.TenantId));
+        shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalOrderNumber, shipment.CreationInformation.TenantId));
         
         return shipment;
     }
@@ -43,11 +43,15 @@ public class InpostShipment : Entity, IAggregateRoot
     {
         trackingNumbers.ForEach(number =>
         {
-            var parcel = Parcel.Create(tenantId, number);
+            var parcel = Parcel.Create(CreationInformation.TenantId ?? tenantId, number);
             
             _parcels.Add(parcel);
         });
         
-        AddDomainEvent(new InpostTrackingNumbersAssigned(Number, trackingNumbers.Select(x => x.Value).ToArray(), _externalOrderNumber, tenantId));
+        AddDomainEvent(new InpostTrackingNumbersAssigned(
+            Number,
+            trackingNumbers.Select(x => x.Value).ToArray(), 
+            ExternalOrderNumber,
+            CreationInformation.TenantId ?? tenantId));
     }
 }

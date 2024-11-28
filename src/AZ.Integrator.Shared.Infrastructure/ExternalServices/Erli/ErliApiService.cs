@@ -4,14 +4,12 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli.RequestModels;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ErliAccount;
 using Microsoft.EntityFrameworkCore;
 using Order = AZ.Integrator.Shared.Application.ExternalServices.Erli.Order;
@@ -96,9 +94,33 @@ public class ErliApiService(
         };
     }
 
+    public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, 
+        string vendor, string deliveryTrackingStatus, string tenantId)
+    {
+        foreach (var trackingNumber in trackingNumbers)
+        {
+            var payload = new AssignTrackingNumberRequestPayload
+            {
+                DeliveryTracking = new DeliveryTrackingPayload
+                {
+                    Vendor = vendor,
+                    Status = deliveryTrackingStatus,
+                    TrackingNumber = trackingNumber
+                },
+                ExternalOrderId = orderNumber
+            };
+            var payloadContent = PrepareContentRequest(payload);
+
+            var httpClient = await PrepareHttpClient(tenantId);
+            using var response = await httpClient.PatchAsync($"orders/{orderNumber}", payloadContent);
+
+            response.EnsureSuccessStatusCode();
+        }
+    }
+
     private static StringContent PrepareContentRequest(object payload)
     {
-        var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload, JsonSerializerDefaultOptions);
+        var payloadJson = JsonSerializer.Serialize(payload, JsonSerializerDefaultOptions);
         var payloadContent = new StringContent(payloadJson, Encoding.UTF8, MediaTypeNames.Application.Json);
         
         return payloadContent;

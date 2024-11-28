@@ -1,7 +1,6 @@
 ﻿using AZ.Integrator.Orders.Application.Common.BackgroundJobs;
-using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 
-namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.ChangeAllegroOrderStatus;
+namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Allegro.ChangeOrderStatus;
 
 public class ChangeAllegroOrderStatusJobCommand : JobCommandBase
 {

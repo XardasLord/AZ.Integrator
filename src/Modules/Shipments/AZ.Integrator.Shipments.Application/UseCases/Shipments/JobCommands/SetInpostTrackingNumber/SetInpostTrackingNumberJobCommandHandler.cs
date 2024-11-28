@@ -8,24 +8,18 @@ using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.JobCommands.SetInpostTrackingNumber;
 
-public class SetInpostTrackingNumberJobCommandHandler : IRequestHandler<SetInpostTrackingNumberJobCommand>
+public class SetInpostTrackingNumberJobCommandHandler(
+    IAggregateRepository<InpostShipment> inpostShippingRepository,
+    IShipXService shipXService) 
+    : IRequestHandler<SetInpostTrackingNumberJobCommand>
 {
-    private readonly IAggregateRepository<InpostShipment> _inpostShippingRepository;
-    private readonly IShipXService _shipXService;
-
-    public SetInpostTrackingNumberJobCommandHandler(IAggregateRepository<InpostShipment> inpostShippingRepository, IShipXService shipXService)
-    {
-        _inpostShippingRepository = inpostShippingRepository;
-        _shipXService = shipXService;
-    }
-    
     public async ValueTask<Unit> Handle(SetInpostTrackingNumberJobCommand command, CancellationToken cancellationToken)
     {
         var spec = new InpostShipmentByNumberSpec(command.ShippingNumber);
-        var shipping = await _inpostShippingRepository.SingleOrDefaultAsync(spec, cancellationToken)
+        var shipping = await inpostShippingRepository.SingleOrDefaultAsync(spec, cancellationToken)
             ?? throw new InpostShipmentNotFoundException();
 
-        var details = await _shipXService.GetDetails(command.ShippingNumber);
+        var details = await shipXService.GetDetails(command.ShippingNumber);
 
         if (details.TrackingNumber is null)
             throw new InpostTrackingNumberNotFoundException();
@@ -34,7 +28,7 @@ public class SetInpostTrackingNumberJobCommandHandler : IRequestHandler<SetInpos
             
         shipping.SetTrackingNumber(trackingNumbers.ToList(), command.TenantId);
 
-        await _inpostShippingRepository.SaveChangesAsync(cancellationToken);
+        await inpostShippingRepository.SaveChangesAsync(cancellationToken);
         
         return Unit.Value;
     }

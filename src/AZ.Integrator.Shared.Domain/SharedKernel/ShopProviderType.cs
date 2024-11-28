@@ -4,5 +4,6 @@ public enum ShopProviderType
 {
     System = 0,
     Allegro = 1,
-    Erli = 2
+    Erli = 2,
+    Unknown = 99,
 }

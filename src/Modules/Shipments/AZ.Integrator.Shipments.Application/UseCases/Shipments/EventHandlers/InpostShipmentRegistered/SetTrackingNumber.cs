@@ -5,21 +5,16 @@ using InpostShipmentRegisteredEvent = AZ.Integrator.Shipments.Domain.Events.Doma
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.EventHandlers.InpostShipmentRegistered;
 
-public class SetTrackingNumber : INotificationHandler<InpostShipmentRegisteredEvent>
+public class SetTrackingNumber(IBackgroundJobClient backgroundJobClient) 
+    : INotificationHandler<InpostShipmentRegisteredEvent>
 {
-    private readonly IBackgroundJobClient _backgroundJobClient;
-
-    public SetTrackingNumber(IBackgroundJobClient backgroundJobClient)
-    {
-        _backgroundJobClient = backgroundJobClient;
-    }
-    
     public ValueTask Handle(InpostShipmentRegisteredEvent notification, CancellationToken cancellationToken)
     {
-        _backgroundJobClient.Enqueue<SetInpostTrackingNumberJob>(
+        backgroundJobClient.Enqueue<SetInpostTrackingNumberJob>(
             job => job.Execute(new SetInpostTrackingNumberJobCommand
             {
                 ShippingNumber = notification.ShipmentNumber,
+                ExternalOrderNumber = notification.ExternalOrderNumber,
                 TenantId = notification.TenantId
             }, null));
         
