@@ -5,7 +5,7 @@ import { NavigationComponent } from '../ui/navigation/navigation.component';
 export const RoutePaths = {
   Auth: 'auth',
   Login: 'login',
-  AllegroOrders: 'allegro-orders',
+  Orders: 'orders',
   ParcelTemplates: 'parcel-templates',
 };
 
@@ -16,13 +16,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: RoutePaths.AllegroOrders,
+        redirectTo: RoutePaths.Orders,
         pathMatch: 'full',
       },
       {
-        path: RoutePaths.AllegroOrders,
-        loadChildren: () =>
-          import('../../features/allegro-orders/allegro-orders.module').then(m => m.AllegroOrdersModule),
+        path: RoutePaths.Orders,
+        loadChildren: () => import('../../features/orders/orders.module').then(m => m.OrdersModule),
         // canActivate: mapToCanActivate([AuthGuard]),
       },
       {

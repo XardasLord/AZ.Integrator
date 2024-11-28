@@ -10,7 +10,7 @@ import { AuthStateModel } from './auth.state.model';
 import { UserAuthHelper } from '../auth/helpers/user-auth.helper';
 import { DOCUMENT } from '@angular/common';
 import { RoutePaths } from '../../core/modules/app-routing.module';
-import { ApplyFilter } from '../../features/allegro-orders/states/allegro-orders.action';
+import { ApplyFilter } from '../../features/orders/states/orders.action';
 
 export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 
@@ -84,17 +84,6 @@ export class AuthState implements NgxsOnInit {
   @Action(Login)
   login(ctx: StateContext<AuthStateModel>, _: Login) {
     // TODO: Unused?
-    // const authUrl = `${environment.allegroLoginEndpointForAzTeamTenant}`;
-    // window.location.href = authUrl;
-    // return this.authService.login(action.login, action.password).pipe(
-    //   map((user: User) => {
-    //     const authUser = UserAuthHelper.parseAccessToken(user);
-    //
-    //     if (authUser) {    //
-    //       ctx.dispatch(new LoginCompleted(authUser));
-    //     }
-    //   })
-    // );
   }
 
   @Action(LoginCompleted)
@@ -106,7 +95,7 @@ export class AuthState implements NgxsOnInit {
     localStorage.setItem('access_token', action.user.access_token!);
     localStorage.setItem('user', JSON.stringify(action.user));
 
-    ctx.dispatch(new Navigate([RoutePaths.AllegroOrders]));
+    ctx.dispatch(new Navigate([RoutePaths.Orders]));
     ctx.dispatch(new ApplyFilter('')); // This is temporary solution to reload list of orders
   }
 

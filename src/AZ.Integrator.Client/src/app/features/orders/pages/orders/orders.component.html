@@ -1,0 +1,44 @@
+<mat-tab-group mat-stretch-tabs="false" #tabGroup>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="mr-2">sell</mat-icon>
+      Nowe zamówienia
+    </ng-template>
+    <ng-template matTabContent>
+      <div class="padding-content">
+        <app-orders-filters></app-orders-filters>
+        <app-orders-list-new></app-orders-list-new>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="mr-2">pending</mat-icon>
+      Przesyłki nadane
+    </ng-template>
+    <ng-template matTabContent>
+      <div class="padding-content">
+        <app-orders-filters></app-orders-filters>
+        <app-orders-list-ready-for-shipment></app-orders-list-ready-for-shipment>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="mr-2">local_shipping</mat-icon>
+      Przesyłki wysłane
+    </ng-template>
+    <ng-template matTabContent>
+      <div class="padding-content">
+        <app-orders-filters></app-orders-filters>
+        <app-orders-list-sent></app-orders-list-sent>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<div class="fixed bottom-4 right-4 z-50">
+  <button mat-fab color="primary" matTooltip="Odśwież" (click)="refreshList()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>

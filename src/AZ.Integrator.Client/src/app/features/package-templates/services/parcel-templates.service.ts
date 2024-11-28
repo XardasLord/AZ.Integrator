@@ -22,7 +22,7 @@ export class ParcelTemplatesService extends RemoteServiceBase {
       params = params.set('searchText', searchText);
     }
 
-    return this.httpClient.get<GetOfferSignaturesResponse>(`${this.apiUrl}/allegroOrders/tags`, { params });
+    return this.httpClient.get<GetOfferSignaturesResponse>(`${this.apiUrl}/orders/tags`, { params });
   }
 
   saveTemplate(command: SaveParcelTemplateCommand): Observable<void> {
