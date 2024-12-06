@@ -1,7 +1,6 @@
 ﻿using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetDetails;
 using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetTags;
-using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

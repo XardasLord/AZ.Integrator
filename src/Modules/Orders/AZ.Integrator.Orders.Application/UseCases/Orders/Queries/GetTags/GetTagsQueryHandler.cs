@@ -1,25 +1,40 @@
-﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
+﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.SharedKernel;
+using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
+using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
 using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetTags;
 
-public class GetTagsQueryHandler : IRequestHandler<GetTagsQuery, GetTagsResponse>
+public class GetTagsQueryHandler(
+    IAllegroService allegroService,
+    IErliService erliService,
+    ICurrentUser currentUser) : IRequestHandler<GetTagsQuery, GetTagsResponse>
 {
-    private readonly IAllegroService _allegroService;
-
-    public GetTagsQueryHandler(IAllegroService allegroService)
-    {
-        _allegroService = allegroService;
-    }
-    
     public async ValueTask<GetTagsResponse> Handle(GetTagsQuery query, CancellationToken cancellationToken)
     {
-        var offers = await _allegroService.GetOffers(query.Filters);
+        if (currentUser.ShopProviderType == ShopProviderType.Allegro)
+        {
+            var offersResponse = await allegroService.GetOffers(query.Filters);
+            var signatures = offersResponse.Offers
+                .Where(x => x.External is not null)
+                .Select(x => x.External.Id)
+                .ToList();
 
-        var signatures = offers.Offers
-            .Where(x => x.External is not null)
-            .Select(x => x.External.Id);
+            return new GetTagsResponse(signatures, offersResponse.Count);
+        }
 
-        return new GetTagsResponse(signatures, offers.TotalCount);
+        if (currentUser.ShopProviderType == ShopProviderType.Erli)
+        {
+            var productsResponse = await erliService.GetProducts(query.Filters);
+            var tags = productsResponse.Products
+                .Where(x => x.Sku is not null)
+                .Select(x => x.Sku)
+                .ToList();
+            
+            return new GetTagsResponse(tags, productsResponse.Count);
+        }
+
+        return new GetTagsResponse([], 0);
     }
 }

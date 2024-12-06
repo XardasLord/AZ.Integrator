@@ -1,6 +1,5 @@
 using AZ.Integrator.Invoices.Application;
 using AZ.Integrator.Orders.Application;
-using AZ.Integrator.Shared.Application;
 using AZ.Integrator.TagParcelTemplates.Application;
 using AZ.Integrator.Shared.Infrastructure;
 using AZ.Integrator.Shipments.Application;

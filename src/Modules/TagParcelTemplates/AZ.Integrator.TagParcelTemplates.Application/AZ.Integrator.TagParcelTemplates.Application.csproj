@@ -20,6 +20,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AZ.Integrator.TagParcelTemplates.Domain\AZ.Integrator.TagParcelTemplates.Domain.csproj" />
+        <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj" />
     </ItemGroup>
 
 </Project>

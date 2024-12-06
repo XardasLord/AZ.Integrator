@@ -19,8 +19,7 @@ namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
 public class ErliApiService(
     IHttpClientFactory httpClientFactory,
     ErliAccountDbContext dataViewContext, // TODO: Create DataViewContext for ErliAccounts
-    ICurrentUser currentUser)
-    : IErliService
+    ICurrentUser currentUser) : IErliService
 {
     private static readonly JsonSerializerOptions JsonSerializerDefaultOptions = new()
     {
@@ -91,6 +90,60 @@ public class ErliApiService(
             Orders = orders,
             TotalCount = totalCount,
             Count = orders.Count
+        };
+    }
+
+    public async Task<GetProductsModelResponse> GetProducts(GetProductTagsQueryFilters filters)
+    {
+        var request = new GetProductsFiltersRequestPayload
+        {
+            Pagination = new Pagination
+            {
+                SortField = ProductPaginationHelper.ModifiedAtSortField,
+                Order = ProductPaginationHelper.Desc,
+                Limit = 200 // 200 is max
+            },
+            Filter = new Filter
+            {
+                Field = ProductFilterHelper.Status,
+                Operator = "=",
+                Value = "active"
+            },
+            Fields = [ProductFieldsHelper.ExternalId, ProductFieldsHelper.Sku]
+        };
+
+        // TODO: Filtering
+        // if (!string.IsNullOrWhiteSpace(filters.SearchText))
+        // {
+        //     request.Filter = new Filter
+        //     {
+        //         Field = OrderFilterHelper.UserEmailField,
+        //         Operator = "=",
+        //         Value = filters.SearchText
+        //     };
+        // }
+        
+        var payloadContent = PrepareContentRequest(request);
+
+        var httpClient = await PrepareHttpClient(currentUser.TenantId);
+        using var response = await httpClient.PostAsync("products/_search", payloadContent);
+
+        response.EnsureSuccessStatusCode();
+
+        var products = await response.Content.ReadFromJsonAsync<List<Product>>();
+
+        var totalCount = products.Count;
+        
+        products = products
+            .Skip(filters.Skip)
+            .Take(filters.Take)
+            .ToList();
+
+        return new GetProductsModelResponse
+        {
+            Products = products,
+            TotalCount = totalCount,
+            Count = products.Count
         };
     }
 

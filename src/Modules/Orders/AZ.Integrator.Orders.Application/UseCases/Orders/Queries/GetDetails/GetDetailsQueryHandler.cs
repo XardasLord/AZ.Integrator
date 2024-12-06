@@ -18,6 +18,7 @@ public class GetDetailsQueryHandler : IRequestHandler<GetDetailsQuery, OrderDeta
     
     public async ValueTask<OrderDetailsDto> Handle(GetDetailsQuery query, CancellationToken cancellationToken)
     {
+        // TODO: Unused?
         var orderDetails = await _allegroService.GetOrderDetails(query.OrderId);
 
         var orderDetailsDto = _mapper.Map<OrderDetailsDto>(orderDetails);
