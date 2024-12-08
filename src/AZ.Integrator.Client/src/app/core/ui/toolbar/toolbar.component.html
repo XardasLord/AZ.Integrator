@@ -11,7 +11,9 @@
       <mat-label>Zaloguj jako</mat-label>
       <mat-select (selectionChange)="login($event.value)">
         @for (tenant of tenants; track tenant) {
-          <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
+          <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
+            <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
+          </ng-container>
         }
       </mat-select>
     </mat-form-field>
