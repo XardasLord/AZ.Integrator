@@ -1,10 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,23 +41,23 @@ internal static class Extensions
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
-        const string azTeamTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-az-team";
-        const string mebleplTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-meblepl";
-        const string myTestTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-my-test";
+        const string allegroAzTeamTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-az-team";
+        const string allegroMebleplTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-meblepl";
+        const string allegroMyTestTenantCookieAuthenticationScheme = $"{CookieAuthenticationDefaults.AuthenticationScheme}-my-test";
         
-        const string azTeamTenantOAuthAuthenticationScheme = "allegro-az-team";
-        const string mebleplTenantOAuthAuthenticationScheme = "allegro-meblepl";
-        const string myTestTenantOAuthAuthenticationScheme = "allegro-my-test";
+        const string allegroAzTeamTenantOAuthAuthenticationScheme = "allegro-az-team";
+        const string allegroMebleplTenantOAuthAuthenticationScheme = "allegro-meblepl";
+        const string allegroMyTestTenantOAuthAuthenticationScheme = "allegro-my-test";
         
         services
             .AddAuthentication(sharedOptions =>
             {
-                sharedOptions.DefaultScheme = azTeamTenantCookieAuthenticationScheme;
-                sharedOptions.DefaultChallengeScheme = azTeamTenantOAuthAuthenticationScheme;
+                sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = allegroAzTeamTenantOAuthAuthenticationScheme;
             })
-            .AddCookie(azTeamTenantCookieAuthenticationScheme)
-            .AddCookie(mebleplTenantCookieAuthenticationScheme)
-            .AddCookie(myTestTenantCookieAuthenticationScheme)
+            .AddCookie(allegroAzTeamTenantCookieAuthenticationScheme)
+            .AddCookie(allegroMebleplTenantCookieAuthenticationScheme)
+            .AddCookie(allegroMyTestTenantCookieAuthenticationScheme)
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 // options.Authority = identityOptions.Authority;
@@ -77,30 +80,30 @@ internal static class Extensions
                     ValidAudience = identityOptions.Audience
                 };
             })
-            .AddOAuth(azTeamTenantOAuthAuthenticationScheme, options =>
+            .AddOAuth(allegroAzTeamTenantOAuthAuthenticationScheme, options =>
             {
                 options.ClientId = allegroOptions.AzTeamTenant.ClientId;
                 options.ClientSecret = allegroOptions.AzTeamTenant.ClientSecret;
                 options.CallbackPath = new PathString(allegroOptions.AzTeamTenant.RedirectUri);
-                options.SignInScheme = azTeamTenantCookieAuthenticationScheme;
+                options.SignInScheme = allegroAzTeamTenantCookieAuthenticationScheme;
                 
                 ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
             })
-            .AddOAuth(myTestTenantOAuthAuthenticationScheme, options =>
+            .AddOAuth(allegroMyTestTenantOAuthAuthenticationScheme, options =>
             {
                 options.ClientId = allegroOptions.MyTestTenant.ClientId;
                 options.ClientSecret = allegroOptions.MyTestTenant.ClientSecret;
                 options.CallbackPath = new PathString(allegroOptions.MyTestTenant.RedirectUri);
-                options.SignInScheme = myTestTenantCookieAuthenticationScheme;
+                options.SignInScheme = allegroMyTestTenantCookieAuthenticationScheme;
                 
                 ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
             })
-            .AddOAuth(mebleplTenantOAuthAuthenticationScheme, options =>
+            .AddOAuth(allegroMebleplTenantOAuthAuthenticationScheme, options =>
             {
                 options.ClientId = allegroOptions.MebleplTenant.ClientId;
                 options.ClientSecret = allegroOptions.MebleplTenant.ClientSecret;
                 options.CallbackPath = new PathString(allegroOptions.MebleplTenant.RedirectUri);
-                options.SignInScheme = mebleplTenantCookieAuthenticationScheme;
+                options.SignInScheme = allegroMebleplTenantCookieAuthenticationScheme;
                 
                 ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
             });
@@ -189,6 +192,7 @@ internal static class Extensions
         {
             new(UserClaimType.ShipXOrganizationId, shipXOptions.OrganizationId.ToString()),
             new(UserClaimType.TenantId, tenantId),
+            new(UserClaimType.AuthorizationProviderType, ShopProviderType.Allegro.ToString())
         };
                 
         var jwtTokenHandler = new JwtSecurityTokenHandler();

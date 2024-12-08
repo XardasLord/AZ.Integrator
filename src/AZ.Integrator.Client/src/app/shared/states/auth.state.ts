@@ -1,18 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
 import { Action, NgxsOnInit, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
-import { map, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { UserAuthModel } from '../auth/models/user-auth.model';
 import { AuthScopes } from '../auth/models/auth.scopes';
-import { Login, LoginCompleted, Logout, Relog } from './auth.action';
-import { RoutePaths } from '../../core/modules/app-routing.module';
+import { Login, LoginCompleted, LoginViaErli, Logout, Relog } from './auth.action';
 import { AuthService } from '../services/auth.service';
 import { AuthStateModel } from './auth.state.model';
-import { User } from 'oidc-client';
 import { UserAuthHelper } from '../auth/helpers/user-auth.helper';
 import { DOCUMENT } from '@angular/common';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { environment } from '../../../environments/environment';
+import { RoutePaths } from '../../core/modules/app-routing.module';
+import { ApplyFilter } from '../../features/orders/states/orders.action';
 
 export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 
@@ -85,27 +83,11 @@ export class AuthState implements NgxsOnInit {
 
   @Action(Login)
   login(ctx: StateContext<AuthStateModel>, _: Login) {
-    const authUrl = `${environment.allegroLoginEndpointForAzTeamTenant}`;
-    window.location.href = authUrl;
-    // return this.authService.login(action.login, action.password).pipe(
-    //   map((user: User) => {
-    //     const authUser = UserAuthHelper.parseAccessToken(user);
-    //
-    //     if (authUser) {
-    //       localStorage.setItem('access_token', user.access_token);
-    //       localStorage.setItem('user', JSON.stringify(authUser));
-    //
-    //       // const expiresAt = moment().add(authResult.expiresIn,'second');
-    //       // localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
-    //
-    //       ctx.dispatch(new LoginCompleted(authUser));
-    //     }
-    //   })
-    // );
+    // TODO: Unused?
   }
 
   @Action(LoginCompleted)
-  loginCompleted(ctx: StateContext<AuthStateModel>, action: LoginCompleted): void {
+  loginCompleted(ctx: StateContext<AuthStateModel>, action: LoginCompleted) {
     ctx.patchState({
       user: action.user,
     });
@@ -113,7 +95,21 @@ export class AuthState implements NgxsOnInit {
     localStorage.setItem('access_token', action.user.access_token!);
     localStorage.setItem('user', JSON.stringify(action.user));
 
-    ctx.dispatch(new Navigate([RoutePaths.AllegroOrders]));
+    ctx.dispatch(new Navigate([RoutePaths.Orders]));
+    ctx.dispatch(new ApplyFilter('')); // This is temporary solution to reload list of orders
+  }
+
+  @Action(LoginViaErli)
+  loginViaErli(ctx: StateContext<AuthStateModel>, action: LoginViaErli) {
+    return this.authService.loginViaErli(action.tenantId).pipe(
+      tap((response: { access_token: string }) => {
+        const authUser = UserAuthHelper.parseAccessToken(response.access_token);
+
+        if (authUser) {
+          ctx.dispatch(new LoginCompleted(authUser));
+        }
+      })
+    );
   }
 
   @Action(Logout)

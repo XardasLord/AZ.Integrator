@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -11,13 +11,14 @@
 
     <ItemGroup>
         <PackageReference Include="IdentityServer4" Version="4.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
+        <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,10 +29,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AZ.Integrator.Shared.Infrastructure\AZ.Integrator.Shared.Infrastructure.csproj" />
-      <ProjectReference Include="..\Invoices\AZ.Integrator.Invoices.Application\AZ.Integrator.Invoices.Application.csproj" />
-      <ProjectReference Include="..\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
-      <ProjectReference Include="..\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
-      <ProjectReference Include="..\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Application\AZ.Integrator.TagParcelTemplates.Application.csproj" />
+      <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Application\AZ.Integrator.Invoices.Application.csproj" />
+      <ProjectReference Include="..\Modules\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
+      <ProjectReference Include="..\Modules\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
+      <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Application\AZ.Integrator.TagParcelTemplates.Application.csproj" />
     </ItemGroup>
 
 </Project>

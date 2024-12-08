@@ -1,21 +1,30 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Identity;
+﻿using AZ.Integrator.Shared.Infrastructure.Authentication;
+using AZ.Integrator.Shared.Infrastructure.Identity;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.UserIdentity;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AZ.Integrator.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly UserDbContext _context;
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
+    
 
-    public AuthController(UserManager<IdentityUser> userManager, UserDbContext context, TokenService tokenService, IConfiguration configuration)
+    public AuthController(
+        UserManager<IdentityUser> userManager,
+        UserDbContext context,
+        TokenService tokenService,
+        IConfiguration configuration)
     {
         _userManager = userManager;
         _context = context;
@@ -100,5 +109,16 @@ public class AuthController : ControllerBase
         {
            RedirectUri = $"{_configuration["Application:ClientAppUrl"]}?access_token={await HttpContext.GetTokenAsync(authenticationScheme, tokenName)}"
         }, authenticationScheme);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("login-erli")]
+    public IActionResult LoginViaErli([FromQuery] string tenantId)
+    {
+        var extendedTokenId = $"erli-{tenantId}";
+        
+        var jwtToken = JwtTokenHelper.GenerateJwtToken(extendedTokenId, _configuration);
+        
+        return Ok(new {access_token = jwtToken});
     }
 }

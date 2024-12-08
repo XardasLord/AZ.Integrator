@@ -1,4 +1,6 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.UserIdentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

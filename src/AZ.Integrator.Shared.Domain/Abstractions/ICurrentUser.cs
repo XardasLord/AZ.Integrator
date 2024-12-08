@@ -1,4 +1,6 @@
-﻿namespace AZ.Integrator.Domain.Abstractions;
+﻿using AZ.Integrator.Domain.SharedKernel;
+
+namespace AZ.Integrator.Domain.Abstractions;
 
 public interface ICurrentUser
 {
@@ -8,4 +10,5 @@ public interface ICurrentUser
     string TenantId { get; }
     IReadOnlyCollection<string> AppScopes { get; }
     int ShipXOrganizationId { get; }
+    ShopProviderType ShopProviderType { get; }
 }

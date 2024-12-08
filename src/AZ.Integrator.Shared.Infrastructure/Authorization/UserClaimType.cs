@@ -7,4 +7,5 @@ public static class UserClaimType
     public const string Role = "role";
     public const string TenantId = "tenant_id";
     public const string ShipXOrganizationId = "shipx_organization_id";
+    public const string AuthorizationProviderType = "auth_provider_type";
 }

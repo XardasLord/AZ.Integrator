@@ -1,0 +1,4 @@
+<mat-form-field appearance="fill">
+  <mat-label>Login/Email</mat-label>
+  <input matInput (valueChanged)="searchTextChanged($event)" [value]="searchText$ | async" appDebounce />
+</mat-form-field>

@@ -42,15 +42,15 @@ export type DateTimeOperationFilterInput = {
 
 export type DpdShipmentViewModel = {
   __typename?: 'DpdShipmentViewModel';
-  allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  externalOrderNumber?: Maybe<Scalars['String']['output']>;
   shipmentNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type DpdShipmentViewModelFilterInput = {
-  allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
 };
@@ -72,15 +72,15 @@ export type FloatOperationFilterInput = {
 
 export type InpostShipmentViewModel = {
   __typename?: 'InpostShipmentViewModel';
-  allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  externalOrderNumber?: Maybe<Scalars['String']['output']>;
   shipmentNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type InpostShipmentViewModelFilterInput = {
-  allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<InpostShipmentViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InpostShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
 };
@@ -136,16 +136,16 @@ export type IntegratorQueryTagParcelTemplatesArgs = {
 
 export type InvoiceViewModel = {
   __typename?: 'InvoiceViewModel';
-  allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  externalOrderNumber?: Maybe<Scalars['String']['output']>;
   invoiceId: Scalars['Long']['output'];
   invoiceNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type InvoiceViewModelFilterInput = {
-  allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   invoiceId?: InputMaybe<LongOperationFilterInput>;
   invoiceNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
@@ -175,16 +175,16 @@ export type LongOperationFilterInput = {
 
 export type ShipmentViewModel = {
   __typename?: 'ShipmentViewModel';
-  allegroOrderNumber?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
+  externalOrderNumber?: Maybe<Scalars['String']['output']>;
   shipmentNumber?: Maybe<Scalars['String']['output']>;
   shipmentProvider?: Maybe<Scalars['String']['output']>;
 };
 
 export type ShipmentViewModelFilterInput = {
-  allegroOrderNumber?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<ShipmentViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
   shipmentProvider?: InputMaybe<StringOperationFilterInput>;

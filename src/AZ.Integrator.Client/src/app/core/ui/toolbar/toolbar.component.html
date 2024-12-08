@@ -10,9 +10,11 @@
     <mat-form-field class="mt-5">
       <mat-label>Zaloguj jako</mat-label>
       <mat-select (selectionChange)="login($event.value)">
-        <mat-option [value]="azTeamTenantUrl">AZ TEAM</mat-option>
-        <mat-option [value]="meblePlTenantUrl">meblepl_24</mat-option>
-        <mat-option *ngIf="environment.showMyTestAllegroAccount" [value]="myTestTenantUrl">MY TEST</mat-option>
+        @for (tenant of tenants; track tenant) {
+          <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
+            <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
+          </ng-container>
+        }
       </mat-select>
     </mat-form-field>
 

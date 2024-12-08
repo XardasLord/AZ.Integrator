@@ -11,7 +11,6 @@ using AZ.Integrator.Shared.Infrastructure.OpenApi;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +36,8 @@ public static class Extensions
         services.AddIntegratorAuthentication(configuration);
         services.AddIntegratorAuthorization(configuration);
         services.AddIntegratorIdentity(configuration);
+            
+        services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
         
         services.AddPostgres(configuration);
         services.AddIntegratorGraphQl(configuration);
@@ -44,8 +45,6 @@ public static class Extensions
         
         services.AddDomainServices();
         services.AddExternalServices(configuration);
-
-        services.AddMediatR(typeof(Extensions).Assembly);
         
         services.AddIntegratorJobManager(configuration)
             .AddRecurringJob<RefreshTenantAccessTokensRecurringJob>();

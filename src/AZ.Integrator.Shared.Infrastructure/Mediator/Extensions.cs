@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Domain.SeedWork;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.Mediator;

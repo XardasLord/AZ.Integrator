@@ -95,4 +95,9 @@ public static class GuardExtensions
 
         return input;
     }
+
+    public static string TenantId(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
+    {
+        return input;
+    }
 }

@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Logout } from '../../../shared/states/auth.action';
+import { LoginViaErli, Logout } from '../../../shared/states/auth.action';
 import { AuthState } from '../../../shared/states/auth.state';
 import { environment } from '../../../../environments/environment';
+import { AuthorizationProvider, Tenant } from '../../../shared/auth/models/tenant.model';
 
 @Component({
   selector: 'app-toolbar',
@@ -14,9 +15,32 @@ export class ToolbarComponent {
   toggleSideNav: EventEmitter<boolean> = new EventEmitter();
   user$ = this.store.select(AuthState.getUser);
 
-  azTeamTenantUrl = environment.allegroLoginEndpointForAzTeamTenant;
-  meblePlTenantUrl = environment.allegroLoginEndpointForMebleplTenant;
-  myTestTenantUrl = environment.allegroLoginEndpointForMyTestTenant;
+  tenants: Tenant[] = [
+    {
+      tenantId: environment.allegroAzTeamTenantId,
+      displayName: 'ALLEGRO - AZ TEAM',
+      authorizationProvider: AuthorizationProvider.Allegro,
+      isTestAccount: false,
+    },
+    {
+      tenantId: environment.allegroMebleplTenantId,
+      displayName: 'ALLEGRO - meblepl_24',
+      authorizationProvider: AuthorizationProvider.Allegro,
+      isTestAccount: false,
+    },
+    {
+      tenantId: environment.allegroMyTestTenantId,
+      displayName: 'ALLEGRO - MY TEST',
+      authorizationProvider: AuthorizationProvider.Allegro,
+      isTestAccount: true,
+    },
+    {
+      tenantId: environment.erliAzTeamTenantId,
+      displayName: 'ERLI - AZ TEAM',
+      authorizationProvider: AuthorizationProvider.Erli,
+      isTestAccount: false,
+    },
+  ];
 
   constructor(private store: Store) {}
 
@@ -24,11 +48,14 @@ export class ToolbarComponent {
     this.toggleSideNav.emit(true);
   }
 
-  login(tenantLoginUrl: any) {
+  login(tenant: Tenant) {
     this.store.dispatch(new Logout());
 
-    const authUrl = `${tenantLoginUrl}`;
-    window.location.href = authUrl;
+    if (tenant.authorizationProvider === AuthorizationProvider.Allegro) {
+      window.location.href = `${environment.allegroLoginEndpoint}${tenant.tenantId}`;
+    } else if (tenant.authorizationProvider === AuthorizationProvider.Erli) {
+      this.store.dispatch(new LoginViaErli(tenant.tenantId));
+    }
   }
 
   protected readonly environment = environment;
