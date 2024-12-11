@@ -50,6 +50,10 @@ public class GetAllQueryHandler(
                 Offer = new OfferDetailsDto
                 {
                     Name = item.Name,
+                    External = string.IsNullOrEmpty(item.Sku) ? null : new ExternalDetailsDto
+                    {
+                        Id = item.Sku
+                    }
                 },
                 Quantity = item.Quantity,
                 Price = new AmountDetailsDto

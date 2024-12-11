@@ -45,6 +45,8 @@ public class Item
     public int UnitPrice { get; set; } // W groszach
     public string Name { get; set; }
     public string Slug { get; set; }
+    public string Ean { get; set; }
+    public string Sku { get; set; }
 }
 
 public class Delivery
