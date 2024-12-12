@@ -70,6 +70,7 @@ public class GetAllQueryHandler(
                 UpdatedAt = order.Created,
                 Buyer = new BuyerDetailsDto
                 {
+                    Login = order.User.Email,
                     FirstName = order.User.DeliveryAddress.FirstName,
                     LastName = order.User.DeliveryAddress.LastName,
                     Email = order.User.Email,
