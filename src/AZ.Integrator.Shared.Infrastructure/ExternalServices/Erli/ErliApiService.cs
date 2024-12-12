@@ -103,25 +103,27 @@ public class ErliApiService(
                 Order = ProductPaginationHelper.Desc,
                 Limit = 200 // 200 is max
             },
-            Filter = new Filter
+            Fields = [ProductFieldsHelper.ExternalId, ProductFieldsHelper.Sku]
+        };
+
+        if (!string.IsNullOrWhiteSpace(filters.SearchText))
+        {
+            request.Filter = new Filter
+            {
+                Field = ProductFilterHelper.Sku,
+                Operator = "=",
+                Value = filters.SearchText
+            };
+        }
+        else
+        {
+            request.Filter = new Filter
             {
                 Field = ProductFilterHelper.Status,
                 Operator = "=",
                 Value = "active"
-            },
-            Fields = [ProductFieldsHelper.ExternalId, ProductFieldsHelper.Sku]
-        };
-
-        // TODO: Filtering
-        // if (!string.IsNullOrWhiteSpace(filters.SearchText))
-        // {
-        //     request.Filter = new Filter
-        //     {
-        //         Field = OrderFilterHelper.UserEmailField,
-        //         Operator = "=",
-        //         Value = filters.SearchText
-        //     };
-        // }
+            };
+        }
         
         var payloadContent = PrepareContentRequest(request);
 
@@ -135,6 +137,7 @@ public class ErliApiService(
         var totalCount = products.Count;
         
         products = products
+            .DistinctBy(x => x.Sku)
             .Skip(filters.Skip)
             .Take(filters.Take)
             .ToList();

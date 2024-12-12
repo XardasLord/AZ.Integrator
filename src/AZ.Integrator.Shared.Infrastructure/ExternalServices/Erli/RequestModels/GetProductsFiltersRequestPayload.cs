@@ -25,6 +25,7 @@ public static class ProductPaginationHelper
 public static class ProductFilterHelper
 {
     public const string Status = "status";
+    public const string Sku = "sku";
 }
 
 public static class ProductFieldsHelper
