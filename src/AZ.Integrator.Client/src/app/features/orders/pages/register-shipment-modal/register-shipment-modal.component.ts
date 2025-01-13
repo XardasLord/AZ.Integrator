@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
@@ -23,6 +23,7 @@ import { OrderDetailsModel } from '../../models/order-details.model';
 })
 export class RegisterShipmentModalComponent {
   form: FormGroup<RegisterParcelFormGroupModel>;
+  minOrderValueValidator: ValidatorFn = Validators.min(this.data.order.summary.totalToPay.amount);
 
   constructor(
     public dialogRef: MatDialogRef<RegisterShipmentModalComponent>,
@@ -74,12 +75,9 @@ export class RegisterShipmentModalComponent {
         orderDetails.delivery?.address?.countryCode ?? orderDetails.delivery.address.countryCode,
         [Validators.required]
       ),
-      insuranceActive: new FormControl<boolean>(false),
-      insuranceAmount: new FormControl<number>({
-        value: orderDetails.summary.totalToPay.amount,
-        disabled: true,
-      }),
-      insuranceCurrency: new FormControl<string>({ value: 'PLN', disabled: true }),
+      insuranceActive: new FormControl<boolean>(true),
+      insuranceAmount: new FormControl<number>(orderDetails.summary.totalToPay.amount, [Validators.required]),
+      insuranceCurrency: new FormControl<string>('PLN', [Validators.required]),
       codActive: new FormControl<boolean>(false),
       parcels: this.fb.array<FormGroup>([], [Validators.required]),
       additionalInfo: new FormControl<string>(''),
@@ -106,16 +104,12 @@ export class RegisterShipmentModalComponent {
     this.form.controls.codActive.valueChanges.subscribe(value => {
       if (value) {
         this.form.controls.insuranceActive.setValue(true);
-        this.form.controls.insuranceAmount.setValidators(Validators.required);
-        this.form.controls.insuranceAmount.setValidators(Validators.min(this.form.controls.insuranceAmount.value!));
+        this.form.controls.insuranceAmount.setValidators([Validators.required, this.minOrderValueValidator]);
         this.form.controls.insuranceAmount.enable();
         this.form.controls.insuranceCurrency.setValidators(Validators.required);
         this.form.controls.insuranceCurrency.enable();
       } else {
-        this.form.controls.insuranceAmount.clearValidators();
-        this.form.controls.insuranceAmount.disable();
-        this.form.controls.insuranceCurrency.clearValidators();
-        this.form.controls.insuranceCurrency.disable();
+        this.form.controls.insuranceAmount.removeValidators(this.minOrderValueValidator);
       }
     });
 
