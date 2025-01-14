@@ -36,6 +36,18 @@ services:
       timeout: 5s
       retries: 5
       
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.0.1
+    ports:
+      - "9080:8080"
+    container_name: az-integrator-keycloak
+    command: start-dev
+    networks:
+      - az
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   postgres_data:
     driver: local
