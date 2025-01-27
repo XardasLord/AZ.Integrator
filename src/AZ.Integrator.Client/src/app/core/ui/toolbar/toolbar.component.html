@@ -7,9 +7,9 @@
 
     <span class="spacer"></span>
 
-    <mat-form-field class="mt-5">
-      <mat-label>Zaloguj jako</mat-label>
-      <mat-select (selectionChange)="login($event.value)">
+    <mat-form-field class="mt-5" *appRoleAllow="[AuthRoles.Admin]">
+      <mat-label>Wybierz sklep</mat-label>
+      <mat-select (selectionChange)="changeTenant($event.value)">
         @for (tenant of tenants; track tenant) {
           <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
             <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
@@ -20,15 +20,17 @@
 
     <span class="right-section">
       <span class="section user-info">
-        <span class="name">{{ (user$ | async)?.tenant_id }}</span>
+        <span class="name"
+          >{{ (user$ | async)?.firstName }} {{ (user$ | async)?.lastName }} ({{ (user$ | async)?.username }})</span
+        >
         <button mat-icon-button>
           <mat-icon>face</mat-icon>
         </button>
       </span>
 
-      <!--      <button mat-icon-button matTooltip="Wyloguj" (click)="logout()">-->
-      <!--        <mat-icon class="material-icons-outlined">logout</mat-icon>-->
-      <!--      </button>-->
+      <button mat-icon-button matTooltip="Wyloguj" (click)="logout()">
+        <mat-icon class="material-icons-outlined">logout</mat-icon>
+      </button>
     </span>
   </mat-toolbar-row>
 </mat-toolbar>

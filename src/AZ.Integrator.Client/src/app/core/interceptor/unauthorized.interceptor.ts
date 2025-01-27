@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Store } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
-import { Relog } from '../../shared/states/auth.action';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
-  constructor(private store: Store) {}
-
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       tap(
@@ -18,7 +14,8 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
         },
         error => {
           if (error.status === 401) {
-            this.store.dispatch(new Relog());
+            console.warn('Unauthorized access');
+            // this.store.dispatch(new Relog());
           }
         }
       )

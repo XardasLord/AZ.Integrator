@@ -1,10 +1,6 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Authentication;
-using AZ.Integrator.Shared.Infrastructure.Identity;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
+﻿using AZ.Integrator.Shared.Infrastructure.Identity;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.UserIdentity;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -102,23 +98,12 @@ public class AuthController : ControllerBase
     [HttpGet("login-allegro")]
     public async Task<IActionResult> LoginViaAllegro([FromQuery] string tenantId)
     {
-        var authenticationScheme = $"allegro-{tenantId}";
+        var authenticationScheme = $"{tenantId}";
         var tokenName = "integrator_access_token";
         
         return Challenge(new AuthenticationProperties
         {
            RedirectUri = $"{_configuration["Application:ClientAppUrl"]}?access_token={await HttpContext.GetTokenAsync(authenticationScheme, tokenName)}"
         }, authenticationScheme);
-    }
-
-    [AllowAnonymous]
-    [HttpGet("login-erli")]
-    public IActionResult LoginViaErli([FromQuery] string tenantId)
-    {
-        var extendedTokenId = $"erli-{tenantId}";
-        
-        var jwtToken = JwtTokenHelper.GenerateJwtToken(extendedTokenId, _configuration);
-        
-        return Ok(new {access_token = jwtToken});
     }
 }

@@ -6,6 +6,6 @@ export class Tenant {
 }
 
 export enum AuthorizationProvider {
-  Allegro,
-  Erli,
+  Allegro = 1,
+  Erli = 2,
 }

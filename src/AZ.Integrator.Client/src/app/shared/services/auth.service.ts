@@ -1,36 +1,22 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, Subscription } from 'rxjs';
-import { User } from 'oidc-client';
-import { AuthState } from '../states/auth.state';
-import { environment } from '../../../environments/environment';
+import { Subscription } from 'rxjs';
+import { AuthRoles } from '../auth/models/auth.roles';
+import { UserAllowTerms } from '../auth/models/route-auth.vo';
+import { getAuthRolesFromToken } from '../auth/helpers/keycloak-token-roles.helper';
+import { KeycloakService } from 'keycloak-angular';
 
 @Injectable()
 export class AuthService implements OnDestroy {
   private readonly roleSubscription: Subscription | undefined;
-  private userRole: string | undefined;
+  private userRoles!: AuthRoles[];
   private userScopes!: number[];
-
-  user$ = this.store.select(AuthState.getUser);
 
   constructor(
     private store: Store,
-    private httpClient: HttpClient
+    private keycloak: KeycloakService
   ) {
-    this.roleSubscription = this.user$?.subscribe(user => {
-      if (!user) {
-        this.userRole = undefined;
-        this.userScopes = [];
-        return;
-      }
-
-      // this.userRole = user.role;
-
-      if (user.auth_scopes) {
-        this.userScopes = Object.values(user.auth_scopes).map(x => +x as number);
-      }
-    });
+    this.userRoles = getAuthRolesFromToken(this.keycloak.getKeycloakInstance().tokenParsed!);
   }
 
   public ngOnDestroy(): void {
@@ -39,45 +25,19 @@ export class AuthService implements OnDestroy {
     }
   }
 
-  login(login: string, password: string): Observable<User> {
-    const payload = {
-      login: login,
-      password: password,
-    };
+  isUserAllowed(roleRouteData: UserAllowTerms): boolean {
+    let allowed = true;
 
-    const apiEndpoint = environment.apiEndpoint;
+    if (allowed && roleRouteData.allowScopes) {
+      allowed = this.isUserAllowedByScopes(roleRouteData.allowScopes);
+    }
 
-    return this.httpClient.post<User>(`${apiEndpoint}/auth/login`, payload);
+    if (allowed && roleRouteData.allowRoles) {
+      allowed = this.isUserAllowedByRoles(roleRouteData.allowRoles);
+    }
+
+    return allowed;
   }
-
-  loginViaErli(tenantId: string): Observable<{ access_token: string }> {
-    const apiEndpoint = environment.apiEndpoint;
-
-    return this.httpClient.get<{ access_token: string }>(`${apiEndpoint}/auth/login-erli?tenantId=${tenantId}`);
-  }
-
-  logout(): Observable<any> {
-    // localStorage.removeItem('access_token');
-    // localStorage.removeItem('user');
-    // localStorage.removeItem("expires_at");
-
-    return of({});
-  }
-
-  public isLoggedIn(): boolean {
-    return localStorage.getItem('access_token') === null;
-    // return moment().isBefore(this.getExpiration());
-  }
-
-  public isLoggedOut(): boolean {
-    return !this.isLoggedIn();
-  }
-
-  // getExpiration() {
-  //   const expiration = localStorage.getItem('expires_at');
-  //   const expiresAt = JSON.parse(expiration);
-  //   return moment(expiresAt);
-  // }
 
   public isUserAllowedByScopes(scopes: number[]): boolean {
     if (!scopes) {
@@ -85,5 +45,17 @@ export class AuthService implements OnDestroy {
     }
 
     return scopes.filter(scope => scope != null).some(scope => this.userScopes.includes(scope));
+  }
+
+  public isUserAllowedByRoles(roles: AuthRoles[]): boolean {
+    if (this.userRoles.includes(AuthRoles.MasterAdmin)) {
+      return true;
+    }
+
+    if (!roles) {
+      return false;
+    }
+
+    return roles.filter(scope => scope != null).some(scope => this.userRoles.includes(scope));
   }
 }

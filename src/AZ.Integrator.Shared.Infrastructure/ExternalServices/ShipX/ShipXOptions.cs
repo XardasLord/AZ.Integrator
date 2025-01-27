@@ -1,6 +1,6 @@
 ﻿namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
 
-internal class ShipXOptions
+public class ShipXOptions
 {
     public string AccessToken { get; set; }
     public string ApiUrl { get; set; }

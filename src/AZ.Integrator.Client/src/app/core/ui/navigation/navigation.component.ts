@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { RoutePaths } from '../../modules/app-routing.module';
-import { AuthScopes } from '../../../shared/auth/models/auth.scopes';
 import { environment } from '../../../../environments/environment';
+import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 
 @Component({
   selector: 'app-navigation',
@@ -13,7 +13,7 @@ export class NavigationComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
   RoutePaths = RoutePaths;
-  AuthScopes = AuthScopes;
+  AuthRoles = AuthRoles;
 
   get appVersion() {
     return environment.version;

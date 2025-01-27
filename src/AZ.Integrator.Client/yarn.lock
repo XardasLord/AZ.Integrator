@@ -7909,6 +7909,18 @@ karma@~6.4.3:
     ua-parser-js "^0.7.30"
     yargs "^16.1.1"
 
+keycloak-angular@^16.1.0:
+  version "16.1.0"
+  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-16.1.0.tgz#50cabab7508be2f1e88eea1c61d0996bb3791918"
+  integrity sha512-y2Eow2mISE0tY+ZOGzgiDISJ69faInYyV1ONwv+8mzU9Rn0xMPEjw7rQCRm9XsyFZiqM0LLucx9m73FCnl4wAg==
+  dependencies:
+    tslib "^2.3.1"
+
+keycloak-js@^26.0.7:
+  version "26.0.7"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-26.0.7.tgz#2025256f7c519df654240648052ea06344e2377e"
+  integrity sha512-vKCk1ISMiouYRLjMzi5fKp58RnYxKEBS29BoDgVfYwVW94IXchj9jLqBvIet31VD1v79l3WaWT+WMX7fH8O4wA==
+
 kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"

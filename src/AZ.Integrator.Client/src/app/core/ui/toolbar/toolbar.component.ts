@@ -1,9 +1,15 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { LoginViaErli, Logout } from '../../../shared/states/auth.action';
+import { KeycloakService } from 'keycloak-angular';
 import { AuthState } from '../../../shared/states/auth.state';
 import { environment } from '../../../../environments/environment';
 import { AuthorizationProvider, Tenant } from '../../../shared/auth/models/tenant.model';
+import { ChangeTenant } from '../../../shared/states/tenant.action';
+import { RoutePaths } from '../../modules/app-routing.module';
+import { LoadNew } from '../../../features/orders/states/orders.action';
+import { LoadProductTags } from '../../../features/package-templates/states/parcel-templates.action';
+import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 
 @Component({
   selector: 'app-toolbar',
@@ -13,7 +19,7 @@ import { AuthorizationProvider, Tenant } from '../../../shared/auth/models/tenan
 export class ToolbarComponent {
   @Output()
   toggleSideNav: EventEmitter<boolean> = new EventEmitter();
-  user$ = this.store.select(AuthState.getUser);
+  user$ = this.store.select(AuthState.getProfile);
 
   tenants: Tenant[] = [
     {
@@ -42,21 +48,38 @@ export class ToolbarComponent {
     },
   ];
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private route: Router,
+    private keycloak: KeycloakService
+  ) {}
 
   toggleMenu(): void {
     this.toggleSideNav.emit(true);
   }
 
-  login(tenant: Tenant) {
-    this.store.dispatch(new Logout());
+  changeTenant(tenant: Tenant) {
+    this.store.dispatch(new ChangeTenant(tenant));
 
-    if (tenant.authorizationProvider === AuthorizationProvider.Allegro) {
-      window.location.href = `${environment.allegroLoginEndpoint}${tenant.tenantId}`;
-    } else if (tenant.authorizationProvider === AuthorizationProvider.Erli) {
-      this.store.dispatch(new LoginViaErli(tenant.tenantId));
+    switch (this.route.url) {
+      case `/${RoutePaths.Orders}`:
+        this.store.dispatch(new LoadNew());
+        return;
+      case `/${RoutePaths.ParcelTemplates}`:
+        this.store.dispatch(new LoadProductTags());
+        return;
     }
+
+    // TODO: This can be moved to a MASTER_ADMIN role functionality to get access token for the tenant
+    // if (tenant.authorizationProvider === AuthorizationProvider.Allegro) {
+    //   window.location.href = `${environment.allegroLoginEndpoint}${tenant.tenantId}`;
+    // }
+  }
+
+  logout() {
+    this.keycloak.logout();
   }
 
   protected readonly environment = environment;
+  protected readonly AuthRoles = AuthRoles;
 }

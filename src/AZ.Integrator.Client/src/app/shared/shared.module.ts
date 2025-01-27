@@ -15,9 +15,10 @@ import { ProgressSpinnerComponent } from './components/progress-spinner/progress
 import { ProgressSpinnerService } from './services/progress-spinner.service';
 import { DownloadService } from './services/download.service';
 import { DebounceDirective } from './directives/debounce.directive';
+import { AuthRoleAllowDirective } from './auth/directives/auth-role-allow.directive';
 
 @NgModule({
-  declarations: [AuthScopeAllowDirective, ProgressSpinnerComponent, DebounceDirective],
+  declarations: [AuthScopeAllowDirective, AuthRoleAllowDirective, ProgressSpinnerComponent, DebounceDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -36,6 +37,7 @@ import { DebounceDirective } from './directives/debounce.directive';
     HttpClientModule,
     ToastrModule,
     AuthScopeAllowDirective,
+    AuthRoleAllowDirective,
     ProgressSpinnerComponent,
     NgOptimizedImage,
     DebounceDirective,

@@ -20,17 +20,17 @@ public class Invoice : Entity, IAggregateRoot
     
     private Invoice() { }
 
-    private Invoice(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private Invoice(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _externalId = externalId;
         _number = number;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, currentUser.TenantId);
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
     }
 
-    public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalExternalOrderNumber, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalExternalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var invoice = new Invoice(externalId, number, externalExternalOrderNumber, currentUser, currentDateTime);
+        var invoice = new Invoice(externalId, number, externalExternalOrderNumber, tenantId, currentUser, currentDateTime);
         
         invoice.AddDomainEvent(new InvoiceCreated(externalId, number, externalExternalOrderNumber));
         

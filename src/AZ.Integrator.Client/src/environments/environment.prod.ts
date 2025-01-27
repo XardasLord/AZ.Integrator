@@ -8,12 +8,11 @@ export const environment = {
 
   // Tenants
   allegroLoginEndpoint: 'http://SERWER:6010/api/auth/login-allegro?tenantId=',
-  erliLoginEndpoint: 'http://SERWER:6010/api/auth/login-erli?tenantId=',
 
-  allegroAzTeamTenantId: 'az-team',
-  allegroMebleplTenantId: 'meblepl',
-  allegroMyTestTenantId: 'my-test',
-  erliAzTeamTenantId: 'az-team',
+  allegroAzTeamTenantId: 'allegro-az-team',
+  allegroMebleplTenantId: 'allegro-meblepl',
+  allegroMyTestTenantId: 'allegro-my-test',
+  erliAzTeamTenantId: 'erli-az-team',
 
   showMyTestAccounts: false,
 };
