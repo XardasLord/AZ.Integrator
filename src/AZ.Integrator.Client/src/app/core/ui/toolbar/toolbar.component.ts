@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthState } from '../../../shared/states/auth.state';
 import { environment } from '../../../../environments/environment';
-import { AuthorizationProvider, Tenant } from '../../../shared/auth/models/tenant.model';
+import { AuthorizationProvider, Tenant, TenantGroup } from '../../../shared/auth/models/tenant.model';
 import { ChangeTenant } from '../../../shared/states/tenant.action';
 import { RoutePaths } from '../../modules/app-routing.module';
 import { LoadNew } from '../../../features/orders/states/orders.action';
@@ -21,30 +21,40 @@ export class ToolbarComponent {
   toggleSideNav: EventEmitter<boolean> = new EventEmitter();
   user$ = this.store.select(AuthState.getProfile);
 
-  tenants: Tenant[] = [
+  tenantGroups: TenantGroup[] = [
     {
-      tenantId: environment.allegroAzTeamTenantId,
-      displayName: 'ALLEGRO - AZ TEAM',
-      authorizationProvider: AuthorizationProvider.Allegro,
-      isTestAccount: false,
+      groupName: 'Allegro',
+      tenants: [
+        {
+          tenantId: environment.allegroAzTeamTenantId,
+          displayName: 'AZ TEAM',
+          authorizationProvider: AuthorizationProvider.Allegro,
+          isTestAccount: false,
+        },
+        {
+          tenantId: environment.allegroMebleplTenantId,
+          displayName: 'meblepl_24',
+          authorizationProvider: AuthorizationProvider.Allegro,
+          isTestAccount: false,
+        },
+        {
+          tenantId: environment.allegroMyTestTenantId,
+          displayName: 'MY TEST',
+          authorizationProvider: AuthorizationProvider.Allegro,
+          isTestAccount: true,
+        },
+      ],
     },
     {
-      tenantId: environment.allegroMebleplTenantId,
-      displayName: 'ALLEGRO - meblepl_24',
-      authorizationProvider: AuthorizationProvider.Allegro,
-      isTestAccount: false,
-    },
-    {
-      tenantId: environment.allegroMyTestTenantId,
-      displayName: 'ALLEGRO - MY TEST',
-      authorizationProvider: AuthorizationProvider.Allegro,
-      isTestAccount: true,
-    },
-    {
-      tenantId: environment.erliAzTeamTenantId,
-      displayName: 'ERLI - AZ TEAM',
-      authorizationProvider: AuthorizationProvider.Erli,
-      isTestAccount: false,
+      groupName: 'ERLI',
+      tenants: [
+        {
+          tenantId: environment.erliAzTeamTenantId,
+          displayName: 'AZ TEAM',
+          authorizationProvider: AuthorizationProvider.Erli,
+          isTestAccount: false,
+        },
+      ],
     },
   ];
 

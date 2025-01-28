@@ -1,6 +1,7 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Stock;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
@@ -31,7 +32,10 @@ internal class IntegratorQuery
     [UseProjection]
     [UseFiltering]
     public IQueryable<TagParcelTemplateViewModel> GetTagParcelTemplates([Service] TagParcelTemplateDataViewContext dataViewContext) 
-        => dataViewContext.TagParcelTemplates
-            // .Where(x => x.TenantId == _currentUser.TenantId)
-            .AsQueryable();
+        => dataViewContext.TagParcelTemplates.AsQueryable();
+
+    [UseProjection]
+    [UseFiltering]
+    public IQueryable<StockViewModel> GetStocks([Service] StockDataViewContext dataViewContext) 
+        => dataViewContext.Stocks.AsQueryable();
 }

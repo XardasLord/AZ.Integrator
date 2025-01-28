@@ -5,6 +5,11 @@ export class Tenant {
   public isTestAccount!: boolean;
 }
 
+export class TenantGroup {
+  public groupName!: string;
+  public tenants!: Tenant[];
+}
+
 export enum AuthorizationProvider {
   Allegro = 1,
   Erli = 2,

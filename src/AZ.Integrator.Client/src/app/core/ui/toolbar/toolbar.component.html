@@ -10,10 +10,14 @@
     <mat-form-field class="mt-5" *appRoleAllow="[AuthRoles.Admin]">
       <mat-label>Wybierz sklep</mat-label>
       <mat-select (selectionChange)="changeTenant($event.value)">
-        @for (tenant of tenants; track tenant) {
-          <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
-            <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
-          </ng-container>
+        @for (group of tenantGroups; track group) {
+          <mat-optgroup [label]="group.groupName">
+            @for (tenant of group.tenants; track tenant) {
+              <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
+                <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
+              </ng-container>
+            }
+          </mat-optgroup>
         }
       </mat-select>
     </mat-form-field>
