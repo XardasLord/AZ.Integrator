@@ -106,6 +106,7 @@ export type IntegratorQuery = {
   inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
   invoices?: Maybe<Array<Maybe<InvoiceViewModel>>>;
   shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
+  stocks?: Maybe<Array<Maybe<StockViewModel>>>;
   tagParcelTemplates?: Maybe<Array<Maybe<TagParcelTemplateViewModel>>>;
 };
 
@@ -130,6 +131,11 @@ export type IntegratorQueryShipmentsArgs = {
 };
 
 
+export type IntegratorQueryStocksArgs = {
+  where?: InputMaybe<StockViewModelFilterInput>;
+};
+
+
 export type IntegratorQueryTagParcelTemplatesArgs = {
   where?: InputMaybe<TagParcelTemplateViewModelFilterInput>;
 };
@@ -149,6 +155,13 @@ export type InvoiceViewModelFilterInput = {
   invoiceId?: InputMaybe<LongOperationFilterInput>;
   invoiceNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
+};
+
+export type ListFilterInputTypeOfStockLogViewModelFilterInput = {
+  all?: InputMaybe<StockLogViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<StockLogViewModelFilterInput>;
+  some?: InputMaybe<StockLogViewModelFilterInput>;
 };
 
 export type ListFilterInputTypeOfTagParcelViewModelFilterInput = {
@@ -188,6 +201,40 @@ export type ShipmentViewModelFilterInput = {
   or?: InputMaybe<Array<ShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
   shipmentProvider?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type StockLogViewModel = {
+  __typename?: 'StockLogViewModel';
+  changeQuantity: Scalars['Int']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  createdBy?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  packageCode?: Maybe<Scalars['String']['output']>;
+};
+
+export type StockLogViewModelFilterInput = {
+  and?: InputMaybe<Array<StockLogViewModelFilterInput>>;
+  changeQuantity?: InputMaybe<IntOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdBy?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<StockLogViewModelFilterInput>>;
+  packageCode?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type StockViewModel = {
+  __typename?: 'StockViewModel';
+  logs?: Maybe<Array<Maybe<StockLogViewModel>>>;
+  packageCode?: Maybe<Scalars['String']['output']>;
+  quantity: Scalars['Int']['output'];
+};
+
+export type StockViewModelFilterInput = {
+  and?: InputMaybe<Array<StockViewModelFilterInput>>;
+  logs?: InputMaybe<ListFilterInputTypeOfStockLogViewModelFilterInput>;
+  or?: InputMaybe<Array<StockViewModelFilterInput>>;
+  packageCode?: InputMaybe<StringOperationFilterInput>;
+  quantity?: InputMaybe<IntOperationFilterInput>;
 };
 
 export type StringOperationFilterInput = {

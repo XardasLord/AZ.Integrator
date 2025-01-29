@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { mapToCanActivate, RouterModule, Routes } from '@angular/router';
+import { provideStates } from '@ngxs/store';
 import { NavigationComponent } from '../ui/navigation/navigation.component';
 import { LoginCompletedComponent } from '../ui/login-completed/login-completed.component';
 import { AuthGuard } from '../guards/auth.guard';
@@ -7,6 +8,8 @@ import { RouteAuthVo } from '../../shared/auth/models/route-auth.vo';
 import { AuthRoles } from '../../shared/auth/models/auth.roles';
 import { NotAuthorizedComponent } from '../ui/not-authorized/not-authorized.component';
 import { HomeComponent } from '../ui/home/home.component';
+import { StocksState } from '../../features/stocks/states/stocks.state';
+import { StocksService } from '../../features/stocks/services/stocks.service';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -16,6 +19,7 @@ export const RoutePaths = {
   Home: 'home',
   Orders: 'orders',
   ParcelTemplates: 'parcel-templates',
+  Stocks: 'stocks',
 };
 
 const routes: Routes = [
@@ -56,6 +60,15 @@ const routes: Routes = [
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],
         }),
+      },
+      {
+        path: RoutePaths.Stocks,
+        loadComponent: () => import('../../features/stocks/pages/stocks/stocks.component').then(c => c.StocksComponent),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.Admin],
+        }),
+        providers: [provideStates([StocksState]), StocksService],
       },
     ],
   },

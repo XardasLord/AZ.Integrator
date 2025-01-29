@@ -18,6 +18,10 @@
         <mat-icon matListItemIcon>inventory</mat-icon>
         <span matListItemTitle *ngIf="sidenav.opened">Szablony paczek</span>
       </mat-list-item>
+      <mat-list-item [routerLink]="RoutePaths.Stocks" routerLinkActive="active-route" *appRoleAllow="[AuthRoles.Admin]">
+        <mat-icon matListItemIcon>package_2</mat-icon>
+        <span matListItemTitle *ngIf="sidenav.opened">Stany magazynowe</span>
+      </mat-list-item>
     </mat-nav-list>
 
     <div class="absolute bottom-[10px] left-[50px]">
