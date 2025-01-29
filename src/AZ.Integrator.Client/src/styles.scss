@@ -1,8 +1,5 @@
 @use 'styles/variables.scss' as *;
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use 'tailwindcss' as *;
 
 
 html, body { height: 100%; }
