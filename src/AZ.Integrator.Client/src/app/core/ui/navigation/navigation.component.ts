@@ -5,9 +5,10 @@ import { environment } from '../../../../environments/environment';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 
 @Component({
-  selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss'],
+    selector: 'app-navigation',
+    templateUrl: './navigation.component.html',
+    styleUrls: ['./navigation.component.scss'],
+    standalone: false
 })
 export class NavigationComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;

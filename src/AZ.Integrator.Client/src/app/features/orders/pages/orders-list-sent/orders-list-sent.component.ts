@@ -9,9 +9,10 @@ import { ChangePage, GenerateDpdLabel, GenerateInpostLabel, LoadSent, SetCurrent
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 
 @Component({
-  selector: 'app-orders-list-sent',
-  templateUrl: './orders-list-sent.component.html',
-  styleUrls: ['./orders-list-sent.component.scss'],
+    selector: 'app-orders-list-sent',
+    templateUrl: './orders-list-sent.component.html',
+    styleUrls: ['./orders-list-sent.component.scss'],
+    standalone: false
 })
 export class OrdersListSentComponent implements OnInit {
   displayedColumns: string[] = [

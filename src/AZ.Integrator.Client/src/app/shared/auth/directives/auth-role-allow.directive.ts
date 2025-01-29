@@ -5,7 +5,8 @@ import { Store } from '@ngxs/store';
 import { KeycloakService } from 'keycloak-angular';
 
 @Directive({
-  selector: '[appRoleAllow]',
+    selector: '[appRoleAllow]',
+    standalone: false
 })
 export class AuthRoleAllowDirective {
   private inputRoles: AuthRoles[] | undefined;

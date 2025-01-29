@@ -17,9 +17,10 @@ import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
 import { OrderDetailsModel } from '../../models/order-details.model';
 
 @Component({
-  selector: 'app-register-shipment-modal',
-  templateUrl: './register-shipment-modal.component.html',
-  styleUrls: ['./register-shipment-modal.component.scss'],
+    selector: 'app-register-shipment-modal',
+    templateUrl: './register-shipment-modal.component.html',
+    styleUrls: ['./register-shipment-modal.component.scss'],
+    standalone: false
 })
 export class RegisterShipmentModalComponent {
   form: FormGroup<RegisterParcelFormGroupModel>;

@@ -5,9 +5,10 @@ import { ParcelTemplatesState } from '../../states/parcel-templates.state';
 import { ChangePage, LoadProductTags, OpenPackageTemplateDefinitionModal } from '../../states/parcel-templates.action';
 
 @Component({
-  selector: 'app-parcel-templates-list',
-  templateUrl: './parcel-templates-list.component.html',
-  styleUrls: ['./parcel-templates-list.component.scss'],
+    selector: 'app-parcel-templates-list',
+    templateUrl: './parcel-templates-list.component.html',
+    styleUrls: ['./parcel-templates-list.component.scss'],
+    standalone: false
 })
 export class ParcelTemplatesListComponent implements OnInit {
   displayedColumns: string[] = ['signatures', 'actions'];

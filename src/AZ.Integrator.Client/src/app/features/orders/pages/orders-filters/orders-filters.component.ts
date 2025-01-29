@@ -5,9 +5,10 @@ import { ApplyFilter } from '../../states/orders.action';
 import { OrdersState } from '../../states/orders-state.service';
 
 @Component({
-  selector: 'app-orders-filters',
-  templateUrl: './orders-filters.component.html',
-  styleUrls: ['./orders-filters.component.scss'],
+    selector: 'app-orders-filters',
+    templateUrl: './orders-filters.component.html',
+    styleUrls: ['./orders-filters.component.scss'],
+    standalone: false
 })
 export class OrdersFiltersComponent {
   searchText$: Observable<string> = this.store.select(OrdersState.getSearchText);

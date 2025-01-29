@@ -3,7 +3,8 @@ import { Subscription, fromEvent, Subject, Observable } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Directive({
-	selector: 'input[appDebounce]'
+    selector: 'input[appDebounce]',
+    standalone: false
 })
 export class DebounceDirective implements OnInit, OnDestroy {
 	@Output() public valueChanged: Observable<string>;

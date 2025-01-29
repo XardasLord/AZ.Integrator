@@ -6,9 +6,10 @@ import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { RoutePaths } from '../../modules/app-routing.module';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
 export class HomeComponent {
   constructor(private store: Store) {}

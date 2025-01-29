@@ -2,7 +2,8 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 
 @Directive({
-  selector: '[appScopeAllow]',
+    selector: '[appScopeAllow]',
+    standalone: false
 })
 export class AuthScopeAllowDirective {
   private inputScopes: number[] | undefined;

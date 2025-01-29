@@ -11,9 +11,10 @@ import { SaveParcelTemplateCommand } from '../../models/commands/save-parcel-tem
 import { SavePackageTemplate } from '../../states/parcel-templates.action';
 
 @Component({
-  selector: 'app-parcel-template-definition-modal',
-  templateUrl: './parcel-template-definition-modal.component.html',
-  styleUrls: ['./parcel-template-definition-modal.component.scss'],
+    selector: 'app-parcel-template-definition-modal',
+    templateUrl: './parcel-template-definition-modal.component.html',
+    styleUrls: ['./parcel-template-definition-modal.component.scss'],
+    standalone: false
 })
 export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
   form: FormGroup<TemplateParcelFormGroupModel>;

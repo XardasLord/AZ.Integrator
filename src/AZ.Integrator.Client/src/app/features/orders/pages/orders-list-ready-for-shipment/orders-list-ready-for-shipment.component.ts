@@ -20,9 +20,10 @@ import { InvoicesState } from '../../states/invoices.state';
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
 
 @Component({
-  selector: 'app-orders-list-ready-for-shipment',
-  templateUrl: './orders-list-ready-for-shipment.component.html',
-  styleUrls: ['./orders-list-ready-for-shipment.component.scss'],
+    selector: 'app-orders-list-ready-for-shipment',
+    templateUrl: './orders-list-ready-for-shipment.component.html',
+    styleUrls: ['./orders-list-ready-for-shipment.component.scss'],
+    standalone: false
 })
 export class OrdersListReadyForShipmentComponent implements OnInit {
   displayedColumns: string[] = [

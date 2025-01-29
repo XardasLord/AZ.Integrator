@@ -15,9 +15,10 @@ import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.m
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
 
 @Component({
-  selector: 'app-orders-list-new',
-  templateUrl: './orders-list-new.component.html',
-  styleUrls: ['./orders-list-new.component.scss'],
+    selector: 'app-orders-list-new',
+    templateUrl: './orders-list-new.component.html',
+    styleUrls: ['./orders-list-new.component.scss'],
+    standalone: false
 })
 export class OrdersListNewComponent implements OnInit {
   displayedColumns: string[] = [

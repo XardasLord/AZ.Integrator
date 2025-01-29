@@ -5,9 +5,10 @@ import { Login } from '../../../../shared/states/auth.action';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent {
   form: FormGroup;

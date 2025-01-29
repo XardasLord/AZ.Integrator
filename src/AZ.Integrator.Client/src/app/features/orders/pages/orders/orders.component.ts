@@ -4,9 +4,10 @@ import { Store } from '@ngxs/store';
 import { LoadNew, LoadReadyForShipment, LoadSent } from '../../states/orders.action';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.scss'],
+    selector: 'app-orders',
+    templateUrl: './orders.component.html',
+    styleUrls: ['./orders.component.scss'],
+    standalone: false
 })
 export class OrdersComponent {
   @ViewChild('tabGroup') tabGroup!: MatTabGroup;

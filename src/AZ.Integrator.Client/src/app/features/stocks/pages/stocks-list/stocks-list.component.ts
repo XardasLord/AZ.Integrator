@@ -8,10 +8,10 @@ import { StocksState } from '../../states/stocks.state';
 
 @Component({
   selector: 'app-stocks-list',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './stocks-list.component.html',
   styleUrl: './stocks-list.component.scss',
+  standalone: true,
 })
 export class StocksListComponent implements OnInit {
   stocks$: Observable<StockViewModel[]> = this.store.select(StocksState.getStocks);
