@@ -7,6 +7,9 @@ services:
       - Infrastructure__Postgres__ConnectionStringApplication=Server=db;Port=5432;Database=integrator;Username=postgres;Password=postgres;
       - Infrastructure__Postgres__ConnectionStringHangfire=Server=db;Port=5432;Database=integrator;Username=postgres;Password=postgres;
       - Infrastructure__Allegro__RedirectUri=http://host.docker.internal:6010/auth/allegro-auth-callback
+      - Infrastructure__Keycloak__Authority=http://host.docker.internal:9080/realms/az-integrator
+      - Infrastructure__Keycloak__AuthorizationUrl=http://host.docker.internal:9080/realms/az-integrator/protocol/openid-connect/auth
+      - Infrastructure__Keycloak__TokenUrl=http://host.docker.internal:9080/realms/az-integrator/protocol/openid-connect/token
     ports:
       - "80"
 

@@ -4,13 +4,13 @@
   @for (stock of stocks$ | async; track stock.packageCode) {
     <div class="bg-white rounded-lg shadow-sm mb-2">
       <mat-list class="divide-y divide-gray-200">
-        <mat-list-item role="listitem" class="flex justify-between items-center p-4 hover:bg-gray-50">
-          <span class="font-medium text-gray-700">{{ stock.packageCode }}</span>
-          <span class="text-sm text-gray-500">{{ stock.quantity }}</span>
+        <mat-list-item role="listitem" class="grid grid-cols-2 gap-4 p-4 hover:bg-gray-50">
+          <span class="block font-medium text-gray-700">{{ stock.packageCode }}</span>
+          <span class="text-gray-500">{{ stock.quantity }}</span>
         </mat-list-item>
       </mat-list>
     </div>
   } @empty {
-    <div class="text-center text-gray-500 py-6">Nie ma dodanych żadnych towarów na stanie magazynowym.</div>
+    <div class="text-center text-gray-500 py-6">Nie ma dodanych żadnych paczek na stanie magazynowym.</div>
   }
 </div>
