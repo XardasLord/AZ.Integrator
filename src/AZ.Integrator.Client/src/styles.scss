@@ -1,6 +1,5 @@
-@use 'styles/variables.scss' as *;
 @use 'tailwindcss' as *;
-
+@use 'styles/variables.scss' as *;
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

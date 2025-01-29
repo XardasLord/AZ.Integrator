@@ -1,12 +1,19 @@
 <div class="p-4 bg-gray-100 rounded-md shadow-md">
-  <h2 class="text-lg font-semibold text-gray-800 mb-4">Stan magazynowy</h2>
+  <h2 class="text-lg font-semibold text-gray-800 mb-4">Stany magazynowe</h2>
 
   @for (stock of stocks$ | async; track stock.packageCode) {
     <div class="bg-white rounded-lg shadow-sm mb-2">
       <mat-list class="divide-y divide-gray-200">
-        <mat-list-item role="listitem" class="grid grid-cols-2 gap-4 p-4 hover:bg-gray-50">
-          <span class="block font-medium text-gray-700">{{ stock.packageCode }}</span>
-          <span class="text-gray-500">{{ stock.quantity }}</span>
+        <mat-list-item class="grid grid-cols-2 items-center gap-4 p-4 hover:bg-gray-50">
+          <div class="flex items-center gap-2">
+            <span class="font-medium text-gray-700">{{ stock.packageCode }}</span>
+
+            @if (stock.quantity < stockWarningThreshold) {
+              <mat-icon class="!text-orange-500" matTooltip="Mało towaru na stanie magazynowym">warning</mat-icon>
+            }
+          </div>
+
+          <span class="text-gray-500 text-right">{{ stock.quantity }}</span>
         </mat-list-item>
       </mat-list>
     </div>

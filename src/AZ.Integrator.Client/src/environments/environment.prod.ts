@@ -15,4 +15,7 @@ export const environment = {
   erliAzTeamTenantId: 'erli-az-team',
 
   showMyTestAccounts: false,
+
+  // Stocks
+  stockWarningThreshold: 20,
 };
