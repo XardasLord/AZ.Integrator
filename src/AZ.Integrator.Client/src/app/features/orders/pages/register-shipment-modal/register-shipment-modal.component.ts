@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
@@ -23,16 +23,18 @@ import { OrderDetailsModel } from '../../models/order-details.model';
     standalone: false
 })
 export class RegisterShipmentModalComponent {
+  dialogRef = inject<MatDialogRef<RegisterShipmentModalComponent>>(MatDialogRef);
+  data = inject<RegisterShipmentDataModel>(MAT_DIALOG_DATA);
+  private fb = inject(FormBuilder);
+  private store = inject(Store);
+  private tagParcelTemplatesGql = inject(GetTagParcelTemplatesGQL);
+
   form: FormGroup<RegisterParcelFormGroupModel>;
   minOrderValueValidator: ValidatorFn = Validators.min(this.data.order.summary.totalToPay.amount);
 
-  constructor(
-    public dialogRef: MatDialogRef<RegisterShipmentModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RegisterShipmentDataModel,
-    private fb: FormBuilder,
-    private store: Store,
-    private tagParcelTemplatesGql: GetTagParcelTemplatesGQL
-  ) {
+  constructor() {
+    const data = this.data;
+
     const orderDetails = data.order;
 
     this.form = this.fb.group<RegisterParcelFormGroupModel>({

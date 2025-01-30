@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { SharedModule } from '../../../../shared/shared.module';
@@ -12,9 +12,9 @@ import { ApplyFilter } from '../../states/stocks.action';
     styleUrl: './stocks-filters.component.scss'
 })
 export class StocksFiltersComponent {
-  searchText$: Observable<string> = this.store.select(StocksState.getSearchText);
+  private store = inject(Store);
 
-  constructor(private store: Store) {}
+  searchText$: Observable<string> = this.store.select(StocksState.getSearchText);
 
   searchTextChanged(searchText: string) {
     this.store.dispatch(new ApplyFilter(searchText));

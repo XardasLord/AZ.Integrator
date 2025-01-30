@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { catchError, of, switchMap, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -21,12 +21,11 @@ const INVOICES_STATE_TOKEN = new StateToken<InvoicesStateModel>('invoices');
 })
 @Injectable()
 export class InvoicesState {
-  constructor(
-    private invoicesService: InvoicesService,
-    private downloadService: DownloadService,
-    private zone: NgZone,
-    private toastService: ToastrService
-  ) {}
+  private invoicesService = inject(InvoicesService);
+  private downloadService = inject(DownloadService);
+  private zone = inject(NgZone);
+  private toastService = inject(ToastrService);
+
 
   @Selector([INVOICES_STATE_TOKEN])
   static getInvoices(state: InvoicesStateModel): InvoiceViewModel[] {

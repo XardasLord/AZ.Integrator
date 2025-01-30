@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
 import { StocksStateModel } from './stocks.state.model';
@@ -21,7 +21,8 @@ const STOCKS_STATE_TOKEN = new StateToken<StocksStateModel>('stocks');
 })
 @Injectable()
 export class StocksState {
-  constructor(private stocksService: StocksService) {}
+  private stocksService = inject(StocksService);
+
 
   @Selector([STOCKS_STATE_TOKEN])
   static getStocks(state: StocksStateModel): StockViewModel[] {

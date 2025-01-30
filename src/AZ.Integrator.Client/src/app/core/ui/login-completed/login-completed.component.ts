@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { LoginCompleted } from '../../../shared/states/auth.action';
 
@@ -9,7 +9,8 @@ import { LoginCompleted } from '../../../shared/states/auth.action';
     standalone: false
 })
 export class LoginCompletedComponent implements OnInit {
-  constructor(private store: Store) {}
+  private store = inject(Store);
+
 
   ngOnInit(): void {
     this.store.dispatch(new LoginCompleted());

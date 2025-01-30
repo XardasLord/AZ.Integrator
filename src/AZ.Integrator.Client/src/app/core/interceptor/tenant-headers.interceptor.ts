@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -6,7 +6,8 @@ import { TenantState } from '../../shared/states/tenant.state';
 
 @Injectable()
 export class TenantHeadersInterceptor implements HttpInterceptor {
-  constructor(private store: Store) {}
+  private store = inject(Store);
+
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const tenant = this.store.selectSnapshot(TenantState.getTenant);

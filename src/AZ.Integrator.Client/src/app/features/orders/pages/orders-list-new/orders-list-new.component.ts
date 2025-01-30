@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { map, Observable, of } from 'rxjs';
@@ -21,6 +21,8 @@ import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
     standalone: false
 })
 export class OrdersListNewComponent implements OnInit {
+  private store = inject(Store);
+
   displayedColumns: string[] = [
     nameof<LineItemDetails>('boughtAt'),
     nameof<OrderDetailsModel>('buyer'),
@@ -39,8 +41,6 @@ export class OrdersListNewComponent implements OnInit {
   totalItems$ = this.store.select(OrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(OrdersState.getCurrentPage);
   pageSize$ = this.store.select(OrdersState.getPageSize);
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(new SetCurrentTab('New'));

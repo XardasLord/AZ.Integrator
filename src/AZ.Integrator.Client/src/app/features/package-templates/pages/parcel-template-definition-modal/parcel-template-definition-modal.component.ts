@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
@@ -17,15 +17,17 @@ import { SavePackageTemplate } from '../../states/parcel-templates.action';
     standalone: false
 })
 export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
+  dialogRef = inject<MatDialogRef<ParcelTemplateDefinitionModalComponent>>(MatDialogRef);
+  data = inject<ParcelTemplateDefinitionDataModel>(MAT_DIALOG_DATA);
+  private fb = inject(FormBuilder);
+  private store = inject(Store);
+
   form: FormGroup<TemplateParcelFormGroupModel>;
   subscriptions: Subscription = new Subscription();
 
-  constructor(
-    public dialogRef: MatDialogRef<ParcelTemplateDefinitionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ParcelTemplateDefinitionDataModel,
-    private fb: FormBuilder,
-    private store: Store
-  ) {
+  constructor() {
+    const data = this.data;
+
     this.form = this.fb.group<TemplateParcelFormGroupModel>({
       parcels: this.fb.array<FormGroup>([], [Validators.required]),
       additionalInfo: new FormControl<string>(''),

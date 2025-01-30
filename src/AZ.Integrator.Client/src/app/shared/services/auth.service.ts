@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subscription } from 'rxjs';
 import { AuthRoles } from '../auth/models/auth.roles';
@@ -8,14 +8,14 @@ import { KeycloakService } from 'keycloak-angular';
 
 @Injectable()
 export class AuthService implements OnDestroy {
+  private store = inject(Store);
+  private keycloak = inject(KeycloakService);
+
   private readonly roleSubscription: Subscription | undefined;
   private userRoles!: AuthRoles[];
   private userScopes!: number[];
 
-  constructor(
-    private store: Store,
-    private keycloak: KeycloakService
-  ) {
+  constructor() {
     this.userRoles = getAuthRolesFromToken(this.keycloak.getKeycloakInstance().tokenParsed!);
   }
 

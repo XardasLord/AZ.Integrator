@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { catchError, map, Observable, of, tap } from 'rxjs';
@@ -11,10 +11,9 @@ import { NotAuthorized } from '../../shared/states/auth.action';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(
-    private store: Store,
-    private authService: AuthService
-  ) {}
+  private store = inject(Store);
+  private authService = inject(AuthService);
+
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.parseRoute(route);

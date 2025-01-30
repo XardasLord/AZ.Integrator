@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { ParcelTemplatesState } from '../../states/parcel-templates.state';
@@ -11,9 +11,9 @@ import { ApplyFilter } from '../../states/parcel-templates.action';
     standalone: false
 })
 export class ParcelTemplatesFiltersComponent {
-  searchText$: Observable<string> = this.store.select(ParcelTemplatesState.getSearchText);
+  private store = inject(Store);
 
-  constructor(private store: Store) {}
+  searchText$: Observable<string> = this.store.select(ParcelTemplatesState.getSearchText);
 
   searchTextChanged(searchText: string) {
     this.store.dispatch(new ApplyFilter(searchText));

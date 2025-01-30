@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { KeycloakService } from 'keycloak-angular';
@@ -18,6 +18,10 @@ import { AuthRoles } from '../../../shared/auth/models/auth.roles';
     standalone: false
 })
 export class ToolbarComponent {
+  private store = inject(Store);
+  private route = inject(Router);
+  private keycloak = inject(KeycloakService);
+
   @Output()
   toggleSideNav: EventEmitter<boolean> = new EventEmitter();
   user$ = this.store.select(AuthState.getProfile);
@@ -58,12 +62,6 @@ export class ToolbarComponent {
       ],
     },
   ];
-
-  constructor(
-    private store: Store,
-    private route: Router,
-    private keycloak: KeycloakService
-  ) {}
 
   toggleMenu(): void {
     this.toggleSideNav.emit(true);

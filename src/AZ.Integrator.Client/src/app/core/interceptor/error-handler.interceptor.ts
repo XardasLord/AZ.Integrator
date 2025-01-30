@@ -1,14 +1,13 @@
-import { ErrorHandler, Injectable, NgZone } from '@angular/core';
+import { ErrorHandler, Injectable, NgZone, inject } from '@angular/core';
 import { ErrorService } from '../../shared/errors/error.service';
 import { MessageStatusEnum } from '../../shared/errors/message-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(
-    private errorService: ErrorService,
-    private zone: NgZone
-  ) {}
+  private errorService = inject(ErrorService);
+  private zone = inject(NgZone);
+
 
   handleError(error: HttpErrorResponse): void {
     // if (!(error instanceof HttpErrorResponse)) {

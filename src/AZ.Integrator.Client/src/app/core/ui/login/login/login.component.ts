@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Login } from '../../../../shared/states/auth.action';
@@ -11,11 +11,11 @@ import { environment } from '../../../../../environments/environment';
     standalone: false
 })
 export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private store = inject(Store);
+
   form: FormGroup;
-  constructor(
-    private fb: FormBuilder,
-    private store: Store
-  ) {
+  constructor() {
     this.form = this.fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required],

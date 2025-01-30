@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { State, StateToken } from '@ngxs/store';
 import { DictionaryStateModel } from './dictionary.state.model';
 import { DictionaryService } from '../services/dictionary.service';
@@ -21,6 +21,6 @@ export const DICTIONARY_STATE_TOKEN = new StateToken<DictionaryStateModel>('dict
   },
 })
 @Injectable()
-export class DictionaryState {
-  constructor(private dictionaryService: DictionaryService) {}
+export class DictionaryState {  private dictionaryService = inject(DictionaryService);
+
 }

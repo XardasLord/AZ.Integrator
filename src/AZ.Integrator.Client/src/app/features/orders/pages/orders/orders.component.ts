@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Store } from '@ngxs/store';
 import { LoadNew, LoadReadyForShipment, LoadSent } from '../../states/orders.action';
@@ -10,9 +10,9 @@ import { LoadNew, LoadReadyForShipment, LoadSent } from '../../states/orders.act
     standalone: false
 })
 export class OrdersComponent {
-  @ViewChild('tabGroup') tabGroup!: MatTabGroup;
+  private store = inject(Store);
 
-  constructor(private store: Store) {}
+  @ViewChild('tabGroup') tabGroup!: MatTabGroup;
 
   refreshList(): void {
     switch (this.tabGroup.selectedIndex) {

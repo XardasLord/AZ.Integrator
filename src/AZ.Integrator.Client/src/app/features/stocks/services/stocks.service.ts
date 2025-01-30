@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { map, Observable } from 'rxjs';
@@ -10,12 +10,13 @@ import { GetStocksGQL } from '../graphql-queries/get-stocks.graphql.query';
 
 @Injectable()
 export class StocksService extends RemoteServiceBase {
+  private getStocksGql = inject(GetStocksGQL);
+
   private apiUrl = environment.apiEndpoint;
 
-  constructor(
-    httpClient: HttpClient,
-    private getStocksGql: GetStocksGQL
-  ) {
+  constructor() {
+    const httpClient = inject(HttpClient);
+
     super(httpClient);
   }
 

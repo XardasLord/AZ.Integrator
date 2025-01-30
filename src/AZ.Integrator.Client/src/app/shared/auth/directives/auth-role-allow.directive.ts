@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { AuthRoles } from '../models/auth.roles';
 import { Store } from '@ngxs/store';
@@ -9,15 +9,13 @@ import { KeycloakService } from 'keycloak-angular';
     standalone: false
 })
 export class AuthRoleAllowDirective {
-  private inputRoles: AuthRoles[] | undefined;
+  private store = inject(Store);
+  private keycloak = inject(KeycloakService);
+  private templateRef = inject<TemplateRef<any>>(TemplateRef);
+  private viewContainer = inject(ViewContainerRef);
+  private authService = inject(AuthService);
 
-  constructor(
-    private store: Store,
-    private keycloak: KeycloakService,
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private authService: AuthService
-  ) {}
+  private inputRoles: AuthRoles[] | undefined;
 
   @Input()
   set appRoleAllow(allowedRoles: AuthRoles[]) {

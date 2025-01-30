@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { PageEvent } from '@angular/material/paginator';
 import { ParcelTemplatesState } from '../../states/parcel-templates.state';
@@ -11,13 +11,13 @@ import { ChangePage, LoadProductTags, OpenPackageTemplateDefinitionModal } from 
     standalone: false
 })
 export class ParcelTemplatesListComponent implements OnInit {
+  private store = inject(Store);
+
   displayedColumns: string[] = ['signatures', 'actions'];
   productTags$ = this.store.select(ParcelTemplatesState.getProductTags);
   totalItems$ = this.store.select(ParcelTemplatesState.getProductTagsCount);
   currentPage$ = this.store.select(ParcelTemplatesState.getCurrentPage);
   pageSize$ = this.store.select(ParcelTemplatesState.getPageSize);
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(new LoadProductTags());

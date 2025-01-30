@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngxs/store';
@@ -26,6 +26,8 @@ import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
     standalone: false
 })
 export class OrdersListReadyForShipmentComponent implements OnInit {
+  private store = inject(Store);
+
   displayedColumns: string[] = [
     'select',
     'shipmentNumber',
@@ -48,8 +50,6 @@ export class OrdersListReadyForShipmentComponent implements OnInit {
   pageSize$ = this.store.select(OrdersState.getPageSize);
 
   selection = new SelectionModel<OrderDetailsModel>(true, []);
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(new SetCurrentTab('ReadyForShipment'));

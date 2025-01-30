@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
 import { AuthState } from '../../../shared/states/auth.state';
@@ -12,7 +12,8 @@ import { RoutePaths } from '../../modules/app-routing.module';
     standalone: false
 })
 export class HomeComponent {
-  constructor(private store: Store) {}
+  private store = inject(Store);
+
 
   startWorkRedirection() {
     const roles = this.store.selectSnapshot(AuthState.getUserRoles);

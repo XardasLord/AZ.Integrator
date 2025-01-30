@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 
 @Directive({
@@ -6,13 +6,11 @@ import { AuthService } from '../../services/auth.service';
     standalone: false
 })
 export class AuthScopeAllowDirective {
-  private inputScopes: number[] | undefined;
+  private templateRef = inject<TemplateRef<any>>(TemplateRef);
+  private viewContainer = inject(ViewContainerRef);
+  private authService = inject(AuthService);
 
-  constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private authService: AuthService
-  ) {}
+  private inputScopes: number[] | undefined;
 
   @Input()
   set appScopeAllow(allowedScopes: number[]) {
