@@ -22,6 +22,13 @@
         <mat-icon matListItemIcon>warehouse</mat-icon>
         <span matListItemTitle *ngIf="sidenav.opened">Stany magazynowe</span>
       </mat-list-item>
+      <mat-list-item
+        [routerLink]="RoutePaths.BarcodeScanner"
+        routerLinkActive="active-route"
+        *appRoleAllow="[AuthRoles.ScannerIn, AuthRoles.ScannerOut]">
+        <mat-icon matListItemIcon>qr_code_scanner</mat-icon>
+        <span matListItemTitle *ngIf="sidenav.opened">Skanowanie kodów</span>
+      </mat-list-item>
     </mat-nav-list>
 
     <div class="absolute bottom-[10px] left-[50px]">

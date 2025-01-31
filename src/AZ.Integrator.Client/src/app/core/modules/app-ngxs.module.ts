@@ -13,7 +13,6 @@ import { TenantState } from '../../shared/states/tenant.state';
       developmentMode: isDevMode(),
       selectorOptions: {
         suppressErrors: false,
-        injectContainerState: false,
       },
     }),
     NgxsModule.forFeature([]),

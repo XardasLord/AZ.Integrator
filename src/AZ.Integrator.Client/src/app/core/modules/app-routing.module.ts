@@ -10,6 +10,7 @@ import { NotAuthorizedComponent } from '../ui/not-authorized/not-authorized.comp
 import { HomeComponent } from '../ui/home/home.component';
 import { StocksState } from '../../features/stocks/states/stocks.state';
 import { StocksService } from '../../features/stocks/services/stocks.service';
+import { BarcodeScannerState } from '../../features/stocks/states/barcode-scanner.state';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -20,6 +21,7 @@ export const RoutePaths = {
   Orders: 'orders',
   ParcelTemplates: 'parcel-templates',
   Stocks: 'stocks',
+  BarcodeScanner: 'barcode-scanner',
 };
 
 const routes: Routes = [
@@ -69,6 +71,18 @@ const routes: Routes = [
           allowRoles: [AuthRoles.Admin],
         }),
         providers: [provideStates([StocksState]), StocksService],
+      },
+      {
+        path: RoutePaths.BarcodeScanner,
+        loadComponent: () =>
+          import('../../features/stocks/pages/barcode-scanner-page/barcode-scanner-page.component').then(
+            c => c.BarcodeScannerPageComponent
+          ),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.ScannerIn, AuthRoles.ScannerOut],
+        }),
+        providers: [provideStates([BarcodeScannerState]), StocksService],
       },
     ],
   },

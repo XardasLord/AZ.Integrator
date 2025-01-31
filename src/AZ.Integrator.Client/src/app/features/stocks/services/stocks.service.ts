@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { map, Observable } from 'rxjs';
@@ -7,6 +7,7 @@ import { IntegratorQueryStocksArgs, StockViewModel } from '../../../shared/graph
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import { GetStocksGQL } from '../graphql-queries/get-stocks.graphql.query';
+import { ChangeStockQuantityCommand } from '../models/change-stock-quantity.command';
 
 @Injectable()
 export class StocksService extends RemoteServiceBase {
@@ -26,7 +27,12 @@ export class StocksService extends RemoteServiceBase {
       .valueChanges.pipe(map(x => x.data));
   }
 
-  // updateStockQuantity(command: SaveParcelTemplateCommand): Observable<void> {
-  //   return this.httpClient.put<void>(`${this.apiUrl}/parcelTemplates/${command.tag}`, command);
-  // }
+  updateStockQuantity(barcode: string, changeQuantity: number): Observable<void> {
+    const command: ChangeStockQuantityCommand = {
+      packageCode: barcode,
+      changeQuantity: changeQuantity,
+    };
+
+    return this.httpClient.put<void>(`${this.apiUrl}/stocks/${barcode}`, command);
+  }
 }

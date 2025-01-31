@@ -6,15 +6,15 @@ import { StocksState } from '../../states/stocks.state';
 import { ApplyFilter } from '../../states/stocks.action';
 
 @Component({
-    selector: 'app-stocks-filters',
-    imports: [SharedModule],
-    templateUrl: './stocks-filters.component.html',
-    styleUrl: './stocks-filters.component.scss'
+  selector: 'app-stocks-filters',
+  imports: [SharedModule],
+  templateUrl: './stocks-filters.component.html',
+  styleUrl: './stocks-filters.component.scss',
 })
 export class StocksFiltersComponent {
   private store = inject(Store);
 
-  searchText$: Observable<string> = this.store.select(StocksState.getSearchText);
+  searchText$: Observable<string> = this.store.select(StocksState.searchText);
 
   searchTextChanged(searchText: string) {
     this.store.dispatch(new ApplyFilter(searchText));

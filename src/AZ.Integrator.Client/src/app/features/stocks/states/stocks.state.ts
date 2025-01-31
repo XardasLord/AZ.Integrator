@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
 import { StocksStateModel } from './stocks.state.model';
@@ -23,24 +23,23 @@ const STOCKS_STATE_TOKEN = new StateToken<StocksStateModel>('stocks');
 export class StocksState {
   private stocksService = inject(StocksService);
 
-
   @Selector([STOCKS_STATE_TOKEN])
-  static getStocks(state: StocksStateModel): StockViewModel[] {
+  static stocks(state: StocksStateModel): StockViewModel[] {
     return state.stocks;
   }
 
   @Selector([STOCKS_STATE_TOKEN])
-  static getStocksCount(state: StocksStateModel): number {
+  static stocksCount(state: StocksStateModel): number {
     return state.graphqlQueryResponse.result.length;
   }
 
   @Selector([STOCKS_STATE_TOKEN])
-  static getPageSize(state: StocksStateModel): number {
+  static pageSize(state: StocksStateModel): number {
     return state.graphqlQuery.currentPage.pageSize;
   }
 
   @Selector([STOCKS_STATE_TOKEN])
-  static getSearchText(state: StocksStateModel): string {
+  static searchText(state: StocksStateModel): string {
     return state.graphqlQuery.searchText!;
   }
 

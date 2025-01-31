@@ -29,28 +29,14 @@ public class Stock : Entity, IAggregateRoot
     {
         var stock = new Stock(packageCode, 0);
         
-        stock.IncreaseQuantity(changeQuantity, currentUser, currentDateTime);
+        stock.UpdateQuantity(changeQuantity, currentUser, currentDateTime);
 
         return stock;
     }
     
     public void UpdateQuantity(ChangeQuantity changeQuantity, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        if (changeQuantity > 0)
-            IncreaseQuantity(changeQuantity, currentUser, currentDateTime);
-        else
-            DecreaseQuantity(changeQuantity, currentUser, currentDateTime);
-    }
-
-    private void IncreaseQuantity(ChangeQuantity changeQuantity, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
-    {
         _quantity += changeQuantity;
-        _stockLogs.Add(new StockLog(PackageCode, changeQuantity, currentUser.UserName, currentDateTime.CurrentDate()));
-    }
-
-    private void DecreaseQuantity(ChangeQuantity changeQuantity, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
-    {
-        _quantity -= changeQuantity;
         _stockLogs.Add(new StockLog(PackageCode, changeQuantity, currentUser.UserName, currentDateTime.CurrentDate()));
     }
 }

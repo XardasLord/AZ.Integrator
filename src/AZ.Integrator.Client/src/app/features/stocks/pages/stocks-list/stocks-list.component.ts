@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SharedModule } from '../../../../shared/shared.module';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -18,7 +18,7 @@ export class StocksListComponent implements OnInit {
   private store = inject(Store);
 
   stockWarningThreshold = environment.stockWarningThreshold;
-  stocks$: Observable<StockViewModel[]> = this.store.select(StocksState.getStocks);
+  stocks$: Observable<StockViewModel[]> = this.store.select(StocksState.stocks);
 
   ngOnInit(): void {
     this.store.dispatch(new LoadStocks());
