@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { NgxsModule } from '@ngxs/store';
+import { provideStates } from '@ngxs/store';
 import { ToastrModule } from 'ngx-toastr';
 import { MaterialModule } from './modules/material.module';
 import { ErrorService } from './errors/error.service';
@@ -19,22 +19,12 @@ import { AuthRoleAllowDirective } from './auth/directives/auth-role-allow.direct
 
 @NgModule({
   declarations: [AuthScopeAllowDirective, AuthRoleAllowDirective, ProgressSpinnerComponent, DebounceDirective],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    HttpClientModule,
-    NgxsModule.forFeature([DictionaryState]),
-    ToastrModule.forRoot(),
-    NgOptimizedImage,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule, ToastrModule.forRoot(), NgOptimizedImage],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    HttpClientModule,
     ToastrModule,
     AuthScopeAllowDirective,
     AuthRoleAllowDirective,
@@ -43,6 +33,8 @@ import { AuthRoleAllowDirective } from './auth/directives/auth-role-allow.direct
     DebounceDirective,
   ],
   providers: [
+    provideStates([DictionaryState]),
+    provideHttpClient(withInterceptorsFromDi()),
     ErrorService,
     AuthService,
     DictionaryService,

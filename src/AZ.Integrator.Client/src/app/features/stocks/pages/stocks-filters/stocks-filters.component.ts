@@ -10,6 +10,7 @@ import { ApplyFilter } from '../../states/stocks.action';
   imports: [SharedModule],
   templateUrl: './stocks-filters.component.html',
   styleUrl: './stocks-filters.component.scss',
+  standalone: true,
 })
 export class StocksFiltersComponent {
   private store = inject(Store);

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { SharedModule } from '../../../../shared/shared.module';
 import { AuthRoles } from '../../../../shared/auth/models/auth.roles';
 import { BarcodeScannerComponent } from '../barcode-scanner/barcode-scanner.component';
+import { SharedModule } from '../../../../shared/shared.module';
 
 @Component({
   selector: 'app-barcode-scanner-page',

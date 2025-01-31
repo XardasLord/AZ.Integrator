@@ -4,7 +4,6 @@ import { SharedModule } from '../shared/shared.module';
 import { AppRoutingModule } from './modules/app-routing.module';
 import { NavigationComponent } from './ui/navigation/navigation.component';
 import { ToolbarComponent } from './ui/toolbar/toolbar.component';
-import { AppNgxsModule } from './modules/app-ngxs.module';
 import { GlobalErrorHandler } from './interceptor/error-handler.interceptor';
 import { LoginComponent } from './ui/login/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -16,6 +15,7 @@ import { LoginCompletedComponent } from './ui/login-completed/login-completed.co
 import { TenantHeadersInterceptor } from './interceptor/tenant-headers.interceptor';
 import { NotAuthorizedComponent } from './ui/not-authorized/not-authorized.component';
 import { HomeComponent } from './ui/home/home.component';
+import { AppNgxsModule } from './modules/app-ngxs.module';
 
 @NgModule({
   declarations: [

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NgxsModule } from '@ngxs/store';
+import { provideStates } from '@ngxs/store';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { ParcelTemplatesComponent } from './pages/parcel-templates/parcel-templates.component';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -17,12 +17,7 @@ import { ParcelTemplatesFiltersComponent } from './pages/parcel-templates-filter
     ParcelTemplateDefinitionModalComponent,
     ParcelTemplatesFiltersComponent,
   ],
-  imports: [
-    SharedModule,
-    ParcelTemplatesRoutingModule,
-    NgxsFormPluginModule,
-    NgxsModule.forFeature([ParcelTemplatesState]),
-  ],
-  providers: [ParcelTemplatesService],
+  imports: [SharedModule, ParcelTemplatesRoutingModule, NgxsFormPluginModule],
+  providers: [provideStates([ParcelTemplatesState]), ParcelTemplatesService],
 })
 export class ParcelTemplatesModule {}
