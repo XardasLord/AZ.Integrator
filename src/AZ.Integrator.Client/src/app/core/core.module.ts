@@ -15,46 +15,45 @@ import { LoginCompletedComponent } from './ui/login-completed/login-completed.co
 import { TenantHeadersInterceptor } from './interceptor/tenant-headers.interceptor';
 import { NotAuthorizedComponent } from './ui/not-authorized/not-authorized.component';
 import { HomeComponent } from './ui/home/home.component';
-import { AppNgxsModule } from './modules/app-ngxs.module';
 
 @NgModule({
-    imports: [SharedModule, AppRoutingModule, AppNgxsModule, AppGraphQLModule, NavigationComponent,
-        ToolbarComponent,
-        HomeComponent,
-        LoginComponent,
-        LoginCompletedComponent,
-        NotAuthorizedComponent],
-    providers: [
-        AuthGuard,
-        {
-            provide: ErrorHandler,
-            useClass: GlobalErrorHandler,
-        },
-        // {
-        //   provide: HTTP_INTERCEPTORS,
-        //   useClass: AuthInterceptor,
-        //   multi: true,
-        // },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: TenantHeadersInterceptor,
-            multi: true,
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: NoCacheInterceptor,
-            multi: true,
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: UnauthorizedInterceptor,
-            multi: true,
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: LoadingInterceptor,
-            multi: true,
-        },
-    ],
+  imports: [
+    SharedModule,
+    AppRoutingModule,
+    AppGraphQLModule,
+    NavigationComponent,
+    ToolbarComponent,
+    HomeComponent,
+    LoginComponent,
+    LoginCompletedComponent,
+    NotAuthorizedComponent,
+  ],
+  providers: [
+    AuthGuard,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TenantHeadersInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NoCacheInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UnauthorizedInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true,
+    },
+  ],
 })
 export class CoreModule {}
