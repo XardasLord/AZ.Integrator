@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { SharedModule } from '../../../../shared/shared.module';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { SharedModule } from '../../../../shared/shared.module';
 import { DecreaseStock, IncreaseStock, LoadLogs } from '../../states/barcode-scanner.action';
 import { StockLogViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
 
@@ -19,8 +19,8 @@ export class BarcodeScannerComponent implements OnInit {
   @Input() type!: BarcodeScannerType;
 
   barcode: string = '';
-  scannedCodes$!: Observable<StockLogViewModel[]>;
-  // scannedCodes$: Observable<StockLogViewModel[]> = this.store.select(BarcodeScannerState.logs);
+  barcodeScannerLogs$!: Observable<StockLogViewModel[]>;
+  // barcodeScannerLogs$: Observable<StockLogViewModel[]> = this.store.select(BarcodeScannerState.logs);
 
   ngOnInit(): void {
     this.store.dispatch(new LoadLogs());
@@ -40,11 +40,11 @@ export class BarcodeScannerComponent implements OnInit {
     this.barcode = '';
   }
 
-  increaseStock() {
+  private increaseStock() {
     this.store.dispatch(new IncreaseStock(this.barcode.trim(), 1));
   }
 
-  decreaseStock() {
+  private decreaseStock() {
     this.store.dispatch(new DecreaseStock(this.barcode.trim(), -1));
   }
 }

@@ -102,12 +102,18 @@ export type IntOperationFilterInput = {
 
 export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
+  barcodeScannerLogs?: Maybe<Array<Maybe<StockLogViewModel>>>;
   dpdShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
   inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
   invoices?: Maybe<Array<Maybe<InvoiceViewModel>>>;
   shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
   stocks?: Maybe<Array<Maybe<StockViewModel>>>;
   tagParcelTemplates?: Maybe<Array<Maybe<TagParcelTemplateViewModel>>>;
+};
+
+
+export type IntegratorQueryBarcodeScannerLogsArgs = {
+  where?: InputMaybe<StockLogViewModelFilterInput>;
 };
 
 

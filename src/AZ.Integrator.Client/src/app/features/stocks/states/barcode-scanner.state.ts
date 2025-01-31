@@ -3,8 +3,10 @@ import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/
 import { append, patch } from '@ngxs/store/operators';
 import { catchError, tap, throwError } from 'rxjs';
 import { BarcodeScannerStateModel } from './barcode-scanner.state.model';
-import { IntegratorQueryStocksArgs, StockLogViewModel } from '../../../shared/graphql/graphql-integrator.schema';
-import { GraphQLQueryVo } from '../../../shared/graphql/graphql.query';
+import {
+  IntegratorQueryBarcodeScannerLogsArgs,
+  StockLogViewModel,
+} from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
 import { StocksService } from '../services/stocks.service';
 import { DecreaseStock, IncreaseStock, LoadLogs } from './barcode-scanner.action';
@@ -17,7 +19,6 @@ const BARCODE_SCANNER_STATE_TOKEN = new StateToken<BarcodeScannerStateModel>('ba
 @State<BarcodeScannerStateModel>({
   name: BARCODE_SCANNER_STATE_TOKEN,
   defaults: {
-    graphqlQuery: new GraphQLQueryVo(),
     graphqlQueryResponse: new GraphQLResponseWithoutPaginationVo<StockLogViewModel[]>(),
     logs: [],
   },
@@ -35,22 +36,16 @@ export class BarcodeScannerState {
 
   @Action(LoadLogs)
   loadLogs(ctx: StateContext<BarcodeScannerStateModel>) {
-    const filters: IntegratorQueryStocksArgs = {};
+    const filters: IntegratorQueryBarcodeScannerLogsArgs = {};
 
     filters.where = {
-      logs: {
-        some: {
-          createdBy: {
-            eq: this.store.selectSnapshot(AuthState.getProfile)?.username,
-          },
-        },
-      },
+      createdBy: { eq: this.store.selectSnapshot(AuthState.getProfile)?.username },
     };
 
-    return this.stocksService.getStocks(filters).pipe(
+    return this.stocksService.getBarcodeScannerLogs(filters).pipe(
       tap(response => {
         ctx.patchState({
-          logs: response.result.flatMap(stocks => stocks.logs ?? []).filter(log => log !== null),
+          logs: response.result,
         });
       })
     );

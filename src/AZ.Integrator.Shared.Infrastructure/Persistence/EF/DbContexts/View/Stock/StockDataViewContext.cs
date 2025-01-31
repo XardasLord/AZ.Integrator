@@ -7,6 +7,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Sto
 public class StockDataViewContext(DbContextOptions<StockDataViewContext> options) : DbContext(options)
 {
     public virtual DbSet<StockViewModel> Stocks { get; set; }
+    public virtual DbSet<StockLogViewModel> StockLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
