@@ -14,15 +14,12 @@ import { InvoicesState } from './states/invoices.state';
 import { OrdersFiltersComponent } from './pages/orders-filters/orders-filters.component';
 
 @NgModule({
-  declarations: [
-    OrdersComponent,
-    OrdersListNewComponent,
-    OrdersListReadyForShipmentComponent,
-    RegisterShipmentModalComponent,
-    OrdersListSentComponent,
-    OrdersFiltersComponent,
-  ],
-  imports: [SharedModule, OrdersRoutingModule],
-  providers: [provideStates([OrdersState, InvoicesState]), OrdersService, InvoicesService],
+    imports: [SharedModule, OrdersRoutingModule, OrdersComponent,
+        OrdersListNewComponent,
+        OrdersListReadyForShipmentComponent,
+        RegisterShipmentModalComponent,
+        OrdersListSentComponent,
+        OrdersFiltersComponent],
+    providers: [provideStates([OrdersState, InvoicesState]), OrdersService, InvoicesService],
 })
 export class OrdersModule {}

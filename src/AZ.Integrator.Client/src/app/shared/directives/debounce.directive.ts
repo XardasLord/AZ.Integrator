@@ -2,10 +2,7 @@ import { Directive, ElementRef, OnDestroy, OnInit, Output, inject } from '@angul
 import { Subscription, fromEvent, Subject, Observable } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-@Directive({
-    selector: 'input[appDebounce]',
-    standalone: false
-})
+@Directive({ selector: 'input[appDebounce]' })
 export class DebounceDirective implements OnInit, OnDestroy {
 	private element = inject(ElementRef);
 

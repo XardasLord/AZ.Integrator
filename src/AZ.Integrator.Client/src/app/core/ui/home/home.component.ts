@@ -4,12 +4,14 @@ import { Navigate } from '@ngxs/router-plugin';
 import { AuthState } from '../../../shared/states/auth.state';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { RoutePaths } from '../../modules/app-routing.module';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    standalone: false
+    imports: [MatButton, MatIcon]
 })
 export class HomeComponent {
   private store = inject(Store);

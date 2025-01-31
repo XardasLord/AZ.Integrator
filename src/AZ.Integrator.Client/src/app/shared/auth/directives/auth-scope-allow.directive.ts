@@ -1,10 +1,7 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 
-@Directive({
-    selector: '[appScopeAllow]',
-    standalone: false
-})
+@Directive({ selector: '[appScopeAllow]' })
 export class AuthScopeAllowDirective {
   private templateRef = inject<TemplateRef<any>>(TemplateRef);
   private viewContainer = inject(ViewContainerRef);

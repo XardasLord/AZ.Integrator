@@ -18,30 +18,29 @@ import { DebounceDirective } from './directives/debounce.directive';
 import { AuthRoleAllowDirective } from './auth/directives/auth-role-allow.directive';
 
 @NgModule({
-  declarations: [AuthScopeAllowDirective, AuthRoleAllowDirective, ProgressSpinnerComponent, DebounceDirective],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule, ToastrModule.forRoot(), NgOptimizedImage],
-  exports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    ToastrModule,
-    AuthScopeAllowDirective,
-    AuthRoleAllowDirective,
-    ProgressSpinnerComponent,
-    NgOptimizedImage,
-    DebounceDirective,
-  ],
-  providers: [
-    provideStates([DictionaryState]),
-    provideHttpClient(withInterceptorsFromDi()),
-    ErrorService,
-    AuthService,
-    DictionaryService,
-    ProgressSpinnerService,
-    DownloadService,
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
-  ],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule, ToastrModule.forRoot(), NgOptimizedImage, AuthScopeAllowDirective, AuthRoleAllowDirective, ProgressSpinnerComponent, DebounceDirective],
+    exports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ToastrModule,
+        AuthScopeAllowDirective,
+        AuthRoleAllowDirective,
+        ProgressSpinnerComponent,
+        NgOptimizedImage,
+        DebounceDirective,
+    ],
+    providers: [
+        provideStates([DictionaryState]),
+        provideHttpClient(withInterceptorsFromDi()),
+        ErrorService,
+        AuthService,
+        DictionaryService,
+        ProgressSpinnerService,
+        DownloadService,
+        { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500 } },
+    ],
 })
 export class SharedModule {
   constructor() {}

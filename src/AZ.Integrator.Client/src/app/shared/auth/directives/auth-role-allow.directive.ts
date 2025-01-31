@@ -4,10 +4,7 @@ import { AuthRoles } from '../models/auth.roles';
 import { Store } from '@ngxs/store';
 import { KeycloakService } from 'keycloak-angular';
 
-@Directive({
-    selector: '[appRoleAllow]',
-    standalone: false
-})
+@Directive({ selector: '[appRoleAllow]' })
 export class AuthRoleAllowDirective {
   private store = inject(Store);
   private keycloak = inject(KeycloakService);

@@ -1,6 +1,14 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Subscription } from 'rxjs';
 import { ParcelTemplateDefinitionDataModel } from '../../models/parcel-template-definition-data.model';
@@ -9,12 +17,14 @@ import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-grou
 import { ParcelTemplate } from '../../models/parcel-template';
 import { SaveParcelTemplateCommand } from '../../models/commands/save-parcel-template.command';
 import { SavePackageTemplate } from '../../states/parcel-templates.action';
+import { NgFor, NgIf } from '@angular/common';
+import { MaterialModule } from '../../../../shared/modules/material.module';
 
 @Component({
-    selector: 'app-parcel-template-definition-modal',
-    templateUrl: './parcel-template-definition-modal.component.html',
-    styleUrls: ['./parcel-template-definition-modal.component.scss'],
-    standalone: false
+  selector: 'app-parcel-template-definition-modal',
+  templateUrl: './parcel-template-definition-modal.component.html',
+  styleUrls: ['./parcel-template-definition-modal.component.scss'],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule, NgFor, NgIf],
 })
 export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
   dialogRef = inject<MatDialogRef<ParcelTemplateDefinitionModalComponent>>(MatDialogRef);

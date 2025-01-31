@@ -11,13 +11,10 @@ import { ParcelTemplateDefinitionModalComponent } from './pages/parcel-template-
 import { ParcelTemplatesFiltersComponent } from './pages/parcel-templates-filters/parcel-templates-filters.component';
 
 @NgModule({
-  declarations: [
-    ParcelTemplatesComponent,
-    ParcelTemplatesListComponent,
-    ParcelTemplateDefinitionModalComponent,
-    ParcelTemplatesFiltersComponent,
-  ],
-  imports: [SharedModule, ParcelTemplatesRoutingModule, NgxsFormPluginModule],
-  providers: [provideStates([ParcelTemplatesState]), ParcelTemplatesService],
+    imports: [SharedModule, ParcelTemplatesRoutingModule, NgxsFormPluginModule, ParcelTemplatesComponent,
+        ParcelTemplatesListComponent,
+        ParcelTemplateDefinitionModalComponent,
+        ParcelTemplatesFiltersComponent],
+    providers: [provideStates([ParcelTemplatesState]), ParcelTemplatesService],
 })
 export class ParcelTemplatesModule {}

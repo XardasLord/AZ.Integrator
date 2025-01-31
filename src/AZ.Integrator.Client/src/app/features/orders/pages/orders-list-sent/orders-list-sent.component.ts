@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { map, Observable } from 'rxjs';
@@ -7,12 +7,14 @@ import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.m
 import { OrdersState } from '../../states/orders-state.service';
 import { ChangePage, GenerateDpdLabel, GenerateInpostLabel, LoadSent, SetCurrentTab } from '../../states/orders.action';
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
+import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { MaterialModule } from '../../../../shared/modules/material.module';
 
 @Component({
-    selector: 'app-orders-list-sent',
-    templateUrl: './orders-list-sent.component.html',
-    styleUrls: ['./orders-list-sent.component.scss'],
-    standalone: false
+  selector: 'app-orders-list-sent',
+  templateUrl: './orders-list-sent.component.html',
+  styleUrls: ['./orders-list-sent.component.scss'],
+  imports: [MaterialModule, NgFor, NgIf, AsyncPipe, DecimalPipe, DatePipe],
 })
 export class OrdersListSentComponent implements OnInit {
   private store = inject(Store);

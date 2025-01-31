@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngxs/store';
@@ -18,12 +18,15 @@ import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 import { DownloadInvoice, GenerateInvoice } from '../../states/invoices.action';
 import { InvoicesState } from '../../states/invoices.state';
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
+import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MaterialModule } from '../../../../shared/modules/material.module';
 
 @Component({
-    selector: 'app-orders-list-ready-for-shipment',
-    templateUrl: './orders-list-ready-for-shipment.component.html',
-    styleUrls: ['./orders-list-ready-for-shipment.component.scss'],
-    standalone: false
+  selector: 'app-orders-list-ready-for-shipment',
+  templateUrl: './orders-list-ready-for-shipment.component.html',
+  styleUrls: ['./orders-list-ready-for-shipment.component.scss'],
+  imports: [MaterialModule, NgIf, MatIcon, NgFor, AsyncPipe, DecimalPipe, DatePipe],
 })
 export class OrdersListReadyForShipmentComponent implements OnInit {
   private store = inject(Store);

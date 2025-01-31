@@ -1,6 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
@@ -15,12 +24,15 @@ import {
 } from '../../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
 import { OrderDetailsModel } from '../../models/order-details.model';
+import { MatError } from '@angular/material/form-field';
+import { NgFor, NgIf } from '@angular/common';
+import { MaterialModule } from '../../../../shared/modules/material.module';
 
 @Component({
-    selector: 'app-register-shipment-modal',
-    templateUrl: './register-shipment-modal.component.html',
-    styleUrls: ['./register-shipment-modal.component.scss'],
-    standalone: false
+  selector: 'app-register-shipment-modal',
+  templateUrl: './register-shipment-modal.component.html',
+  styleUrls: ['./register-shipment-modal.component.scss'],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule, NgIf, MatError, NgFor],
 })
 export class RegisterShipmentModalComponent {
   dialogRef = inject<MatDialogRef<RegisterShipmentModalComponent>>(MatDialogRef);

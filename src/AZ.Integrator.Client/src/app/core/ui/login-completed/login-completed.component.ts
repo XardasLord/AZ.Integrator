@@ -5,8 +5,7 @@ import { LoginCompleted } from '../../../shared/states/auth.action';
 @Component({
     selector: 'app-login-completed',
     templateUrl: './login-completed.component.html',
-    styleUrl: './login-completed.component.scss',
-    standalone: false
+    styleUrl: './login-completed.component.scss'
 })
 export class LoginCompletedComponent implements OnInit {
   private store = inject(Store);

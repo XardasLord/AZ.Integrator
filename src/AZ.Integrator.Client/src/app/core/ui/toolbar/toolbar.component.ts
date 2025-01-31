@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { KeycloakService } from 'keycloak-angular';
@@ -10,12 +10,15 @@ import { RoutePaths } from '../../modules/app-routing.module';
 import { LoadNew } from '../../../features/orders/states/orders.action';
 import { LoadProductTags } from '../../../features/package-templates/states/parcel-templates.action';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
+import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-role-allow.directive';
+import { AsyncPipe, NgIf } from '@angular/common';
+import { MaterialModule } from '../../../shared/modules/material.module';
 
 @Component({
-    selector: 'app-toolbar',
-    templateUrl: './toolbar.component.html',
-    styleUrls: ['./toolbar.component.scss'],
-    standalone: false
+  selector: 'app-toolbar',
+  templateUrl: './toolbar.component.html',
+  styleUrls: ['./toolbar.component.scss'],
+  imports: [MaterialModule, AuthRoleAllowDirective, NgIf, AsyncPipe],
 })
 export class ToolbarComponent {
   private store = inject(Store);
