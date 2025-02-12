@@ -27,10 +27,11 @@
         <span class="name"
           >{{ (user$ | async)?.firstName }} {{ (user$ | async)?.lastName }} ({{ (user$ | async)?.username }})</span
         >
-        <button mat-icon-button>
-          <mat-icon>face</mat-icon>
-        </button>
       </span>
+
+      <button mat-icon-button matTooltip="My Account">
+        <mat-icon>account_circle</mat-icon>
+      </button>
 
       <button mat-icon-button matTooltip="Wyloguj" (click)="logout()">
         <mat-icon class="material-icons-outlined">logout</mat-icon>

@@ -13,7 +13,14 @@
             }
           </div>
 
-          <span class="text-gray-500 text-right">{{ stock.quantity }}</span>
+          <span
+            class="text-right"
+            [ngClass]="{
+              'text-orange-500': stock.quantity < stockWarningThreshold,
+              'text-gray-500': stock.quantity >= stockWarningThreshold,
+            }"
+            >{{ stock.quantity }}</span
+          >
         </mat-list-item>
       </mat-list>
     </div>
