@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { SharedModule } from '../../../../shared/shared.module';
 import { DecreaseStock, IncreaseStock, LoadLogs } from '../../states/barcode-scanner.action';
 import { StockLogViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
+import { BarcodeScannerState } from '../../states/barcode-scanner.state';
 
 export type BarcodeScannerType = 'in' | 'out';
 
@@ -19,8 +20,7 @@ export class BarcodeScannerComponent implements OnInit {
   @Input() type!: BarcodeScannerType;
 
   barcode: string = '';
-  barcodeScannerLogs$!: Observable<StockLogViewModel[]>;
-  // barcodeScannerLogs$: Observable<StockLogViewModel[]> = this.store.select(BarcodeScannerState.logs);
+  barcodeScannerLogs$: Observable<StockLogViewModel[]> = this.store.select(BarcodeScannerState.logs);
 
   ngOnInit(): void {
     this.store.dispatch(new LoadLogs());

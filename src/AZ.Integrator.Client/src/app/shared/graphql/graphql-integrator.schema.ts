@@ -113,6 +113,7 @@ export type IntegratorQuery = {
 
 
 export type IntegratorQueryBarcodeScannerLogsArgs = {
+  order?: InputMaybe<Array<StockLogViewModelSortInput>>;
   where?: InputMaybe<StockLogViewModelFilterInput>;
 };
 
@@ -209,6 +210,11 @@ export type ShipmentViewModelFilterInput = {
   shipmentProvider?: InputMaybe<StringOperationFilterInput>;
 };
 
+export enum SortEnumType {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
 export type StockLogViewModel = {
   __typename?: 'StockLogViewModel';
   changeQuantity: Scalars['Int']['output'];
@@ -226,6 +232,14 @@ export type StockLogViewModelFilterInput = {
   id?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<StockLogViewModelFilterInput>>;
   packageCode?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type StockLogViewModelSortInput = {
+  changeQuantity?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  createdBy?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  packageCode?: InputMaybe<SortEnumType>;
 };
 
 export type StockViewModel = {

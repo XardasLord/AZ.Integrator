@@ -41,6 +41,7 @@ internal class IntegratorQuery
 
     [UseProjection]
     [UseFiltering]
+    [UseSorting]
     public IQueryable<StockLogViewModel> GetBarcodeScannerLogs([Service] StockDataViewContext dataViewContext) 
         => dataViewContext.StockLogs.AsQueryable();
 }

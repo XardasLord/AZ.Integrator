@@ -20,11 +20,24 @@
     Zatwierdź
   </button>
 
-  <ul class="w-full mt-4 space-y-2">
+  <ul class="w-full mt-4 space-y-2 max-h-128 overflow-auto">
     <li
       *ngFor="let log of barcodeScannerLogs$ | async"
-      class="w-full p-3 text-center bg-gray-100 border border-gray-300 rounded-md">
-      {{ log?.packageCode }}
+      class="w-full p-3 text-center border border-gray-400 rounded-lg shadow-sm"
+      [ngClass]="{
+        'bg-green-100 border-green-500': log.changeQuantity > 0,
+        'bg-red-100 border-red-500': log.changeQuantity < 0,
+      }">
+      <span class="font-bold text-blue-700 text-lg">{{ log?.packageCode }}</span>
+      <span
+        class="text-lg font-semibold"
+        [ngClass]="{ 'text-green-600': log.changeQuantity > 0, 'text-red-600': log.changeQuantity < 0 }">
+        {{ log.changeQuantity > 0 ? '+' : '' }}{{ log.changeQuantity }}
+      </span>
+
+      <div class="text-xs text-gray-500 mt-1">
+        {{ log.createdAt | date: 'dd.MM.yyyy, HH:mm:ss' }}
+      </div>
     </li>
   </ul>
 </div>
