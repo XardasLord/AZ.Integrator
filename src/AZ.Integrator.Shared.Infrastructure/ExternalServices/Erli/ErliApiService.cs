@@ -60,7 +60,7 @@ public class ErliApiService(
         if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.New.Name || status == AllegroFulfillmentStatusEnum.Processing.Name))
         {
             orders = orders
-                .Where(x => x.DeliveryTracking is null)
+                .Where(x => x.SellerStatus == ErliOrderSellerStatusEnum.ReadyToProcess.Name)
                 .ToList();
         }
         else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.ReadyForShipment.Name))
