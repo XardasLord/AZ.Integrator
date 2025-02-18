@@ -14,6 +14,7 @@ public class Order
     public DateTime Updated { get; set; }
     public DateTime PurchasedAt { get; set; }
     public Payment Payment { get; set; }
+    public string SellerStatus { get; set; }
 }
 
 public class User
