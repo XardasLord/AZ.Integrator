@@ -55,6 +55,12 @@ export class NavigationComponent {
       roles: [AuthRoles.Admin],
     },
     {
+      title: 'Statystyki',
+      icon: 'bar_chart',
+      route: RoutePaths.StocksStatistics,
+      roles: [AuthRoles.Admin],
+    },
+    {
       title: 'Skanowanie kodów',
       icon: 'qr_code_scanner',
       route: RoutePaths.BarcodeScanner,

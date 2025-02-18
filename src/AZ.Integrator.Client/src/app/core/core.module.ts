@@ -15,6 +15,17 @@ import { LoginCompletedComponent } from './ui/login-completed/login-completed.co
 import { TenantHeadersInterceptor } from './interceptor/tenant-headers.interceptor';
 import { NotAuthorizedComponent } from './ui/not-authorized/not-authorized.component';
 import { HomeComponent } from './ui/home/home.component';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD.MM.YYYY',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMM YYYY',
+  },
+};
 
 @NgModule({
   imports: [
@@ -29,6 +40,8 @@ import { HomeComponent } from './ui/home/home.component';
     NotAuthorizedComponent,
   ],
   providers: [
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
     AuthGuard,
     {
       provide: ErrorHandler,

@@ -1,0 +1,14 @@
+<mat-form-field appearance="fill">
+  <mat-label>Skaner</mat-label>
+  <input matInput (valueChanged)="searchTextChanged($event)" [value]="searchText$ | async" appDebounce />
+</mat-form-field>
+
+<mat-form-field appearance="fill" class="ml-2">
+  <mat-label>Zakres dat</mat-label>
+  <mat-date-range-input [rangePicker]="picker">
+    <input matStartDate placeholder="Od" [(ngModel)]="dateRange.start" (ngModelChange)="dateRangeChanged()" />
+    <input matEndDate placeholder="Do" [(ngModel)]="dateRange.end" (ngModelChange)="dateRangeChanged()" />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>

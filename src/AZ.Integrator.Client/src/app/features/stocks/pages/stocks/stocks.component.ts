@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { StocksListComponent } from '../stocks-list/stocks-list.component';
-import { StocksFiltersComponent } from '../stocks-filters/stocks-filters.component';
+import { StocksFiltersComponent } from '../../components/stocks-filters/stocks-filters.component';
 import { SharedModule } from '../../../../shared/shared.module';
 
 @Component({

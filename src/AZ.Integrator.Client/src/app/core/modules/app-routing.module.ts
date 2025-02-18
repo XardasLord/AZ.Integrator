@@ -11,6 +11,7 @@ import { HomeComponent } from '../ui/home/home.component';
 import { StocksState } from '../../features/stocks/states/stocks.state';
 import { StocksService } from '../../features/stocks/services/stocks.service';
 import { BarcodeScannerState } from '../../features/stocks/states/barcode-scanner.state';
+import { StockLogsState } from '../../features/stocks/states/stock-logs.state';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -21,6 +22,7 @@ export const RoutePaths = {
   Orders: 'orders',
   ParcelTemplates: 'parcel-templates',
   Stocks: 'stocks',
+  StocksStatistics: 'stocks-statistics',
   BarcodeScanner: 'barcode-scanner',
 };
 
@@ -71,6 +73,18 @@ const routes: Routes = [
           allowRoles: [AuthRoles.Admin],
         }),
         providers: [provideStates([StocksState]), StocksService],
+      },
+      {
+        path: RoutePaths.StocksStatistics,
+        loadComponent: () =>
+          import('../../features/stocks/pages/stocks-statistics/stocks-statistics.component').then(
+            c => c.StocksStatisticsComponent
+          ),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.Admin],
+        }),
+        providers: [provideStates([StockLogsState]), StocksService],
       },
       {
         path: RoutePaths.BarcodeScanner,
