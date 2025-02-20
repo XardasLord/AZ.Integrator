@@ -8,7 +8,6 @@ import { GlobalErrorHandler } from './interceptor/error-handler.interceptor';
 import { LoginComponent } from './ui/login/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NoCacheInterceptor } from './interceptor/no-cache.interceptor';
-import { AppGraphQLModule } from './modules/app-graphql.module';
 import { UnauthorizedInterceptor } from './interceptor/unauthorized.interceptor';
 import { LoadingInterceptor } from './interceptor/loading.interceptor';
 import { LoginCompletedComponent } from './ui/login-completed/login-completed.component';
@@ -31,7 +30,6 @@ export const MY_DATE_FORMATS = {
   imports: [
     SharedModule,
     AppRoutingModule,
-    AppGraphQLModule,
     NavigationComponent,
     ToolbarComponent,
     HomeComponent,
