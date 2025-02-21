@@ -4,6 +4,7 @@ export const environment = {
   version: `${APP_VERSION}`,
   apiEndpoint: 'http://SERWER:6010/api',
   graphqlEndpoint: 'http://SERWER:6010/api/graphql',
+  keycloakEndpoint: 'http://SERWER:9080',
   defaultPageSize: 10,
 
   // Tenants
