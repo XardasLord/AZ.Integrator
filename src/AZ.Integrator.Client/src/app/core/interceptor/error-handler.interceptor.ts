@@ -1,4 +1,4 @@
-import { ErrorHandler, Injectable, NgZone, inject } from '@angular/core';
+import { ErrorHandler, inject, Injectable, NgZone } from '@angular/core';
 import { ErrorService } from '../../shared/errors/error.service';
 import { MessageStatusEnum } from '../../shared/errors/message-status.enum';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -7,7 +7,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class GlobalErrorHandler implements ErrorHandler {
   private errorService = inject(ErrorService);
   private zone = inject(NgZone);
-
 
   handleError(error: HttpErrorResponse): void {
     // if (!(error instanceof HttpErrorResponse)) {
@@ -20,9 +19,9 @@ export class GlobalErrorHandler implements ErrorHandler {
     //   // )
     // );
 
-    const applicationError: IntegratorError = error.error;
+    const applicationError: IntegratorError = error?.error;
 
-    this.zone.run(() => this.errorService.display(applicationError.Message, MessageStatusEnum.Error));
+    this.zone.run(() => this.errorService.display(applicationError?.Message, MessageStatusEnum.Error));
     console.error('Error from global error handler', error);
   }
 }
