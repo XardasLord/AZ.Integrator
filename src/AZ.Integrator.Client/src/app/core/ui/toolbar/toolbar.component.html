@@ -3,11 +3,11 @@
     <button mat-icon-button (click)="toggleMenu()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>AZ Integrator</span>
+    <span class="hidden lg:inline">AZ Integrator</span>
 
     <span class="spacer"></span>
 
-    <mat-form-field class="mt-5" *appRoleAllow="[AuthRoles.Admin]">
+    <mat-form-field class="mt-5 store-selector" *appRoleAllow="[AuthRoles.Admin]">
       <mat-label>Wybierz sklep</mat-label>
       <mat-select (selectionChange)="changeTenant($event.value)">
         @for (group of tenantGroups; track group) {
@@ -25,7 +25,8 @@
     <span class="right-section">
       <span class="section user-info">
         <span class="name"
-          >{{ (user$ | async)?.firstName }} {{ (user$ | async)?.lastName }} ({{ (user$ | async)?.username }})</span
+          >{{ (user$ | async)?.firstName }} {{ (user$ | async)?.lastName }}
+          <span class="hidden lg:inline">({{ (user$ | async)?.username }})</span></span
         >
       </span>
 

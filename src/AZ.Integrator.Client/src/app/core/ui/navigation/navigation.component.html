@@ -1,7 +1,7 @@
 <app-toolbar (toggleSideNav)="sidenav.toggle()"></app-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="side" opened="true" fixedInViewport="true">
+  <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="sidenavOpened" fixedInViewport="true">
     <mat-nav-list>
       @for (item of navigationItems; track item) {
         <mat-list-item [routerLink]="item.route" routerLinkActive="active-route" *appRoleAllow="item.roles">

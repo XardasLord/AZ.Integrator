@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { RoutePaths } from '../../modules/app-routing.module';
 import { environment } from '../../../../environments/environment';
@@ -23,8 +23,10 @@ export type NavigationItem = {
   styleUrls: ['./navigation.component.scss'],
   imports: [MaterialModule, ToolbarComponent, RouterLinkActive, RouterLink, NgIf, AuthRoleAllowDirective, RouterOutlet],
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
+  sidenavMode: 'side' | 'over' = 'side';
+  sidenavOpened = true;
 
   RoutePaths = RoutePaths;
   AuthRoles = AuthRoles;
@@ -70,5 +72,24 @@ export class NavigationComponent {
 
   get appVersion() {
     return environment.version;
+  }
+
+  ngOnInit(): void {
+    this.updateSidenavMode();
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.updateSidenavMode();
+  }
+
+  private updateSidenavMode() {
+    if (window.innerWidth < 768) {
+      this.sidenavMode = 'over';
+      this.sidenavOpened = false;
+    } else {
+      this.sidenavMode = 'side';
+      this.sidenavOpened = true;
+    }
   }
 }
