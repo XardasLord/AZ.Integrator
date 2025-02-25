@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0 --ssl --ssl-key certs/private_key_192.168.0.185.pem --ssl-cert certs/certificate_192.168.0.185.pem",
     "build": "ng build",
     "build-dev": "ng build --configuration development",
     "build-test": "ng build --configuration test",
-    "deploy-dev-iis": "ng build --watch --base-href /",
+    "deploy-dev-iis": "ng build --watch --base-href / --configuration development",
     "deploy-prod-iis": "ng build --watch --base-href / --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
