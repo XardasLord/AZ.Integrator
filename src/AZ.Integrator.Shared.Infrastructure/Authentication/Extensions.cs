@@ -71,6 +71,13 @@ internal static class Extensions
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = false,
                     ValidAudience = configuration["Infrastructure:Keycloak:Audience"],
+                    
+                    SignatureValidator = delegate (string token, TokenValidationParameters parameters)
+                    {
+                        var jwt = new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token);
+
+                        return jwt;
+                    },
                 };
                 
                 options.Events = new JwtBearerEvents
@@ -85,7 +92,7 @@ internal static class Extensions
                         // Debug only for security reasons
                         // return c.Response.WriteAsync(c.Exception.ToString());
 
-                        return c.Response.WriteAsync("An error occured processing your authentication.");
+                        return c.Response.WriteAsync($"An error occured processing your authentication - {c.Exception.Message}");
                     }
                 };
             })
