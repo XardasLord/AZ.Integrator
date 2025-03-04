@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
     az.integrator.db:
         image: "postgres:15"
@@ -7,8 +5,8 @@ services:
         ports:
           - "5432:5432"
         restart: always
-        environment:
-          - POSTGRES_PASSWORD=xr?8751A>H?S
+        env_file:
+          - env/postgres.env
         volumes:
           - postgres_data:/var/lib/postgresql/data
         networks:
@@ -18,6 +16,22 @@ services:
           interval: 10s
           timeout: 5s
           retries: 5
+    
+    az.integrator.keycloak:
+      image: quay.io/keycloak/keycloak:21.0.1
+      ports:
+        - "9080:8443"
+      container_name: az-integrator-keycloak
+      env_file:
+        - env/keycloak.env
+      command: --https-port=8443
+      networks:
+        - az
+      volumes:
+        - ./https/:/opt/keycloak/conf
+      depends_on:
+        az.integrator.db:
+          condition: service_healthy
       
 volumes:
   postgres_data:
