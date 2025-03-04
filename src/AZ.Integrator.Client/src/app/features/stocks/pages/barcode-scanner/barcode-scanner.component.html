@@ -7,11 +7,11 @@
     }
   </h2>
   <input
+    #barcodeInput
     type="text"
     [(ngModel)]="barcode"
-    (keyup.enter)="scanBarcode()"
+    (keydown.enter)="scanBarcode()"
     placeholder="Zeskanuj kod kreskowy..."
-    autofocus
     class="w-full px-4 py-3 text-lg text-center border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300" />
 
   <button

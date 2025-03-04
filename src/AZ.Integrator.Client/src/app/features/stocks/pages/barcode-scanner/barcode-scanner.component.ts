@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { SharedModule } from '../../../../shared/shared.module';
@@ -15,15 +15,20 @@ export type BarcodeScannerType = 'in' | 'out';
   styleUrl: './barcode-scanner.component.scss',
   standalone: true,
 })
-export class BarcodeScannerComponent implements OnInit {
+export class BarcodeScannerComponent implements OnInit, AfterViewInit {
   private store = inject(Store);
   @Input() type!: BarcodeScannerType;
+  @ViewChild('barcodeInput') barcodeInput!: ElementRef;
 
   barcode: string = '';
   barcodeScannerLogs$: Observable<StockLogViewModel[]> = this.store.select(BarcodeScannerState.logs);
 
   ngOnInit(): void {
     this.store.dispatch(new LoadLogs());
+  }
+
+  ngAfterViewInit(): void {
+    this.focusInput();
   }
 
   scanBarcode() {
@@ -38,6 +43,11 @@ export class BarcodeScannerComponent implements OnInit {
     }
 
     this.barcode = '';
+    this.focusInput();
+  }
+
+  private focusInput() {
+    setTimeout(() => this.barcodeInput.nativeElement.focus(), 100);
   }
 
   private increaseStock() {
