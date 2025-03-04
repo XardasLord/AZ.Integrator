@@ -8,14 +8,13 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
-    imports: [MatButton, MatIcon]
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+  imports: [MatButton, MatIcon],
 })
 export class HomeComponent {
   private store = inject(Store);
-
 
   startWorkRedirection() {
     const roles = this.store.selectSnapshot(AuthState.getUserRoles);
@@ -25,9 +24,9 @@ export class HomeComponent {
     } else if (roles.includes(AuthRoles.Admin)) {
       this.store.dispatch(new Navigate([RoutePaths.Orders]));
     } else if (roles.includes(AuthRoles.ScannerIn)) {
-      console.warn('Redirection to Stocks IN');
+      this.store.dispatch(new Navigate([RoutePaths.BarcodeScanner]));
     } else if (roles.includes(AuthRoles.ScannerOut)) {
-      console.warn('Redirection to Stocks OUT');
+      this.store.dispatch(new Navigate([RoutePaths.BarcodeScanner]));
     }
   }
 }
