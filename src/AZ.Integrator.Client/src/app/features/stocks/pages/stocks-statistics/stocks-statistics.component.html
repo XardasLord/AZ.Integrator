@@ -1,4 +1,5 @@
 <div class="padding-content">
   <app-stocks-statistics-filters />
-  <app-stocks-statistics-list />
+  <app-stocks-statistics-charts [groupedLogs$]="groupedLogs$" />
+  <app-stocks-statistics-list [groupedLogs$]="groupedLogs$" />
 </div>

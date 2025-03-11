@@ -19,7 +19,10 @@ const STOCK_LOGS_STATE_TOKEN = new StateToken<StockLogsStateModel>('stockLogs');
   defaults: {
     graphqlQuery: new GraphQLQueryVo(),
     graphqlQueryResponse: new GraphQLResponseWithoutPaginationVo<StockLogViewModel[]>(),
-    dateFilter: { from: new Date(new Date().setDate(new Date().getDate() - 30)), to: new Date() },
+    dateFilter: {
+      from: new Date(new Date().setDate(new Date().getDate() - 30)),
+      to: new Date(new Date().setDate(new Date().getDate() + 1)),
+    },
     logs: [],
   },
 })
