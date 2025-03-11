@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NgIf } from '@angular/common';
 import { RoutePaths } from '../../modules/app-routing.module';
 import { environment } from '../../../../environments/environment';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-role-allow.directive';
 import { MaterialModule } from '../../../shared/modules/material.module';
 
@@ -54,13 +54,13 @@ export class NavigationComponent implements OnInit {
       title: 'Stany magazynowe',
       icon: 'warehouse',
       route: RoutePaths.Stocks,
-      roles: [AuthRoles.Admin],
+      roles: [],
     },
     {
       title: 'Statystyki',
       icon: 'bar_chart',
       route: RoutePaths.StocksStatistics,
-      roles: [AuthRoles.Admin],
+      roles: [],
     },
     {
       title: 'Skanowanie kodów',

@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, inject } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Subscription } from 'rxjs';
 import { AuthRoles } from '../auth/models/auth.roles';
@@ -47,12 +47,12 @@ export class AuthService implements OnDestroy {
     return scopes.filter(scope => scope != null).some(scope => this.userScopes.includes(scope));
   }
 
-  public isUserAllowedByRoles(roles: AuthRoles[]): boolean {
+  public isUserAllowedByRoles(roles: AuthRoles[] | undefined): boolean {
     if (this.userRoles.includes(AuthRoles.MasterAdmin)) {
       return true;
     }
 
-    if (!roles) {
+    if (!roles || roles.length === 0) {
       return false;
     }
 
