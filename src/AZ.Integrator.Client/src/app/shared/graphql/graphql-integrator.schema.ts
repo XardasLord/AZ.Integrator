@@ -139,6 +139,7 @@ export type IntegratorQueryShipmentsArgs = {
 
 
 export type IntegratorQueryStocksArgs = {
+  order?: InputMaybe<Array<StockViewModelSortInput>>;
   where?: InputMaybe<StockViewModelFilterInput>;
 };
 
@@ -255,6 +256,11 @@ export type StockViewModelFilterInput = {
   or?: InputMaybe<Array<StockViewModelFilterInput>>;
   packageCode?: InputMaybe<StringOperationFilterInput>;
   quantity?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type StockViewModelSortInput = {
+  packageCode?: InputMaybe<SortEnumType>;
+  quantity?: InputMaybe<SortEnumType>;
 };
 
 export type StringOperationFilterInput = {

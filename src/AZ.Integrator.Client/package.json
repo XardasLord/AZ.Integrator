@@ -12,7 +12,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "update-graphql-schema": "graphql-codegen --config graphql-codegen.yml"
+    "update-graphql-schema": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config graphql-codegen.yml"
   },
   "private": true,
   "dependencies": {
@@ -35,6 +35,7 @@
     "@tailwindcss/postcss": "^4.0.7",
     "apollo-angular": "^10.0.1",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "echarts": "^5.6.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.3",

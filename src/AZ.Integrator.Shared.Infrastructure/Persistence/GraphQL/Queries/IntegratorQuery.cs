@@ -36,6 +36,7 @@ internal class IntegratorQuery
 
     [UseProjection]
     [UseFiltering]
+    [UseSorting]
     public IQueryable<StockViewModel> GetStocks([Service] StockDataViewContext dataViewContext) 
         => dataViewContext.Stocks.AsQueryable();
 
