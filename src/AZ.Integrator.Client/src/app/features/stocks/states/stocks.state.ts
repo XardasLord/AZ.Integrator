@@ -3,7 +3,11 @@ import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
 import { StocksStateModel } from './stocks.state.model';
 import { ApplyFilter, ChangePage, LoadStocks } from './stocks.action';
-import { IntegratorQueryStocksArgs, StockViewModel } from '../../../shared/graphql/graphql-integrator.schema';
+import {
+  IntegratorQueryStocksArgs,
+  SortEnumType,
+  StockViewModel,
+} from '../../../shared/graphql/graphql-integrator.schema';
 import { RestQueryHelper } from '../../../shared/models/pagination/rest.helper';
 import { GraphQLQueryVo } from '../../../shared/graphql/graphql.query';
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
@@ -52,6 +56,12 @@ export class StocksState {
         contains: ctx.getState().graphqlQuery.searchText,
       },
     };
+
+    filters.order = [
+      {
+        quantity: SortEnumType.Desc,
+      },
+    ];
 
     return this.stocksService.getStocks(filters).pipe(
       tap(response => {

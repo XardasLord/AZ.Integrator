@@ -67,5 +67,5 @@ export class StocksStatisticsChartsComponent {
 
 const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
 function getColor(index: number): string {
-  return colors[index % colors.length]; // Zapętlamy kolory
+  return colors[index % colors.length];
 }

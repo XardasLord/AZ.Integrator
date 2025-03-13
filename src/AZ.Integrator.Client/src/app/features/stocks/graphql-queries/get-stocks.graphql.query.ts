@@ -10,10 +10,10 @@ import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/grap
 export class GetStocksGQL extends Query<GraphQLResponseWithoutPaginationVo<StockViewModel[]>> {
   override document = gql`
     query stocks(
-      $where: StockViewModelFilterInput
+      $where: StockViewModelFilterInput, $order: [StockViewModelSortInput!]!
     ) {
       result: ${nameof<IntegratorQuery>('stocks')}(
-        where: $where
+        where: $where, order: $order
       ) {
             ${nameof<StockViewModel>('packageCode')}
             ${nameof<StockViewModel>('quantity')}

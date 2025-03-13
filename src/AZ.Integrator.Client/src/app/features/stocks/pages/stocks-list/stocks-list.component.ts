@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { SharedModule } from '../../../../shared/shared.module';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { SharedModule } from '../../../../shared/shared.module';
 import { LoadStocks } from '../../states/stocks.action';
 import { StockViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
 import { StocksState } from '../../states/stocks.state';
