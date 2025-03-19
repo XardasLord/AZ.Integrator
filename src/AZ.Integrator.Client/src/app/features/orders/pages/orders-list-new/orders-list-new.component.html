@@ -17,8 +17,8 @@
   <ng-container matColumnDef="isPaid">
     <th mat-header-cell *matHeaderCellDef>Zapłacono?</th>
     <td mat-cell *matCellDef="let order">
-      <mat-icon *ngIf="!order?.payment?.paidAmount" class="text-red-600">close</mat-icon>
-      <mat-icon *ngIf="order?.payment?.paidAmount" class="text-green-600">done</mat-icon>
+      <mat-icon *ngIf="!order?.payment?.paidAmount" class="!text-red-600">close</mat-icon>
+      <mat-icon *ngIf="order?.payment?.paidAmount" class="!text-green-600">done</mat-icon>
     </td>
   </ng-container>
 
@@ -39,7 +39,7 @@
         {{ item.offer.name }}
       </div>
       <span *ngIf="order.messageToSeller" class="text-xs text-gray-500">
-        <mat-icon class="text-sm text-blue-500 text-center align-middle">info</mat-icon>
+        <mat-icon class="!text-blue-500 text-center align-middle">info</mat-icon>
         {{ order.messageToSeller }}
       </span>
     </td>
@@ -81,7 +81,7 @@
             mat-icon-button
             matTooltip="Nadaj przesykę kurierską InPost"
             (click)="registerInPostShipment(order); $event.stopPropagation()">
-            <mat-icon class="text-blue-600">add_box</mat-icon>
+            <mat-icon class="!text-blue-600">add_box</mat-icon>
           </button>
         </ng-container>
       </div>

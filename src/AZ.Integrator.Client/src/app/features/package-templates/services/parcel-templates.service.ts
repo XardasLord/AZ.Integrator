@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -11,7 +11,9 @@ import { GetOfferSignaturesResponse } from '../states/parcel-templates.state.mod
 export class ParcelTemplatesService extends RemoteServiceBase {
   private apiUrl = environment.apiEndpoint;
 
-  constructor(httpClient: HttpClient) {
+  constructor() {
+    const httpClient = inject(HttpClient);
+
     super(httpClient);
   }
 

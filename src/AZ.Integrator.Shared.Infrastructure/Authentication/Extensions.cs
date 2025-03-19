@@ -1,12 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
-using AZ.Integrator.Domain.SharedKernel;
-using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -53,7 +48,8 @@ internal static class Extensions
             .AddAuthentication(sharedOptions =>
             {
                 sharedOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                sharedOptions.DefaultChallengeScheme = allegroAzTeamTenantOAuthAuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                // sharedOptions.DefaultChallengeScheme = allegroAzTeamTenantOAuthAuthenticationScheme;
             })
             .AddCookie(allegroAzTeamTenantCookieAuthenticationScheme)
             .AddCookie(allegroMebleplTenantCookieAuthenticationScheme)
@@ -63,21 +59,41 @@ internal static class Extensions
                 // options.Authority = identityOptions.Authority;
                 // options.MetadataAddress = identityOptions.MetadataAddress;
                 // options.Audience = identityOptions.ClientId;
+
+                options.Authority = configuration["Infrastructure:Keycloak:Authority"];
+                options.Audience = configuration["Infrastructure:Keycloak:Audience"];
                 options.RequireHttpsMetadata = false;
                 options.IncludeErrorDetails = true;
-        
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ClockSkew = TimeSpan.FromSeconds(5),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(identityOptions.PrivateKey)
-                    ),
-                    ValidIssuer = identityOptions.Issuer,
-                    ValidAudience = identityOptions.Audience
+                    ValidateIssuerSigningKey = false,
+                    ValidAudience = configuration["Infrastructure:Keycloak:Audience"],
+                    
+                    SignatureValidator = delegate (string token, TokenValidationParameters parameters)
+                    {
+                        var jwt = new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token);
+
+                        return jwt;
+                    },
+                };
+                
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = c =>
+                    {
+                        c.NoResult();
+
+                        c.Response.StatusCode = 500;
+                        c.Response.ContentType = "text/plain";
+
+                        // Debug only for security reasons
+                        // return c.Response.WriteAsync(c.Exception.ToString());
+
+                        return c.Response.WriteAsync($"An error occured processing your authentication - {c.Exception.Message}");
+                    }
                 };
             })
             .AddOAuth(allegroAzTeamTenantOAuthAuthenticationScheme, options =>
@@ -120,7 +136,7 @@ internal static class Extensions
         string clientUrlAppRedirect)
     {
         options.AuthorizationEndpoint = allegroOptions.AuthorizationEndpoint;
-        options.TokenEndpoint = allegroOptions.TokenEndpoint;
+        options.TokenEndpoint = allegroOptions.RedirectUri;
         
         options.SaveTokens = true;
 
@@ -146,6 +162,8 @@ internal static class Extensions
             }
             else
             {
+                // TODO: This can be removed after introducment of the new authentication flow using Keycloak
+                
                 // Account exists, so we don't need to force login
                 var jwtToken = GenerateJwtToken(tenantId, identityOptions, shipXOptions);
                 
@@ -168,19 +186,26 @@ internal static class Extensions
         {
             // TODO: Here comes a new account that does not exist in DB in the system, so at the end of this event we need to create a new tenant account in the system
             var tenantId = ctx.Identity?.AuthenticationType;
-                    
+            
+            var accessToken = ctx.AccessToken;
+            var refreshToken = ctx.RefreshToken;
+            
+            // TODO: We could save new tenant account in DB
+            // ...
+            
+            
+            // TODO: This can be removed after introducment of the new authentication flow using Keycloak
+            
             var jwtToken = GenerateJwtToken(tenantId, identityOptions, shipXOptions);
 
-            ctx.Properties.StoreTokens(new[]
-            {
+            ctx.Properties.StoreTokens([
                 new AuthenticationToken
                 {
                     Name = "integrator_access_token",
                     Value = jwtToken
                 }
-            });
+            ]);
             
-            // TODO: We should save new account in DB
             
             return Task.CompletedTask;
         };
@@ -188,20 +213,20 @@ internal static class Extensions
 
     private static string GenerateJwtToken(string tenantId, IdentityOptions identityOptions, ShipXOptions shipXOptions)
     {
-        var claims = new List<Claim>
-        {
-            new(UserClaimType.ShipXOrganizationId, shipXOptions.OrganizationId.ToString()),
-            new(UserClaimType.TenantId, tenantId),
-            new(UserClaimType.AuthorizationProviderType, ShopProviderType.Allegro.ToString())
-        };
+        // var claims = new List<Claim>
+        // {
+        //     new(UserClaimType.ShipXOrganizationId, shipXOptions.OrganizationId.ToString()),
+        //     new(UserClaimType.TenantId, tenantId),
+        //     new(UserClaimType.AuthorizationProviderType, ShopProviderType.Allegro.ToString())
+        // };
                 
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = new JwtSecurityToken(
             issuer: identityOptions.Issuer,
             audience: identityOptions.Audience,
-            claims: claims,
+            // claims: claims,
             expires: DateTime.UtcNow.AddHours(identityOptions.ExpiresInHours),
-            signingCredentials: new SigningCredentials(
+            signingCredentials:  new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(identityOptions.PrivateKey)),
                 SecurityAlgorithms.HmacSha256)
         );

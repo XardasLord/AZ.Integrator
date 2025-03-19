@@ -1,18 +1,18 @@
-import { Directive, ElementRef, OnDestroy, OnInit, Output } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, OnInit, Output, inject } from '@angular/core';
 import { Subscription, fromEvent, Subject, Observable } from 'rxjs';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-@Directive({
-	selector: 'input[appDebounce]'
-})
+@Directive({ selector: 'input[appDebounce]' })
 export class DebounceDirective implements OnInit, OnDestroy {
+	private element = inject(ElementRef);
+
 	@Output() public valueChanged: Observable<string>;
 
 	private valueChangedSubject: Subject<string> = new Subject();
 	private debounceTime = 500;
 	private subscription: Subscription | undefined;
 
-	constructor(private element: ElementRef) {
+	constructor() {
 		this.valueChanged = this.valueChangedSubject.asObservable();
 	}
 

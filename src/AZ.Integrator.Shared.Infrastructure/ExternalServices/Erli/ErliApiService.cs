@@ -26,7 +26,7 @@ public class ErliApiService(
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
     };
 
-    public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters)
+    public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId)
     {
         var request = new GetOrdersFiltersRequestPayload
         {
@@ -50,7 +50,7 @@ public class ErliApiService(
         
         var payloadContent = PrepareContentRequest(request);
 
-        var httpClient = await PrepareHttpClient(currentUser.TenantId);
+        var httpClient = await PrepareHttpClient(tenantId);
         using var response = await httpClient.PostAsync("orders/_search", payloadContent);
 
         response.EnsureSuccessStatusCode();
@@ -93,7 +93,7 @@ public class ErliApiService(
         };
     }
 
-    public async Task<GetProductsModelResponse> GetProducts(GetProductTagsQueryFilters filters)
+    public async Task<GetProductsModelResponse> GetProducts(GetProductTagsQueryFilters filters, TenantId tenantId)
     {
         var request = new GetProductsFiltersRequestPayload
         {
@@ -127,7 +127,7 @@ public class ErliApiService(
         
         var payloadContent = PrepareContentRequest(request);
 
-        var httpClient = await PrepareHttpClient(currentUser.TenantId);
+        var httpClient = await PrepareHttpClient(tenantId);
         using var response = await httpClient.PostAsync("products/_search", payloadContent);
 
         response.EnsureSuccessStatusCode();

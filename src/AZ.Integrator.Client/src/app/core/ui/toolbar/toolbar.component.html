@@ -3,32 +3,40 @@
     <button mat-icon-button (click)="toggleMenu()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>AZ Integrator</span>
+    <span class="hidden lg:inline">AZ Integrator</span>
 
     <span class="spacer"></span>
 
-    <mat-form-field class="mt-5">
-      <mat-label>Zaloguj jako</mat-label>
-      <mat-select (selectionChange)="login($event.value)">
-        @for (tenant of tenants; track tenant) {
-          <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
-            <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
-          </ng-container>
+    <mat-form-field class="mt-5 store-selector" *appRoleAllow="[AuthRoles.Admin]">
+      <mat-label>Wybierz sklep</mat-label>
+      <mat-select (selectionChange)="changeTenant($event.value)">
+        @for (group of tenantGroups; track group) {
+          <mat-optgroup [label]="group.groupName">
+            @for (tenant of group.tenants; track tenant) {
+              <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
+                <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
+              </ng-container>
+            }
+          </mat-optgroup>
         }
       </mat-select>
     </mat-form-field>
 
     <span class="right-section">
       <span class="section user-info">
-        <span class="name">{{ (user$ | async)?.tenant_id }}</span>
-        <button mat-icon-button>
-          <mat-icon>face</mat-icon>
-        </button>
+        <span class="name"
+          >{{ (user$ | async)?.firstName }} {{ (user$ | async)?.lastName }}
+          <span class="hidden lg:inline">({{ (user$ | async)?.username }})</span></span
+        >
       </span>
 
-      <!--      <button mat-icon-button matTooltip="Wyloguj" (click)="logout()">-->
-      <!--        <mat-icon class="material-icons-outlined">logout</mat-icon>-->
-      <!--      </button>-->
+      <button mat-icon-button matTooltip="My Account">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Wyloguj" (click)="logout()">
+        <mat-icon class="material-icons-outlined">logout</mat-icon>
+      </button>
     </span>
   </mat-toolbar-row>
 </mat-toolbar>

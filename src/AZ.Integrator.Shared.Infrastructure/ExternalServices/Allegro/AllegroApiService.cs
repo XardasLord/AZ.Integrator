@@ -2,44 +2,30 @@
 using System.Net.Http.Json;
 using System.Text;
 using System.Web;
-using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 
-public class AllegroApiService : IAllegroService
+public class AllegroApiService(
+    IHttpClientFactory httpClientFactory,
+    AllegroAccountDataViewContext dataViewContext)
+    : IAllegroService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly AllegroAccountDataViewContext _dataViewContext;
-    private readonly ICurrentUser _currentUser;
-
     private const string AllegroMediaType = "application/vnd.allegro.public.v1+json";
 
-    public AllegroApiService(
-        IHttpClientFactory httpClientFactory,
-        AllegroAccountDataViewContext dataViewContext,
-        ICurrentUser currentUser)
-    {
-        _httpClientFactory = httpClientFactory;
-        _dataViewContext = dataViewContext;
-        _currentUser = currentUser;
-    }
-
-    public async Task<IEnumerable<OrderEvent>> GetOrderEvents()
+    public async Task<IEnumerable<OrderEvent>> GetOrderEvents(string tenantId)
     {
         var orderTypes = new[] { AllegroOrderTypesEnum.ReadyForProcessing.Name };
         var queryString = string.Join("&", orderTypes.Select(type => $"type={HttpUtility.UrlEncode(type)}"));
         
-        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        var httpClient = await PrepareHttpClient(tenantId);
         using var response = await httpClient.GetAsync($"order/events?{queryString}");
         
         response.EnsureSuccessStatusCode();
@@ -49,11 +35,11 @@ public class AllegroApiService : IAllegroService
         return orderEvents.Events;
     }
 
-    public async Task<GetNewOrdersModelResponse> GetOrders(GetAllQueryFilters filters)
+    public async Task<GetNewOrdersModelResponse> GetOrders(GetAllQueryFilters filters, string tenantId)
     {
         var queryParams = ApplyFilters(filters);
 
-        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        var httpClient = await PrepareHttpClient(tenantId);
         using var response = await httpClient.GetAsync($"order/checkout-forms?{queryParams}");
         
         response.EnsureSuccessStatusCode();
@@ -63,9 +49,9 @@ public class AllegroApiService : IAllegroService
         return orders;
     }
 
-    public async Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId)
+    public async Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId, string tenantId)
     {
-        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        var httpClient = await PrepareHttpClient(tenantId);
         using var response = await httpClient.GetAsync($"order/checkout-forms/{orderId}");
         
         response.EnsureSuccessStatusCode();
@@ -75,7 +61,7 @@ public class AllegroApiService : IAllegroService
         return orderDetails;
     }
 
-    public async Task<GetOffersResponse> GetOffers(GetProductTagsQueryFilters filters)
+    public async Task<GetOffersResponse> GetOffers(GetProductTagsQueryFilters filters, string tenantId)
     {
         var queryParamsDictionary = new Dictionary<string, object>
         {
@@ -90,7 +76,7 @@ public class AllegroApiService : IAllegroService
 
         var queryParams = queryParamsDictionary.ToHttpQueryString();
         
-        var httpClient = await PrepareHttpClient(_currentUser.TenantId);
+        var httpClient = await PrepareHttpClient(tenantId);
         using var response = await httpClient.GetAsync($"sale/offers?{queryParams}");
         
         response.EnsureSuccessStatusCode();
@@ -162,7 +148,7 @@ public class AllegroApiService : IAllegroService
 
     private async Task<HttpClient> PrepareHttpClient(TenantId tenantId)
     {
-        var httpClient = _httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
+        var httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessToken(tenantId));
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AllegroMediaType));
 
@@ -171,7 +157,7 @@ public class AllegroApiService : IAllegroService
 
     private async Task<string> GetAccessToken(TenantId tenantId)
     {
-        var tenantAccount = await _dataViewContext.AllegroAccounts.SingleAsync(x => x.TenantId == tenantId.Value);
+        var tenantAccount = await dataViewContext.AllegroAccounts.SingleAsync(x => x.TenantId == tenantId.Value);
 
         return tenantAccount.AccessToken;
     }

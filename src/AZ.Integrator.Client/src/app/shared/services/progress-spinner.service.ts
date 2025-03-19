@@ -1,14 +1,14 @@
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ProgressSpinnerComponent } from '../components/progress-spinner/progress-spinner.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProgressSpinnerService {
-  private progressSpinnerDialogRef?: MatDialogRef<ProgressSpinnerComponent>;
+  private dialog = inject(MatDialog);
 
-  constructor(private dialog: MatDialog) {}
+  private progressSpinnerDialogRef?: MatDialogRef<ProgressSpinnerComponent>;
 
   hideProgressSpinner(): void {
     if (this.progressSpinnerDialogRef) {

@@ -1,4 +1,6 @@
-﻿using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
+﻿using AZ.Integrator.Domain.SharedKernel;
+using AZ.Integrator.Shared.Application;
+using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
 using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateInpostShipment;
@@ -12,4 +14,6 @@ public record CreateInpostShipmentCommand(
     string Reference,
     string Comments,
     string ExternalCustomerId,
-    string ExternalOrderId) : IRequest<ShipmentResponse>;
+    string ExternalOrderId,
+    ShopProviderType? ShopProviderType = null,
+    string TenantId = null) : HeaderRequest, IRequest<ShipmentResponse>;

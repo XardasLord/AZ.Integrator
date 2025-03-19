@@ -19,17 +19,18 @@ public class GetAllQueryHandler(
 {
     public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        if (currentUser.ShopProviderType == ShopProviderType.Allegro)
+        var roles = currentUser.Roles;
+        if (query.ShopProvider == ShopProviderType.Allegro)
         {
-            var ordersResponse = await allegroService.GetOrders(query.Filters); 
+            var ordersResponse = await allegroService.GetOrders(query.Filters, query.TenantId); 
             
             var orderDtos = mapper.Map<List<OrderDetailsDto>>(ordersResponse.CheckoutForms);
             return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
         }
 
-        if (currentUser.ShopProviderType == ShopProviderType.Erli)
+        if (query.ShopProvider == ShopProviderType.Erli)
         {
-            var ordersResponse = await erliService.GetOrders(query.Filters);
+            var ordersResponse = await erliService.GetOrders(query.Filters, query.TenantId);
 
             var orderDtos = MapErliOrders(ordersResponse);
 

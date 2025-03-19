@@ -22,17 +22,17 @@ public class TagParcelTemplate : Entity, IAggregateRoot
         _parcels = [];
     }
 
-    private TagParcelTemplate(Tag tag, IEnumerable<TagParcel> parcels, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private TagParcelTemplate(Tag tag, IEnumerable<TagParcel> parcels, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _tag = tag;
-        _tenantId = currentUser.TenantId;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, currentUser.TenantId);
+        _tenantId = tenantId;
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
         _parcels = parcels.ToList();
     }
 
-    public static TagParcelTemplate Create(Tag tag, IEnumerable<TagParcel> parcels, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static TagParcelTemplate Create(Tag tag, IEnumerable<TagParcel> parcels, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var template = new TagParcelTemplate(tag, parcels, currentUser, currentDateTime);
+        var template = new TagParcelTemplate(tag, parcels, tenantId, currentUser, currentDateTime);
         
         return template;
     }

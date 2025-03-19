@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
@@ -16,12 +16,13 @@ import { GenerateInvoiceCommand } from '../models/commands/generate-invoice.comm
 
 @Injectable()
 export class OrdersService extends RemoteServiceBase {
+  private shipmentsGqlQuery = inject(GetShipmentsGQL);
+
   private apiUrl = environment.apiEndpoint;
 
-  constructor(
-    httpClient: HttpClient,
-    private shipmentsGqlQuery: GetShipmentsGQL
-  ) {
+  constructor() {
+    const httpClient = inject(HttpClient);
+
     super(httpClient);
   }
 

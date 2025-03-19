@@ -1,17 +1,15 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Invoice;
+﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Invoice;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Shipment;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Stock;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ErliAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.UserIdentity;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Stock;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,13 +61,18 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
+
+        services.AddDbContext<StockDbContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
+        });
         
         services.AddDbContext<ShipmentDataViewContext>(options =>
         {
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            // .UseSnakeCaseNamingConvention();
         });
         
         services.AddDbContext<InvoiceDataViewContext>(options =>
@@ -77,7 +80,6 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            // .UseSnakeCaseNamingConvention();
         });
         
         services.AddDbContext<AllegroAccountDataViewContext>(options =>
@@ -85,7 +87,6 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            // .UseSnakeCaseNamingConvention();
         });
         
         services.AddDbContext<TagParcelTemplateDataViewContext>(options =>
@@ -93,7 +94,13 @@ internal static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            // .UseSnakeCaseNamingConvention();
+        });
+        
+        services.AddDbContext<StockDataViewContext>(options =>
+        {
+            options.EnableDetailedErrors();
+            options.UseNpgsql(postgresOptions.ConnectionStringApplication)
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
         
         // EF Core + Npgsql issue (https://www.npgsql.org/doc/types/datetime.html)

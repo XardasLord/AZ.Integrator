@@ -5,19 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AZ.Integrator.Api.Controllers;
 
-public class TestController : ApiBaseController
+public class TestController(ICurrentUser currentUser) : ApiBaseController
 {
-    private readonly ICurrentUser _currentUser;
-
-    public TestController(ICurrentUser currentUser)
-    {
-        _currentUser = currentUser;
-    }
-    
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("tenant")]
     public IActionResult GetTenantId()
     {
-        return Ok(_currentUser.TenantId);
+        return Ok(currentUser.UserName);
     }
 }

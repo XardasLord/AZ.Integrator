@@ -1,4 +1,6 @@
-﻿using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd.Models;
+﻿using AZ.Integrator.Domain.SharedKernel;
+using AZ.Integrator.Shared.Application;
+using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd.Models;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
 using Mediator;
 
@@ -13,4 +15,6 @@ public record CreateDpdShipmentCommand(
     string Reference,
     string Comments,
     string ExternalCustomerId,
-    string AllegroOrderId) : IRequest<CreateDpdShipmentResponse>;
+    string AllegroOrderId, 
+    ShopProviderType? ShopProviderType = null,
+    string TenantId = null) : HeaderRequest, IRequest<CreateDpdShipmentResponse>;

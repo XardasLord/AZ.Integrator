@@ -1,14 +1,10 @@
-﻿using AZ.Integrator.Domain.SharedKernel;
-
-namespace AZ.Integrator.Domain.Abstractions;
+﻿namespace AZ.Integrator.Domain.Abstractions;
 
 public interface ICurrentUser
 {
     Guid UserId { get; }
+    string Name { get; }
     string UserName { get; }
-    string Role { get; }
-    string TenantId { get; }
+    IReadOnlyCollection<string> Roles { get; }
     IReadOnlyCollection<string> AppScopes { get; }
-    int ShipXOrganizationId { get; }
-    ShopProviderType ShopProviderType { get; }
 }

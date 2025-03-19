@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
@@ -33,16 +33,14 @@ const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>(
 })
 @Injectable()
 export class ParcelTemplatesState {
-  private dialogRef?: MatDialogRef<ParcelTemplateDefinitionModalComponent>;
+  private store = inject(Store);
+  private packageTemplatesService = inject(ParcelTemplatesService);
+  private getTagParcelTemplatesGql = inject(GetTagParcelTemplatesGQL);
+  private zone = inject(NgZone);
+  private dialog = inject(MatDialog);
+  private toastService = inject(ToastrService);
 
-  constructor(
-    private store: Store,
-    private packageTemplatesService: ParcelTemplatesService,
-    private getTagParcelTemplatesGql: GetTagParcelTemplatesGQL,
-    private zone: NgZone,
-    private dialog: MatDialog,
-    private toastService: ToastrService
-  ) {}
+  private dialogRef?: MatDialogRef<ParcelTemplateDefinitionModalComponent>;
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
   static getProductTags(state: ParcelTemplatesStateModel): string[] {

@@ -7,10 +7,12 @@ using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using AZ.Integrator.Shared.Infrastructure.Hangfire;
 using AZ.Integrator.Shared.Infrastructure.Hangfire.RecurringJobs;
 using AZ.Integrator.Shared.Infrastructure.Identity;
+using AZ.Integrator.Shared.Infrastructure.Mediator;
 using AZ.Integrator.Shared.Infrastructure.OpenApi;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
+using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,7 +39,11 @@ public static class Extensions
         services.AddIntegratorAuthorization(configuration);
         services.AddIntegratorIdentity(configuration);
             
-        services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
+        services.AddMediator(opt =>
+        {
+            opt.ServiceLifetime = ServiceLifetime.Scoped;
+        });
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(HeaderRequestMiddleware<,>));
         
         services.AddPostgres(configuration);
         services.AddIntegratorGraphQl(configuration);

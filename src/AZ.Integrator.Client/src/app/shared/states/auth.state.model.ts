@@ -1,5 +1,10 @@
-import { UserAuthModel } from '../auth/models/user-auth.model';
+import { KeycloakProfile } from 'keycloak-js/lib/keycloak';
+import { AuthScopes } from '../auth/models/auth.scopes';
+import { AuthRoles } from '../auth/models/auth.roles';
 
 export interface AuthStateModel {
-  user: UserAuthModel | null;
+  profile: KeycloakProfile | null;
+  isLoggedIn: boolean;
+  authScopes: AuthScopes[];
+  authRoles: AuthRoles[];
 }

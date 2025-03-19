@@ -5,9 +5,11 @@ using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Invoice;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Shipment;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Stock;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
+using AZ.Integrator.Stocks.Domain.Aggregates;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,10 +24,12 @@ public static class Extensions
             .AddScoped(typeof(IAggregateRepository<DpdShipment>), typeof(AggregateRepository<DpdShipment, ShipmentDbContext>))
             .AddScoped(typeof(IAggregateRepository<Invoice>), typeof(AggregateRepository<Invoice, InvoiceDbContext>))
             .AddScoped(typeof(IAggregateRepository<TagParcelTemplate>), typeof(AggregateRepository<TagParcelTemplate, TagParcelTemplateDbContext>))
+            .AddScoped(typeof(IAggregateRepository<Stock>), typeof(AggregateRepository<Stock, StockDbContext>))
             
             .AddScoped(typeof(IAggregateReadRepository<InpostShipment>), typeof(AggregateReadRepository<InpostShipment, ShipmentDbContext>))
             .AddScoped(typeof(IAggregateReadRepository<DpdShipment>), typeof(AggregateReadRepository<DpdShipment, ShipmentDbContext>))
             .AddScoped(typeof(IAggregateReadRepository<Invoice>), typeof(AggregateReadRepository<Invoice, InvoiceDbContext>))
-            .AddScoped(typeof(IAggregateReadRepository<TagParcelTemplate>), typeof(AggregateReadRepository<TagParcelTemplate, TagParcelTemplateDbContext>));
+            .AddScoped(typeof(IAggregateReadRepository<TagParcelTemplate>), typeof(AggregateReadRepository<TagParcelTemplate, TagParcelTemplateDbContext>))
+            .AddScoped(typeof(IAggregateReadRepository<Stock>), typeof(AggregateReadRepository<Stock, StockDbContext>));
     }
 }

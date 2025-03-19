@@ -14,7 +14,7 @@ public class SaveParcelTemplateCommandHandler(
 {
     public async ValueTask<Unit> Handle(SaveParcelTemplateCommand command, CancellationToken cancellationToken)
     {
-        var spec = new TagParcelTemplateByTagAndTenantSpec(command.Tag, currentUser.TenantId);
+        var spec = new TagParcelTemplateByTagAndTenantSpec(command.Tag, command.TenantId);
         
         var tagParcelTemplate = await repository.SingleOrDefaultAsync(spec, cancellationToken);
 
@@ -23,7 +23,7 @@ public class SaveParcelTemplateCommandHandler(
         
         if (tagParcelTemplate is null)
         {
-            tagParcelTemplate = TagParcelTemplate.Create(command.Tag, tagParcels, currentUser, currentDateTime);
+            tagParcelTemplate = TagParcelTemplate.Create(command.Tag, tagParcels, command.TenantId, currentUser, currentDateTime);
             
             await repository.AddAsync(tagParcelTemplate, cancellationToken);
         }

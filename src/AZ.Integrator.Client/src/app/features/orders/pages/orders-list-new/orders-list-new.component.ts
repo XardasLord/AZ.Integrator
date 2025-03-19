@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { map, Observable, of } from 'rxjs';
@@ -13,13 +13,19 @@ import {
 } from '../../states/orders.action';
 import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
+import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MaterialModule } from '../../../../shared/modules/material.module';
 
 @Component({
   selector: 'app-orders-list-new',
   templateUrl: './orders-list-new.component.html',
   styleUrls: ['./orders-list-new.component.scss'],
+  imports: [MaterialModule, NgIf, MatIcon, NgFor, AsyncPipe, DecimalPipe, DatePipe],
 })
 export class OrdersListNewComponent implements OnInit {
+  private store = inject(Store);
+
   displayedColumns: string[] = [
     nameof<LineItemDetails>('boughtAt'),
     nameof<OrderDetailsModel>('buyer'),
@@ -38,8 +44,6 @@ export class OrdersListNewComponent implements OnInit {
   totalItems$ = this.store.select(OrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(OrdersState.getCurrentPage);
   pageSize$ = this.store.select(OrdersState.getPageSize);
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(new SetCurrentTab('New'));

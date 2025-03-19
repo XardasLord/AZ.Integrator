@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NgxsModule } from '@ngxs/store';
+import { provideStates } from '@ngxs/store';
 import { SharedModule } from '../../shared/shared.module';
 import { OrdersRoutingModule } from './orders-routing.module';
 import { OrdersComponent } from './pages/orders/orders.component';
@@ -14,15 +14,12 @@ import { InvoicesState } from './states/invoices.state';
 import { OrdersFiltersComponent } from './pages/orders-filters/orders-filters.component';
 
 @NgModule({
-  declarations: [
-    OrdersComponent,
-    OrdersListNewComponent,
-    OrdersListReadyForShipmentComponent,
-    RegisterShipmentModalComponent,
-    OrdersListSentComponent,
-    OrdersFiltersComponent,
-  ],
-  imports: [SharedModule, OrdersRoutingModule, NgxsModule.forFeature([OrdersState, InvoicesState])],
-  providers: [OrdersService, InvoicesService],
+    imports: [SharedModule, OrdersRoutingModule, OrdersComponent,
+        OrdersListNewComponent,
+        OrdersListReadyForShipmentComponent,
+        RegisterShipmentModalComponent,
+        OrdersListSentComponent,
+        OrdersFiltersComponent],
+    providers: [provideStates([OrdersState, InvoicesState]), OrdersService, InvoicesService],
 })
 export class OrdersModule {}

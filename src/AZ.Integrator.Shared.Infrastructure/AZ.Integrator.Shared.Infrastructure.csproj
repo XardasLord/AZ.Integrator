@@ -46,7 +46,6 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="6.0.0" />
     <PackageReference Include="System.ServiceModel.Federation" Version="8.0.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="8.0.0" />
@@ -61,5 +60,12 @@
     <ProjectReference Include="..\Modules\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
     <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Domain\AZ.Integrator.TagParcelTemplates.Domain.csproj" />
     <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Application\AZ.Integrator.TagParcelTemplates.Application.csproj" />
+    <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Domain\AZ.Integrator.Stocks.Domain.csproj" />
+    <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Application\AZ.Integrator.Stocks.Application.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Persistence\EF\DbContexts\Domain\Stock\Migrations\" />
+    <Folder Include="Persistence\EF\DbContexts\View\Stock\Migrations\" />
   </ItemGroup>
 </Project>
