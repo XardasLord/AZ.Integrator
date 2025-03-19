@@ -1,137 +1,119 @@
-import { Inject, Injectable } from '@angular/core';
-import { Action, NgxsOnInit, Selector, State, StateContext, StateToken } from '@ngxs/store';
+import { Injectable, inject } from '@angular/core';
+import { Action, NgxsAfterBootstrap, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
-import { tap } from 'rxjs';
-import { UserAuthModel } from '../auth/models/user-auth.model';
+
+import { KeycloakService } from 'keycloak-angular';
+import { KeycloakProfile } from 'keycloak-js/lib/keycloak';
+
 import { AuthScopes } from '../auth/models/auth.scopes';
-import { Login, LoginCompleted, LoginViaErli, Logout, Relog } from './auth.action';
-import { AuthService } from '../services/auth.service';
+import { Login, LoginCompleted, Logout, NotAuthorized, Relog } from './auth.action';
 import { AuthStateModel } from './auth.state.model';
-import { UserAuthHelper } from '../auth/helpers/user-auth.helper';
-import { DOCUMENT } from '@angular/common';
 import { RoutePaths } from '../../core/modules/app-routing.module';
-import { ApplyFilter } from '../../features/orders/states/orders.action';
+import { AuthRoles } from '../auth/models/auth.roles';
+import { getAuthRolesFromToken } from '../auth/helpers/keycloak-token-roles.helper';
 
 export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 
 @State<AuthStateModel>({
   name: AUTH_STATE_TOKEN,
   defaults: {
-    user: JSON.parse(localStorage.getItem('user')!),
+    profile: null,
+    isLoggedIn: false,
+    authScopes: [],
+    authRoles: [],
   },
 })
 @Injectable()
-export class AuthState implements NgxsOnInit {
-  constructor(
-    private authService: AuthService,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
+export class AuthState implements NgxsAfterBootstrap {
+  private keycloak = inject(KeycloakService);
 
-  ngxsOnInit(ctx: StateContext<AuthStateModel>): void {
-    const state = ctx.getState();
-    if (state.user) {
-      ctx.dispatch(new LoginCompleted(state.user));
-      return;
-    }
 
-    const currentUrl = this.document.location.href;
-    const regExp = new RegExp(`(access_token=)(.+)`).exec(currentUrl);
-
-    if (regExp && regExp[2]) {
-      const accessToken = regExp[2];
-
-      const authUser = UserAuthHelper.parseAccessToken(accessToken);
-
-      ctx.dispatch(new LoginCompleted(authUser!));
+  ngxsAfterBootstrap(ctx: StateContext<AuthStateModel>): void {
+    if (this.keycloak.isLoggedIn()) {
+      ctx.dispatch(new LoginCompleted());
     } else {
-      console.warn('BRAK TOKENU - wymagane zalogowanie');
-      // ctx.dispatch(new Login());
+      ctx.dispatch(new Logout());
     }
-
-    // const user = AuthState.getUser(ctx.getState());
-    // if (!user) {
-    //   ctx.dispatch(new Navigate([RoutePaths.Login]));
-    // }
-    //
-    // ctx.patchState({
-    //   user: user,
-    // });
   }
 
   @Selector([AUTH_STATE_TOKEN])
-  static getUser(state: AuthStateModel): UserAuthModel | null {
-    if (state?.user === null && localStorage.getItem('user') !== null) {
-      return JSON.parse(localStorage.getItem('user')!);
+  static getProfile(state: AuthStateModel): KeycloakProfile | null {
+    if (state?.profile === null && localStorage.getItem('profile') !== null) {
+      return JSON.parse(localStorage.getItem('profile')!);
     }
 
-    return state?.user;
+    return state?.profile;
   }
 
   @Selector([AUTH_STATE_TOKEN])
   static isAuthenticated(state: AuthStateModel): boolean {
-    return !!state.user;
+    return state.isLoggedIn;
   }
 
   @Selector([AUTH_STATE_TOKEN])
   static getUserScopes(state: AuthStateModel): AuthScopes[] {
-    if (!state || !state.user || !state.user.auth_scopes) {
+    if (!state || !state.authScopes) {
       return [];
     }
 
-    return Object.values(state.user.auth_scopes).map(x => +x as number);
+    return Object.values(state.authScopes).map(x => +x as number);
+  }
+
+  @Selector([AUTH_STATE_TOKEN])
+  static getUserRoles(state: AuthStateModel): AuthRoles[] {
+    // if (!state || !state) {
+    //   return [];
+    // }
+
+    return Object.values(state.authRoles);
   }
 
   @Action(Login)
-  login(ctx: StateContext<AuthStateModel>, _: Login) {
-    // TODO: Unused?
+  login(ctx: StateContext<AuthStateModel>) {
+    ctx.patchState({
+      profile: undefined,
+      isLoggedIn: false,
+    });
+
+    this.keycloak?.login({
+      redirectUri: `${window.location.origin}/login-completed`,
+    });
   }
 
   @Action(LoginCompleted)
-  loginCompleted(ctx: StateContext<AuthStateModel>, action: LoginCompleted) {
-    ctx.patchState({
-      user: action.user,
+  loginCompleted(ctx: StateContext<AuthStateModel>) {
+    // TODO: Extend profile with the custom app_scopes
+    this.keycloak.loadUserProfile().then(profile => {
+      ctx.patchState({
+        isLoggedIn: this.keycloak.isLoggedIn(),
+        profile: profile,
+        authRoles: getAuthRolesFromToken(this.keycloak.getKeycloakInstance().idTokenParsed!),
+      });
     });
 
-    localStorage.setItem('access_token', action.user.access_token!);
-    localStorage.setItem('user', JSON.stringify(action.user));
-
-    ctx.dispatch(new Navigate([RoutePaths.Orders]));
-    ctx.dispatch(new ApplyFilter('')); // This is temporary solution to reload list of orders
-  }
-
-  @Action(LoginViaErli)
-  loginViaErli(ctx: StateContext<AuthStateModel>, action: LoginViaErli) {
-    return this.authService.loginViaErli(action.tenantId).pipe(
-      tap((response: { access_token: string }) => {
-        const authUser = UserAuthHelper.parseAccessToken(response.access_token);
-
-        if (authUser) {
-          ctx.dispatch(new LoginCompleted(authUser));
-        }
-      })
-    );
+    ctx.dispatch(new Navigate([RoutePaths.Home]));
   }
 
   @Action(Logout)
-  logout(ctx: StateContext<AuthStateModel>, _: Logout) {
-    return this.authService.logout().pipe(
-      tap(() => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('user');
-        // localStorage.removeItem("expires_at");
+  logout(ctx: StateContext<AuthStateModel>) {
+    ctx.patchState({
+      profile: null,
+      isLoggedIn: false,
+      authRoles: [],
+    });
 
-        ctx.patchState({
-          user: null,
-        });
-
-        // ctx.dispatch(new Login());
-        // ctx.dispatch(new Navigate([RoutePaths.Login]));
-      })
-    );
+    this.keycloak.logout().then(() => {
+      ctx.dispatch(new Login());
+    });
   }
 
   @Action(Relog)
   relog(ctx: StateContext<AuthStateModel>) {
     return ctx.dispatch(new Logout());
+  }
+
+  @Action(NotAuthorized)
+  notAuthorized(ctx: StateContext<AuthStateModel>) {
+    ctx.dispatch(new Navigate([RoutePaths.NotAuthorized]));
   }
 }

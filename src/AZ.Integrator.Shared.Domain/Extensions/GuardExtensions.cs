@@ -42,6 +42,17 @@ public static class GuardExtensions
         return input;
     }
 
+    public static string OperatorCreationInformationCreator(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
+    {
+        // if (input == default)
+        //     throw new InvalidCreationInformationCreatorException(input, "Creator cannot be empty");
+
+        // if (input == Guid.Empty)
+        //     throw new InvalidCreationInformationCreatorException(input, "Creator cannot be unknown");
+
+        return input;
+    }
+
     public static DateTime ModificationInformationDate(this IGuardClause guardClause, DateTime input, [CallerArgumentExpression("input")] string parameterName = null)
     {
         if (input == default)
@@ -97,6 +108,19 @@ public static class GuardExtensions
     }
 
     public static string TenantId(this IGuardClause guardClause, string input, [CallerArgumentExpression("input")] string parameterName = null)
+    {
+        return input;
+    }
+
+    public static int Quantity(this IGuardClause guardClause, int input, [CallerArgumentExpression("input")] string parameterName = null)
+    {
+        if (input < 0)
+            throw new InvalidQuantityException(input, "Quantity cannot lower than zero");
+
+        return input;
+    }
+
+    public static int ChangeQuantity(this IGuardClause guardClause, int input, [CallerArgumentExpression("input")] string parameterName = null)
     {
         return input;
     }

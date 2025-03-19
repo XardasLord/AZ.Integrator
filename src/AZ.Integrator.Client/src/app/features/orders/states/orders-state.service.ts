@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
@@ -50,15 +50,13 @@ const ORDERS_STATE_TOKEN = new StateToken<OrdersStateModel>('orders');
 })
 @Injectable()
 export class OrdersState {
-  private dialogRef?: MatDialogRef<RegisterShipmentModalComponent>;
+  private orderService = inject(OrdersService);
+  private downloadService = inject(DownloadService);
+  private dialog = inject(MatDialog);
+  private zone = inject(NgZone);
+  private toastService = inject(ToastrService);
 
-  constructor(
-    private orderService: OrdersService,
-    private downloadService: DownloadService,
-    private dialog: MatDialog,
-    private zone: NgZone,
-    private toastService: ToastrService
-  ) {}
+  private dialogRef?: MatDialogRef<RegisterShipmentModalComponent>;
 
   @Selector([ORDERS_STATE_TOKEN])
   static getAllNewOrders(state: OrdersStateModel): OrderDetailsModel[] {

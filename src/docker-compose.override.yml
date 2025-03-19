@@ -1,17 +1,40 @@
-version: '3.4'
-
 services:
   api:
     environment:
+      - ASPNETCORE_URLS=https://+:443;http://+:80
       - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate_192.168.0.185.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=
       - Infrastructure__Postgres__ConnectionStringApplication=Server=db;Port=5432;Database=integrator;Username=postgres;Password=postgres;
       - Infrastructure__Postgres__ConnectionStringHangfire=Server=db;Port=5432;Database=integrator;Username=postgres;Password=postgres;
-      - Infrastructure__Allegro__RedirectUri=http://host.docker.internal:6010/auth/allegro-auth-callback
-    ports:
-      - "80"
+      - Infrastructure__Allegro__RedirectUri=https://host.docker.internal:6010/auth/allegro-auth-callback
+      - Infrastructure__Keycloak__Authority=https://host.docker.internal:9080/realms/az-integrator
+      - Infrastructure__Keycloak__AuthorizationUrl=https://host.docker.internal:9080/realms/az-integrator/protocol/openid-connect/auth
+      - Infrastructure__Keycloak__TokenUrl=https://host.docker.internal:9080/realms/az-integrator/protocol/openid-connect/token
 
   db:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=integrator
+        
+  keycloak:
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      
+      KC_HOSTNAME: 192.168.0.185
+      KC_HOSTNAME_STRICT: false
+      KC_HTTP_ENABLED: false
+      
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/certificate_192.168.0.185.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/private_key_192.168.0.185.pem
+      
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin

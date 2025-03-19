@@ -4,7 +4,7 @@ import { GraphQLHelper } from './graphql.helper';
 export class GraphQLQueryVo {
   public currentPage: PageEvent = GraphQLHelper.getInitialPageEvent();
   public currentOrder?: GraphQLOrderVo<any>;
-  public searchText?: string;
+  public searchText?: string = '';
   public filters: Array<GraphQLFilterVo> = new Array<GraphQLFilterVo>();
 
   constructor(init?: Partial<GraphQLQueryVo>) {

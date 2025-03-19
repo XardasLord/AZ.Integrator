@@ -1,0 +1,43 @@
+<div class="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4">
+  <h2 class="text-lg font-semibold text-center mb-2">
+    @if (type === 'in') {
+      Przyjęcie towaru - skanuj kod kreskowy
+    } @else {
+      Wydanie towaru - skanuj kod kreskowy
+    }
+  </h2>
+  <input
+    #barcodeInput
+    type="text"
+    [(ngModel)]="barcode"
+    (keydown.enter)="scanBarcode()"
+    placeholder="Zeskanuj kod kreskowy..."
+    class="w-full px-4 py-3 text-lg text-center border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300" />
+
+  <button
+    (click)="scanBarcode()"
+    class="w-full mt-2 px-4 py-3 text-lg font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition cursor-pointer">
+    Zatwierdź
+  </button>
+
+  <ul class="w-full mt-4 space-y-2 max-h-128 overflow-auto">
+    <li
+      *ngFor="let log of barcodeScannerLogs$ | async"
+      class="w-full p-3 text-center border border-gray-400 rounded-lg shadow-sm"
+      [ngClass]="{
+        'bg-green-100 border-green-500': log.changeQuantity > 0,
+        'bg-red-100 border-red-500': log.changeQuantity < 0,
+      }">
+      <span class="font-bold text-blue-700 text-lg">{{ log?.packageCode }}</span>
+      <span
+        class="text-lg font-semibold"
+        [ngClass]="{ 'text-green-600': log.changeQuantity > 0, 'text-red-600': log.changeQuantity < 0 }">
+        {{ log.changeQuantity > 0 ? '+' : '' }}{{ log.changeQuantity }}
+      </span>
+
+      <div class="text-xs text-gray-500 mt-1">
+        {{ log.createdAt | date: 'dd.MM.yyyy, HH:mm:ss' }}
+      </div>
+    </li>
+  </ul>
+</div>

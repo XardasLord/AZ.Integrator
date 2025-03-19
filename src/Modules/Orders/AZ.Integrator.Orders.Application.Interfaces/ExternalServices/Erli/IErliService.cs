@@ -1,12 +1,13 @@
-﻿using AZ.Integrator.Shared.Application.ExternalServices.Erli;
+﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 
 namespace AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
 
 public interface IErliService
 {
-    Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters);
-    Task<GetProductsModelResponse> GetProducts(GetProductTagsQueryFilters filters);
+    Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId);
+    Task<GetProductsModelResponse> GetProducts(GetProductTagsQueryFilters filters, TenantId tenantId);
 
     Task AssignTrackingNumber(
         string orderNumber,

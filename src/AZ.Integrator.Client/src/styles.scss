@@ -1,8 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@import 'styles/variables.scss';
+@use 'tailwindcss' as *;
+@use 'styles/variables.scss' as *;
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -42,4 +39,23 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mat-column-actions {
   text-align: center !important;
+}
+
+@media (max-width: 768px) {
+  mat-sidenav {
+    width: 250px;
+  }
+
+  .store-selector {
+    width: 100%;
+  }
+
+  .right-section {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .mobile-hide {
+    display: none;
+  }
 }

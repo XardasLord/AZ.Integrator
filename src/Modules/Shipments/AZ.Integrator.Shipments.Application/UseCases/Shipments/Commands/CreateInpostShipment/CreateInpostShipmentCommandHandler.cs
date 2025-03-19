@@ -35,7 +35,7 @@ public class CreateInpostShipmentCommandHandler : IRequestHandler<CreateInpostSh
 
         var response = await _shipXService.CreateShipment(shipment);
         
-        var inpostShipment = InpostShipment.Create(response.Id.ToString(), command.ExternalOrderId, _currentUser, _currentDateTime);
+        var inpostShipment = InpostShipment.Create(response.Id.ToString(), command.ExternalOrderId, command.TenantId, _currentUser, _currentDateTime);
         await _shipmentRepository.AddAsync(inpostShipment, cancellationToken);
 
         return response;

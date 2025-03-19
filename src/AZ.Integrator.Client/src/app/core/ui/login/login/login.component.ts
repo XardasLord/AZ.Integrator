@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { Login } from '../../../../shared/states/auth.action';
 import { environment } from '../../../../../environments/environment';
+import { MaterialModule } from '../../../../shared/modules/material.module';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule],
 })
 export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private store = inject(Store);
+
   form: FormGroup;
-  constructor(
-    private fb: FormBuilder,
-    private store: Store
-  ) {
+  constructor() {
     this.form = this.fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required],

@@ -2,18 +2,21 @@ import { APP_VERSION } from '../app/version';
 
 export const environment = {
   version: `${APP_VERSION}-dev`,
-  apiEndpoint: 'http://localhost:6010/api',
-  graphqlEndpoint: 'http://localhost:6010/api/graphql',
+  apiEndpoint: 'https://192.168.0.185:6010/api',
+  graphqlEndpoint: 'https://192.168.0.185:6010/api/graphql',
+  keycloakEndpoint: 'https://192.168.0.185:9080',
   defaultPageSize: 10,
 
   // Tenants
-  allegroLoginEndpoint: 'http://localhost:6010/api/auth/login-allegro?tenantId=',
-  erliLoginEndpoint: 'http://localhost:6010/api/auth/login-erli?tenantId=',
+  allegroLoginEndpoint: 'https://192.168.0.185:6010/api/auth/login-allegro?tenantId=',
 
-  allegroAzTeamTenantId: 'az-team',
-  allegroMebleplTenantId: 'meblepl',
-  allegroMyTestTenantId: 'my-test',
-  erliAzTeamTenantId: 'az-team',
+  allegroAzTeamTenantId: 'allegro-az-team',
+  allegroMebleplTenantId: 'allegro-meblepl',
+  allegroMyTestTenantId: 'allegro-my-test',
+  erliAzTeamTenantId: 'erli-az-team',
 
   showMyTestAccounts: true,
+
+  // Stocks
+  stockWarningThreshold: 20,
 };

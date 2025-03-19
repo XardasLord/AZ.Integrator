@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   api:
     image: az.integrator.api
@@ -11,9 +9,12 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "6010:80"
+      - "6011:80"
+      - "6010:443"
     networks:
       - az
+    volumes:
+      - ./https:/app/https
     healthcheck:
       test: curl --fail http://localhost/api/healthz || exit 1
       interval: 5s
@@ -36,6 +37,20 @@ services:
       timeout: 5s
       retries: 5
       
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.0.1
+    ports:
+      - "9080:8443"
+    container_name: az-integrator-keycloak
+    command: start-dev --https-port=8443
+    networks:
+      - az
+    volumes:
+      - ./https/:/opt/keycloak/conf
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   postgres_data:
     driver: local

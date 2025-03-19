@@ -1,10 +1,11 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { MessageStatusEnum } from './message-status.enum';
 
 @Injectable()
 export class ErrorService {
-  constructor(private snackBar: MatSnackBar) {}
+  private snackBar = inject(MatSnackBar);
+
 
   display(message: string, messageStatus: MessageStatusEnum): void {
     if (

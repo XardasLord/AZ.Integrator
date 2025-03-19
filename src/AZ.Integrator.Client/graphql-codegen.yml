@@ -1,7 +1,7 @@
 #documents: 'src/**/*.graphql.query.ts'
 generates:
   src/app/shared/graphql/graphql-integrator.schema.ts:
-    schema: "http://localhost:6010/api/graphql"
+    schema: "https://192.168.0.185:6010/api/graphql"
     plugins:
       - "typescript"
       - "typescript-operations"
