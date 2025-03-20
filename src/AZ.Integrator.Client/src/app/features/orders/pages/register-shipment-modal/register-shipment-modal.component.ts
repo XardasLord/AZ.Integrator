@@ -27,6 +27,7 @@ import { OrderDetailsModel } from '../../models/order-details.model';
 import { MatError } from '@angular/material/form-field';
 import { NgFor, NgIf } from '@angular/common';
 import { MaterialModule } from '../../../../shared/modules/material.module';
+import { TenantState } from '../../../../shared/states/tenant.state';
 
 @Component({
   selector: 'app-register-shipment-modal',
@@ -146,6 +147,9 @@ export class RegisterShipmentModalComponent {
       where: {
         tag: {
           in: tags,
+        },
+        tenantId: {
+          eq: this.store.selectSnapshot(TenantState.getTenant)?.tenantId,
         },
       },
     };

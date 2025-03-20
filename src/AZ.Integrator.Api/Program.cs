@@ -21,4 +21,6 @@ app.UseInfrastructure(builder.Configuration, app.Environment);
 
 app.MapGet("/", () => "Hello from HTTPS!");
 
+app.MapGet("/cert", () => Results.File("https/cert.pfx", "application/x-pkcs12"));
+
 app.Run();
