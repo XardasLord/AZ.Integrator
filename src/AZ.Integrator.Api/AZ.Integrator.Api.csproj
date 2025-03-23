@@ -36,4 +36,10 @@
         <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Application\AZ.Integrator.Stocks.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="https\certificate_192.168.0.185.pfx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
