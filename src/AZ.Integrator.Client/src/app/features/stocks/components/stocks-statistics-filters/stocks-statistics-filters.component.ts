@@ -28,13 +28,13 @@ export class StocksStatisticsFiltersComponent {
 
   dateRangeChanged() {
     if (this.dateRange.start && this.dateRange.end) {
-      this.store.dispatch(
-        new ApplyFilters(
-          this.store.selectSnapshot(StockLogsState.searchText),
-          this.dateRange.start!,
-          this.dateRange.end!
-        )
-      );
+      const startDate = new Date(this.dateRange.start);
+      const endDate = new Date(this.dateRange.end);
+
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(23, 59, 59, 999);
+
+      this.store.dispatch(new ApplyFilters(this.store.selectSnapshot(StockLogsState.searchText), startDate, endDate));
     }
   }
 }
