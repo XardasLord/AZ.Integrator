@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using AutoMapper;
-using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
@@ -14,12 +13,10 @@ namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 public class GetAllQueryHandler(
     IAllegroService allegroService,
     IErliService erliService,
-    IMapper mapper,
-    ICurrentUser currentUser) : IRequestHandler<GetAllQuery, GetAllQueryResponse>
+    IMapper mapper) : IRequestHandler<GetAllQuery, GetAllQueryResponse>
 {
     public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        var roles = currentUser.Roles;
         if (query.ShopProvider == ShopProviderType.Allegro)
         {
             var ordersResponse = await allegroService.GetOrders(query.Filters, query.TenantId); 

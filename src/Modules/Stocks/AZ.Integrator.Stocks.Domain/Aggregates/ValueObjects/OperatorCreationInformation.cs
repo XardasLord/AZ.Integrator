@@ -1,20 +1,21 @@
 ﻿using Ardalis.GuardClauses;
 using AZ.Integrator.Domain.Extensions;
-using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 
 namespace AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
 
 public record OperatorCreationInformation
 {
     public DateTime CreatedAt { get; }
-    public string OperatorId { get; }
+    public string OperatorLogin { get; }
+    public Guid OperatorId { get; }
 
     protected OperatorCreationInformation() { }
 	
-    public OperatorCreationInformation(DateTime creationDate, string createdBy)
+    public OperatorCreationInformation(DateTime creationDate, string createdByLogin, Guid createdById)
     {
         CreatedAt = Guard.Against.CreationInformationDate(creationDate);
-        OperatorId = Guard.Against.OperatorCreationInformationCreator(createdBy);
+        OperatorLogin = Guard.Against.OperatorCreationInformationCreator(createdByLogin);
+        OperatorId = Guard.Against.CreationInformationCreator(createdById);
     }
         
     public static implicit operator DateTime(OperatorCreationInformation info)

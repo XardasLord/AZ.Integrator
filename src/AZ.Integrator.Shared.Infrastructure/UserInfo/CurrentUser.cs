@@ -13,6 +13,8 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUse
     public Guid UserId => GetClaimValue(UserClaimType.UserId) is null ? Guid.Empty : Guid.Parse(GetClaimValue(UserClaimType.UserId));
     public string Name => GetClaimValue(UserClaimType.Name) ?? System;
     public string UserName => GetClaimValue(UserClaimType.UserName) ?? System;
+    public string Email => GetClaimValue(UserClaimType.Email) ?? System;
+    
     public IReadOnlyCollection<string> Roles => httpContextAccessor.HttpContext?.User.Claims
         .Where(c => c.Type == UserClaimType.Roles)
         .Select(c => c.Value)
