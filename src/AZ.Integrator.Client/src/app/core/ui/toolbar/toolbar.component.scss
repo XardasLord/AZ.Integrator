@@ -1,5 +1,11 @@
 @use '../../../../styles/variables.scss' as *;
 
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
 .logo {
   color: white;
 }
