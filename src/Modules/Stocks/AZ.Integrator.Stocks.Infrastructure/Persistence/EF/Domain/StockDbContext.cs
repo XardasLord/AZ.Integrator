@@ -1,9 +1,9 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Mediator;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Stock.Configurations;
+using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain.Configurations;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Stock;
+namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain;
 
 public class StockDbContext(DbContextOptions<StockDbContext> options, IMediator mediator)
     : DbContext(options)

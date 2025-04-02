@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shared.Infrastructure.Mediator;
 
-internal static class Extensions
+public static class Extensions
 {
     public static async Task DispatchDomainEventsAsync<T>(this IMediator mediator, T dbContext) where T : DbContext
     {

@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
+using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.PostgreSql;

@@ -3,7 +3,7 @@ using AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Stock.Configurations;
+namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain.Configurations;
 
 public class StockLogConfiguration : IEntityTypeConfiguration<StockLog>
 {

@@ -1,9 +1,8 @@
-﻿using System;
+﻿#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Stock.Migrations
+namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain.Migrations
 {
     /// <inheritdoc />
     public partial class AddCreatedByIdToStockLogs : Migration

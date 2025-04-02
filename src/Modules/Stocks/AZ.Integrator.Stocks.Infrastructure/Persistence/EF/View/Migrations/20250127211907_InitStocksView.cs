@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Stock.Migrations
+namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.Migrations
 {
     /// <inheritdoc />
     public partial class InitStocksView : Migration

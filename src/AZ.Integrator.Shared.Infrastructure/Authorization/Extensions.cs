@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AZ.Integrator.Shared.Infrastructure.Authorization;
 
-internal static class Extensions
+public static class Extensions
 {
     public static IServiceCollection AddIntegratorAuthorization(this IServiceCollection services, IConfiguration configuration)
     {

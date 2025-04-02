@@ -1,4 +1,4 @@
-﻿namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+﻿namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
 
 public class StockViewModel
 {
