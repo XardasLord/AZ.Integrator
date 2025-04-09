@@ -1,8 +1,7 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Stock.Configurations;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+﻿using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.Configurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Stock;
+namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
 
 public class StockDataViewContext(DbContextOptions<StockDataViewContext> options) : DbContext(options)
 {

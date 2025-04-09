@@ -20,10 +20,6 @@
     <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.9.14" />
     <PackageReference Include="HotChocolate.Types.Scalars" Version="13.9.14" />
     <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
-    <PackageReference Include="Mediator.SourceGenerator" Version="2.1.7">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
@@ -62,10 +58,5 @@
     <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Application\AZ.Integrator.TagParcelTemplates.Application.csproj" />
     <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Domain\AZ.Integrator.Stocks.Domain.csproj" />
     <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Application\AZ.Integrator.Stocks.Application.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Persistence\EF\DbContexts\Domain\Stock\Migrations\" />
-    <Folder Include="Persistence\EF\DbContexts\View\Stock\Migrations\" />
   </ItemGroup>
 </Project>

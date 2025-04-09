@@ -3,6 +3,7 @@ using System.Text;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
+using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,7 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AZ.Integrator.Shared.Infrastructure.Authentication;
 
-internal static class Extensions
+public static class Extensions
 {
     private const string IdentityOptionsSectionName = "Infrastructure:Identity";
     private const string AllegroOptionsSectionName = "Infrastructure:Allegro";

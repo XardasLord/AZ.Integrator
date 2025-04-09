@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Stock.Configurations;
+namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.Configurations;
 
 public class StockLogViewModelConfiguration : IEntityTypeConfiguration<StockLogViewModel>
 {

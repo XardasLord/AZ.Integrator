@@ -1,4 +1,4 @@
-import { Injectable, NgZone, inject } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
@@ -20,6 +20,7 @@ import { GetTagParcelTemplatesGQL } from '../../../shared/graphql/queries/get-ta
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import { RestQueryHelper } from '../../../shared/models/pagination/rest.helper';
+import { TenantState } from '../../../shared/states/tenant.state';
 
 const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>('packageTemplates');
 
@@ -119,6 +120,9 @@ export class ParcelTemplatesState {
         where: {
           tag: {
             eq: action.tag,
+          },
+          tenantId: {
+            eq: this.store.selectSnapshot(TenantState.getTenant)?.tenantId,
           },
         },
       };

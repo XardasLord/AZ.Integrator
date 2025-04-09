@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AZ.Integrator.Api.Infrastructure\AZ.Integrator.Api.Infrastructure.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Shared.Infrastructure\AZ.Integrator.Shared.Infrastructure.csproj" />
       <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Application\AZ.Integrator.Invoices.Application.csproj" />
       <ProjectReference Include="..\Modules\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />

@@ -14,10 +14,10 @@ public class StockLog : Entity<StockLogId>
     
     private StockLog() { }
     
-    internal StockLog(PackageCode packageCode, ChangeQuantity changeQuantity, string operatorId, DateTime createdAt)
+    internal StockLog(PackageCode packageCode, ChangeQuantity changeQuantity, string operatorLogin, Guid operatorId, DateTime createdAt)
     {
         _packageCode = packageCode;
         _changeQuantity = changeQuantity;
-        _creationInformation = new OperatorCreationInformation(createdAt, operatorId);
+        _creationInformation = new OperatorCreationInformation(createdAt, operatorLogin, operatorId);
     }
 }

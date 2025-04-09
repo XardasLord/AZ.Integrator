@@ -37,6 +37,6 @@ public class Stock : Entity, IAggregateRoot
     public void UpdateQuantity(ChangeQuantity changeQuantity, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _quantity += changeQuantity;
-        _stockLogs.Add(new StockLog(PackageCode, changeQuantity, currentUser.UserName, currentDateTime.CurrentDate()));
+        _stockLogs.Add(new StockLog(PackageCode, changeQuantity, currentUser.UserName, currentUser.UserId, currentDateTime.CurrentDate()));
     }
 }

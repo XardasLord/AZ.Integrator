@@ -1,4 +1,6 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Invoices.Application;
+using AZ.Integrator.Orders.Application;
 using AZ.Integrator.Shared.Infrastructure.Authentication;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.DomainServices;
@@ -12,6 +14,9 @@ using AZ.Integrator.Shared.Infrastructure.OpenApi;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
+using AZ.Integrator.Shipments.Application;
+using AZ.Integrator.Stocks.Infrastructure;
+using AZ.Integrator.TagParcelTemplates.Application;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,24 +26,29 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace AZ.Integrator.Shared.Infrastructure;
+namespace AZ.Integrator.Api.Infrastructure;
 
 public static class Extensions
 {
-    public static IServiceCollection AddSharedInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApiInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<ICurrentDateTime, CurrentDateTime>();
-        
         services.AddHealthChecks();
         services.AddControllers();
         services.AddHttpContextAccessor();
         services.AddHttpClient();
         services.AddCors();
         
+        services.AddOrdersModuleApplication(configuration);
+        services.AddShipmentsModuleApplication(configuration);
+        services.AddInvoicesModuleApplication(configuration);
+        services.AddTagParcelTemplatesModuleApplication(configuration);
+        
+        services.AddScoped<ICurrentDateTime, CurrentDateTime>();
+        
         services.AddIntegratorAuthentication(configuration);
         services.AddIntegratorAuthorization(configuration);
         services.AddIntegratorIdentity(configuration);
-            
+        
         services.AddMediator(opt =>
         {
             opt.ServiceLifetime = ServiceLifetime.Scoped;
@@ -46,7 +56,8 @@ public static class Extensions
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(HeaderRequestMiddleware<,>));
         
         services.AddPostgres(configuration);
-        services.AddIntegratorGraphQl(configuration);
+        services.AddIntegratorGraphQl(configuration)
+            .AddStocksModuleGraphQlObjects();
         services.AddIntegratorOpenApi(configuration);
         
         services.AddDomainServices();
@@ -55,10 +66,13 @@ public static class Extensions
         services.AddIntegratorJobManager(configuration)
             .AddRecurringJob<RefreshTenantAccessTokensRecurringJob>();
         
+        // Infrastructure dedicated modules
+        services.RegisterStocksModule(configuration);
+
         return services;
     }
-
-    public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration, IWebHostEnvironment env)
+    
+    public static IApplicationBuilder UseApiInfrastructure(this IApplicationBuilder app, IConfiguration configuration, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
@@ -96,14 +110,5 @@ public static class Extensions
         app.StartIntegratorRecurringJobs();
         
         return app;
-    }
-    
-    public static T GetOptions<T>(this IConfiguration configuration, string sectionName) where T : class, new()
-    {
-        var options = new T();
-        var section = configuration.GetRequiredSection(sectionName);
-        section.Bind(options);
-
-        return options;
     }
 }

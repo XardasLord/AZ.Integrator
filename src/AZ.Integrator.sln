@@ -57,6 +57,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Stocks.Domain
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Stocks.Application", "Modules\Stocks\AZ.Integrator.Stocks.Application\AZ.Integrator.Stocks.Application.csproj", "{15A00825-8670-4B79-8785-46055209C1E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Stocks.Infrastructure", "Modules\Stocks\AZ.Integrator.Stocks.Infrastructure\AZ.Integrator.Stocks.Infrastructure.csproj", "{979A492B-FDD2-4A6C-8418-960FC0A11628}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Api.Infrastructure", "AZ.Integrator.Api.Infrastructure\AZ.Integrator.Api.Infrastructure.csproj", "{AF7E64AC-027A-4721-B72F-03FC59A82C58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +147,14 @@ Global
 		{15A00825-8670-4B79-8785-46055209C1E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15A00825-8670-4B79-8785-46055209C1E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15A00825-8670-4B79-8785-46055209C1E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979A492B-FDD2-4A6C-8418-960FC0A11628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979A492B-FDD2-4A6C-8418-960FC0A11628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979A492B-FDD2-4A6C-8418-960FC0A11628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979A492B-FDD2-4A6C-8418-960FC0A11628}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF7E64AC-027A-4721-B72F-03FC59A82C58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF7E64AC-027A-4721-B72F-03FC59A82C58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF7E64AC-027A-4721-B72F-03FC59A82C58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF7E64AC-027A-4721-B72F-03FC59A82C58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,5 +180,6 @@ Global
 		{87F559AE-6448-426E-87CD-CF2C4AA11D1B} = {AF5A56E9-8FD1-47B5-B69D-17756EDE918E}
 		{D89449EB-E15E-46B7-BC34-4B2BFD74A62D} = {87F559AE-6448-426E-87CD-CF2C4AA11D1B}
 		{15A00825-8670-4B79-8785-46055209C1E2} = {87F559AE-6448-426E-87CD-CF2C4AA11D1B}
+		{979A492B-FDD2-4A6C-8418-960FC0A11628} = {87F559AE-6448-426E-87CD-CF2C4AA11D1B}
 	EndGlobalSection
 EndGlobal

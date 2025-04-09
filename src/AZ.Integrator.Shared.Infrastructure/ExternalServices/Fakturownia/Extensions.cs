@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
+using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -7,7 +7,7 @@ namespace AZ.Integrator.Stocks.Application;
 
 public static class Extensions
 {
-    public static IServiceCollection AddStocksModuleApplication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddModuleApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services
             .AddAutoMapper(Assembly.GetExecutingAssembly())
