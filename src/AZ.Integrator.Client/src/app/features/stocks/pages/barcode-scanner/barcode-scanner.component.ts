@@ -1,31 +1,24 @@
-import { AfterViewInit, Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
 import { SharedModule } from '../../../../shared/shared.module';
-import { DecreaseStock, IncreaseStock, LoadLogs } from '../../states/barcode-scanner.action';
-import { StockLogViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
-import { BarcodeScannerState } from '../../states/barcode-scanner.state';
+import { DecreaseStock, IncreaseStock } from '../../states/barcode-scanner.action';
+import { BarcodeScannedCodesListComponent } from '../barcode-scanned-codes-list/barcode-scanned-codes-list.component';
 
 export type BarcodeScannerType = 'in' | 'out';
 
 @Component({
   selector: 'app-barcode-scanner',
-  imports: [SharedModule],
+  imports: [SharedModule, BarcodeScannedCodesListComponent],
   templateUrl: './barcode-scanner.component.html',
   styleUrl: './barcode-scanner.component.scss',
   standalone: true,
 })
-export class BarcodeScannerComponent implements OnInit, AfterViewInit {
+export class BarcodeScannerComponent implements AfterViewInit {
   private store = inject(Store);
   @Input() type!: BarcodeScannerType;
   @ViewChild('barcodeInput') barcodeInput!: ElementRef;
 
   barcode: string = '';
-  barcodeScannerLogs$: Observable<StockLogViewModel[]> = this.store.select(BarcodeScannerState.logs);
-
-  ngOnInit(): void {
-    this.store.dispatch(new LoadLogs());
-  }
 
   ngAfterViewInit(): void {
     this.focusInput();
