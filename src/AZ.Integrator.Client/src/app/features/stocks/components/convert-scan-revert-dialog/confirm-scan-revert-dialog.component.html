@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>Cofnij zmianę</h2>
+<mat-dialog-content>
+  Czy na pewno chcesz cofnąć zmianę dla paczki <strong>{{ data.packageCode }}</strong
+  >?
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close(false)">Anuluj</button>
+  <button mat-button color="warn" (click)="dialogRef.close(true)">Zatwierdź</button>
+</mat-dialog-actions>

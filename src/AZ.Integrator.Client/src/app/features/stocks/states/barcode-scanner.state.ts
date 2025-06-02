@@ -12,7 +12,7 @@ import {
 } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
 import { StocksService } from '../services/stocks.service';
-import { DecreaseStock, IncreaseStock, LoadLogs } from './barcode-scanner.action';
+import { DecreaseStock, IncreaseStock, LoadLogs, RevertScan } from './barcode-scanner.action';
 import { AuthState } from '../../../shared/states/auth.state';
 
 const BARCODE_SCANNER_STATE_TOKEN = new StateToken<BarcodeScannerStateModel>('barcodeScanner');
@@ -62,7 +62,8 @@ export class BarcodeScannerState {
   increaseStock(ctx: StateContext<BarcodeScannerStateModel>, action: IncreaseStock) {
     return this.stocksService.updateStockQuantity(action.barcode, action.changeQuantity).pipe(
       tap(() => {
-        this.insertLogToState(ctx, action);
+        // this.insertLogToState(ctx, action);
+        ctx.dispatch(new LoadLogs());
 
         this.toastService.success(`Stan magazynowy dla kodu ${action.barcode} został poprawnie dodany`);
       }),
@@ -77,7 +78,8 @@ export class BarcodeScannerState {
   decreaseStock(ctx: StateContext<BarcodeScannerStateModel>, action: DecreaseStock) {
     return this.stocksService.updateStockQuantity(action.barcode, action.changeQuantity).pipe(
       tap(() => {
-        this.insertLogToState(ctx, action);
+        // this.insertLogToState(ctx, action);
+        ctx.dispatch(new LoadLogs());
 
         this.toastService.success(`Stan magazynowy dla kodu ${action.barcode} został poprawnie odjęty`);
       }),
@@ -89,7 +91,28 @@ export class BarcodeScannerState {
     );
   }
 
-  private insertLogToState(ctx: StateContext<BarcodeScannerStateModel>, action: IncreaseStock | DecreaseStock) {
+  @Action(RevertScan)
+  revertScan(ctx: StateContext<BarcodeScannerStateModel>, action: RevertScan) {
+    return this.stocksService.revertScan(action.barcode, action.scanLogId).pipe(
+      tap(() => {
+        // this.insertLogToState(ctx, action);
+
+        ctx.dispatch(new LoadLogs());
+
+        this.toastService.success(`Skan dla kodu ${action.barcode} został poprawnie cofnięty`);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.warn(error);
+        this.toastService.error(`Wystąpił błąd podczas wysyłania żądania do serwera - ${error.error.Message}`);
+        return throwError(() => new Error(error.message));
+      })
+    );
+  }
+
+  private insertLogToState(
+    ctx: StateContext<BarcodeScannerStateModel>,
+    action: IncreaseStock | DecreaseStock | RevertScan
+  ) {
     ctx.setState(
       patch<BarcodeScannerStateModel>({
         logs: insertItem<StockLogViewModel>(

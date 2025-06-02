@@ -2,6 +2,7 @@
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using AZ.Integrator.Stocks.Application;
 using AZ.Integrator.Stocks.Application.UseCases.ChangeQuantity;
+using AZ.Integrator.Stocks.Application.UseCases.RevertScanLog;
 using AZ.Integrator.Stocks.Domain.Aggregates;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain;
@@ -11,6 +12,7 @@ using HotChocolate.Execution.Configuration;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,6 +46,19 @@ public static class Extensions
             return Results.NoContent();
         })
         .RequireAuthorization();
+        
+        endpoints.MapDelete("/api/stock-logs/{scanLogId}", async (int scanLogId, [FromBody] RevertScanLogCommand command, IMediator mediator, CancellationToken cancellationToken) => 
+            {
+                command = command with
+                {
+                    ScanLogId = scanLogId
+                };
+                
+                await mediator.Send(command, cancellationToken);
+            
+                return Results.NoContent();
+            })
+            .RequireAuthorization();
         
         return endpoints;
     }
