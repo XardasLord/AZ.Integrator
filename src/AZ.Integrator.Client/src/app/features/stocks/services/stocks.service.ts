@@ -14,6 +14,7 @@ import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import { GetStocksGQL } from '../graphql-queries/get-stocks.graphql.query';
 import { ChangeStockQuantityCommand } from '../models/change-stock-quantity.command';
 import { GetBarcodeScannerLogsGQL } from '../graphql-queries/get-barcode-scanner-logs.graphql.query';
+import { RevertScanLogCommand } from '../models/revert-scan-log.command';
 
 @Injectable()
 export class StocksService extends RemoteServiceBase {
@@ -49,5 +50,13 @@ export class StocksService extends RemoteServiceBase {
     };
 
     return this.httpClient.put<void>(`${this.apiUrl}/stocks/${barcode}`, command);
+  }
+
+  revertScan(barcode: string, scanLogId: number): Observable<void> {
+    const command: RevertScanLogCommand = {
+      packageCode: barcode,
+    };
+
+    return this.httpClient.delete<void>(`${this.apiUrl}/stock-logs/${scanLogId}`, { body: command });
   }
 }

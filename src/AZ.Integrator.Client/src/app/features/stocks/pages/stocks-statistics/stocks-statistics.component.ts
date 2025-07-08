@@ -11,6 +11,12 @@ import { StocksStatisticsChartsComponent } from '../stocks-statistics-charts/sto
 export interface UserScanningStats {
   createdBy: string;
   totalScanned: number;
+  packageStats: UserScanningPackageStats[];
+}
+
+export interface UserScanningPackageStats {
+  packageCode: string;
+  totalScanned: number;
 }
 
 @Component({
@@ -31,23 +37,34 @@ export class StocksStatisticsComponent implements OnInit {
 
     this.groupedLogs$ = this.logs$.pipe(
       map(logs => {
-        const groupedMap = logs.reduce((acc, log) => {
-          if (!log.createdBy) {
-            return acc;
+        const groupedMap = new Map<string, { totalScanned: number; packageMap: Map<string, number> }>();
+
+        for (const log of logs) {
+          if (!log.createdBy) continue;
+
+          if (!groupedMap.has(log.createdBy)) {
+            groupedMap.set(log.createdBy, {
+              totalScanned: 0,
+              packageMap: new Map<string, number>(),
+            });
           }
 
-          if (!acc.has(log.createdBy)) {
-            acc.set(log.createdBy, 0);
-          }
+          const userData = groupedMap.get(log.createdBy)!;
+          userData.totalScanned += log.changeQuantity;
 
-          acc.set(log.createdBy, acc.get(log.createdBy)! + log.changeQuantity);
-          return acc;
-        }, new Map<string, number>());
+          const packageCode = log.packageCode ?? 'UNKNOWN';
+          userData.packageMap.set(packageCode, (userData.packageMap.get(packageCode) || 0) + log.changeQuantity);
+        }
 
-        return Array.from(groupedMap.entries()).map(([createdBy, totalScanned]) => ({
-          createdBy,
-          totalScanned,
-        }));
+        return Array.from(groupedMap.entries())
+          .map(([createdBy, { totalScanned, packageMap }]) => ({
+            createdBy,
+            totalScanned,
+            packageStats: Array.from(packageMap.entries())
+              .map(([packageCode, totalScanned]) => ({ packageCode, totalScanned }))
+              .sort((a, b) => b.totalScanned - a.totalScanned), // sortowanie paczek
+          }))
+          .sort((a, b) => b.totalScanned - a.totalScanned); // sortowanie użytkowników
       })
     );
   }

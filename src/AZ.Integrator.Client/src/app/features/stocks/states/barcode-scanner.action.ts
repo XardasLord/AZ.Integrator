@@ -21,3 +21,13 @@ export class DecreaseStock {
     public changeQuantity: number
   ) {}
 }
+
+export class RevertScan {
+  static readonly type = `${prefix} ${RevertScan.name}`;
+
+  constructor(
+    public barcode: string,
+    public changeQuantity: number,
+    public scanLogId: number
+  ) {}
+}

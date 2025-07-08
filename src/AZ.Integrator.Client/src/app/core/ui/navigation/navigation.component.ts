@@ -54,7 +54,7 @@ export class NavigationComponent implements OnInit {
       title: 'Stany magazynowe',
       icon: 'warehouse',
       route: RoutePaths.Stocks,
-      roles: [],
+      roles: [AuthRoles.Admin],
     },
     {
       title: 'Statystyki',

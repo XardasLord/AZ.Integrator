@@ -115,7 +115,7 @@ public static class GuardExtensions
     public static int Quantity(this IGuardClause guardClause, int input, [CallerArgumentExpression("input")] string parameterName = null)
     {
         if (input < 0)
-            throw new InvalidQuantityException(input, "Quantity cannot lower than zero");
+            throw new InvalidQuantityException(input, "Quantity cannot be lower than zero");
 
         return input;
     }

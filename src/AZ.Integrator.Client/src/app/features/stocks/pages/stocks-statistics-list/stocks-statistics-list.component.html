@@ -1,17 +1,33 @@
-<div class="p-4 bg-gray-100 rounded-md shadow-md">
+<div class="max-w-2xl mx-auto p-4 bg-gray-100 rounded-md shadow-md">
   <h2 class="text-lg font-semibold text-gray-800 mb-4">Statystyki skanowań</h2>
 
   @for (log of groupedLogs$ | async; track log.createdBy) {
-    <div class="bg-white rounded-lg shadow-sm mb-2">
-      <mat-list class="divide-y divide-gray-200">
-        <mat-list-item class="grid grid-cols-2 items-center gap-4 p-4 hover:bg-gray-50">
-          <div class="flex items-center gap-2">
-            <span class="font-medium text-gray-700">{{ log.createdBy }}</span>
-          </div>
+    <div class="bg-white rounded-lg shadow-md mb-4 border-l-4 border-blue-500">
+      <div class="flex justify-between items-center p-4 bg-blue-50 rounded-t-md">
+        <div class="text-blue-800 font-semibold text-base sm:text-lg">{{ log.createdBy }}</div>
+        <div class="text-blue-800 font-bold text-xl">
+          {{ log.totalScanned }}
+        </div>
+      </div>
 
-          <span class="text-gray-500 text-right">{{ log.totalScanned }}</span>
-        </mat-list-item>
-      </mat-list>
+      <div class="px-4 pb-4 pt-2">
+        <table class="w-full text-sm text-left text-gray-500">
+          <thead class="text-xs text-gray-400 uppercase">
+            <tr>
+              <th scope="col" class="px-2 py-2">Kod paczki</th>
+              <th scope="col" class="px-2 py-2 text-right">Skanów</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (pkg of log.packageStats; track pkg.packageCode) {
+              <tr class="border-t">
+                <td class="px-2 py-1">{{ pkg.packageCode }}</td>
+                <td class="px-2 py-1 text-right">{{ pkg.totalScanned }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   } @empty {
     <div class="text-center text-gray-500 py-6">Nie ma zarejestrowanych żadnych aktywności na skanerach.</div>

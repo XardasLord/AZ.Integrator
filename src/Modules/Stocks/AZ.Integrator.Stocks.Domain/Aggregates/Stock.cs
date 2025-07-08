@@ -39,4 +39,13 @@ public class Stock : Entity, IAggregateRoot
         _quantity += changeQuantity;
         _stockLogs.Add(new StockLog(PackageCode, changeQuantity, currentUser.UserName, currentUser.UserId, currentDateTime.CurrentDate()));
     }
+    
+    public void RevertScannedLog(StockLogId logId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    {
+        var log = _stockLogs.FirstOrDefault(x => x.Id == logId)
+            ?? throw new Exception("Log not found");
+        
+        _quantity += log.ChangeQuantity.Revert();
+        _stockLogs.Add(new StockLog(PackageCode, log.ChangeQuantity.Revert(), currentUser.UserName, currentUser.UserId, currentDateTime.CurrentDate()));
+    }
 }

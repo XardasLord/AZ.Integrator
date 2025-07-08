@@ -14,6 +14,9 @@ public sealed record ChangeQuantity
     {
         Value = Guard.Against.ChangeQuantity(quantity, nameof(ChangeQuantity));
     }
+    
+    internal ChangeQuantity Revert() 
+        => new(-Value);
 
     public static implicit operator double(ChangeQuantity quantity)
         => quantity.Value;
