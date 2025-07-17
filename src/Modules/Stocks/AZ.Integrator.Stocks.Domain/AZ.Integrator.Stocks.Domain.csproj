@@ -9,9 +9,5 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="Aggregates\Exceptions\" />
-    </ItemGroup>
 
 </Project>

@@ -1,15 +1,18 @@
 ﻿using AZ.Integrator.Domain.SeedWork;
-using AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.Shared.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
 
-namespace AZ.Integrator.Stocks.Domain.Aggregates;
+namespace AZ.Integrator.Stocks.Domain.Aggregates.Stock;
 
 public class StockLog : Entity<StockLogId>
 {
     private PackageCode _packageCode;
     private ChangeQuantity _changeQuantity;
+    private StockLogStatus _status;
     private OperatorCreationInformation _creationInformation;
-    
+
     public ChangeQuantity ChangeQuantity => _changeQuantity;
+    public StockLogStatus Status => _status;
     public OperatorCreationInformation CreationInformation => _creationInformation;
     
     private StockLog() { }
@@ -18,6 +21,7 @@ public class StockLog : Entity<StockLogId>
     {
         _packageCode = packageCode;
         _changeQuantity = changeQuantity;
+        _status = StockLogStatus.Active;
         _creationInformation = new OperatorCreationInformation(createdAt, operatorLogin, operatorId);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using AZ.Integrator.Domain.Extensions;
 
-namespace AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
+namespace AZ.Integrator.Stocks.Domain.Aggregates.Shared.ValueObjects;
 
 public record OperatorCreationInformation
 {

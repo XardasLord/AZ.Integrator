@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.Configurations;
+using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
@@ -7,10 +8,13 @@ public class StockDataViewContext(DbContextOptions<StockDataViewContext> options
 {
     public virtual DbSet<StockViewModel> Stocks { get; set; }
     public virtual DbSet<StockLogViewModel> StockLogs { get; set; }
+    public virtual DbSet<StockGroupViewModel> StockGroups { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new StockViewModelConfiguration());
         modelBuilder.ApplyConfiguration(new StockLogViewModelConfiguration());
+
+        modelBuilder.ApplyConfiguration(new StockGroupViewModelConfiguration());
     }
 }

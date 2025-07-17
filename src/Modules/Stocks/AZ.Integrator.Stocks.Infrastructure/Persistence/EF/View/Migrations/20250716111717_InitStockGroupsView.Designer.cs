@@ -3,6 +3,7 @@ using System;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.Migrations
 {
     [DbContext(typeof(StockDataViewContext))]
-    partial class StockDataViewContextModelSnapshot : ModelSnapshot
+    [Migration("20250716111717_InitStockGroupsView")]
+    partial class InitStockGroupsView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

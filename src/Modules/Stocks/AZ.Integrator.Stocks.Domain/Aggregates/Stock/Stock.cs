@@ -1,14 +1,16 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SeedWork;
-using AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup.ValueObjects;
 
-namespace AZ.Integrator.Stocks.Domain.Aggregates;
+namespace AZ.Integrator.Stocks.Domain.Aggregates.Stock;
 
 public class Stock : Entity, IAggregateRoot
 {
     private PackageCode _packageCode;
     private Quantity _quantity;
     private List<StockLog> _stockLogs;
+    private StockGroupId _groupId;
     
     public PackageCode PackageCode => _packageCode;
     public Quantity Quantity => _quantity;
@@ -47,5 +49,10 @@ public class Stock : Entity, IAggregateRoot
         
         _quantity += log.ChangeQuantity.Revert();
         _stockLogs.Add(new StockLog(PackageCode, log.ChangeQuantity.Revert(), currentUser.UserName, currentUser.UserId, currentDateTime.CurrentDate()));
+    }
+    
+    public void AssignToGroup(StockGroupId groupId) 
+    {
+        _groupId = groupId;
     }
 }
