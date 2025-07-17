@@ -7,7 +7,6 @@
       czas i zarządzaj efektywniej.
     </p>
     <div class="mt-6">
-      <!--      <button mat-raised-button color="primary" class="mr-4" routerLink="/features">Zobacz funkcje</button>-->
       <button mat-raised-button color="accent" (click)="startWorkRedirection()">Rozpocznij teraz</button>
     </div>
   </section>
@@ -15,7 +14,7 @@
   <!-- Sekcja Funkcji -->
   <section class="w-full bg-white py-16">
     <div class="container mx-auto px-6">
-      <h3 class="text-2xl font-bold text-gray-800 text-center">Kluczowe funkcje AZ Integrator</h3>
+      <h2 class="text-4xl font-bold text-gray-800 text-center">Kluczowe funkcje AZ Integrator</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <div class="p-6 bg-gray-50 rounded-lg shadow">
           <mat-icon class="!text-blue-600 text-4xl">sync</mat-icon>
@@ -39,7 +38,7 @@
   <!-- Stopka -->
   <footer class="w-full bg-gray-800 text-white py-6">
     <div class="container mx-auto text-center">
-      <p>&copy; 2025 AZ Integrator. Wszystkie prawa zastrzeżone.</p>
+      <p>&copy; 2023-{{ today | date: 'yyyy' }} AZ Integrator. Wszystkie prawa zastrzeżone.</p>
     </div>
   </footer>
 </div>

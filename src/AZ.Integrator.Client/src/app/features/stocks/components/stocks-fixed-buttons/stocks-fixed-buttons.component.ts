@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { SharedModule } from '../../../../shared/shared.module';
 import { MatDialog } from '@angular/material/dialog';
+
+import { Store } from '@ngxs/store';
+
+import { SharedModule } from '../../../../shared/shared.module';
 import { StockGroupFormDialogComponent } from '../stock-group-form-dialog/stock-group-form-dialog.component';
 import { StockGroupFormDialogResponseModel } from '../stock-group-form-dialog/stock-group-form-dialog-response.model';
-import { AddStockGroup } from '../../states/stocks.action';
+import { AddStockGroup, LoadStockGroups, LoadStocks } from '../../states/stocks.action';
 
 @Component({
   selector: 'app-stocks-fixed-buttons',
@@ -30,5 +32,9 @@ export class StocksFixedButtonsComponent {
 
       this.store.dispatch(new AddStockGroup(result.name, result.description));
     });
+  }
+
+  refreshStocks() {
+    this.store.dispatch([new LoadStocks(), new LoadStockGroups()]);
   }
 }

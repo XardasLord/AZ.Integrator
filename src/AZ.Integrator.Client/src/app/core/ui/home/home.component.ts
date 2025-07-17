@@ -6,15 +6,18 @@ import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { RoutePaths } from '../../modules/app-routing.module';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [MatButton, MatIcon],
+  imports: [MatButton, MatIcon, DatePipe],
 })
 export class HomeComponent {
   private store = inject(Store);
+
+  today = new Date();
 
   startWorkRedirection() {
     const roles = this.store.selectSnapshot(AuthState.getUserRoles);
