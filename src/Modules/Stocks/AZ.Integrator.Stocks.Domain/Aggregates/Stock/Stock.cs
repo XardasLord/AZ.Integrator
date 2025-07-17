@@ -48,7 +48,8 @@ public class Stock : Entity, IAggregateRoot
             ?? throw new Exception("Log not found");
         
         _quantity += log.ChangeQuantity.Revert();
-        _stockLogs.Add(new StockLog(PackageCode, log.ChangeQuantity.Revert(), currentUser.UserName, currentUser.UserId, currentDateTime.CurrentDate()));
+        
+        log.Revert();
     }
     
     public void AssignToGroup(StockGroupId groupId) 

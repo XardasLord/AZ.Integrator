@@ -24,4 +24,12 @@ public class StockLog : Entity<StockLogId>
         _status = StockLogStatus.Active;
         _creationInformation = new OperatorCreationInformation(createdAt, operatorLogin, operatorId);
     }
+
+    internal void Revert()
+    {
+        if (_status != StockLogStatus.Active)
+            throw new InvalidOperationException("Cannot revert a log that is not active.");
+        
+        _status = StockLogStatus.Reverted;
+    }
 }

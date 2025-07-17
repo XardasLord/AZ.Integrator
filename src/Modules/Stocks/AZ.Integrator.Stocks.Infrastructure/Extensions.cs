@@ -4,8 +4,10 @@ using AZ.Integrator.Stocks.Application;
 using AZ.Integrator.Stocks.Application.UseCases.AddStockGroup;
 using AZ.Integrator.Stocks.Application.UseCases.ChangeQuantity;
 using AZ.Integrator.Stocks.Application.UseCases.RevertScanLog;
+using AZ.Integrator.Stocks.Application.UseCases.UpdateStockGroup;
 using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
 using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup;
+using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup.ValueObjects;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
@@ -62,11 +64,24 @@ public static class Extensions
             })
             .RequireAuthorization();
         
-        endpoints.MapPost("/api/stocks-groups", async (AddStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
+        endpoints.MapPost("/api/stock-groups", async (AddStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
             {
                 var stockGroupId = await mediator.Send(command, cancellationToken);
 
-                return Results.Created($"/api/stocks-groups/{stockGroupId}", new { Id = stockGroupId });
+                return Results.Created($"/api/stock-groups/{stockGroupId}", new { Id = stockGroupId });
+            })
+            .RequireAuthorization();
+        
+        endpoints.MapPut("/api/stock-groups/{groupId}", async (int groupId, UpdateStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
+            {
+                command = command with
+                {
+                    GroupId = groupId
+                };
+                
+                await mediator.Send(command, cancellationToken);
+
+                return Results.NoContent();
             })
             .RequireAuthorization();
         

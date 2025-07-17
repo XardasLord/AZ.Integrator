@@ -27,6 +27,7 @@ public class StockGroup : Entity<StockGroupId>, IAggregateRoot
         _name = name;
         _description = description;
         _creationInformation = new OperatorCreationInformation(createdAt, operatorLogin, operatorId);
+        _modificationInformation = new ModificationInformation(createdAt, operatorId);
     }
     
     public static StockGroup Create(StockGroupName name, Description description, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
@@ -34,5 +35,12 @@ public class StockGroup : Entity<StockGroupId>, IAggregateRoot
         var stockGroup = new StockGroup(name, description, currentUser.UserName, currentUser.UserId, currentDateTime.CurrentDate());
 
         return stockGroup;
+    }
+
+    public void Update(StockGroupName name, Description description, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    {
+        _name = name;
+        _description = description;
+        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
     }
 }

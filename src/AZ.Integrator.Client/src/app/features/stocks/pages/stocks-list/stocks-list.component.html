@@ -1,30 +1,60 @@
 <div class="p-4 bg-gray-100 rounded-md shadow-md">
   <h2 class="text-lg font-semibold text-gray-800 mb-4">Stany magazynowe</h2>
 
-  @for (stock of stocks$ | async; track stock.packageCode) {
-    <div class="bg-white rounded-lg shadow-sm mb-2">
-      <mat-list class="divide-y divide-gray-200">
-        <mat-list-item class="grid grid-cols-2 items-center gap-4 p-4 hover:bg-gray-50">
-          <div class="flex items-center gap-2">
-            <span class="font-medium text-gray-700">{{ stock.packageCode }}</span>
+  <mat-accordion>
+    @for (group of groups$ | async; track group.id) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <div class="flex items-center justify-between w-full">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-medium"> {{ group.name }} ({{ group.stocks.length }}) </span>
 
-            @if (stock.quantity < stockWarningThreshold) {
-              <mat-icon class="!text-orange-500" matTooltip="Mało towaru na stanie magazynowym">warning</mat-icon>
-            }
+                <mat-icon
+                  *ngIf="hasWarning(group)"
+                  class="!text-orange-500 text-base"
+                  matTooltip="W grupie są kody poniżej progu">
+                  warning
+                </mat-icon>
+              </div>
+              <span class="text-sm text-gray-500">{{ group.description }}</span>
+            </div>
+
+            <button mat-icon-button (click)="editGroup(group)" [matTooltip]="'Edytuj grupę'" class="shrink-0">
+              <mat-icon>edit</mat-icon>
+            </button>
           </div>
+        </mat-expansion-panel-header>
 
-          <span
-            class="text-right"
-            [ngClass]="{
-              'text-orange-500': stock.quantity < stockWarningThreshold,
-              'text-gray-500': stock.quantity >= stockWarningThreshold,
-            }"
-            >{{ stock.quantity }}</span
-          >
-        </mat-list-item>
-      </mat-list>
-    </div>
-  } @empty {
-    <div class="text-center text-gray-500 py-6">Nie ma dodanych żadnych paczek na stanie magazynowym.</div>
-  }
+        <div *ngIf="group.stocks?.length; else noStocks">
+          <mat-list>
+            @for (stock of group.stocks; track stock.packageCode) {
+              <mat-list-item class="grid grid-cols-2 items-center gap-4 p-4 hover:bg-gray-50">
+                <div class="flex items-center gap-2">
+                  <span class="font-medium text-gray-700">{{ stock.packageCode }}</span>
+
+                  @if (stock.quantity < stockWarningThreshold) {
+                    <mat-icon class="!text-orange-500" matTooltip="Mało towaru">warning</mat-icon>
+                  }
+                </div>
+
+                <span
+                  class="text-right"
+                  [ngClass]="{
+                    'text-orange-500': stock.quantity < stockWarningThreshold,
+                    'text-gray-500': stock.quantity >= stockWarningThreshold,
+                  }">
+                  {{ stock.quantity }}
+                </span>
+              </mat-list-item>
+            }
+          </mat-list>
+        </div>
+
+        <ng-template #noStocks>
+          <div class="text-center text-gray-500 py-4">Brak kodów w tej grupie.</div>
+        </ng-template>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
 </div>
