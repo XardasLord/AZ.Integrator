@@ -5,7 +5,7 @@ namespace AZ.Integrator.Stocks.Domain.Aggregates.Shared.ValueObjects;
 
 public record OperatorCreationInformation
 {
-    public DateTime CreatedAt { get; }
+    public DateTimeOffset CreatedAt { get; }
     public string OperatorLogin { get; }
     public Guid OperatorId { get; }
 
@@ -18,11 +18,11 @@ public record OperatorCreationInformation
         OperatorId = Guard.Against.CreationInformationCreator(createdById);
     }
         
-    public static implicit operator DateTime(OperatorCreationInformation info)
+    public static implicit operator DateTimeOffset(OperatorCreationInformation info)
         => info.CreatedAt;
         
-    public static implicit operator OperatorCreationInformation(DateTime date)
+    public static implicit operator OperatorCreationInformation(DateTimeOffset date)
         => new(date);
         
-    public override string ToString() => CreatedAt.ToShortDateString();
+    public override string ToString() => CreatedAt.Date.ToShortDateString();
 }

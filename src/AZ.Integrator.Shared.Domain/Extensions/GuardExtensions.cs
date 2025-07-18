@@ -20,7 +20,7 @@ public static class GuardExtensions
         return input;
     }
 
-    public static DateTime CreationInformationDate(this IGuardClause guardClause, DateTime input, [CallerArgumentExpression("input")] string parameterName = null)
+    public static DateTimeOffset CreationInformationDate(this IGuardClause guardClause, DateTimeOffset input, [CallerArgumentExpression("input")] string parameterName = null)
     {
         if (input == default)
             throw new InvalidCreationInformationDateException(input, "Creation date cannot be empty");
@@ -53,7 +53,7 @@ public static class GuardExtensions
         return input;
     }
 
-    public static DateTime ModificationInformationDate(this IGuardClause guardClause, DateTime input, [CallerArgumentExpression("input")] string parameterName = null)
+    public static DateTimeOffset ModificationInformationDate(this IGuardClause guardClause, DateTimeOffset input, [CallerArgumentExpression("input")] string parameterName = null)
     {
         if (input == default)
             throw new InvalidModificationInformationDateException(input, "Modification date cannot be empty");
