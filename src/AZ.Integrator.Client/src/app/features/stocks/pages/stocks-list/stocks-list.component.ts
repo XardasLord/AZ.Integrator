@@ -1,8 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CdkDragDrop, transferArrayItem, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Store } from '@ngxs/store';
-import { Observable, map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { SharedModule } from '../../../../shared/shared.module';
 import { ChangeGroup, LoadStockGroups, LoadStocks, UpdateStockGroup } from '../../states/stocks.action';
 import { StockGroupViewModel, StockViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
@@ -24,16 +24,18 @@ export class StocksListComponent implements OnInit {
 
   stockWarningThreshold = environment.stockWarningThreshold;
   groups$: Observable<StockGroupViewModel[]> = this.store.select(StocksState.groupedStocks);
-  connectedDropLists$: Observable<string[]> = this.groups$.pipe(
-    map(groups => groups.map(g => `group-${g.id}`))
-  );
+  connectedDropLists$: Observable<string[]> = this.groups$.pipe(map(groups => groups.map(g => `group-${g.id}`)));
 
   ngOnInit(): void {
     this.store.dispatch([new LoadStocks(), new LoadStockGroups()]);
   }
 
   hasWarning(group: StockGroupViewModel): boolean {
-    return group.stocks?.some(s => s.quantity < this.stockWarningThreshold);
+    return group.stocks?.some(stock => this.hasQuantityBelowThreshold(stock));
+  }
+
+  hasQuantityBelowThreshold(stock: StockViewModel): boolean {
+    return stock.quantity < this.stockWarningThreshold;
   }
 
   editGroup(group: StockGroupViewModel) {
