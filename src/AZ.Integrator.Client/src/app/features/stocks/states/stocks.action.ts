@@ -40,3 +40,12 @@ export class UpdateStockGroup {
     public description: string
   ) {}
 }
+
+export class ChangeGroup {
+  static readonly type = `${prefix} ${ChangeGroup.name}`;
+
+  constructor(
+    public packageCode: string,
+    public newGroupId: number
+  ) {}
+}

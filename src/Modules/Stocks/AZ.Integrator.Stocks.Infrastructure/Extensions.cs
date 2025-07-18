@@ -3,6 +3,7 @@ using AZ.Integrator.Shared.Infrastructure.Repositories;
 using AZ.Integrator.Stocks.Application;
 using AZ.Integrator.Stocks.Application.UseCases.AddStockGroup;
 using AZ.Integrator.Stocks.Application.UseCases.ChangeQuantity;
+using AZ.Integrator.Stocks.Application.UseCases.ChangeStockGroup;
 using AZ.Integrator.Stocks.Application.UseCases.RevertScanLog;
 using AZ.Integrator.Stocks.Application.UseCases.UpdateStockGroup;
 using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
@@ -39,6 +40,19 @@ public static class Extensions
         endpoints.MapGet("/api/stocks/info", () => Results.Ok("Stocks module")).AllowAnonymous();
         
         endpoints.MapPut("/api/stocks/{*packageCode}", async (string packageCode, ChangeQuantityCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                command = command with
+                {
+                    PackageCode = packageCode
+                };
+                
+                await mediator.Send(command, cancellationToken);
+                
+                return Results.NoContent();
+            })
+            .RequireAuthorization();
+        
+        endpoints.MapPatch("/api/stocks/{*packageCode}", async (string packageCode, ChangeStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 command = command with
                 {

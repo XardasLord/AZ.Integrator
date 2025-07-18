@@ -2,59 +2,71 @@
   <h2 class="text-lg font-semibold text-gray-800 mb-4">Stany magazynowe</h2>
 
   <mat-accordion>
-    @for (group of groups$ | async; track group.id) {
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <div class="flex items-center justify-between w-full">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-medium"> {{ group.name }} ({{ group.stocks.length }}) </span>
+    <ng-container *ngIf="groups$ | async as groups">
+      <ng-container *ngIf="connectedDropLists$ | async as connectedDropLists">
+        <ng-container *ngFor="let group of groups; trackBy: trackByGroupId">
+          <div
+            cdkDropList
+            [id]="'group-' + group.id"
+            [cdkDropListConnectedTo]="connectedDropLists"
+            [cdkDropListData]="group.stocks"
+            (cdkDropListDropped)="onDropPackageCodeToGroup($event, group.id)">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <div class="flex items-center justify-between w-full">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-medium"> {{ group.name }} ({{ group.stocks.length }})</span>
 
-                <mat-icon
-                  *ngIf="hasWarning(group)"
-                  class="!text-orange-500 text-base"
-                  matTooltip="W grupie są kody poniżej progu">
-                  warning
-                </mat-icon>
-              </div>
-              <span class="text-sm text-gray-500">{{ group.description }}</span>
-            </div>
+                      <mat-icon
+                        *ngIf="hasWarning(group)"
+                        class="!text-orange-500 text-base"
+                        matTooltip="W grupie są kody poniżej progu">
+                        warning
+                      </mat-icon>
+                    </div>
+                    <span class="text-sm text-gray-500">{{ group.description }}</span>
+                  </div>
 
-            <button mat-icon-button (click)="editGroup(group)" [matTooltip]="'Edytuj grupę'" class="shrink-0">
-              <mat-icon>edit</mat-icon>
-            </button>
-          </div>
-        </mat-expansion-panel-header>
-
-        <div *ngIf="group.stocks?.length; else noStocks">
-          <mat-list>
-            @for (stock of group.stocks; track stock.packageCode) {
-              <mat-list-item class="grid grid-cols-2 items-center gap-4 p-4 hover:bg-gray-50">
-                <div class="flex items-center gap-2">
-                  <span class="font-medium text-gray-700">{{ stock.packageCode }}</span>
-
-                  @if (stock.quantity < stockWarningThreshold) {
-                    <mat-icon class="!text-orange-500" matTooltip="Mało towaru">warning</mat-icon>
-                  }
+                  <button mat-icon-button (click)="editGroup(group)" [matTooltip]="'Edytuj grupę'" class="shrink-0">
+                    <mat-icon>edit</mat-icon>
+                  </button>
                 </div>
+              </mat-expansion-panel-header>
 
-                <span
-                  class="text-right"
-                  [ngClass]="{
-                    'text-orange-500': stock.quantity < stockWarningThreshold,
-                    'text-gray-500': stock.quantity >= stockWarningThreshold,
-                  }">
-                  {{ stock.quantity }}
-                </span>
-              </mat-list-item>
-            }
-          </mat-list>
-        </div>
+              <div class="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <ng-container *ngIf="group.stocks && group.stocks.length > 0; else noStocks">
+                  <ng-container *ngFor="let stock of group.stocks; trackBy: trackByStockCode">
+                    <div
+                      cdkDrag
+                      class="bg-white border rounded shadow p-4 flex flex-col gap-2 hover:shadow-md cursor-grab active:cursor-grabbing">
+                      <div class="flex items-center justify-between">
+                        <span class="font-medium text-gray-700">{{ stock.packageCode }}</span>
+                        <mat-icon *ngIf="stock.quantity < stockWarningThreshold" class="!text-orange-500" matTooltip="Mało towaru"> warning </mat-icon>
+                      </div>
+                      <div
+                        class="text-right"
+                        [ngClass]="{
+                          'text-orange-500': stock.quantity < stockWarningThreshold,
+                          'text-gray-500': stock.quantity >= stockWarningThreshold
+                        }">
+                        {{ stock.quantity }}
+                      </div>
+                      <mat-icon class="text-gray-300">drag_indicator</mat-icon>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
 
-        <ng-template #noStocks>
-          <div class="text-center text-gray-500 py-4">Brak kodów w tej grupie.</div>
-        </ng-template>
-      </mat-expansion-panel>
-    }
+              <ng-template #noStocks>
+                <div class="text-center text-gray-500 py-4">Brak kodów w tej grupie.</div>
+              </ng-template>
+            </mat-expansion-panel>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
   </mat-accordion>
 </div>
+
+<!-- Add trackBy functions in the component for better performance -->

@@ -5,7 +5,15 @@ import { patch, updateItem } from '@ngxs/store/operators';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { StocksStateModel } from './stocks.state.model';
-import { AddStockGroup, ApplyFilter, ChangePage, LoadStockGroups, LoadStocks, UpdateStockGroup } from './stocks.action';
+import {
+  AddStockGroup,
+  ApplyFilter,
+  ChangeGroup,
+  ChangePage,
+  LoadStockGroups,
+  LoadStocks,
+  UpdateStockGroup,
+} from './stocks.action';
 import {
   IntegratorQueryStockGroupsArgs,
   IntegratorQueryStocksArgs,
@@ -43,14 +51,9 @@ export class StocksState {
 
   @Selector()
   static groupedStocks(state: StocksStateModel): StockGroupViewModel[] {
-    const allGroups = [
-      ...state.stockGroups.map(g => ({
-        ...g,
-        stocks: state.stocks.filter(s => s.groupId === g.id),
-      })),
-    ];
-
     const ungroupedStocks = state.stocks.filter(s => !s.groupId);
+
+    let allGroups: StockGroupViewModel[] = [];
 
     if (ungroupedStocks.length) {
       allGroups.push({
@@ -61,6 +64,14 @@ export class StocksState {
         stocks: ungroupedStocks.map(s => s),
       });
     }
+
+    allGroups = [
+      ...allGroups,
+      ...state.stockGroups.map(g => ({
+        ...g,
+        stocks: state.stocks.filter(s => s.groupId === g.id),
+      })),
+    ];
 
     return allGroups;
   }
@@ -111,7 +122,7 @@ export class StocksState {
 
     filters.order = [
       {
-        name: SortEnumType.Desc,
+        name: SortEnumType.Asc,
       },
     ];
 
@@ -177,6 +188,27 @@ export class StocksState {
         );
 
         this.toastService.success(`Grupa '${action.name}' została poprawnie edytowana`);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        return this.handleException(error);
+      })
+    );
+  }
+
+  @Action(ChangeGroup)
+  changeGroup(ctx: StateContext<StocksStateModel>, action: ChangeGroup) {
+    return this.stocksService.changeGroup(action.packageCode, action.newGroupId).pipe(
+      tap(() => {
+        ctx.setState(
+          patch({
+            stocks: updateItem<StockViewModel>(
+              stock => stock.packageCode === action.packageCode,
+              patch({ groupId: action.newGroupId })
+            ),
+          })
+        );
+
+        this.toastService.success(`Kod '${action.packageCode}' postał poprawnie przypisany do nowej grupy`);
       }),
       catchError((error: HttpErrorResponse) => {
         return this.handleException(error);
