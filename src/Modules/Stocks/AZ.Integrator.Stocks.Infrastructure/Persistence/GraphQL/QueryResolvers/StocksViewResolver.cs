@@ -1,5 +1,6 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
+using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.ViewModels;
 using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Types;
@@ -20,4 +21,10 @@ public class StocksViewResolver()
     [UseSorting]
     public IQueryable<StockLogViewModel> GetBarcodeScannerLogs([Service] StockDataViewContext dataViewContext) 
         => dataViewContext.StockLogs.AsQueryable();
+
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<StockGroupViewModel> GetStockGroups([Service] StockDataViewContext dataViewContext) 
+        => dataViewContext.StockGroups.AsQueryable();
 }

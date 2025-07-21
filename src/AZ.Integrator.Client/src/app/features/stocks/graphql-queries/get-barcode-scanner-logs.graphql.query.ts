@@ -20,6 +20,7 @@ export class GetBarcodeScannerLogsGQL extends Query<GraphQLResponseWithoutPagina
             ${nameof<StockLogViewModel>('id')}
             ${nameof<StockLogViewModel>('packageCode')}
             ${nameof<StockLogViewModel>('changeQuantity')}
+            ${nameof<StockLogViewModel>('status')}
             ${nameof<StockLogViewModel>('createdBy')}
             ${nameof<StockLogViewModel>('createdAt')}
         }

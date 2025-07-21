@@ -14,7 +14,17 @@
           <mat-optgroup [label]="group.groupName">
             @for (tenant of group.tenants; track tenant) {
               <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
-                <mat-option [value]="tenant">{{ tenant.displayName }}</mat-option>
+                <mat-option [value]="tenant">
+                  <div class="flex items-center gap-2 w-full">
+                    <mat-icon class="text-gray-500" fontIcon="storefront"></mat-icon>
+                    <span class="flex-1 truncate">{{ tenant.displayName }}</span>
+                    <span
+                      *ngIf="tenant.isTestAccount"
+                      class="ml-2 px-2 py-0.5 rounded bg-yellow-100 text-yellow-800 text-xs font-semibold whitespace-nowrap"
+                      >TEST</span
+                    >
+                  </div>
+                </mat-option>
               </ng-container>
             }
           </mat-optgroup>

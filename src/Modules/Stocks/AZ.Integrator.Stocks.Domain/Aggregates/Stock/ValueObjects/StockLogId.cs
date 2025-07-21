@@ -1,4 +1,4 @@
-﻿namespace AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
+﻿namespace AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
 
 public sealed record StockLogId(uint Value)
 {

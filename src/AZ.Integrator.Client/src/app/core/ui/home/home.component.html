@@ -1,45 +1,49 @@
-<div class="min-h-screen bg-gray-100 flex flex-col items-center">
-  <!-- Sekcja Hero -->
-  <section class="flex-1 flex flex-col justify-center items-center text-center py-20 px-6">
-    <h2 class="text-4xl font-bold text-gray-800">Witamy w systemie AZ Integrator</h2>
-    <p class="text-gray-600 mt-4 max-w-xl">
-      Kompleksowe rozwiązanie do integracji danych i procesów w Twojej organizacji. Przyspiesz działanie, oszczędzaj
-      czas i zarządzaj efektywniej.
-    </p>
-    <div class="mt-6">
-      <!--      <button mat-raised-button color="primary" class="mr-4" routerLink="/features">Zobacz funkcje</button>-->
-      <button mat-raised-button color="accent" (click)="startWorkRedirection()">Rozpocznij teraz</button>
+<div class="min-h-screen flex flex-col w-full bg-gradient-to-b from-blue-50 to-gray-100">
+  <!-- Hero Section -->
+  <section class="flex flex-col flex-1 justify-center items-center text-center py-16 px-4 w-full bg-gradient-to-br from-blue-50 to-blue-200 shadow-md">
+    <div class="max-w-2xl mx-auto">
+      <div class="flex flex-col items-center mb-6">
+        <mat-icon class="text-blue-600 text-6xl mb-2">hub</mat-icon>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 leading-tight mb-2 drop-shadow">Witamy w systemie AZ Integrator</h1>
+        <p class="text-lg sm:text-xl text-gray-700 mt-2 mb-4 max-w-xl">
+          Kompleksowe rozwiązanie do integracji danych i procesów w Twojej organizacji.<br />
+          Przyspiesz działanie, oszczędzaj czas i zarządzaj efektywniej.
+        </p>
+      </div>
+      <button mat-raised-button color="accent" (click)="startWorkRedirection()" class="mt-4 px-8 py-3 text-lg font-bold rounded-lg shadow-lg bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition">
+        Rozpocznij teraz
+      </button>
     </div>
   </section>
 
-  <!-- Sekcja Funkcji -->
-  <section class="w-full bg-white py-16">
-    <div class="container mx-auto px-6">
-      <h3 class="text-2xl font-bold text-gray-800 text-center">Kluczowe funkcje AZ Integrator</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <div class="p-6 bg-gray-50 rounded-lg shadow">
-          <mat-icon class="!text-blue-600 text-4xl">sync</mat-icon>
-          <h4 class="mt-4 text-lg font-bold text-gray-700">Automatyczna synchronizacja</h4>
-          <p class="text-gray-600 mt-2">Połącz swoje systemy w jeden sprawny ekosystem.</p>
+  <!-- Features Section -->
+  <section class="w-full py-12 bg-white shadow-inner">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 text-center mb-10">Kluczowe funkcje AZ Integrator</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-6 bg-blue-50 rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
+          <mat-icon class="!text-blue-600 text-5xl mb-3">sync</mat-icon>
+          <h4 class="text-lg font-bold text-gray-700 mb-2">Automatyczna synchronizacja</h4>
+          <p class="text-gray-600">Połącz swoje systemy w jeden sprawny ekosystem.</p>
         </div>
-        <div class="p-6 bg-gray-50 rounded-lg shadow">
-          <mat-icon class="!text-blue-600 text-4xl">speed</mat-icon>
-          <h4 class="mt-4 text-lg font-bold text-gray-700">Szybkość i wydajność</h4>
-          <p class="text-gray-600 mt-2">Analizuj i przetwarzaj dane w czasie rzeczywistym.</p>
+        <div class="p-6 bg-blue-50 rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
+          <mat-icon class="!text-blue-600 text-5xl mb-3">speed</mat-icon>
+          <h4 class="text-lg font-bold text-gray-700 mb-2">Szybkość i wydajność</h4>
+          <p class="text-gray-600">Analizuj i przetwarzaj dane w czasie rzeczywistym.</p>
         </div>
-        <div class="p-6 bg-gray-50 rounded-lg shadow">
-          <mat-icon class="!text-blue-600 text-4xl">security</mat-icon>
-          <h4 class="mt-4 text-lg font-bold text-gray-700">Bezpieczeństwo danych</h4>
-          <p class="text-gray-600 mt-2">Twoje dane są zawsze bezpieczne dzięki zaawansowanym zabezpieczeniom.</p>
+        <div class="p-6 bg-blue-50 rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
+          <mat-icon class="!text-blue-600 text-5xl mb-3">security</mat-icon>
+          <h4 class="text-lg font-bold text-gray-700 mb-2">Bezpieczeństwo danych</h4>
+          <p class="text-gray-600">Twoje dane są zawsze bezpieczne dzięki zaawansowanym zabezpieczeniom.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Stopka -->
-  <footer class="w-full bg-gray-800 text-white py-6">
+  <!-- Footer -->
+  <footer class="w-full bg-gray-800 text-white py-6 mt-auto shadow-inner">
     <div class="container mx-auto text-center">
-      <p>&copy; 2025 AZ Integrator. Wszystkie prawa zastrzeżone.</p>
+      <p class="text-sm">&copy; 2023-{{ today | date: 'yyyy' }} AZ Integrator. Wszystkie prawa zastrzeżone.</p>
     </div>
   </footer>
 </div>

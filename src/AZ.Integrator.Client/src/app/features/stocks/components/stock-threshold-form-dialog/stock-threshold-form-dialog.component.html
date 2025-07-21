@@ -1,0 +1,31 @@
+<h2 mat-dialog-title class="text-lg font-semibold">Ustaw limit</h2>
+
+<form [formGroup]="groupForm" (ngSubmit)="save()" mat-dialog-content class="space-y-4">
+  <p class="text-sm text-gray-600">
+    Ustaw minimalny limit dla kodu
+    <span class="font-semibold text-gray-800">‘{{ data!.packageCode }}’</span>.
+  </p>
+  <div class="flex items-start gap-2 text-sm text-gray-600">
+    <mat-icon
+      class="!text-orange-500 text-lg flex-shrink-0"
+      style="line-height: 1; display: inline-flex; align-items: center">
+      warning
+    </mat-icon>
+    <p class="m-0">
+      Gdy stan spadnie poniżej limitu, kod zostanie oznaczony
+      <span class="text-orange-600 font-medium">pomarańczową ikoną</span>.
+    </p>
+  </div>
+
+  <mat-form-field appearance="fill" class="w-full mt-2">
+    <mat-label>Limit</mat-label>
+    <input matInput type="number" step="1" formControlName="threshold" class="focus:ring focus:ring-blue-300" />
+    <mat-error *ngIf="groupForm.get('threshold')!.hasError('required')"> Limit jest wymagany </mat-error>
+    <mat-error *ngIf="groupForm.get('threshold')!.hasError('min')"> Minimalna wartość limitu to 1 </mat-error>
+  </mat-form-field>
+</form>
+
+<mat-dialog-actions align="end" class="mt-4">
+  <button mat-button type="button" (click)="cancel()" class="text-gray-700 hover:text-gray-900">Anuluj</button>
+  <button mat-flat-button color="primary" type="button" (click)="save()" [disabled]="groupForm.invalid">Zapisz</button>
+</mat-dialog-actions>

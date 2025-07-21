@@ -22,7 +22,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Inv
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels.InvoiceViewModel", b =>
+            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels.InvoiceViewModel", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone")

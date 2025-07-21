@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
-using AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
 
-namespace AZ.Integrator.Stocks.Domain.Aggregates.Specifications;
+namespace AZ.Integrator.Stocks.Domain.Aggregates.Stock.Specifications;
 
 public sealed class StockByPackageCodeSpec : Specification<Stock>, ISingleResultSpecification<Stock>
 {

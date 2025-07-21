@@ -1,5 +1,4 @@
-﻿using AZ.Integrator.Shared.Infrastructure;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
+﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;

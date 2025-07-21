@@ -1,7 +1,8 @@
-﻿using AZ.Integrator.Stocks.Domain.Aggregates;
-using AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
+﻿using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain.Configurations;
 
@@ -27,6 +28,11 @@ public class StockLogConfiguration : IEntityTypeConfiguration<StockLog>
         builder.Property(e => e.ChangeQuantity)
             .HasConversion(value => value.Value, value => new ChangeQuantity(value))
             .HasColumnName("change_quantity")
+            .IsRequired();
+        
+        builder.Property(e => e.Status)
+            .HasConversion(new EnumToNumberConverter<StockLogStatus, int>())
+            .HasColumnName("status")
             .IsRequired();
         
         builder.OwnsOne(e => e.CreationInformation, ci =>

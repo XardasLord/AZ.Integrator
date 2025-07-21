@@ -1,4 +1,4 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+﻿using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,8 +11,10 @@ public class StockViewModelConfiguration : IEntityTypeConfiguration<StockViewMod
         builder.ToView("stocks_view");
         builder.HasKey(x => x.PackageCode);
 
+        builder.Property(x => x.GroupId).HasColumnName("group_id");
         builder.Property(x => x.PackageCode).HasColumnName("package_code");
         builder.Property(x => x.Quantity).HasColumnName("quantity");
+        builder.Property(x => x.Threshold).HasColumnName("threshold");
         
         builder.HasMany(x => x.Logs)
             .WithOne()

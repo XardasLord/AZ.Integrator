@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Stocks.Application.Exceptions;
-using AZ.Integrator.Stocks.Domain.Aggregates;
-using AZ.Integrator.Stocks.Domain.Aggregates.Specifications;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock.Specifications;
 using Mediator;
 
 namespace AZ.Integrator.Stocks.Application.UseCases.ChangeQuantity;

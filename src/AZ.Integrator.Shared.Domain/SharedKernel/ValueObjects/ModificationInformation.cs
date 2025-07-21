@@ -5,7 +5,7 @@ namespace AZ.Integrator.Domain.SharedKernel.ValueObjects;
 
 public record ModificationInformation
 {
-    public DateTime ModifiedAt { get; }
+    public DateTimeOffset ModifiedAt { get; }
     public Guid ModifiedBy { get; }
 
     protected ModificationInformation() { }
@@ -16,11 +16,11 @@ public record ModificationInformation
         ModifiedBy = Guard.Against.ModificationInformationCreator(createdBy);
     }
         
-    public static implicit operator DateTime(ModificationInformation info)
+    public static implicit operator DateTimeOffset(ModificationInformation info)
         => info.ModifiedAt;
         
-    public static implicit operator ModificationInformation(DateTime date)
+    public static implicit operator ModificationInformation(DateTimeOffset date)
         => new(date);
         
-    public override string ToString() => ModifiedAt.ToShortDateString();
+    public override string ToString() => ModifiedAt.Date.ToShortDateString();
 }

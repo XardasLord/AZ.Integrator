@@ -1,0 +1,16 @@
+.horizontal-strike::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 0, 0, 0.5),
+      rgba(255, 0, 0, 0.5) 2px,
+      transparent 2px,
+      transparent 10px
+  );
+  pointer-events: none;
+}

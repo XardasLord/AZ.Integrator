@@ -133,8 +133,8 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.S
                             b1.Property<long>("DpdShipmentSessionNumber")
                                 .HasColumnType("bigint");
 
-                            b1.Property<DateTime>("CreatedAt")
-                                .HasColumnType("timestamp without time zone")
+                            b1.Property<DateTimeOffset>("CreatedAt")
+                                .HasColumnType("timestamp with time zone")
                                 .HasColumnName("created_at");
 
                             b1.Property<Guid>("CreatedBy")
@@ -165,8 +165,8 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.S
                             b1.Property<string>("InpostShipmentNumber")
                                 .HasColumnType("text");
 
-                            b1.Property<DateTime>("CreatedAt")
-                                .HasColumnType("timestamp without time zone")
+                            b1.Property<DateTimeOffset>("CreatedAt")
+                                .HasColumnType("timestamp with time zone")
                                 .HasColumnName("created_at");
 
                             b1.Property<Guid>("CreatedBy")

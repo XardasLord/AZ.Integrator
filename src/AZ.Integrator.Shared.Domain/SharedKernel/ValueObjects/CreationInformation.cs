@@ -5,7 +5,7 @@ namespace AZ.Integrator.Domain.SharedKernel.ValueObjects;
 
 public record CreationInformation
 {
-    public DateTime CreatedAt { get; }
+    public DateTimeOffset CreatedAt { get; }
     public Guid CreatedBy { get; }
     public TenantId TenantId { get; }
 
@@ -18,11 +18,11 @@ public record CreationInformation
         TenantId = Guard.Against.TenantId(tenantId);
     }
         
-    public static implicit operator DateTime(CreationInformation info)
+    public static implicit operator DateTimeOffset(CreationInformation info)
         => info.CreatedAt;
         
-    public static implicit operator CreationInformation(DateTime date)
+    public static implicit operator CreationInformation(DateTimeOffset date)
         => new(date);
         
-    public override string ToString() => CreatedAt.ToShortDateString();
+    public override string ToString() => CreatedAt.Date.ToShortDateString();
 }

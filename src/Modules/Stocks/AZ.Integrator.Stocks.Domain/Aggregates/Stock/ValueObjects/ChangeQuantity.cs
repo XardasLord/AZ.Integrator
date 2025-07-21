@@ -2,7 +2,7 @@
 using Ardalis.GuardClauses;
 using AZ.Integrator.Domain.Extensions;
 
-namespace AZ.Integrator.Stocks.Domain.Aggregates.ValueObjects;
+namespace AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
 
 public sealed record ChangeQuantity
 {

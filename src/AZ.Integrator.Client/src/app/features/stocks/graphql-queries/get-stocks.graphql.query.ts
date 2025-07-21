@@ -17,6 +17,8 @@ export class GetStocksGQL extends Query<GraphQLResponseWithoutPaginationVo<Stock
       ) {
             ${nameof<StockViewModel>('packageCode')}
             ${nameof<StockViewModel>('quantity')}
+            ${nameof<StockViewModel>('threshold')}
+            ${nameof<StockViewModel>('groupId')}
             ${nameof<StockViewModel>('logs')} {
               ${nameof<StockLogViewModel>('changeQuantity')}
               ${nameof<StockLogViewModel>('createdAt')}

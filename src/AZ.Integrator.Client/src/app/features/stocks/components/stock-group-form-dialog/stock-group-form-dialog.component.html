@@ -1,0 +1,20 @@
+<h2 mat-dialog-title class="text-lg font-semibold" *ngIf="editMode">Edytuj grupę</h2>
+<h2 mat-dialog-title class="text-lg font-semibold" *ngIf="!editMode">Dodaj nową grupę</h2>
+
+<form [formGroup]="groupForm" (ngSubmit)="save()" mat-dialog-content class="space-y-4">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Nazwa grupy</mat-label>
+    <input matInput formControlName="name" class="focus:ring focus:ring-blue-300" />
+    <mat-error *ngIf="groupForm.get('name')!.hasError('required')"> Nazwa jest wymagana </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Opis</mat-label>
+    <textarea matInput formControlName="description" class="focus:ring focus:ring-blue-300" rows="3"></textarea>
+  </mat-form-field>
+</form>
+
+<mat-dialog-actions align="end" class="mt-4">
+  <button mat-button type="button" (click)="cancel()" class="text-gray-700 hover:text-gray-900">Anuluj</button>
+  <button mat-flat-button color="primary" type="button" (click)="save()" [disabled]="groupForm.invalid">Zapisz</button>
+</mat-dialog-actions>

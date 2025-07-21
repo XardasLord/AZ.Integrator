@@ -49,8 +49,8 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.I
                             b1.Property<int>("InvoiceExternalId")
                                 .HasColumnType("integer");
 
-                            b1.Property<DateTime>("CreatedAt")
-                                .HasColumnType("timestamp without time zone")
+                            b1.Property<DateTimeOffset>("CreatedAt")
+                                .HasColumnType("timestamp with time zone")
                                 .HasColumnName("created_at");
 
                             b1.Property<Guid>("CreatedBy")

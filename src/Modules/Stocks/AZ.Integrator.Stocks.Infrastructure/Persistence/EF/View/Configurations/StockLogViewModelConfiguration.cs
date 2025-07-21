@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +15,7 @@ public class StockLogViewModelConfiguration : IEntityTypeConfiguration<StockLogV
         builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.PackageCode).HasColumnName("package_code");
         builder.Property(x => x.ChangeQuantity).HasColumnName("change_quantity");
+        builder.Property(x => x.Status).HasColumnName("status");
         builder.Property(x => x.CreatedAt).HasColumnName("created_at");
         builder.Property(x => x.CreatedBy).HasColumnName("created_by");
     }

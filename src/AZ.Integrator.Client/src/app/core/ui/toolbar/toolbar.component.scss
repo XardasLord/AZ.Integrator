@@ -23,6 +23,32 @@
 }
 
 .store-selector {
-  width: 200px;
+  min-width: 240px !important;
+  width: 16rem !important;
+  max-width: 100%;
+  .mat-form-field-outline {
+    border-radius: 0.75rem;
+  }
+  .mat-select-value {
+    font-weight: 500;
+  }
+}
+::ng-deep .custom-tenant-panel {
+  min-width: 240px !important;
+  max-width: 320px !important;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+  .mat-option {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    min-height: 2.5rem;
+  }
+  .mat-optgroup-label {
+    font-weight: 600;
+    color: #222;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
 }
 

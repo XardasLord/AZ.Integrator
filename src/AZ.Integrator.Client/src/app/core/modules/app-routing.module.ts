@@ -12,6 +12,7 @@ import { StocksState } from '../../features/stocks/states/stocks.state';
 import { StocksService } from '../../features/stocks/services/stocks.service';
 import { BarcodeScannerState } from '../../features/stocks/states/barcode-scanner.state';
 import { StockLogsState } from '../../features/stocks/states/stock-logs.state';
+import { StockGroupsService } from '../../features/stocks/services/stock-groups.service';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -72,7 +73,7 @@ const routes: Routes = [
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],
         }),
-        providers: [provideStates([StocksState]), StocksService],
+        providers: [provideStates([StocksState]), StocksService, StockGroupsService],
       },
       {
         path: RoutePaths.StocksStatistics,

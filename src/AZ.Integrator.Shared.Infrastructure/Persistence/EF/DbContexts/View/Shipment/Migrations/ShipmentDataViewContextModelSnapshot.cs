@@ -22,7 +22,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shi
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels.DpdShipmentViewModel", b =>
+            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels.DpdShipmentViewModel", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
@@ -41,7 +41,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shi
                     b.ToView("dpd_shipments_view", (string)null);
                 });
 
-            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels.InpostShipmentViewModel", b =>
+            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels.InpostShipmentViewModel", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
@@ -60,7 +60,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shi
                     b.ToView("inpost_shipments_view", (string)null);
                 });
 
-            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.Configurations.View.ViewModels.ShipmentViewModel", b =>
+            modelBuilder.Entity("AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels.ShipmentViewModel", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
