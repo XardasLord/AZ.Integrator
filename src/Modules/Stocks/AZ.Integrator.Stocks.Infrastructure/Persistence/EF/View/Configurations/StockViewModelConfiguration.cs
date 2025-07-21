@@ -14,6 +14,7 @@ public class StockViewModelConfiguration : IEntityTypeConfiguration<StockViewMod
         builder.Property(x => x.GroupId).HasColumnName("group_id");
         builder.Property(x => x.PackageCode).HasColumnName("package_code");
         builder.Property(x => x.Quantity).HasColumnName("quantity");
+        builder.Property(x => x.Threshold).HasColumnName("threshold");
         
         builder.HasMany(x => x.Logs)
             .WithOne()

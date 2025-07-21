@@ -4,11 +4,11 @@ using AZ.Integrator.Stocks.Application;
 using AZ.Integrator.Stocks.Application.UseCases.AddStockGroup;
 using AZ.Integrator.Stocks.Application.UseCases.ChangeQuantity;
 using AZ.Integrator.Stocks.Application.UseCases.ChangeStockGroup;
+using AZ.Integrator.Stocks.Application.UseCases.ChangeStockThreshold;
 using AZ.Integrator.Stocks.Application.UseCases.RevertScanLog;
 using AZ.Integrator.Stocks.Application.UseCases.UpdateStockGroup;
 using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
 using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup;
-using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup.ValueObjects;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.Domain;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
@@ -52,7 +52,20 @@ public static class Extensions
             })
             .RequireAuthorization();
         
-        endpoints.MapPatch("/api/stocks/{*packageCode}", async (string packageCode, ChangeStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        endpoints.MapPut("/api/stocks/group/{*packageCode}", async (string packageCode, ChangeStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                command = command with
+                {
+                    PackageCode = packageCode
+                };
+                
+                await mediator.Send(command, cancellationToken);
+                
+                return Results.NoContent();
+            })
+            .RequireAuthorization();
+        
+        endpoints.MapPut("/api/stocks/threshold/{*packageCode}", async (string packageCode, ChangeStockThresholdCommand command, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 command = command with
                 {

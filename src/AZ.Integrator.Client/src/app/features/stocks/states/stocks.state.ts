@@ -10,6 +10,7 @@ import {
   ApplyFilter,
   ChangeGroup,
   ChangePage,
+  ChangeThreshold,
   LoadStockGroups,
   LoadStocks,
   UpdateStockGroup,
@@ -208,7 +209,30 @@ export class StocksState {
           })
         );
 
-        this.toastService.success(`Kod '${action.packageCode}' postał poprawnie przypisany do nowej grupy`);
+        this.toastService.success(`Kod '${action.packageCode}' został poprawnie przypisany do nowej grupy`);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        return this.handleException(error);
+      })
+    );
+  }
+
+  @Action(ChangeThreshold)
+  changeThreshold(ctx: StateContext<StocksStateModel>, action: ChangeThreshold) {
+    return this.stocksService.changeThreshold(action.packageCode, action.threshold).pipe(
+      tap(() => {
+        ctx.setState(
+          patch({
+            stocks: updateItem<StockViewModel>(
+              stock => stock.packageCode === action.packageCode,
+              patch({ threshold: action.threshold })
+            ),
+          })
+        );
+
+        this.toastService.success(
+          `Limit dla kodu '${action.packageCode}' został poprawnie zmieniony na ${action.threshold}`
+        );
       }),
       catchError((error: HttpErrorResponse) => {
         return this.handleException(error);

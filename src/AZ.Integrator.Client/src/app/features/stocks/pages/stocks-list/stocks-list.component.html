@@ -51,13 +51,29 @@
                       [ngClass]="getStockQuantityCardColor(stock)"
                       class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing !bg-gradient-to-r">
                       <div class="flex items-center justify-between">
-                        <span class="font-medium text-gray-700 text-base">{{ stock.packageCode }}</span>
-                        <mat-icon
-                          *ngIf="isBelowThreshold(stock)"
-                          class="!text-orange-500 animate-pulse"
-                          matTooltip="Ilość towaru poniżej ustalonego limitu">
-                          warning
-                        </mat-icon>
+                        <span class="font-medium text-gray-700 text-base">
+                          {{ stock.packageCode }}
+                        </span>
+
+                        <div class="flex items-center gap-1">
+                          <mat-icon
+                            *ngIf="isBelowThreshold(stock)"
+                            class="!text-orange-500 animate-pulse"
+                            matTooltip="Ilość towaru poniżej ustalonego limitu">
+                            warning
+                          </mat-icon>
+
+                          <button mat-icon-button [matMenuTriggerFor]="stockMenu" class="shrink-0">
+                            <mat-icon>more_vert</mat-icon>
+                          </button>
+
+                          <mat-menu #stockMenu="matMenu">
+                            <button mat-menu-item (click)="editThreshold(stock)">
+                              <mat-icon>edit</mat-icon>
+                              <span>Edytuj próg</span>
+                            </button>
+                          </mat-menu>
+                        </div>
                       </div>
                       <div class="flex items-center justify-between mt-2">
                         <span
@@ -65,16 +81,15 @@
                           [ngClass]="getStockQuantityColor(stock)">
                           {{ stock.quantity }}
                         </span>
-                        <mat-icon class="text-gray-300 ml-2">drag_indicator</mat-icon>
                       </div>
                       <mat-progress-bar
                         mode="determinate"
-                        [value]="Math.min(100, (stock.quantity / stockWarningThreshold) * 100)"
+                        [value]="Math.min(100, (stock.quantity / stock.threshold) * 100)"
                         [color]="isBelowThreshold(stock) ? 'warn' : 'primary'">
                       </mat-progress-bar>
 
                       <div class="text-xs text-center mt-1">
-                        {{ stock.quantity }} / {{ stockWarningThreshold }}
+                        {{ stock.quantity }} / {{ stock.threshold }}
 
                         <ng-container *ngIf="getDifferenceBetweenThreshold(stock) !== 0">
                           <mat-icon class="align-middle text-sm" [ngClass]="getDifferenceClass(stock)">

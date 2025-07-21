@@ -49,3 +49,12 @@ export class ChangeGroup {
     public newGroupId: number
   ) {}
 }
+
+export class ChangeThreshold {
+  static readonly type = `${prefix} ${ChangeThreshold.name}`;
+
+  constructor(
+    public packageCode: string,
+    public threshold: number
+  ) {}
+}

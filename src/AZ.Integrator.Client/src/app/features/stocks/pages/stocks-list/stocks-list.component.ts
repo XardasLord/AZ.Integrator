@@ -4,12 +4,21 @@ import { CdkDrag, CdkDragDrop, CdkDropList, transferArrayItem } from '@angular/c
 import { Store } from '@ngxs/store';
 import { map, Observable } from 'rxjs';
 import { SharedModule } from '../../../../shared/shared.module';
-import { ChangeGroup, LoadStockGroups, LoadStocks, UpdateStockGroup } from '../../states/stocks.action';
+import {
+  ChangeGroup,
+  ChangeThreshold,
+  LoadStockGroups,
+  LoadStocks,
+  UpdateStockGroup,
+} from '../../states/stocks.action';
 import { StockGroupViewModel, StockViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
 import { StocksState } from '../../states/stocks.state';
-import { environment } from '../../../../../environments/environment';
 import { StockGroupFormDialogComponent } from '../../components/stock-group-form-dialog/stock-group-form-dialog.component';
 import { StockGroupFormDialogResponseModel } from '../../components/stock-group-form-dialog/stock-group-form-dialog-response.model';
+import { StockThresholdFormDialogComponent } from '../../components/stock-threshold-form-dialog/stock-threshold-form-dialog.component';
+import { StockThresholdFormDialogModel } from '../../components/stock-threshold-form-dialog/stock-threshold-form-dialog.model';
+import { StockGroupFormDialogModel } from '../../components/stock-group-form-dialog/stock-group-form-dialog.model';
+import { StockThresholdFormDialogResponseModel } from '../../components/stock-threshold-form-dialog/stock-threshold-form-dialog-response.model';
 
 @Component({
   selector: 'app-stocks-list',
@@ -22,7 +31,6 @@ export class StocksListComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
 
-  stockWarningThreshold = environment.stockWarningThreshold;
   groups$: Observable<StockGroupViewModel[]> = this.store.select(StocksState.groupedStocks);
   connectedDropLists$: Observable<string[]> = this.groups$.pipe(map(groups => groups.map(g => `group-${g.id}`)));
 
@@ -35,7 +43,7 @@ export class StocksListComponent implements OnInit {
   editGroup(group: StockGroupViewModel) {
     const dialogRef = this.dialog.open(StockGroupFormDialogComponent, {
       width: '400px',
-      data: {
+      data: <StockGroupFormDialogModel>{
         name: group.name,
         description: group.description,
       },
@@ -45,7 +53,26 @@ export class StocksListComponent implements OnInit {
       if (!result) {
         return;
       }
+
       this.store.dispatch(new UpdateStockGroup(group.id, result.name, result.description));
+    });
+  }
+
+  editThreshold(stock: StockViewModel) {
+    const dialogRef = this.dialog.open(StockThresholdFormDialogComponent, {
+      width: '400px',
+      data: <StockThresholdFormDialogModel>{
+        threshold: stock.threshold,
+        packageCode: stock.packageCode,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: StockThresholdFormDialogResponseModel) => {
+      if (!result) {
+        return;
+      }
+
+      this.store.dispatch(new ChangeThreshold(stock.packageCode, result.threshold));
     });
   }
 
@@ -64,26 +91,26 @@ export class StocksListComponent implements OnInit {
   }
 
   getDifferenceBetweenThreshold(stock: StockViewModel): number {
-    return stock.quantity - this.stockWarningThreshold;
+    return stock.quantity - stock.threshold;
   }
 
   isBelowThreshold(stock: StockViewModel): boolean {
-    return stock.quantity < this.stockWarningThreshold;
+    return stock.quantity < stock.threshold;
   }
 
   isAboveThreshold(stock: StockViewModel): boolean {
-    return stock.quantity > this.stockWarningThreshold;
+    return stock.quantity > stock.threshold;
   }
 
   getStockQuantityColor(stock: StockViewModel) {
-    const ratio = stock.quantity / this.stockWarningThreshold;
+    const ratio = stock.quantity / stock.threshold;
     if (ratio < 0.5) return 'bg-red-100 text-red-700';
     if (ratio < 1) return 'bg-orange-100 text-orange-700';
     return 'bg-green-100 text-green-700';
   }
 
   getStockQuantityCardColor(stock: StockViewModel) {
-    const ratio = stock.quantity / this.stockWarningThreshold;
+    const ratio = stock.quantity / stock.threshold;
     if (ratio < 0.5) return '!from-red-50 !to-red-100';
     if (ratio < 1) return '!from-orange-50 !to-orange-100';
     return '!from-green-50 !to-green-100';

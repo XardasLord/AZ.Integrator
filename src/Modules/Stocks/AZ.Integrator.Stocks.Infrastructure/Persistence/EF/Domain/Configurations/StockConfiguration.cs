@@ -31,6 +31,11 @@ public class StockConfiguration : IEntityTypeConfiguration<Stock>
             .HasConversion(quantity => quantity.Value, quantity => new Quantity(quantity))
             .IsRequired();
 
+        builder.Property(e => e.Threshold)
+            .HasColumnName("threshold")
+            .HasConversion(quantity => quantity.Value, quantity => new Quantity(quantity))
+            .IsRequired();
+
         builder.HasMany(e => e.StockLogs)
             .WithOne()
             .HasForeignKey("_packageCode");

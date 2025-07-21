@@ -16,6 +16,7 @@ import { ChangeStockQuantityCommand } from '../models/change-stock-quantity.comm
 import { GetBarcodeScannerLogsGQL } from '../graphql-queries/get-barcode-scanner-logs.graphql.query';
 import { RevertScanLogCommand } from '../models/revert-scan-log.command';
 import { ChangeStockGroupCommand } from '../models/change-stock-group.command';
+import { ChangeStockThresholdCommand } from '../models/change-stock-threshold.command';
 
 @Injectable()
 export class StocksService extends RemoteServiceBase {
@@ -67,6 +68,15 @@ export class StocksService extends RemoteServiceBase {
       newGroupId,
     };
 
-    return this.httpClient.patch<void>(`${this.apiUrl}/stocks/${barcode}`, command);
+    return this.httpClient.put<void>(`${this.apiUrl}/stocks/group/${barcode}`, command);
+  }
+
+  changeThreshold(barcode: string, threshold: number): Observable<void> {
+    const command: ChangeStockThresholdCommand = {
+      packageCode: barcode,
+      threshold,
+    };
+
+    return this.httpClient.put<void>(`${this.apiUrl}/stocks/threshold/${barcode}`, command);
   }
 }

@@ -301,6 +301,7 @@ export type StockViewModel = {
   logs: Array<StockLogViewModel>;
   packageCode: Scalars['String']['output'];
   quantity: Scalars['Int']['output'];
+  threshold: Scalars['Int']['output'];
 };
 
 export type StockViewModelFilterInput = {
@@ -310,12 +311,14 @@ export type StockViewModelFilterInput = {
   or?: InputMaybe<Array<StockViewModelFilterInput>>;
   packageCode?: InputMaybe<StringOperationFilterInput>;
   quantity?: InputMaybe<IntOperationFilterInput>;
+  threshold?: InputMaybe<IntOperationFilterInput>;
 };
 
 export type StockViewModelSortInput = {
   groupId?: InputMaybe<SortEnumType>;
   packageCode?: InputMaybe<SortEnumType>;
   quantity?: InputMaybe<SortEnumType>;
+  threshold?: InputMaybe<SortEnumType>;
 };
 
 export type StringOperationFilterInput = {

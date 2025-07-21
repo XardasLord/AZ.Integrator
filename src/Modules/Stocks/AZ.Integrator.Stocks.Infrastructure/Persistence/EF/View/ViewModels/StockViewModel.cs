@@ -7,6 +7,7 @@ public class StockViewModel
     public int? GroupId { get; set; }
     public string PackageCode { get; set; }
     public int Quantity { get; set; }
+    public int Threshold { get; set; }
     public ICollection<StockLogViewModel> Logs { get; set; }
 }
 
