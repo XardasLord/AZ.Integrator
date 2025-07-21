@@ -26,16 +26,10 @@ export class StocksListComponent implements OnInit {
   groups$: Observable<StockGroupViewModel[]> = this.store.select(StocksState.groupedStocks);
   connectedDropLists$: Observable<string[]> = this.groups$.pipe(map(groups => groups.map(g => `group-${g.id}`)));
 
+  protected readonly Math = Math;
+
   ngOnInit(): void {
     this.store.dispatch([new LoadStocks(), new LoadStockGroups()]);
-  }
-
-  hasWarning(group: StockGroupViewModel): boolean {
-    return group.stocks?.some(stock => this.hasQuantityBelowThreshold(stock));
-  }
-
-  hasQuantityBelowThreshold(stock: StockViewModel): boolean {
-    return stock.quantity < this.stockWarningThreshold;
   }
 
   editGroup(group: StockGroupViewModel) {
@@ -57,9 +51,56 @@ export class StocksListComponent implements OnInit {
 
   onDropPackageCodeToGroup(event: CdkDragDrop<StockViewModel[]>, targetGroupId: number) {
     if (event.previousContainer === event.container) return;
+
     const stock = event.previousContainer.data[event.previousIndex];
+
     transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+
     this.store.dispatch(new ChangeGroup(stock.packageCode, targetGroupId));
+  }
+
+  hasAnyWarning(group: StockGroupViewModel): boolean {
+    return group.stocks?.some(stock => this.isBelowThreshold(stock));
+  }
+
+  getDifferenceBetweenThreshold(stock: StockViewModel): number {
+    return stock.quantity - this.stockWarningThreshold;
+  }
+
+  isBelowThreshold(stock: StockViewModel): boolean {
+    return stock.quantity < this.stockWarningThreshold;
+  }
+
+  isAboveThreshold(stock: StockViewModel): boolean {
+    return stock.quantity > this.stockWarningThreshold;
+  }
+
+  getStockQuantityColor(stock: StockViewModel) {
+    const ratio = stock.quantity / this.stockWarningThreshold;
+    if (ratio < 0.5) return 'bg-red-100 text-red-700';
+    if (ratio < 1) return 'bg-orange-100 text-orange-700';
+    return 'bg-green-100 text-green-700';
+  }
+
+  getStockQuantityCardColor(stock: StockViewModel) {
+    const ratio = stock.quantity / this.stockWarningThreshold;
+    if (ratio < 0.5) return '!from-red-50 !to-red-100';
+    if (ratio < 1) return '!from-orange-50 !to-orange-100';
+    return '!from-green-50 !to-green-100';
+  }
+
+  getDifferenceIcon(stock: StockViewModel): string {
+    const diff = this.getDifferenceBetweenThreshold(stock);
+    if (diff > 0) return 'arrow_upward';
+    if (diff < 0) return 'arrow_downward';
+    return '';
+  }
+
+  getDifferenceClass(stock: StockViewModel): string {
+    const diff = this.getDifferenceBetweenThreshold(stock);
+    if (diff > 0) return '!text-green-600';
+    if (diff < 0) return '!text-red-600';
+    return '';
   }
 
   trackByGroupId(index: number, group: StockGroupViewModel): number {

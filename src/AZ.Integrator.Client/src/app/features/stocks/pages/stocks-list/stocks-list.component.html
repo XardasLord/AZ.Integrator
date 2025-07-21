@@ -12,7 +12,7 @@
             class="mb-4">
             <mat-expansion-panel
               class="rounded-lg shadow border border-gray-200"
-              [ngClass]="hasWarning(group) ? '!bg-gradient-to-r !from-orange-100 !to-orange-200' : ''">
+              [ngClass]="hasAnyWarning(group) ? '!bg-gradient-to-r !from-orange-100 !to-orange-200' : ''">
               <mat-expansion-panel-header>
                 <div class="flex items-center justify-between w-full">
                   <div>
@@ -25,17 +25,20 @@
                         {{ group.stocks.length }}
                       </span>
                       <mat-icon
-                        *ngIf="hasWarning(group)"
-                        class="!text-orange-500 text-base"
+                        *ngIf="hasAnyWarning(group)"
+                        class="!text-orange-500 text-base animate-pulse"
                         matTooltip="W grupie są kody poniżej progu">
                         warning
                       </mat-icon>
                     </div>
                     <span class="text-sm text-gray-400">{{ group.description }}</span>
                   </div>
-                  <button mat-icon-button (click)="editGroup(group)" [matTooltip]="'Edytuj grupę'" class="shrink-0">
-                    <mat-icon>edit</mat-icon>
-                  </button>
+
+                  @if (group.id) {
+                    <button mat-icon-button (click)="editGroup(group)" [matTooltip]="'Edytuj grupę'" class="shrink-0">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                  }
                 </div>
               </mat-expansion-panel-header>
 
@@ -45,29 +48,44 @@
                   <ng-container *ngFor="let stock of group.stocks; trackBy: trackByStockCode">
                     <div
                       cdkDrag
-                      [ngClass]="{
-                        '!bg-gradient-to-r !from-orange-50 !to-orange-100': hasQuantityBelowThreshold(stock),
-                      }"
-                      class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing">
+                      [ngClass]="getStockQuantityCardColor(stock)"
+                      class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col gap-2 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing !bg-gradient-to-r">
                       <div class="flex items-center justify-between">
                         <span class="font-medium text-gray-700 text-base">{{ stock.packageCode }}</span>
                         <mat-icon
-                          *ngIf="hasQuantityBelowThreshold(stock)"
-                          class="!text-orange-500"
-                          matTooltip="Mało towaru">
+                          *ngIf="isBelowThreshold(stock)"
+                          class="!text-orange-500 animate-pulse"
+                          matTooltip="Ilość towaru poniżej ustalonego limitu">
                           warning
                         </mat-icon>
                       </div>
                       <div class="flex items-center justify-between mt-2">
                         <span
                           class="inline-flex items-center px-2 py-0.5 rounded-full text-s font-medium"
-                          [ngClass]="{
-                            'text-orange-500 bg-orange-100': hasQuantityBelowThreshold(stock),
-                            'text-green-600 bg-green-100': !hasQuantityBelowThreshold(stock),
-                          }">
+                          [ngClass]="getStockQuantityColor(stock)">
                           {{ stock.quantity }}
                         </span>
                         <mat-icon class="text-gray-300 ml-2">drag_indicator</mat-icon>
+                      </div>
+                      <mat-progress-bar
+                        mode="determinate"
+                        [value]="Math.min(100, (stock.quantity / stockWarningThreshold) * 100)"
+                        [color]="isBelowThreshold(stock) ? 'warn' : 'primary'">
+                      </mat-progress-bar>
+
+                      <div class="text-xs text-center mt-1">
+                        {{ stock.quantity }} / {{ stockWarningThreshold }}
+
+                        <ng-container *ngIf="getDifferenceBetweenThreshold(stock) !== 0">
+                          <mat-icon class="align-middle text-sm" [ngClass]="getDifferenceClass(stock)">
+                            {{ getDifferenceIcon(stock) }}
+                          </mat-icon>
+
+                          <span [ngClass]="getDifferenceClass(stock)">
+                            ({{ getDifferenceBetweenThreshold(stock) > 0 ? '+' : ''
+                            }}{{ getDifferenceBetweenThreshold(stock) }})
+                          </span>
+                        </ng-container>
                       </div>
                     </div>
                   </ng-container>

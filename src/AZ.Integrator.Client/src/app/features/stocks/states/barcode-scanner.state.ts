@@ -61,7 +61,6 @@ export class BarcodeScannerState {
   increaseStock(ctx: StateContext<BarcodeScannerStateModel>, action: IncreaseStock) {
     return this.stocksService.updateStockQuantity(action.barcode, action.changeQuantity).pipe(
       tap(() => {
-        // this.insertLogToState(ctx, action);
         ctx.dispatch(new LoadLogs());
 
         this.toastService.success(`Stan magazynowy dla kodu ${action.barcode} został poprawnie dodany`);
@@ -77,7 +76,6 @@ export class BarcodeScannerState {
   decreaseStock(ctx: StateContext<BarcodeScannerStateModel>, action: DecreaseStock) {
     return this.stocksService.updateStockQuantity(action.barcode, action.changeQuantity).pipe(
       tap(() => {
-        // this.insertLogToState(ctx, action);
         ctx.dispatch(new LoadLogs());
 
         this.toastService.success(`Stan magazynowy dla kodu ${action.barcode} został poprawnie odjęty`);
@@ -93,8 +91,6 @@ export class BarcodeScannerState {
   revertScan(ctx: StateContext<BarcodeScannerStateModel>, action: RevertScan) {
     return this.stocksService.revertScan(action.barcode, action.scanLogId).pipe(
       tap(() => {
-        // this.insertLogToState(ctx, action);
-
         ctx.dispatch(new LoadLogs());
 
         this.toastService.success(`Skan dla kodu ${action.barcode} został poprawnie cofnięty`);

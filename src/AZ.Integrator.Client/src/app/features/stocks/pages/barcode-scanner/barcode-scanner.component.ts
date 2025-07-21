@@ -40,7 +40,7 @@ export class BarcodeScannerComponent implements AfterViewInit {
   }
 
   private focusInput() {
-    setTimeout(() => this.barcodeInput.nativeElement.focus(), 100);
+    setTimeout(() => this.barcodeInput.nativeElement.focus(), 200);
   }
 
   private increaseStock() {

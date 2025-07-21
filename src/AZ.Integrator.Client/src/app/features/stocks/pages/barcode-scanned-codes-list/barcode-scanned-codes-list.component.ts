@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { SharedModule } from '../../../../shared/shared.module';
 import { LoadLogs, RevertScan } from '../../states/barcode-scanner.action';
-import { StockLogViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
+import { StockLogStatus, StockLogViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
 import { BarcodeScannerState } from '../../states/barcode-scanner.state';
 import { BarcodeScannerType } from '../barcode-scanner/barcode-scanner.component';
 import { ConfirmScanRevertDialogComponent } from '../../components/convert-scan-revert-dialog/confirm-scan-revert-dialog.component';
@@ -43,4 +43,6 @@ export class BarcodeScannedCodesListComponent implements OnInit {
   revertScanLog(log: StockLogViewModel): void {
     this.store.dispatch(new RevertScan(log.packageCode!, -log.changeQuantity, log.id));
   }
+
+  protected readonly StockLogStatus = StockLogStatus;
 }
