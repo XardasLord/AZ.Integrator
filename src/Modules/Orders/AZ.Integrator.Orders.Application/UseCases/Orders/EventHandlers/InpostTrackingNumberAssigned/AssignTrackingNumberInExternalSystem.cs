@@ -37,6 +37,10 @@ public class AssignTrackingNumberInExternalSystem(IBackgroundJobClient backgroun
                     TenantId = notification.TenantId
                 }, null));
         }
+        else if (shopProvider == ShopProviderType.Shopify)
+        {
+            // TODO: Potentially implement tracking number assignment for Shopify
+        }
 
         return new ValueTask();
     }

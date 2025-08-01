@@ -3,8 +3,8 @@ using AutoMapper;
 using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
+using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
-using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using Mediator;
 
@@ -13,6 +13,7 @@ namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 public class GetAllQueryHandler(
     IAllegroService allegroService,
     IErliService erliService,
+    IShopifyService shopifyService,
     IMapper mapper) : IRequestHandler<GetAllQuery, GetAllQueryResponse>
 {
     public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
@@ -34,10 +35,19 @@ public class GetAllQueryHandler(
             return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
         }
 
+        if (query.ShopProvider == ShopProviderType.Shopify)
+        {
+            var ordersResponse = await shopifyService.GetOrders(query.Filters, query.TenantId);
+
+            var orderDtos = MapShopifyOrders(ordersResponse);
+
+            return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
+        }
+
         return null;
     }
 
-    private static List<OrderDetailsDto> MapErliOrders(GetOrdersModelResponse ordersResponse)
+    private static List<OrderDetailsDto> MapErliOrders(AZ.Integrator.Shared.Application.ExternalServices.Erli.GetOrdersModelResponse ordersResponse)
     {
         List<OrderDetailsDto> orderDtos = [];
 
@@ -111,6 +121,14 @@ public class GetAllQueryHandler(
                 MessageToSeller = order.Comment
             });
         });
+        
+        return orderDtos;
+    }
+    
+
+    private static List<OrderDetailsDto> MapShopifyOrders(AZ.Integrator.Shared.Application.ExternalServices.Shopify.GetOrdersModelResponse ordersResponse)
+    {
+        List<OrderDetailsDto> orderDtos = [];
         
         return orderDtos;
     }

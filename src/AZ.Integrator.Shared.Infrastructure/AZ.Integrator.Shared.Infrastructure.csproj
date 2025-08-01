@@ -59,4 +59,8 @@
     <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Domain\AZ.Integrator.Stocks.Domain.csproj" />
     <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Application\AZ.Integrator.Stocks.Application.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Persistence\EF\DbContexts\Infrastructure\ShopifyAccount\Migrations\" />
+  </ItemGroup>
 </Project>

@@ -28,6 +28,10 @@ public class ChangeOrderStatusInExternalSystem(IBackgroundJobClient backgroundJo
         {
             // Erli does not support changing Order's status
         }
+        else if (shopProvider == ShopProviderType.Shopify)
+        {
+            // TODO: Potentially implement Shopify order status change
+        }
 
         return new ValueTask();
     }

@@ -9,6 +9,9 @@ public static class TenantHelper
         
         if (tenantId.StartsWith("allegro-"))
             return ShopProviderType.Allegro;
+        
+        if (tenantId.StartsWith("shopify-")) 
+            return ShopProviderType.Shopify;
 
         return ShopProviderType.Unknown;
     }
