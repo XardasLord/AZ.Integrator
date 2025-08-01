@@ -13,4 +13,5 @@ export class TenantGroup {
 export enum AuthorizationProvider {
   Allegro = 1,
   Erli = 2,
+  Shopify = 3,
 }

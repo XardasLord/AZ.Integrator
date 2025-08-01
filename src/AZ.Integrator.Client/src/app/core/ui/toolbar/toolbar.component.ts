@@ -31,7 +31,7 @@ export class ToolbarComponent {
 
   tenantGroups: TenantGroup[] = [
     {
-      groupName: 'Allegro',
+      groupName: 'ALLEGRO',
       tenants: [
         {
           tenantId: environment.allegroAzTeamTenantId,
@@ -60,6 +60,17 @@ export class ToolbarComponent {
           tenantId: environment.erliAzTeamTenantId,
           displayName: 'AZ TEAM',
           authorizationProvider: AuthorizationProvider.Erli,
+          isTestAccount: false,
+        },
+      ],
+    },
+    {
+      groupName: 'SHOPIFY',
+      tenants: [
+        {
+          tenantId: environment.shopifyUmeblovaneTenantId,
+          displayName: 'Umeblovane',
+          authorizationProvider: AuthorizationProvider.Shopify,
           isTestAccount: false,
         },
       ],
