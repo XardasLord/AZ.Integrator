@@ -83,7 +83,7 @@ public class DeliveryDetails
     public AmountDetails Cost { get; set; }
     public TimeDetails Time { get; set; }
     public bool Smart { get; set; }
-    public int CalculatedNumberOfPackages { get; set; }
+    public int? CalculatedNumberOfPackages { get; set; }
 }
 
 public class DeliveryAddressDetails
