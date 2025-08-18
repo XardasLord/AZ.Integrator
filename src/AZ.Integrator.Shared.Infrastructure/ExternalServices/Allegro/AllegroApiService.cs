@@ -61,31 +61,6 @@ public class AllegroApiService(
         return orderDetails;
     }
 
-    public async Task<GetOffersResponse> GetOffers(GetProductTagsQueryFilters filters, string tenantId)
-    {
-        var queryParamsDictionary = new Dictionary<string, object>
-        {
-            { "limit", filters.Take.ToString() },
-            { "offset", filters.Skip.ToString() }
-        };
-
-        if (!string.IsNullOrWhiteSpace(filters.SearchText))
-        {
-            queryParamsDictionary.Add("external.id", filters.SearchText);
-        }
-
-        var queryParams = queryParamsDictionary.ToHttpQueryString();
-        
-        var httpClient = await PrepareHttpClient(tenantId);
-        using var response = await httpClient.GetAsync($"sale/offers?{queryParams}");
-        
-        response.EnsureSuccessStatusCode();
-
-        var offers = await response.Content.ReadFromJsonAsync<GetOffersResponse>();
-
-        return offers;
-    }
-
     public async Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatus, string tenantId)
     {
         var payload = new ChangeStatusRequestPayload

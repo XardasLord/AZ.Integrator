@@ -1,6 +1,5 @@
 ﻿using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetDetails;
-using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetTags;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +20,5 @@ public class OrdersController : ApiBaseController
     public async Task<OkObjectResult> GetOrderDetails(Guid orderId)
     {
         return Ok(await Mediator.Send(new GetDetailsQuery(orderId)));
-    }
-    
-    [HttpGet("tags")]
-    public async Task<OkObjectResult> GetTags([FromQuery] GetProductTagsQueryFilters filters)
-    {
-        return Ok(await Mediator.Send(new GetTagsQuery(filters)));
     }
 }

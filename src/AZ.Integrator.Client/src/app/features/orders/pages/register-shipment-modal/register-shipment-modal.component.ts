@@ -17,7 +17,6 @@ import { RegisterParcelFormGroupModel } from '../../models/register-parcel-form-
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
-import { GetTagParcelTemplatesGQL } from '../../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
 import {
   IntegratorQueryTagParcelTemplatesArgs,
   TagParcelTemplateViewModel,
@@ -27,7 +26,7 @@ import { OrderDetailsModel } from '../../models/order-details.model';
 import { MatError } from '@angular/material/form-field';
 import { NgFor, NgIf } from '@angular/common';
 import { MaterialModule } from '../../../../shared/modules/material.module';
-import { TenantState } from '../../../../shared/states/tenant.state';
+import { GetTagParcelTemplatesGQL } from '../../../package-templates/graphql-queries/get-tag-parcel-templates.graphql.query';
 
 @Component({
   selector: 'app-register-shipment-modal',
@@ -148,9 +147,6 @@ export class RegisterShipmentModalComponent {
         tag: {
           in: tags,
         },
-        tenantId: {
-          eq: this.store.selectSnapshot(TenantState.getTenant)?.tenantId,
-        },
       },
     };
 
@@ -158,11 +154,11 @@ export class RegisterShipmentModalComponent {
       .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
       .valueChanges.pipe(map(x => x.data.result))
       .subscribe(results => {
-        if (results.length < 1 && !results[0]) return;
+        if (results.nodes.length < 1 && !results.nodes[0]) return;
 
         this.removeAllParcels();
 
-        results.forEach((tagParcelTemplate: TagParcelTemplateViewModel) => {
+        results.nodes.forEach((tagParcelTemplate: TagParcelTemplateViewModel) => {
           const totalQuantityOfBoughtProduct = orderDetails.lineItems
             .filter(x => x.offer.external?.id === tagParcelTemplate?.tag)
             .reduce((ty, u) => ty + u.quantity, 0);

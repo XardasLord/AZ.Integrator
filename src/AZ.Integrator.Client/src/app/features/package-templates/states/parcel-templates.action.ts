@@ -3,14 +3,8 @@ import { PageEvent } from '@angular/material/paginator';
 
 const prefix = '[Package Templates]';
 
-export class LoadProductTags {
-  static readonly type = `${prefix} ${LoadProductTags.name}`;
-}
-
-export class OpenPackageTemplateDefinitionModal {
-  static readonly type = `${prefix} ${OpenPackageTemplateDefinitionModal.name}`;
-
-  constructor(public tag: string) {}
+export class LoadTemplates {
+  static readonly type = `${prefix} ${LoadTemplates.name}`;
 }
 
 export class ChangePage {

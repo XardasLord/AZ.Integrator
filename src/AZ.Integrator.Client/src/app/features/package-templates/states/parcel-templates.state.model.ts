@@ -1,14 +1,13 @@
-import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
-import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
+import { GraphQLQueryVo } from '../../../shared/graphql/graphql.query';
+import { GraphQLResponse } from '../../../shared/graphql/graphql.response';
+import {
+  IntegratorQueryTagParcelTemplatesArgs,
+  TagParcelTemplateViewModel,
+} from '../../../shared/graphql/graphql-integrator.schema';
 
 export interface ParcelTemplatesStateModel {
-  restQuery: RestQueryVo;
-  restQueryResponse: RestQueryResponse<GetOfferSignaturesResponse>;
-  signatures: string[];
-}
-
-export interface GetOfferSignaturesResponse {
-  signatures: string[];
-  count: number;
-  totalCount: number;
+  graphQLQuery: GraphQLQueryVo;
+  graphQLResponse: GraphQLResponse<TagParcelTemplateViewModel[]>;
+  graphQLFilters: IntegratorQueryTagParcelTemplatesArgs;
+  templates: TagParcelTemplateViewModel[];
 }

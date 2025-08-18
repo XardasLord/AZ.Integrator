@@ -93,63 +93,6 @@ public class ErliApiService(
         };
     }
 
-    public async Task<GetProductsModelResponse> GetProducts(GetProductTagsQueryFilters filters, TenantId tenantId)
-    {
-        var request = new GetProductsFiltersRequestPayload
-        {
-            Pagination = new Pagination
-            {
-                SortField = ProductPaginationHelper.ModifiedAtSortField,
-                Order = ProductPaginationHelper.Desc,
-                Limit = 200 // 200 is max
-            },
-            Fields = [ProductFieldsHelper.ExternalId, ProductFieldsHelper.Sku]
-        };
-
-        if (!string.IsNullOrWhiteSpace(filters.SearchText))
-        {
-            request.Filter = new Filter
-            {
-                Field = ProductFilterHelper.Sku,
-                Operator = "=",
-                Value = filters.SearchText
-            };
-        }
-        else
-        {
-            request.Filter = new Filter
-            {
-                Field = ProductFilterHelper.Status,
-                Operator = "=",
-                Value = "active"
-            };
-        }
-        
-        var payloadContent = PrepareContentRequest(request);
-
-        var httpClient = await PrepareHttpClient(tenantId);
-        using var response = await httpClient.PostAsync("products/_search", payloadContent);
-
-        response.EnsureSuccessStatusCode();
-
-        var products = await response.Content.ReadFromJsonAsync<List<Product>>();
-
-        var totalCount = products.Count;
-        
-        products = products
-            .DistinctBy(x => x.Sku)
-            .Skip(filters.Skip)
-            .Take(filters.Take)
-            .ToList();
-
-        return new GetProductsModelResponse
-        {
-            Products = products,
-            TotalCount = totalCount,
-            Count = products.Count
-        };
-    }
-
     public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, 
         string vendor, string deliveryTrackingStatus, string tenantId)
     {
