@@ -10,12 +10,12 @@ public class InpostShipment : Entity, IAggregateRoot
 {
     private ShipmentNumber _number;
     private ExternalOrderNumber _externalOrderNumber;
-    private CreationInformation _creationInformation;
+    private TenantCreationInformation _creationInformation;
     private List<Parcel> _parcels;
 
     public ShipmentNumber Number => _number;
     public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
-    public CreationInformation CreationInformation => _creationInformation;
+    public TenantCreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<Parcel> Parcels => _parcels;
 
     private InpostShipment()
@@ -27,7 +27,7 @@ public class InpostShipment : Entity, IAggregateRoot
     {
         _number = number;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
     }
 
     public static InpostShipment Create(ShipmentNumber number, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)

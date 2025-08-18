@@ -11,12 +11,12 @@ public class Invoice : Entity, IAggregateRoot
     private InvoiceExternalId _externalId;
     private InvoiceNumber _number;
     private ExternalOrderNumber _externalOrderNumber;
-    private CreationInformation _creationInformation;
+    private TenantCreationInformation _creationInformation;
 
     public InvoiceExternalId ExternalId => _externalId;
     public InvoiceNumber Number => _number;
     public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
-    public CreationInformation CreationInformation => _creationInformation;
+    public TenantCreationInformation CreationInformation => _creationInformation;
     
     private Invoice() { }
 
@@ -25,7 +25,7 @@ public class Invoice : Entity, IAggregateRoot
         _externalId = externalId;
         _number = number;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
     }
 
     public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalExternalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)

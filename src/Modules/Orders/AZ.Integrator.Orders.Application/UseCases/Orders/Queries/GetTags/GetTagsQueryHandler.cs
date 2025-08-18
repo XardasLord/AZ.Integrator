@@ -7,6 +7,7 @@ namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetTags;
 
 public class GetTagsQueryHandler(IAllegroService allegroService, IErliService erliService) : IRequestHandler<GetTagsQuery, GetTagsResponse>
 {
+    [Obsolete("No longer used")]
     public async ValueTask<GetTagsResponse> Handle(GetTagsQuery query, CancellationToken cancellationToken)
     {
         if (query.ShopProvider == ShopProviderType.Allegro)
@@ -29,6 +30,11 @@ public class GetTagsQueryHandler(IAllegroService allegroService, IErliService er
                 .ToList();
             
             return new GetTagsResponse(tags, productsResponse.Count);
+        }
+
+        if (query.ShopProvider == ShopProviderType.Shopify)
+        {
+            throw new NotImplementedException("Shopify tags retrieval is not implemented yet.");
         }
 
         return new GetTagsResponse([], 0);
