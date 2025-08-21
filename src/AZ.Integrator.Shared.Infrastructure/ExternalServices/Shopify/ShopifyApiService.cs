@@ -73,11 +73,12 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
     
     private static async Task<GraphQLResponse<GetOrdersResponse>> FetchOrders(GraphQLHttpClient client, GetAllQueryFilters filters)
     {
+        // https://shopify.dev/docs/api/admin-graphql/latest/queries/orders
         var request = new GraphQLRequest
         {
             Query = """
-                    query ($take: Int!) { 
-                        orders(first: $take) {
+                    query ($take: Int!, $sortKey: OrderSortKeys!, $reverse: Boolean!) { 
+                        orders(first: $take, sortKey: $sortKey, reverse: $reverse) {
                             edges {
                                 cursor
                                 node {
@@ -95,7 +96,12 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
                         }
                     }
                     """,
-            Variables = new { filters.Take }
+            Variables = new
+            {
+                take = filters.Take,
+                sortKey = "CREATED_AT",
+                reverse = true
+            }
         };
 
         return await client.SendQueryAsync<GetOrdersResponse>(request);
