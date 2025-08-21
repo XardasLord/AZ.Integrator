@@ -1,6 +1,9 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
+using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
+using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ShopifyAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
@@ -9,6 +12,7 @@ using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.SystemTextJson;
 using Microsoft.EntityFrameworkCore;
 using GetOrdersModelResponse = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GetOrdersModelResponse;
+using Order = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses.Order;
 
 namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Shopify;
 
@@ -21,7 +25,7 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         var ordersResponse = await FetchOrders(graphqlClient, filters);
         ValidateResponse(ordersResponse, "orders");
         
-        var ordersCountResponse = await FetchOrdersCount(graphqlClient);
+        var ordersCountResponse = await FetchOrdersCount(graphqlClient, filters);
         ValidateResponse(ordersCountResponse, "ordersCount");
         
         return new GetOrdersModelResponse
@@ -73,18 +77,58 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
     
     private static async Task<GraphQLResponse<GetOrdersResponse>> FetchOrders(GraphQLHttpClient client, GetAllQueryFilters filters)
     {
+        var filter = BuildOrderFilterQuery(filters);
+
         // https://shopify.dev/docs/api/admin-graphql/latest/queries/orders
         var request = new GraphQLRequest
         {
             Query = """
-                    query ($take: Int!, $sortKey: OrderSortKeys!, $reverse: Boolean!) { 
-                        orders(first: $take, sortKey: $sortKey, reverse: $reverse) {
+                    query ($take: Int!, $sortKey: OrderSortKeys!, $reverse: Boolean!, $query: String) { 
+                        orders(first: $take, sortKey: $sortKey, reverse: $reverse, query: $query) {
                             edges {
                                 cursor
                                 node {
                                     id
                                     createdAt
                                     name
+                                    number
+                                    fullyPaid
+                                    note
+                                    displayFinancialStatus
+                                    displayFulfillmentStatus
+                                    shippingLine {
+                                        title
+                                    }
+                                    # Requires Shopify Plus plan
+                                    # shippingAddress {
+                                        # firstName
+                                        # lastName
+                                        # address1
+                                        # address2
+                                        # phone
+                                        # city
+                                        # countryCodeV2
+                                    # }
+                                    totalPriceSet {
+                                        presentmentMoney { 
+                                            amount
+                                            currencyCode
+                                        }
+                                    }
+                                    lineItems(first: 100) {
+                                        nodes {
+                                            id
+                                            name
+                                            quantity
+                                            sku
+                                            originalUnitPriceSet {
+                                                presentmentMoney {
+                                                    amount
+                                                    currencyCode
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             pageInfo {
@@ -100,30 +144,51 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
             {
                 take = filters.Take,
                 sortKey = "CREATED_AT",
-                reverse = true
+                reverse = true,
+                query = filter
             }
         };
 
         return await client.SendQueryAsync<GetOrdersResponse>(request);
     }
 
-    private static async Task<GraphQLResponse<GetOrdersCountResponse>> FetchOrdersCount(GraphQLHttpClient client)
+    private static async Task<GraphQLResponse<GetOrdersCountResponse>> FetchOrdersCount(GraphQLHttpClient client, GetAllQueryFilters filters)
     {
+        var filter = BuildOrderFilterQuery(filters);
+        
         var request = new GraphQLRequest
         {
             Query = """
-                    query { 
-                        ordersCount {
+                    query ($query: String) { 
+                        ordersCount(query: $query) {
                             count
                             precision
                         }
                     }
-                    """
+                    """,
+            Variables = new
+            {
+                query = filter
+            }
         };
 
         return await client.SendQueryAsync<GetOrdersCountResponse>(request);
     }
-    
+
+    private static string BuildOrderFilterQuery(GetAllQueryFilters filters)
+    {
+        var filter = string.Empty;
+        
+        if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.New.Name || status == AllegroFulfillmentStatusEnum.Processing.Name))
+            filter = ShopifyFulfillmentStatusGraphqlFilterEnum.New.Name;
+        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.ReadyForShipment.Name))
+            filter = ShopifyFulfillmentStatusGraphqlFilterEnum.ReadyToProcess.Name;
+        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.Sent.Name))
+            filter = ShopifyFulfillmentStatusGraphqlFilterEnum.Sent.Name;
+        
+        return filter;
+    }
+
     private static async Task<GraphQLResponse<List<Order>>> FetchOrder(GraphQLHttpClient client, string orderNumber)
     {
         var request = new GraphQLRequest

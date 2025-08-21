@@ -337,16 +337,22 @@ export class RegisterShipmentModalComponent {
   }
 
   private normalizePhoneNumber(phoneNumber: string) {
+    if (!phoneNumber) return '';
+
     return phoneNumber.replace('+48', '').replace(/ /g, '');
   }
 
   private extractStreetName(address: string): string {
+    if (!address) return '';
+
     const regex = /^(.*?)(?=\s+\d[\w\/]*$)/;
     const match = address.match(regex);
     return match ? match[1].trim() : address;
   }
 
   private extractBuildingNumber(address: string): string {
+    if (!address) return '';
+
     const regex = /\s+\d[\w\/]*$/;
     const match = address.match(regex);
 

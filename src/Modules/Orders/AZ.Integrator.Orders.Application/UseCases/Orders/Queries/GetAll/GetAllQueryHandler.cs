@@ -130,6 +130,77 @@ public class GetAllQueryHandler(
     {
         List<OrderDetailsDto> orderDtos = [];
         
+        ordersResponse.Orders.ToList().ForEach(order =>
+        {
+            var lineItems = order.LineItems.Nodes.Select(item => new LineItemDetailsDto
+            {
+                Offer = new OfferDetailsDto
+                {
+                    Name = item.Name,
+                    External = string.IsNullOrEmpty(item.Sku) ? null : new ExternalDetailsDto
+                    {
+                        Id = item.Sku
+                    }
+                },
+                Quantity = item.Quantity,
+                Price = new AmountDetailsDto
+                {
+                    Amount = item.OriginalUnitPriceSet?.PresentmentMoney?.Amount,
+                    Currency = item.OriginalUnitPriceSet?.PresentmentMoney?.CurrencyCode,
+                }
+            }).ToList();
+            
+            orderDtos.Add(new OrderDetailsDto
+            {
+                Id = order.Name, // ID = gid://shopify/Order/7011438395732, so the name (readable number) is used here for better later reference
+                UpdatedAt = order.CreatedAt.LocalDateTime,
+                // Status = order.Status,
+                Buyer = new BuyerDetailsDto
+                {
+                    // Login = order.User.Email,
+                    // FirstName = order.User.DeliveryAddress.FirstName,
+                    // LastName = order.User.DeliveryAddress.LastName,
+                    // Email = order.User.Email,
+                },
+                Payment = new PaymentDetailsDto
+                {
+                    PaidAmount = order.FullyPaid ? new AmountDetails
+                    {
+                        Amount = order.TotalPriceSet?.PresentmentMoney?.Amount,
+                        Currency = order.TotalPriceSet?.PresentmentMoney?.CurrencyCode
+                    } : null,
+                    Type = order.FullyPaid ? OrderPaymentType.Online : OrderPaymentType.Cod
+                },
+                Delivery = new DeliveryDetailsDto
+                {
+                    Method = new MethodDetailsDto
+                    {
+                        Name = order.ShippingLine?.Title
+                    },
+                    Address = new DeliveryAddressDetailsDto
+                    {
+                        FirstName = order.ShippingAddress?.FirstName,
+                        LastName = order.ShippingAddress?.LastName,
+                        City = order.ShippingAddress?.City,
+                        Street = string.IsNullOrWhiteSpace(order.ShippingAddress?.Address1) ? null : $"{order.ShippingAddress?.Address1} {order.ShippingAddress?.Address2}",
+                        ZipCode = order.ShippingAddress?.Zip,
+                        PhoneNumber = order.ShippingAddress?.Phone,
+                        CountryCode = order.ShippingAddress?.CountryCodeV2
+                    }
+                },
+                LineItems = lineItems,
+                Summary = new SummaryDetailsDto
+                {
+                    TotalToPay = new AmountDetailsDto
+                    {
+                        Amount = order.TotalPriceSet?.PresentmentMoney?.Amount,
+                        Currency = order.TotalPriceSet?.PresentmentMoney?.CurrencyCode
+                    }
+                },
+                MessageToSeller = order.Note
+            });
+        });
+        
         return orderDtos;
     }
 }
