@@ -32,6 +32,21 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         };
     }
 
+    public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, string vendor, string tenantId)
+    {
+        var graphqlClient = await PrepareGraphqlClient(tenantId);
+        
+        var orderResponse = await FetchOrder(graphqlClient, orderNumber);
+        ValidateResponse(orderResponse, "orders");
+
+        var fulfillmentOrderIds = orderResponse.Data
+            .SelectMany(x => x.FulfillmentOrders.Select(fo => fo.Id))
+            .ToList();
+        
+        var createFulfillmentResponse = await CreateFulfillment(graphqlClient, fulfillmentOrderIds, trackingNumbers.ToList(), vendor);
+        ValidateResponse(createFulfillmentResponse, "createFulfillment");
+    }
+
     private async Task<GraphQLHttpClient> PrepareGraphqlClient(TenantId tenantId)
     {
         var account = await GetAccount(tenantId);
@@ -102,7 +117,82 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
 
         return await client.SendQueryAsync<GetOrdersCountResponse>(request);
     }
+    
+    private static async Task<GraphQLResponse<List<Order>>> FetchOrder(GraphQLHttpClient client, string orderNumber)
+    {
+        var request = new GraphQLRequest
+        {
+            Query = """
+                    query ($filter: String!) { 
+                        orders(first: 1, query: $filter) {
+                            nodes {
+                                id
+                                name
+                                fulfillmentOrders(first: 10) {
+                                    nodes {
+                                        id
+                                        status
+                                        createdAt
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    """,
+            Variables = new
+            {
+                filter = $"name:{orderNumber}"
+            }
+        };
 
+        return await client.SendQueryAsync<List<Order>>(request);
+    }
+
+    private static async Task<GraphQLResponse<dynamic>> CreateFulfillment(GraphQLHttpClient client, List<string> fulfillmentOrderIds, List<string> trackingNumbers, string vendor)
+    {
+        // https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentcreate
+        var request = new GraphQLRequest
+        {
+            Query = """
+                    mutation ($fulfillment: FulfillmentInput!, $message: String) { 
+                        fulfillmentCreate(fulfillment: $fulfillment, message: $message) {
+                            fulfillment {
+                                id
+                                status
+                                createdAt
+                                trackingInfo {
+                                  number
+                                  company
+                                  url
+                                }
+                            }
+                            userErrors {
+                                field
+                                message
+                            }
+                        }
+                    }
+                    """,
+            Variables = new
+            {
+                fulfillment = new
+                {
+                    notifyCustomer = true,
+                    trackingInfo = new
+                    {
+                        company = vendor,
+                        numbers = trackingNumbers.ToArray()
+                    },
+                    lineItemsByFulfillmentOrder = fulfillmentOrderIds
+                        .Select(id => new { fulfillmentOrderId = id })
+                        .ToArray()
+                }
+            }
+        };
+        
+        return await client.SendMutationAsync<dynamic>(request);
+    }
+    
     private static void ValidateResponse<T>(GraphQLResponse<T> response, string context)
     {
         if (response.Errors is not null && response.Errors.Length != 0)

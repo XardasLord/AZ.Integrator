@@ -22,6 +22,13 @@ public class Order
     public int Id { get; set; }
     public string Name { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
-    
+    public List<FulfillmentOrder> FulfillmentOrders { get; set; }
     // TODO: Add other order properties as needed.
+}
+
+public class FulfillmentOrder
+{
+    public string Id { get; set; }
+    public string OrderId { get; set; }
+    public string Status { get; set; }
 }

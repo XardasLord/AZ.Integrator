@@ -7,4 +7,10 @@ namespace AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
 public interface IShopifyService
 {
     Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId);
+    
+    Task AssignTrackingNumber(
+        string orderNumber,
+        IEnumerable<string> trackingNumbers,
+        string vendor,
+        string tenantId);
 }
