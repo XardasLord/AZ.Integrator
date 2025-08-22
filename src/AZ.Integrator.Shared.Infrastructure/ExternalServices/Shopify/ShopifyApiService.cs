@@ -43,12 +43,17 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         var orderResponse = await FetchOrder(graphqlClient, orderNumber);
         ValidateResponse(orderResponse, "orders");
 
-        var fulfillmentOrderIds = orderResponse.Data
-            .SelectMany(x => x.FulfillmentOrders.Select(fo => fo.Id))
+        var fulfillmentOrderIds = orderResponse.Data.Orders.Edges
+            .SelectMany(x => x.Node.FulfillmentOrders.Nodes.Select(fo => fo.Id))
             .ToList();
+
+        trackingNumbers = trackingNumbers.ToList();
         
-        var createFulfillmentResponse = await CreateFulfillment(graphqlClient, fulfillmentOrderIds, trackingNumbers.ToList(), vendor);
-        ValidateResponse(createFulfillmentResponse, "createFulfillment");
+        foreach (var fulfillmentOrderId in fulfillmentOrderIds)
+        {
+            var createFulfillmentResponse = await CreateFulfillment(graphqlClient, fulfillmentOrderId, trackingNumbers.ToList(), vendor);
+            ValidateResponse(createFulfillmentResponse, "createFulfillment");
+        }
     }
 
     private async Task<GraphQLHttpClient> PrepareGraphqlClient(TenantId tenantId)
@@ -189,21 +194,23 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         return filter;
     }
 
-    private static async Task<GraphQLResponse<List<Order>>> FetchOrder(GraphQLHttpClient client, string orderNumber)
+    private static async Task<GraphQLResponse<GetOrdersResponse>> FetchOrder(GraphQLHttpClient client, string orderNumber)
     {
         var request = new GraphQLRequest
         {
             Query = """
                     query ($filter: String!) { 
                         orders(first: 1, query: $filter) {
-                            nodes {
-                                id
-                                name
-                                fulfillmentOrders(first: 10) {
-                                    nodes {
-                                        id
-                                        status
-                                        createdAt
+                            edges {
+                                node {
+                                    id
+                                    name
+                                    fulfillmentOrders(first: 10, query: "status:open") {
+                                        nodes {
+                                            id
+                                            status
+                                            createdAt
+                                        }
                                     }
                                 }
                             }
@@ -216,10 +223,10 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
             }
         };
 
-        return await client.SendQueryAsync<List<Order>>(request);
+        return await client.SendQueryAsync<GetOrdersResponse>(request);
     }
 
-    private static async Task<GraphQLResponse<dynamic>> CreateFulfillment(GraphQLHttpClient client, List<string> fulfillmentOrderIds, List<string> trackingNumbers, string vendor)
+    private static async Task<GraphQLResponse<dynamic>> CreateFulfillment(GraphQLHttpClient client, string fulfillmentOrderId, List<string> trackingNumbers, string vendor)
     {
         // https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentcreate
         var request = new GraphQLRequest
@@ -254,9 +261,13 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
                         company = vendor,
                         numbers = trackingNumbers.ToArray()
                     },
-                    lineItemsByFulfillmentOrder = fulfillmentOrderIds
-                        .Select(id => new { fulfillmentOrderId = id })
-                        .ToArray()
+                    lineItemsByFulfillmentOrder = new[] 
+                    {
+                        new
+                        {
+                            fulfillmentOrderId = fulfillmentOrderId
+                        }
+                    }
                 }
             }
         };

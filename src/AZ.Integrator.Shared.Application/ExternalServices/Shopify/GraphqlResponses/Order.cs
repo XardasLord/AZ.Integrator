@@ -28,17 +28,10 @@ public class Order
     public TotalPriceSet TotalPriceSet { get; set; }
     public ShippingLine ShippingLine { get; set; }
     public ShippingAddress ShippingAddress { get; set; }
-    public List<FulfillmentOrder> FulfillmentOrders { get; set; }
     public LineItemConnection LineItems { get; set; }
+    public FulfillmentOrderConnection FulfillmentOrders { get; set; }
     public string DisplayFinancialStatus { get; set; }
     public string DisplayFulfillmentStatus { get; set; }
-}
-
-public class FulfillmentOrder
-{
-    public string Id { get; set; }
-    public string OrderId { get; set; }
-    public string Status { get; set; }
 }
 
 public class TotalPriceSet
@@ -93,4 +86,17 @@ public class Product
 {
     public string Id { get; set; }
     public string Description { get; set; }
+}
+
+public class FulfillmentOrderConnection
+{
+    public List<FulfillmentOrder> Nodes { get; set; }
+    public PageInfo PageInfo { get; set; }
+}
+
+public class FulfillmentOrder
+{
+    public string Id { get; set; }
+    public string Status { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 }

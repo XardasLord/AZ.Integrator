@@ -30,7 +30,7 @@ public class ChangeOrderStatusInExternalSystem(IBackgroundJobClient backgroundJo
         }
         else if (shopProvider == ShopProviderType.Shopify)
         {
-            // TODO: Potentially implement Shopify order status change
+            // Assigning tracking numbers in Shopify does change the order status automatically
         }
 
         return new ValueTask();
