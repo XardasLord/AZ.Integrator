@@ -1,84 +1,77 @@
 import { inject, Injectable, NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { GetOfferSignaturesResponse, ParcelTemplatesStateModel } from './parcel-templates.state.model';
-import { RestQueryVo } from '../../../shared/models/pagination/rest.query';
-import { RestQueryResponse } from '../../../shared/models/pagination/rest.response';
+import { ParcelTemplatesStateModel } from './parcel-templates.state.model';
 import { ParcelTemplatesService } from '../services/parcel-templates.service';
-import { ParcelTemplateDefinitionModalComponent } from '../pages/parcel-template-definition-modal/parcel-template-definition-modal.component';
-import { ParcelTemplateDefinitionDataModel } from '../models/parcel-template-definition-data.model';
+import { PackageTemplateDefinitionFormDialogComponent } from '../components/package-template-definition-form-dialog/package-template-definition-form-dialog.component';
+import { ApplyFilter, ChangePage, LoadTemplates, SavePackageTemplate } from './parcel-templates.action';
 import {
-  ApplyFilter,
-  ChangePage,
-  LoadProductTags,
-  OpenPackageTemplateDefinitionModal,
-  SavePackageTemplate,
-} from './parcel-templates.action';
-import { GetTagParcelTemplatesGQL } from '../../../shared/graphql/queries/get-tag-parcel-templates.graphql.query';
-import { IntegratorQueryTagParcelTemplatesArgs } from '../../../shared/graphql/graphql-integrator.schema';
-import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
-import { RestQueryHelper } from '../../../shared/models/pagination/rest.helper';
-import { TenantState } from '../../../shared/states/tenant.state';
+  IntegratorQueryTagParcelTemplatesArgs,
+  SortEnumType,
+  TagParcelTemplateViewModel,
+  TagParcelTemplateViewModelFilterInput,
+  TagParcelTemplateViewModelSortInput,
+} from '../../../shared/graphql/graphql-integrator.schema';
+import { GraphQLQueryVo } from '../../../shared/graphql/graphql.query';
+import { GraphQLResponse } from '../../../shared/graphql/graphql.response';
+import { applyChangePageFilter, applyCommonSearchFilter } from '../../../shared/graphql/common-search-filter';
+import { nameof } from 'src/app/shared/helpers/name-of.helper';
 
 const PACKAGE_TEMPLATES_STATE_TOKEN = new StateToken<ParcelTemplatesStateModel>('packageTemplates');
 
 @State<ParcelTemplatesStateModel>({
   name: PACKAGE_TEMPLATES_STATE_TOKEN,
   defaults: {
-    restQuery: new RestQueryVo(),
-    restQueryResponse: new RestQueryResponse<GetOfferSignaturesResponse>(),
-    signatures: [],
+    templates: [],
+    graphQLQuery: new GraphQLQueryVo(),
+    graphQLResponse: new GraphQLResponse<TagParcelTemplateViewModel[]>(),
+    graphQLFilters: {},
   },
 })
 @Injectable()
 export class ParcelTemplatesState {
-  private store = inject(Store);
   private packageTemplatesService = inject(ParcelTemplatesService);
-  private getTagParcelTemplatesGql = inject(GetTagParcelTemplatesGQL);
   private zone = inject(NgZone);
   private dialog = inject(MatDialog);
   private toastService = inject(ToastrService);
 
-  private dialogRef?: MatDialogRef<ParcelTemplateDefinitionModalComponent>;
+  private dialogRef?: MatDialogRef<PackageTemplateDefinitionFormDialogComponent>;
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
-  static getProductTags(state: ParcelTemplatesStateModel): string[] {
-    return state.signatures;
+  static getTemplates(state: ParcelTemplatesStateModel): TagParcelTemplateViewModel[] {
+    return state.templates;
   }
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
-  static getProductTagsCount(state: ParcelTemplatesStateModel): number {
-    return state.restQueryResponse.totalCount;
+  static getTemplatesCount(state: ParcelTemplatesStateModel): number {
+    return state.graphQLResponse?.result?.totalCount ?? 0;
   }
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
   static getCurrentPage(state: ParcelTemplatesStateModel): number {
-    return state.restQuery.currentPage.pageIndex;
+    return state.graphQLQuery?.currentPage?.pageIndex ?? 0;
   }
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
   static getPageSize(state: ParcelTemplatesStateModel): number {
-    return state.restQuery.currentPage.pageSize;
+    return state.graphQLQuery?.currentPage?.pageSize ?? 0;
   }
 
   @Selector([PACKAGE_TEMPLATES_STATE_TOKEN])
   static getSearchText(state: ParcelTemplatesStateModel): string {
-    return state.restQuery.searchText;
+    return state.graphQLQuery.searchText || '';
   }
 
-  @Action(LoadProductTags)
-  loadInvoices(ctx: StateContext<ParcelTemplatesStateModel>) {
-    const state = ctx.getState();
-
-    return this.packageTemplatesService.loadProductTags(state.restQuery.currentPage, state.restQuery.searchText).pipe(
+  @Action(LoadTemplates)
+  loadTemplates(ctx: StateContext<ParcelTemplatesStateModel>) {
+    return this.packageTemplatesService.loadTemplates(ctx.getState().graphQLFilters).pipe(
       tap(response => {
         ctx.patchState({
-          signatures: response.signatures,
-          restQueryResponse: {
-            result: response,
-            totalCount: response.totalCount,
+          templates: response.result.nodes,
+          graphQLResponse: {
+            result: response.result,
           },
         });
       })
@@ -87,65 +80,41 @@ export class ParcelTemplatesState {
 
   @Action(ChangePage)
   changePage(ctx: StateContext<ParcelTemplatesStateModel>, action: ChangePage) {
-    const customQuery = new RestQueryVo();
-    customQuery.currentPage = action.event;
+    ctx.patchState(
+      applyChangePageFilter<
+        IntegratorQueryTagParcelTemplatesArgs,
+        TagParcelTemplateViewModel,
+        TagParcelTemplateViewModelSortInput
+      >(ctx.getState(), action.event, [
+        {
+          tag: SortEnumType.Asc,
+        },
+      ])
+    );
 
-    ctx.patchState({
-      restQuery: customQuery,
-    });
-
-    return ctx.dispatch(new LoadProductTags());
+    return ctx.dispatch(new LoadTemplates());
   }
 
   @Action(ApplyFilter)
   applyFilter(ctx: StateContext<ParcelTemplatesStateModel>, action: ApplyFilter): Observable<void> {
-    const updatedQuery = { ...ctx.getState().restQuery };
-    updatedQuery.searchText = action.searchPhrase;
-    updatedQuery.currentPage = RestQueryHelper.getInitialPageEvent();
-
-    ctx.patchState({
-      restQuery: updatedQuery,
-    });
-
-    return ctx.dispatch(new LoadProductTags());
-  }
-
-  @Action(OpenPackageTemplateDefinitionModal)
-  openPackageTemplateDefinitionModal(
-    ctx: StateContext<ParcelTemplatesStateModel>,
-    action: OpenPackageTemplateDefinitionModal
-  ) {
-    this.zone.run(() => {
-      const query: IntegratorQueryTagParcelTemplatesArgs = {
-        where: {
-          tag: {
-            eq: action.tag,
+    ctx.patchState(
+      applyCommonSearchFilter<
+        IntegratorQueryTagParcelTemplatesArgs,
+        TagParcelTemplateViewModel,
+        TagParcelTemplateViewModelSortInput
+      >(
+        ctx.getState(),
+        action.searchPhrase,
+        [nameof<TagParcelTemplateViewModelFilterInput>('tag')],
+        [
+          {
+            tag: SortEnumType.Asc,
           },
-          tenantId: {
-            eq: this.store.selectSnapshot(TenantState.getTenant)?.tenantId,
-          },
-        },
-      };
+        ]
+      )
+    );
 
-      this.getTagParcelTemplatesGql
-        .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-        .valueChanges.pipe(map(x => x.data.result))
-        .subscribe(results => {
-          const data: ParcelTemplateDefinitionDataModel = {
-            tag: action.tag,
-            template: results[0] ?? null,
-          };
-
-          this.dialogRef = this.dialog.open<ParcelTemplateDefinitionModalComponent, ParcelTemplateDefinitionDataModel>(
-            ParcelTemplateDefinitionModalComponent,
-            {
-              data: <ParcelTemplateDefinitionDataModel>data,
-              width: '50%',
-              height: '70%',
-            }
-          );
-        });
-    });
+    return ctx.dispatch(new LoadTemplates());
   }
 
   @Action(SavePackageTemplate)
@@ -155,7 +124,7 @@ export class ParcelTemplatesState {
         this.zone.run(() => this.toastService.success('Szablon przesyłki został zapisany', 'Szablon przesyłki'));
         this.dialogRef?.close();
 
-        ctx.dispatch(new LoadProductTags());
+        ctx.dispatch(new LoadTemplates());
       }),
       catchError(error => {
         this.zone.run(() => this.toastService.error('Błąd podczas zapisu szablonu przesyłki', 'Szablon przesyłki'));

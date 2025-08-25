@@ -1,14 +1,21 @@
-import { Injectable, inject } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable } from 'rxjs';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
 import { SaveParcelTemplateCommand } from '../models/commands/save-parcel-template.command';
-import { GetOfferSignaturesResponse } from '../states/parcel-templates.state.model';
+import {
+  IntegratorQueryTagParcelTemplatesArgs,
+  TagParcelTemplateViewModel,
+} from '../../../shared/graphql/graphql-integrator.schema';
+import { GraphQLResponse } from '../../../shared/graphql/graphql.response';
+import { GetTagParcelTemplatesGQL } from '../graphql-queries/get-tag-parcel-templates.graphql.query';
+import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 
 @Injectable()
 export class ParcelTemplatesService extends RemoteServiceBase {
+  private getTagParcelTemplatesGql = inject(GetTagParcelTemplatesGQL);
+
   private apiUrl = environment.apiEndpoint;
 
   constructor() {
@@ -17,14 +24,12 @@ export class ParcelTemplatesService extends RemoteServiceBase {
     super(httpClient);
   }
 
-  loadProductTags(pageInfo: PageEvent, searchText: string): Observable<GetOfferSignaturesResponse> {
-    let params = new HttpParams().set('take', pageInfo.pageSize).set('skip', pageInfo.pageIndex * pageInfo.pageSize);
-
-    if (searchText?.length > 0) {
-      params = params.set('searchText', searchText);
-    }
-
-    return this.httpClient.get<GetOfferSignaturesResponse>(`${this.apiUrl}/orders/tags`, { params });
+  loadTemplates(
+    filters: IntegratorQueryTagParcelTemplatesArgs
+  ): Observable<GraphQLResponse<TagParcelTemplateViewModel[]>> {
+    return this.getTagParcelTemplatesGql
+      .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
+      .valueChanges.pipe(map(x => x.data));
   }
 
   saveTemplate(command: SaveParcelTemplateCommand): Observable<void> {

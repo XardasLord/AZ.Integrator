@@ -9,25 +9,44 @@
 
     <mat-form-field class="mt-5 store-selector" *appRoleAllow="[AuthRoles.Admin]">
       <mat-label>Wybierz sklep</mat-label>
-      <mat-select (selectionChange)="changeTenant($event.value)">
-        @for (group of tenantGroups; track group) {
-          <mat-optgroup [label]="group.groupName">
-            @for (tenant of group.tenants; track tenant) {
-              <ng-container *ngIf="!tenant.isTestAccount || (tenant.isTestAccount && environment.showMyTestAccounts)">
-                <mat-option [value]="tenant">
-                  <div class="flex items-center gap-2 w-full">
-                    <mat-icon class="text-gray-500" fontIcon="storefront"></mat-icon>
-                    <span class="flex-1 truncate">{{ tenant.displayName }}</span>
-                    <span
-                      *ngIf="tenant.isTestAccount"
-                      class="ml-2 px-2 py-0.5 rounded bg-yellow-100 text-yellow-800 text-xs font-semibold whitespace-nowrap"
-                      >TEST</span
-                    >
+
+      <mat-select (selectionChange)="onSelected($event.value)">
+        @for (group of tenantGroups; let first = $first; track group) {
+          <!-- Nagłówek grupy jako nieklikalny wiersz -->
+          <mat-option disabled class="!cursor-default !opacity-100 !py-0 !min-h-0">
+            <ng-container *ngIf="!first">
+              <div class="mt-3"></div>
+            </ng-container>
+            <div
+              class="px-3 py-1.5 text-[12px] font-semibold tracking-wide uppercase text-slate-900 flex items-center gap-2 select-none">
+              <span>{{ group.groupName }}</span>
+              <span class="text-slate-800">({{ group.tenants.length }})</span>
+            </div>
+          </mat-option>
+
+          <!-- Pozycje -->
+          @for (tenant of group.tenants; track tenant) {
+            <mat-option [value]="tenant" class="!py-0">
+              <div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-50 aria-selected:bg-slate-50">
+                <!-- ikona / „avatar” platformy -->
+                <div class="h-6 w-6 grid place-items-center rounded-md bg-slate-100 text-slate-600 shrink-0">
+                  <mat-icon
+                    [fontIcon]="iconFor(tenant.authorizationProvider)"
+                    class="text-[18px] leading-none"></mat-icon>
+                </div>
+
+                <!-- nazwa + (opcjonalnie) podtytuł/login -->
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="truncate">{{ tenant.displayName }}</span>
                   </div>
-                </mat-option>
-              </ng-container>
-            }
-          </mat-optgroup>
+                  <div *ngIf="tenant.subtitle" class="text-xs text-slate-400 truncate">
+                    {{ tenant.subtitle }}
+                  </div>
+                </div>
+              </div>
+            </mat-option>
+          }
         }
       </mat-select>
     </mat-form-field>

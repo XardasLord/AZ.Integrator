@@ -28,8 +28,10 @@ public class IntegratorQuery
     public IQueryable<InvoiceViewModel> GetInvoices([Service] InvoiceDataViewContext dataViewContext) 
         => dataViewContext.Invoices.AsQueryable();
 
+    [UsePaging]
     [UseProjection]
     [UseFiltering]
+    [UseSorting]
     public IQueryable<TagParcelTemplateViewModel> GetTagParcelTemplates([Service] TagParcelTemplateDataViewContext dataViewContext) 
         => dataViewContext.TagParcelTemplates.AsQueryable();
 }

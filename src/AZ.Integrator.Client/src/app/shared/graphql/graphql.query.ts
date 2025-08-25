@@ -1,5 +1,6 @@
 import { PageEvent } from '@angular/material/paginator';
 import { GraphQLHelper } from './graphql.helper';
+import { InputMaybe } from './graphql-integrator.schema';
 
 export class GraphQLQueryVo {
   public currentPage: PageEvent = GraphQLHelper.getInitialPageEvent();
@@ -13,7 +14,7 @@ export class GraphQLQueryVo {
 }
 
 export class GraphQLOrderVo<T> {
-  // public orders!: InputMaybe<Array<T>>;
+  public orders!: InputMaybe<Array<T>>;
 
   constructor(init?: Partial<GraphQLOrderVo<T>>) {
     Object.assign(this, { ...init });

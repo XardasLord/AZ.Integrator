@@ -20,6 +20,21 @@ services:
       interval: 5s
       retries: 5
       timeout: 10s
+      
+  dbup:
+    image: az.integrator.dbup
+    container_name: az-integrator-dbup
+    build:
+      context: .
+      dockerfile: AZ.Integrator.DbUp/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - az
+    stop_signal: SIGINT
+    tty: true
+    stdin_open: true
 
   db:
     image: "postgres:15"

@@ -8,12 +8,10 @@ namespace AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 public class TagParcelTemplate : Entity, IAggregateRoot
 {
     private Tag _tag;
-    private TenantId _tenantId;
     private CreationInformation _creationInformation;
     private List<TagParcel> _parcels;
 
     public Tag Tag => _tag;
-    public TenantId TenantId => _tenantId;
     public CreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<TagParcel> Parcels => _parcels;
 
@@ -22,17 +20,17 @@ public class TagParcelTemplate : Entity, IAggregateRoot
         _parcels = [];
     }
 
-    private TagParcelTemplate(Tag tag, IEnumerable<TagParcel> parcels, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private TagParcelTemplate(Tag tag, IEnumerable<TagParcel> parcels, ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
+        : this()
     {
         _tag = tag;
-        _tenantId = tenantId;
-        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
         _parcels = parcels.ToList();
     }
 
-    public static TagParcelTemplate Create(Tag tag, IEnumerable<TagParcel> parcels, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static TagParcelTemplate Create(Tag tag, IEnumerable<TagParcel> parcels, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var template = new TagParcelTemplate(tag, parcels, tenantId, currentUser, currentDateTime);
+        var template = new TagParcelTemplate(tag, parcels, currentUser, currentDateTime);
         
         return template;
     }

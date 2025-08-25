@@ -3,6 +3,7 @@ using AZ.Integrator.Shared.Infrastructure.ExternalServices.Dpd;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices.Shopify;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,7 @@ public static class Extensions
         return services
             .AddAllegro(configuration)
             .AddErli(configuration)
+            .AddShopify(configuration)
             .AddShipX(configuration)
             .AddDpd(configuration)
             .AddFakturownia(configuration);

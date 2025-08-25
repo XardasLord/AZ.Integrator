@@ -1,5 +1,4 @@
-﻿using AZ.Integrator.Domain.SharedKernel;
-using AZ.Integrator.Shared.Application;
+﻿using AZ.Integrator.Shared.Application;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using Mediator;
 

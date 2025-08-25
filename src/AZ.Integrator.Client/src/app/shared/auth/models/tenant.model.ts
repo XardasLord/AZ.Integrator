@@ -1,8 +1,8 @@
 export class Tenant {
   public tenantId!: string;
   public displayName!: string;
+  public subtitle?: string;
   public authorizationProvider!: AuthorizationProvider;
-  public isTestAccount!: boolean;
 }
 
 export class TenantGroup {
@@ -13,4 +13,5 @@ export class TenantGroup {
 export enum AuthorizationProvider {
   Allegro = 1,
   Erli = 2,
+  Shopify = 3,
 }

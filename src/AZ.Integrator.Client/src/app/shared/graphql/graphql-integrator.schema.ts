@@ -109,7 +109,7 @@ export type IntegratorQuery = {
   shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
   stockGroups: Array<StockGroupViewModel>;
   stocks: Array<StockViewModel>;
-  tagParcelTemplates?: Maybe<Array<Maybe<TagParcelTemplateViewModel>>>;
+  tagParcelTemplates?: Maybe<TagParcelTemplatesConnection>;
 };
 
 
@@ -152,6 +152,11 @@ export type IntegratorQueryStocksArgs = {
 
 
 export type IntegratorQueryTagParcelTemplatesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<TagParcelTemplateViewModelSortInput>>;
   where?: InputMaybe<TagParcelTemplateViewModelFilterInput>;
 };
 
@@ -206,6 +211,19 @@ export type LongOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['Long']['input']>>>;
   nlt?: InputMaybe<Scalars['Long']['input']>;
   nlte?: InputMaybe<Scalars['Long']['input']>;
+};
+
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** Indicates whether more edges exist following the set defined by the clients arguments. */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** Indicates whether more edges exist prior the set defined by the clients arguments. */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
 };
 
 export type ShipmentViewModel = {
@@ -340,7 +358,6 @@ export type TagParcelTemplateViewModel = {
   __typename?: 'TagParcelTemplateViewModel';
   parcels?: Maybe<Array<Maybe<TagParcelViewModel>>>;
   tag?: Maybe<Scalars['String']['output']>;
-  tenantId?: Maybe<Scalars['String']['output']>;
 };
 
 export type TagParcelTemplateViewModelFilterInput = {
@@ -348,7 +365,32 @@ export type TagParcelTemplateViewModelFilterInput = {
   or?: InputMaybe<Array<TagParcelTemplateViewModelFilterInput>>;
   parcels?: InputMaybe<ListFilterInputTypeOfTagParcelViewModelFilterInput>;
   tag?: InputMaybe<StringOperationFilterInput>;
-  tenantId?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type TagParcelTemplateViewModelSortInput = {
+  tag?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type TagParcelTemplatesConnection = {
+  __typename?: 'TagParcelTemplatesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<TagParcelTemplatesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Maybe<TagParcelTemplateViewModel>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type TagParcelTemplatesEdge = {
+  __typename?: 'TagParcelTemplatesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node?: Maybe<TagParcelTemplateViewModel>;
 };
 
 export type TagParcelViewModel = {
@@ -357,7 +399,6 @@ export type TagParcelViewModel = {
   id: Scalars['Int']['output'];
   length: Scalars['Float']['output'];
   tag?: Maybe<Scalars['String']['output']>;
-  tenantId?: Maybe<Scalars['String']['output']>;
   weight: Scalars['Float']['output'];
   width: Scalars['Float']['output'];
 };
@@ -369,7 +410,6 @@ export type TagParcelViewModelFilterInput = {
   length?: InputMaybe<FloatOperationFilterInput>;
   or?: InputMaybe<Array<TagParcelViewModelFilterInput>>;
   tag?: InputMaybe<StringOperationFilterInput>;
-  tenantId?: InputMaybe<StringOperationFilterInput>;
   weight?: InputMaybe<FloatOperationFilterInput>;
   width?: InputMaybe<FloatOperationFilterInput>;
 };

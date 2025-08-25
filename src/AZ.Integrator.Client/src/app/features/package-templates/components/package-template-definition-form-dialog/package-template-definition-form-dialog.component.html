@@ -1,14 +1,24 @@
 <div mat-dialog-title>
   <div class="flex justify-between items-center text-xl">
-    <div>
-      Szablon przesyłek dla tagu: <span class="font-bold">{{ data.tag }}</span>
-    </div>
+    <div>Szablon paczek</div>
     <mat-icon class="cursor-pointer" mat-dialog-close>close</mat-icon>
   </div>
 </div>
-<mat-divider></mat-divider>
+
+<mat-divider />
+
 <div mat-dialog-content>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <div class="flex text-lg mt-4 items-center">
+      <div class="w-full">
+        <mat-form-field class="w-full">
+          <mat-label>Tag</mat-label>
+          <input type="text" matInput formControlName="tag" />
+          <mat-error *ngIf="form.controls.tag.hasError('required')">Tag jest wymagany</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
     <div class="flex text-lg mt-4 items-center">
       Paczki
       <button mat-icon-button type="button" (click)="addNewParcel()" matTooltip="Dodaj nową paczkę">
@@ -16,7 +26,8 @@
       </button>
     </div>
 
-    <mat-divider></mat-divider>
+    <mat-divider />
+
     <ng-container formArrayName="parcels">
       <ng-container *ngFor="let parcel of parcels.controls; let i = index">
         <div [formGroupName]="i" class="flex mt-4">
@@ -57,9 +68,9 @@
   </form>
 </div>
 
-<mat-divider></mat-divider>
+<mat-divider />
 
 <div mat-dialog-actions align="end">
   <button mat-flat-button [disabled]="form.invalid" color="primary" (click)="onSubmit()">Zapisz szablon</button>
-  <button mat-stroked-button color="primary" mat-dialog-close>Anuluj</button>
+  <button mat-stroked-button color="primary" mat-dialog-close (click)="onCancel()">Anuluj</button>
 </div>
