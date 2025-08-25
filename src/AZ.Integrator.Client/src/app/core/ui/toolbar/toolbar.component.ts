@@ -1,4 +1,5 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { KeycloakService } from 'keycloak-angular';
@@ -10,7 +11,6 @@ import { RoutePaths } from '../../modules/app-routing.module';
 import { LoadNew } from '../../../features/orders/states/orders.action';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-role-allow.directive';
-import { AsyncPipe, NgIf } from '@angular/common';
 import { MaterialModule } from '../../../shared/modules/material.module';
 
 @Component({
@@ -36,19 +36,11 @@ export class ToolbarComponent {
           tenantId: environment.allegroAzTeamTenantId,
           displayName: 'AZ TEAM',
           authorizationProvider: AuthorizationProvider.Allegro,
-          isTestAccount: false,
         },
         {
           tenantId: environment.allegroMebleplTenantId,
           displayName: 'meblepl_24',
           authorizationProvider: AuthorizationProvider.Allegro,
-          isTestAccount: false,
-        },
-        {
-          tenantId: environment.allegroMyTestTenantId,
-          displayName: 'MY TEST',
-          authorizationProvider: AuthorizationProvider.Allegro,
-          isTestAccount: true,
         },
       ],
     },
@@ -59,7 +51,6 @@ export class ToolbarComponent {
           tenantId: environment.erliAzTeamTenantId,
           displayName: 'AZ TEAM',
           authorizationProvider: AuthorizationProvider.Erli,
-          isTestAccount: false,
         },
       ],
     },
@@ -69,15 +60,15 @@ export class ToolbarComponent {
         {
           tenantId: environment.shopifyUmeblovaneTenantId,
           displayName: 'Umeblovane',
+          subtitle: 'umeblovane.pl',
           authorizationProvider: AuthorizationProvider.Shopify,
-          isTestAccount: false,
         },
       ],
     },
   ];
 
-  toggleMenu(): void {
-    this.toggleSideNav.emit(true);
+  onSelected(tenant: Tenant) {
+    this.changeTenant(tenant);
   }
 
   changeTenant(tenant: Tenant) {
@@ -93,6 +84,21 @@ export class ToolbarComponent {
     // if (tenant.authorizationProvider === AuthorizationProvider.Allegro) {
     //   window.location.href = `${environment.allegroLoginEndpoint}${tenant.tenantId}`;
     // }
+  }
+
+  iconFor(platform: AuthorizationProvider) {
+    switch (platform) {
+      case AuthorizationProvider.Allegro:
+        return 'storefront';
+      case AuthorizationProvider.Erli:
+        return 'storefront';
+      case AuthorizationProvider.Shopify:
+        return 'storefront';
+    }
+  }
+
+  toggleMenu(): void {
+    this.toggleSideNav.emit(true);
   }
 
   logout() {

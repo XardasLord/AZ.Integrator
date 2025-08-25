@@ -1,8 +1,8 @@
 export class Tenant {
   public tenantId!: string;
   public displayName!: string;
+  public subtitle?: string;
   public authorizationProvider!: AuthorizationProvider;
-  public isTestAccount!: boolean;
 }
 
 export class TenantGroup {

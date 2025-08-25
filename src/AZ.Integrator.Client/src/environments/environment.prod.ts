@@ -12,9 +12,6 @@ export const environment = {
 
   allegroAzTeamTenantId: 'allegro-az-team',
   allegroMebleplTenantId: 'allegro-meblepl',
-  allegroMyTestTenantId: 'allegro-my-test',
   erliAzTeamTenantId: 'erli-az-team',
   shopifyUmeblovaneTenantId: 'shopify-umeblovane',
-
-  showMyTestAccounts: false,
 };
