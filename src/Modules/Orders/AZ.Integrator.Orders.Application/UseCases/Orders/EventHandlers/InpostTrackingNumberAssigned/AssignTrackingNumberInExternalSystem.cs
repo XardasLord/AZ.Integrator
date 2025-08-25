@@ -1,7 +1,9 @@
 ﻿using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Allegro.AssignTrackingNumbers;
 using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Erli.AssignTrackingNumbers;
+using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Shopify.AssignTrackingNumbers;
 using AZ.Integrator.Shared.Application.ExternalServices.Erli;
+using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
 using AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
 using Hangfire;
 using Mediator;
@@ -34,6 +36,17 @@ public class AssignTrackingNumberInExternalSystem(IBackgroundJobClient backgroun
                     TrackingNumbers = notification.TrackingNumbers,
                     DeliveryTrackingStatus = ErliDeliveryTrackingStatusEnum.ReadyToSend.Name,
                     Vendor = ErliDeliveryTrackingVendorEnum.InPost.Name,
+                    TenantId = notification.TenantId
+                }, null));
+        }
+        else if (shopProvider == ShopProviderType.Shopify)
+        {
+            backgroundJobClient.Enqueue<AssignTrackingNumbersInShopifyJob>(
+                job => job.Execute(new AssignTrackingNumbersInShopifyJobCommand
+                {
+                    OrderNumber = notification.ExternalOrderNumber,
+                    TrackingNumbers = notification.TrackingNumbers,
+                    Vendor = ShopifyDeliveryTrackingVendorEnum.InPost.Name,
                     TenantId = notification.TenantId
                 }, null));
         }

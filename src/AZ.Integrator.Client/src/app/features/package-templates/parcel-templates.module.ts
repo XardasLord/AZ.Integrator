@@ -7,14 +7,19 @@ import { ParcelTemplatesRoutingModule } from './parcel-templates-routing.module'
 import { ParcelTemplatesListComponent } from './pages/parcel-templates-list/parcel-templates-list.component';
 import { ParcelTemplatesService } from './services/parcel-templates.service';
 import { ParcelTemplatesState } from './states/parcel-templates.state';
-import { ParcelTemplateDefinitionModalComponent } from './pages/parcel-template-definition-modal/parcel-template-definition-modal.component';
-import { ParcelTemplatesFiltersComponent } from './pages/parcel-templates-filters/parcel-templates-filters.component';
+import { PackageTemplateDefinitionFormDialogComponent } from './components/package-template-definition-form-dialog/package-template-definition-form-dialog.component';
+import { ParcelTemplatesFiltersComponent } from './components/parcel-templates-filters/parcel-templates-filters.component';
 
 @NgModule({
-    imports: [SharedModule, ParcelTemplatesRoutingModule, NgxsFormPluginModule, ParcelTemplatesComponent,
-        ParcelTemplatesListComponent,
-        ParcelTemplateDefinitionModalComponent,
-        ParcelTemplatesFiltersComponent],
-    providers: [provideStates([ParcelTemplatesState]), ParcelTemplatesService],
+  imports: [
+    SharedModule,
+    ParcelTemplatesRoutingModule,
+    NgxsFormPluginModule,
+    ParcelTemplatesComponent,
+    ParcelTemplatesListComponent,
+    PackageTemplateDefinitionFormDialogComponent,
+    ParcelTemplatesFiltersComponent,
+  ],
+  providers: [provideStates([ParcelTemplatesState]), ParcelTemplatesService],
 })
 export class ParcelTemplatesModule {}

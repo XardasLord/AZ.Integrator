@@ -29,13 +29,13 @@ export class StockGroupFormDialogComponent implements OnInit {
     this.editMode = !!this.data?.name;
   }
 
-  save() {
+  onSubmit() {
     if (this.groupForm.valid) {
       this.dialogRef.close(this.groupForm.value as StockGroupFormDialogResponseModel);
     }
   }
 
-  cancel() {
+  onCancel() {
     this.dialogRef.close();
   }
 }

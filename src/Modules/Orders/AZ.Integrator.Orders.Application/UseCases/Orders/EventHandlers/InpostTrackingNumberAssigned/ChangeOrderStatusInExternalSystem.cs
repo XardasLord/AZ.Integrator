@@ -28,6 +28,10 @@ public class ChangeOrderStatusInExternalSystem(IBackgroundJobClient backgroundJo
         {
             // Erli does not support changing Order's status
         }
+        else if (shopProvider == ShopProviderType.Shopify)
+        {
+            // Assigning tracking numbers in Shopify does change the order status automatically
+        }
 
         return new ValueTask();
     }

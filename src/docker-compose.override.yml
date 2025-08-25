@@ -11,6 +11,10 @@ services:
       - Infrastructure__Keycloak__Authority=https://host.docker.internal:9080/realms/az-integrator
       - Infrastructure__Keycloak__AuthorizationUrl=https://host.docker.internal:9080/realms/az-integrator/protocol/openid-connect/auth
       - Infrastructure__Keycloak__TokenUrl=https://host.docker.internal:9080/realms/az-integrator/protocol/openid-connect/token
+  
+  dbup:
+    environment:
+      - ConnectionStringApplication=Server=db;Port=5432;Database=integrator;Username=postgres;Password=postgres;
 
   db:
     environment:

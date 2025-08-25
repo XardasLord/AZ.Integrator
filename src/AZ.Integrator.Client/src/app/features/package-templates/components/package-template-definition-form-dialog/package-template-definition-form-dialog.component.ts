@@ -1,4 +1,5 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   FormArray,
@@ -9,42 +10,47 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import { Subscription } from 'rxjs';
-import { ParcelTemplateDefinitionDataModel } from '../../models/parcel-template-definition-data.model';
-import { TemplateParcelFormGroupModel } from '../../models/template-parcel-form-group.model';
+import { ParcelTemplateDefinitionDataModel } from './parcel-template-definition-data.model';
+import { TemplatePackageFormGroupModel } from './template-package-form-group.model';
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
 import { ParcelTemplate } from '../../models/parcel-template';
-import { SaveParcelTemplateCommand } from '../../models/commands/save-parcel-template.command';
-import { SavePackageTemplate } from '../../states/parcel-templates.action';
-import { NgFor, NgIf } from '@angular/common';
 import { MaterialModule } from '../../../../shared/modules/material.module';
+import { PackageTemplateDefinitionFormDialogResponseModel } from './package-template-definition-form-dialog-response-model';
 
 @Component({
-  selector: 'app-parcel-template-definition-modal',
-  templateUrl: './parcel-template-definition-modal.component.html',
-  styleUrls: ['./parcel-template-definition-modal.component.scss'],
+  selector: 'app-package-template-definition-form-dialog',
+  templateUrl: './package-template-definition-form-dialog.component.html',
+  styleUrls: ['./package-template-definition-form-dialog.component.scss'],
   imports: [MaterialModule, FormsModule, ReactiveFormsModule, NgFor, NgIf],
 })
-export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
-  dialogRef = inject<MatDialogRef<ParcelTemplateDefinitionModalComponent>>(MatDialogRef);
-  data = inject<ParcelTemplateDefinitionDataModel>(MAT_DIALOG_DATA);
+export class PackageTemplateDefinitionFormDialogComponent implements OnInit {
+  private data: ParcelTemplateDefinitionDataModel = inject(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
-  private store = inject(Store);
+  private dialogRef: MatDialogRef<PackageTemplateDefinitionFormDialogComponent> = inject(MatDialogRef);
 
-  form: FormGroup<TemplateParcelFormGroupModel>;
-  subscriptions: Subscription = new Subscription();
+  form!: FormGroup<TemplatePackageFormGroupModel>;
+  editMode: boolean = false;
 
-  constructor() {
-    const data = this.data;
+  get parcels(): FormArray<FormGroup> {
+    return this.form.controls.parcels;
+  }
 
-    this.form = this.fb.group<TemplateParcelFormGroupModel>({
+  ngOnInit(): void {
+    this.editMode = !!this.data?.tag;
+
+    this.form = this.fb.group<TemplatePackageFormGroupModel>({
+      tag: new FormControl<string>(
+        {
+          value: this.editMode ? this.data?.tag : '',
+          disabled: this.editMode,
+        },
+        Validators.required
+      ),
       parcels: this.fb.array<FormGroup>([], [Validators.required]),
-      additionalInfo: new FormControl<string>(''),
     });
 
-    if (data?.template?.parcels && data?.template?.parcels?.length > 0) {
-      data.template?.parcels?.forEach(parcel => {
+    if (this.data?.template?.parcels && this.data?.template?.parcels?.length > 0) {
+      this.data.template?.parcels?.forEach(parcel => {
         this.addNewParcel(parcel?.length, parcel?.width, parcel?.height, parcel?.weight);
       });
     } else {
@@ -52,18 +58,6 @@ export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
     }
 
     this.form.markAllAsTouched();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
-  onSubmit() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    this.savePackageTemplate();
   }
 
   addNewParcel(length = 0, width = 0, height = 0, weight = 0) {
@@ -81,11 +75,11 @@ export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
     this.parcels.removeAt(index);
   }
 
-  get parcels(): FormArray<FormGroup> {
-    return this.form.controls.parcels;
-  }
+  onSubmit() {
+    if (!this.form.valid) {
+      return;
+    }
 
-  private savePackageTemplate() {
     const parcels: ParcelTemplate[] = [];
 
     for (let i = 0; i < this.form.value.parcels.length; i++) {
@@ -102,11 +96,15 @@ export class ParcelTemplateDefinitionModalComponent implements OnDestroy {
       });
     }
 
-    const command: SaveParcelTemplateCommand = {
-      tag: this.data.tag,
-      parcelTemplates: parcels,
+    const response: PackageTemplateDefinitionFormDialogResponseModel = {
+      tag: this.editMode ? this.data.tag : this.form.value.tag!,
+      parcels,
     };
 
-    this.store.dispatch(new SavePackageTemplate(command));
+    this.dialogRef.close(response);
+  }
+
+  onCancel() {
+    this.dialogRef.close();
   }
 }
