@@ -1,8 +1,21 @@
 ﻿using DbUp;
 using DbUp.Helpers;
 using DbUp.ScriptProviders;
+using Microsoft.Extensions.Configuration;
 
-var connectionString = Environment.GetEnvironmentVariable("ConnectionStringApplication");
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
+var config = new ConfigurationBuilder()
+    .SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddJsonFile($"appsettings.{environment}.json", optional: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStringApplication")
+                       ?? config.GetConnectionString("Application");
+
+Console.WriteLine($"Environment: {environment}");
 
 const string oneTimeScriptsDirectory = "OneTime";
 const string permanentScriptsDirectory = "Permanent";
