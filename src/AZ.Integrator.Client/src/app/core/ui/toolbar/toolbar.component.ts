@@ -8,7 +8,6 @@ import { AuthorizationProvider, Tenant, TenantGroup } from '../../../shared/auth
 import { ChangeTenant } from '../../../shared/states/tenant.action';
 import { RoutePaths } from '../../modules/app-routing.module';
 import { LoadNew } from '../../../features/orders/states/orders.action';
-import { LoadTemplates } from '../../../features/package-templates/states/parcel-templates.action';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-role-allow.directive';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -87,9 +86,6 @@ export class ToolbarComponent {
     switch (this.route.url) {
       case `/${RoutePaths.Orders}`:
         this.store.dispatch(new LoadNew());
-        return;
-      case `/${RoutePaths.ParcelTemplates}`:
-        this.store.dispatch(new LoadTemplates());
         return;
     }
 

@@ -1,5 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
+import { MatIcon } from '@angular/material/icon';
 import { Store } from '@ngxs/store';
 import { map, Observable, of } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
@@ -13,8 +15,6 @@ import {
 } from '../../states/orders.action';
 import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
-import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 
 @Component({
