@@ -185,11 +185,11 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         var filter = string.Empty;
         
         if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.New.Name || status == AllegroFulfillmentStatusEnum.Processing.Name))
-            filter = ShopifyFulfillmentStatusGraphqlFilterEnum.New.Name;
+            filter = $"{ShopifyFulfillmentStatusGraphqlFilterEnum.New.Name} AND {ShopifyOrderStatusGraphqlFilterEnum.Open}";
         else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.ReadyForShipment.Name))
-            filter = ShopifyFulfillmentStatusGraphqlFilterEnum.ReadyToProcess.Name;
+            filter = $"{ShopifyFulfillmentStatusGraphqlFilterEnum.ReadyToProcess.Name} AND {ShopifyOrderStatusGraphqlFilterEnum.Open}";
         else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.Sent.Name))
-            filter = ShopifyFulfillmentStatusGraphqlFilterEnum.Sent.Name;
+            filter = $"{ShopifyFulfillmentStatusGraphqlFilterEnum.Sent.Name} AND {ShopifyOrderStatusGraphqlFilterEnum.Closed}";
         
         return filter;
     }
