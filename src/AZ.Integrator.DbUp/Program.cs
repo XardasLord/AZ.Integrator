@@ -1,87 +1,153 @@
-﻿using DbUp;
+﻿using System.Text;
+using DbUp;
+using DbUp.Engine;
 using DbUp.Helpers;
 using DbUp.ScriptProviders;
 using Microsoft.Extensions.Configuration;
 
-var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-
-var config = new ConfigurationBuilder()
-    .SetBasePath(AppContext.BaseDirectory)
-    .AddJsonFile("appsettings.json", optional: true)
-    .AddJsonFile($"appsettings.{environment}.json", optional: true)
-    .AddEnvironmentVariables()
-    .Build();
-
-var connectionString = Environment.GetEnvironmentVariable("ConnectionStringApplication")
-                       ?? config.GetConnectionString("Application");
+var environment = GetEnvironment();
+var config = BuildConfiguration(environment);
+var connectionString = GetConnectionString(config);
 
 Console.WriteLine($"Environment: {environment}");
 
-const string oneTimeScriptsDirectory = "OneTime";
-const string permanentScriptsDirectory = "Permanent";
+// Common journal table for all schemas
+const string JournalTable   = "__schema_history";
 
-const ConsoleColor errorConsoleColor = ConsoleColor.Red;
-const ConsoleColor successConsoleColor = ConsoleColor.Green;
+// Public schema
+const string MigrationsPublicDir  = "Migrations/Public";
+const string JournalPublicSchema  = "public";
+
+// Account schema
+const string MigrationsAccountDir  = "Migrations/Account";
+const string JournalAccountSchema  = "account";
+
+const string RepeatablesDir = "Repeatable";
+
+ValidateDirectories(MigrationsPublicDir);
+ValidateConnectionString(connectionString);
 
 EnsureDatabase.For.PostgresqlDatabase(connectionString);
 
-// var oneTimeScriptsUpgrader =
-//     DeployChanges.To
-//         .PostgresqlDatabase(connectionString)
-//         .WithScriptsFromFileSystem(oneTimeScriptsDirectory)
-//         .LogToConsole()
-//         .Build();
-//
-// if (oneTimeScriptsUpgrader.IsUpgradeRequired())
-// {
-//     var oneTimeResult = oneTimeScriptsUpgrader.PerformUpgrade();
-//
-//     if (!oneTimeResult.Successful)
-//     {
-//         Console.ForegroundColor = errorConsoleColor;
-//         Console.WriteLine(oneTimeResult.Error);
-//         Console.ResetColor();
-// #if DEBUG
-//         Console.ReadLine();
-// #endif                
-//     }
-//     else
-//     {
-//         Console.ForegroundColor = successConsoleColor;
-//         Console.WriteLine("One Time scripts success!");
-//         Console.ResetColor();
-//     }
-// }
+RunMigrations(connectionString, MigrationsPublicDir, JournalPublicSchema, JournalTable);
+// RunMigrations(connectionString, MigrationsAccountDir, JournalAccountSchema, JournalTable); // No migrations yet
 
-var permanentScriptsUpgrader =
-    DeployChanges.To
-        .PostgresqlDatabase(connectionString)
-        .WithScriptsFromFileSystem(permanentScriptsDirectory, new FileSystemScriptOptions
+RunRepeatables(connectionString, RepeatablesDir);
+
+Environment.Exit(0);
+return;
+
+
+static string GetEnvironment()
+    => Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
+static IConfigurationRoot BuildConfiguration(string environment)
+    => new ConfigurationBuilder()
+        .SetBasePath(AppContext.BaseDirectory)
+        .AddJsonFile("appsettings.json", optional: true)
+        .AddJsonFile($"appsettings.{environment}.json", optional: true)
+        .AddEnvironmentVariables()
+        .Build();
+
+static string GetConnectionString(IConfigurationRoot config)
+    => Environment.GetEnvironmentVariable("ConnectionStringApplication")
+       ?? config.GetConnectionString("Application")
+       ?? throw new InvalidOperationException("Brak ConnectionStringApplication / Application.");
+
+
+static void ValidateDirectories(params string[] dirs)
+{
+    foreach (var d in dirs)
+    {
+        if (!Directory.Exists(d))
         {
-            IncludeSubDirectories = true
+            Console.Error.WriteLine($"Directory does not exist: {d}");
+            Environment.Exit(2);
+        }
+    }
+}
+
+static void ValidateConnectionString(string cs)
+{
+    if (string.IsNullOrWhiteSpace(cs))
+    {
+        Console.Error.WriteLine("Empty connection string.");
+        Environment.Exit(2);
+    }
+}
+
+static void RunMigrations(
+    string connectionString,
+    string scriptsDir,
+    string journalSchema,
+    string journalTable)
+{
+    var upgrader = DeployChanges.To
+        .PostgresqlDatabase(connectionString)
+        .JournalToPostgresqlTable(journalSchema, journalTable)
+        .WithScriptsFromFileSystem(scriptsDir, new FileSystemScriptOptions
+        {
+            Encoding = Encoding.UTF8
         })
-        .JournalTo(new NullJournal())
         .LogToConsole()
         .Build();
 
-if (permanentScriptsUpgrader.IsUpgradeRequired())
-{
-    var permanentResult = permanentScriptsUpgrader.PerformUpgrade();
-
-    if (!permanentResult.Successful)
+    if (!upgrader.IsUpgradeRequired())
     {
-        Console.ForegroundColor = errorConsoleColor;
-        Console.WriteLine(permanentResult.Error);
-        Console.ResetColor();
-#if DEBUG
-        Console.ReadLine();
-#endif                
-        return -1;
+        Console.WriteLine("No migration scripts to run.");
+        return;
     }
 
-    Console.ForegroundColor = successConsoleColor;
-    Console.WriteLine("Permanent scripts success!");
+    var result = upgrader.PerformUpgrade();
+    if (!result.Successful)
+    {
+        PrintError(result);
+        Environment.Exit(1);
+    }
+
+    PrintSuccess("Migration scripts success!");
+}
+
+static void RunRepeatables(string connectionString, string scriptsDir)
+{
+    if (!Directory.Exists(scriptsDir))
+    {
+        Console.WriteLine("No repeatable directory found – skipping.");
+        return;
+    }
+
+    var upgrader = DeployChanges.To
+        .PostgresqlDatabase(connectionString)
+        .JournalTo(new NullJournal())
+        .WithScriptsFromFileSystem(scriptsDir, new FileSystemScriptOptions
+        {
+            IncludeSubDirectories = true,
+            Encoding = Encoding.UTF8
+        })
+        .LogToConsole()
+        .WithTransactionPerScript()
+        .Build();
+
+    var result = upgrader.PerformUpgrade();
+    if (!result.Successful)
+    {
+        PrintError(result);
+        Environment.Exit(1);
+    }
+
+    PrintSuccess("Repeatable scripts success!");
+}
+
+static void PrintError(DatabaseUpgradeResult result)
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine(result.Error);
     Console.ResetColor();
 }
 
-return 0;
+static void PrintSuccess(string message)
+{
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine(message);
+    Console.ResetColor();
+}

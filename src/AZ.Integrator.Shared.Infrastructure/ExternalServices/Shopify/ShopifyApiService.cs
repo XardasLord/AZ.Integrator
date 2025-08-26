@@ -1,7 +1,6 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
-using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses;
@@ -12,7 +11,6 @@ using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.SystemTextJson;
 using Microsoft.EntityFrameworkCore;
 using GetOrdersModelResponse = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GetOrdersModelResponse;
-using Order = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses.Order;
 
 namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Shopify;
 
