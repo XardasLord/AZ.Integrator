@@ -18,33 +18,36 @@ public class GetAllQueryHandler(
 {
     public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        if (query.ShopProvider == ShopProviderType.Allegro)
+        switch (query.ShopProvider)
         {
-            var ordersResponse = await allegroService.GetOrders(query.Filters, query.TenantId); 
+            case ShopProviderType.Allegro:
+            {
+                var ordersResponse = await allegroService.GetOrders(query.Filters, query.TenantId); 
             
-            var orderDtos = mapper.Map<List<OrderDetailsDto>>(ordersResponse.CheckoutForms);
-            return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
+                var orderDtos = mapper.Map<List<OrderDetailsDto>>(ordersResponse.CheckoutForms);
+                return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
+            }
+            case ShopProviderType.Erli:
+            {
+                var ordersResponse = await erliService.GetOrders(query.Filters, query.TenantId);
+
+                var orderDtos = MapErliOrders(ordersResponse);
+
+                return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
+            }
+            case ShopProviderType.Shopify:
+            {
+                var ordersResponse = await shopifyService.GetOrders(query.Filters, query.TenantId);
+
+                var orderDtos = MapShopifyOrders(ordersResponse);
+
+                return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
+            }
+            case ShopProviderType.System:
+            case ShopProviderType.Unknown:
+            default:
+                return null;
         }
-
-        if (query.ShopProvider == ShopProviderType.Erli)
-        {
-            var ordersResponse = await erliService.GetOrders(query.Filters, query.TenantId);
-
-            var orderDtos = MapErliOrders(ordersResponse);
-
-            return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
-        }
-
-        if (query.ShopProvider == ShopProviderType.Shopify)
-        {
-            var ordersResponse = await shopifyService.GetOrders(query.Filters, query.TenantId);
-
-            var orderDtos = MapShopifyOrders(ordersResponse);
-
-            return new GetAllQueryResponse(orderDtos, ordersResponse.Count, ordersResponse.TotalCount);
-        }
-
-        return null;
     }
 
     private static List<OrderDetailsDto> MapErliOrders(AZ.Integrator.Shared.Application.ExternalServices.Erli.GetOrdersModelResponse ordersResponse)
@@ -67,7 +70,7 @@ public class GetAllQueryHandler(
                 Price = new AmountDetailsDto
                 {
                     Amount = (item.UnitPrice / 100m).ToString(CultureInfo.InvariantCulture),
-                    Currency = "PLN"
+                    Currency = CurrencyEnum.Pln.Name
                 }
             }).ToList();
             
@@ -88,7 +91,7 @@ public class GetAllQueryHandler(
                     PaidAmount = order.Payment is null ? null : new AmountDetails
                     {
                         Amount = (order.TotalPrice / 100m).ToString(CultureInfo.InvariantCulture),
-                        Currency = "PLN"
+                        Currency = CurrencyEnum.Pln.Name
                     },
                     Type = order.Delivery.Cod ? OrderPaymentType.Cod : OrderPaymentType.Online,
                 },
@@ -115,7 +118,7 @@ public class GetAllQueryHandler(
                     TotalToPay = new AmountDetailsDto
                     {
                         Amount = (order.TotalPrice / 100m).ToString(CultureInfo.InvariantCulture),
-                        Currency = "PLN"
+                        Currency = CurrencyEnum.Pln.Name
                     }
                 },
                 MessageToSeller = order.Comment
