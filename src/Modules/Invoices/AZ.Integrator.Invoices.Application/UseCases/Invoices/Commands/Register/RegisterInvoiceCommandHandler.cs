@@ -41,26 +41,16 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
     
     public async ValueTask<Unit> Handle(RegisterInvoiceCommand command, CancellationToken cancellationToken)
     {
-        CreateInvoiceResponse invoiceResponse = null;
-        
-        switch (command.ShopProvider)
+        var invoiceResponse = command.ShopProvider switch
         {
-            case ShopProviderType.Allegro:
-                invoiceResponse = await GenerateInvoiceFromAllegro(command);
-                break;
-            case ShopProviderType.Erli:
-                var orderDetails2 = await _erliService.GetOrderDetails(command.OrderNumber, command.TenantId);
-                break;
-            case ShopProviderType.Shopify:
-                invoiceResponse = await GenerateInvoiceFromShopify(command);
-                break;
-            case ShopProviderType.System:
-            case ShopProviderType.Unknown:
-                throw new NotImplementedException("Unknown shop provider");
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-        
+            ShopProviderType.Allegro => await GenerateInvoiceFromAllegro(command),
+            ShopProviderType.Erli => await GenerateInvoiceFromErli(command),
+            ShopProviderType.Shopify => await GenerateInvoiceFromShopify(command),
+            ShopProviderType.System or ShopProviderType.Unknown => throw new NotImplementedException(
+                "Unknown shop provider"),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
         var invoice = Invoice.Create(invoiceResponse?.Id, invoiceResponse?.Number, command.OrderNumber, command.TenantId, _currentUser, _currentDateTime);
         await _invoiceRepository.AddAsync(invoice, cancellationToken);
 
@@ -101,6 +91,39 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         return response;
     }
 
+    private async ValueTask<CreateInvoiceResponse> GenerateInvoiceFromErli(RegisterInvoiceCommand command)
+    {
+        var orderDetails = await _erliService.GetOrderDetails(command.OrderNumber, command.TenantId);
+                
+        var buyerDetails = new BuyerDetails(
+            orderDetails.User?.Email,
+            orderDetails.InvoiceAddress?.FirstName ?? orderDetails.User?.DeliveryAddress?.FirstName,
+            orderDetails.InvoiceAddress?.LastName ?? orderDetails.User?.DeliveryAddress?.LastName,
+            orderDetails.InvoiceAddress?.CompanyName,
+            orderDetails.InvoiceAddress?.Nip,
+            null);
+        
+        var invoiceItems = orderDetails.Items.Select(x =>
+                new InvoiceItem(x.Name,
+                    decimal.Parse((x.UnitPrice / 100).ToString(), CultureInfo.InvariantCulture),
+                    x.Quantity,
+                    "PL"))
+            .ToList();
+        
+        var paymentDetails = new PaymentDetails(
+            orderDetails.PurchasedAt.Date,
+            orderDetails.PurchasedAt.Date,
+            orderDetails.PurchasedAt.Date);
+        
+        var deliveryDetails = new DeliveryDetails(
+            orderDetails.Delivery.Name,
+            decimal.Parse(((orderDetails.Delivery?.Price ?? 0) / 100).ToString(), CultureInfo.InvariantCulture));
+        
+        var invoiceResponse = await _invoiceService.GenerateInvoice(buyerDetails, invoiceItems, paymentDetails, deliveryDetails);
+        
+        return invoiceResponse;
+    }
+    
     private async ValueTask<CreateInvoiceResponse> GenerateInvoiceFromShopify(RegisterInvoiceCommand command)
     {
         var orderDetails = await _shopifyService.GetOrderDetails(command.OrderNumber, command.TenantId);

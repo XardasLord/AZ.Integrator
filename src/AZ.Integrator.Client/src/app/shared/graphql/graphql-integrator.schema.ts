@@ -130,6 +130,7 @@ export type IntegratorQueryInpostShipmentsArgs = {
 
 
 export type IntegratorQueryInvoicesArgs = {
+  order?: InputMaybe<Array<InvoiceViewModelSortInput>>;
   where?: InputMaybe<InvoiceViewModelFilterInput>;
 };
 
@@ -175,6 +176,13 @@ export type InvoiceViewModelFilterInput = {
   invoiceId?: InputMaybe<LongOperationFilterInput>;
   invoiceNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
+};
+
+export type InvoiceViewModelSortInput = {
+  createdAt?: InputMaybe<SortEnumType>;
+  externalOrderNumber?: InputMaybe<SortEnumType>;
+  invoiceId?: InputMaybe<SortEnumType>;
+  invoiceNumber?: InputMaybe<SortEnumType>;
 };
 
 export type ListFilterInputTypeOfStockLogViewModelFilterInput = {

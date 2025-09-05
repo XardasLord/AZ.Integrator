@@ -93,10 +93,16 @@ public class ErliApiService(
         };
     }
     
-    public Task<Order> GetOrderDetails(string orderId, TenantId tenantId)
+    public async Task<Order> GetOrderDetails(string orderId, TenantId tenantId)
     {
-        // TODO:
-        return (Task<Order>)Task.CompletedTask;
+        var httpClient = await PrepareHttpClient(tenantId);
+        using var response = await httpClient.GetAsync($"orders/{orderId}");
+
+        response.EnsureSuccessStatusCode();
+
+        var order = await response.Content.ReadFromJsonAsync<Order>();
+
+        return order;
     }
 
     public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, 

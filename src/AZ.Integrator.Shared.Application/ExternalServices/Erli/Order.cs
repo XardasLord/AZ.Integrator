@@ -10,6 +10,7 @@ public class Order
     public string Comment { get; set; }
     public int TotalPrice { get; set; }
     public DeliveryTracking DeliveryTracking { get; set; }
+    public InvoiceAddress InvoiceAddress { get; set; }
     public DateTime Created { get; set; }
     public DateTime Updated { get; set; }
     public DateTime PurchasedAt { get; set; }
@@ -69,4 +70,20 @@ public class DeliveryTracking
 public class Payment
 {
     public int Id { get; set; }
+}
+
+public class InvoiceAddress
+{
+    public string Type { get; set; }
+    public string Address { get; set; }
+    public string Street { get; set; }
+    public string BuildingNumber { get; set; }
+    public string FlatNumber { get; set; }
+    public string Zip { get; set; }
+    public string City { get; set; }
+    public string Country { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string CompanyName { get; set; }
+    public string Nip { get; set; }
 }
