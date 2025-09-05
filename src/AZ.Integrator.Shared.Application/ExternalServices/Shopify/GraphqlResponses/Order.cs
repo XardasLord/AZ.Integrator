@@ -23,11 +23,14 @@ public class Order
     public DateTimeOffset CreatedAt { get; set; }
     public string Name { get; set; }
     public int Number { get; set; }
+    public string Email { get; set; }
     public bool FullyPaid { get; set; }
     public string Note { get; set; }
+    public bool BillingAddressMatchesShippingAddress { get; set; }
     public TotalPriceSet TotalPriceSet { get; set; }
     public ShippingLine ShippingLine { get; set; }
     public ShippingAddress ShippingAddress { get; set; }
+    public ShippingAddress BillingAddress { get; set; }
     public LineItemConnection LineItems { get; set; }
     public FulfillmentOrderConnection FulfillmentOrders { get; set; }
     public string DisplayFinancialStatus { get; set; }
@@ -49,10 +52,13 @@ public class Money
 public class ShippingLine
 {
     public string Title { get; set; }
+    public TotalPriceSet CurrentDiscountedPriceSet { get; set; }
+    public TotalPriceSet OriginalPriceSet { get; set; }
 }
 
 public class ShippingAddress
 {
+    public string Company { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Address1 { get; set; }

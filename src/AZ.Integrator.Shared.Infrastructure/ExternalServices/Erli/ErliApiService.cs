@@ -92,6 +92,12 @@ public class ErliApiService(
             Count = orders.Count
         };
     }
+    
+    public Task<Order> GetOrderDetails(string orderId, TenantId tenantId)
+    {
+        // TODO:
+        return (Task<Order>)Task.CompletedTask;
+    }
 
     public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, 
         string vendor, string deliveryTrackingStatus, string tenantId)
