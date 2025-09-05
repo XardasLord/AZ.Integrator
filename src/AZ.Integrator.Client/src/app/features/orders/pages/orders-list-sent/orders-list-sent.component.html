@@ -1,8 +1,11 @@
 <table mat-table [dataSource]="(orders$ | async)!" class="mat-elevation-z3">
   <ng-container matColumnDef="shipmentNumber">
     <th mat-header-cell *matHeaderCellDef>Numer przesyłki</th>
-    <td mat-cell *matCellDef="let order">{{ getShipmentNumber(order) | async }}</td>
-  </ng-container>
+    <td mat-cell *matCellDef="let order">
+      <span *ngIf="getShipmentNumber(order) | async">{{ getShipmentNumber(order) | async }}</span>
+      <mat-icon *ngIf="(getShipmentNumber(order) | async) === undefined" class="!text-red-600">close</mat-icon>
+    </td></ng-container
+  >
 
   <ng-container matColumnDef="invoiceNumber">
     <th mat-header-cell *matHeaderCellDef>Numer faktury</th>
