@@ -94,7 +94,7 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
     private async ValueTask<CreateInvoiceResponse> GenerateInvoiceFromErli(RegisterInvoiceCommand command)
     {
         var orderDetails = await _erliService.GetOrderDetails(command.OrderNumber, command.TenantId);
-                
+
         var buyerDetails = new BuyerDetails(
             orderDetails.User?.Email,
             orderDetails.InvoiceAddress?.FirstName ?? orderDetails.User?.DeliveryAddress?.FirstName,
@@ -102,25 +102,25 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
             orderDetails.InvoiceAddress?.CompanyName,
             orderDetails.InvoiceAddress?.Nip,
             null);
-        
+
         var invoiceItems = orderDetails.Items.Select(x =>
                 new InvoiceItem(x.Name,
-                    decimal.Parse((x.UnitPrice / 100).ToString(), CultureInfo.InvariantCulture),
+                    decimal.Parse((x.UnitPrice / 100m).ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture),
                     x.Quantity,
                     "PL"))
             .ToList();
-        
+
         var paymentDetails = new PaymentDetails(
             orderDetails.PurchasedAt.Date,
             orderDetails.PurchasedAt.Date,
             orderDetails.PurchasedAt.Date);
-        
+
         var deliveryDetails = new DeliveryDetails(
             orderDetails.Delivery.Name,
-            decimal.Parse(((orderDetails.Delivery?.Price ?? 0) / 100).ToString(), CultureInfo.InvariantCulture));
-        
+            decimal.Parse(((orderDetails.Delivery?.Price ?? 0) / 100m).ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture));
+
         var invoiceResponse = await _invoiceService.GenerateInvoice(buyerDetails, invoiceItems, paymentDetails, deliveryDetails);
-        
+
         return invoiceResponse;
     }
     
