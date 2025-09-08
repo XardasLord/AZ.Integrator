@@ -1,8 +1,12 @@
-import { Injectable, NgZone, inject } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { catchError, of, switchMap, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { IntegratorQueryInvoicesArgs, InvoiceViewModel } from '../../../shared/graphql/graphql-integrator.schema';
+import {
+  IntegratorQueryInvoicesArgs,
+  InvoiceViewModel,
+  SortEnumType,
+} from '../../../shared/graphql/graphql-integrator.schema';
 import { IntegratorError } from '../../../core/interceptor/error-handler.interceptor';
 import { GenerateInvoiceCommand } from '../models/commands/generate-invoice.command';
 import { InvoicesStateModel } from './invoices.state.model';
@@ -26,7 +30,6 @@ export class InvoicesState {
   private zone = inject(NgZone);
   private toastService = inject(ToastrService);
 
-
   @Selector([INVOICES_STATE_TOKEN])
   static getInvoices(state: InvoicesStateModel): InvoiceViewModel[] {
     return state.invoices;
@@ -43,6 +46,7 @@ export class InvoicesState {
             in: action.orderIds,
           },
         },
+        order: [{ createdAt: SortEnumType.Desc }],
       };
     }
     return this.invoicesService.getInvoices(filters).pipe(

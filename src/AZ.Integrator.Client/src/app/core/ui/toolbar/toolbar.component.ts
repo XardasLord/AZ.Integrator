@@ -35,11 +35,13 @@ export class ToolbarComponent {
         {
           tenantId: environment.allegroAzTeamTenantId,
           displayName: 'AZ TEAM',
+          subtitle: 'ALLEGRO',
           authorizationProvider: AuthorizationProvider.Allegro,
         },
         {
           tenantId: environment.allegroMebleplTenantId,
           displayName: 'meblepl_24',
+          subtitle: 'ALLEGRO',
           authorizationProvider: AuthorizationProvider.Allegro,
         },
       ],
@@ -50,6 +52,7 @@ export class ToolbarComponent {
         {
           tenantId: environment.erliAzTeamTenantId,
           displayName: 'AZ TEAM',
+          subtitle: 'ERLI',
           authorizationProvider: AuthorizationProvider.Erli,
         },
       ],

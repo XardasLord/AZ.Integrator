@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store } from '@ngxs/store';
-import { map, Observable, of, take } from 'rxjs';
+import { filter, firstValueFrom, map, Observable, of, take, tap } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { OrdersState } from '../../states/orders-state.service';
@@ -21,6 +21,12 @@ import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
 import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MaterialModule } from '../../../../shared/modules/material.module';
+import {
+  ConfirmationDialogComponent,
+  ConfirmationDialogModel,
+} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-orders-list-ready-for-shipment',
@@ -30,6 +36,8 @@ import { MaterialModule } from '../../../../shared/modules/material.module';
 })
 export class OrdersListReadyForShipmentComponent implements OnInit {
   private store = inject(Store);
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   displayedColumns: string[] = [
     'select',
@@ -85,8 +93,27 @@ export class OrdersListReadyForShipmentComponent implements OnInit {
     this.store.dispatch(new GenerateInpostLabels(shipmentIds));
   }
 
-  generateInvoice(order: OrderDetailsModel) {
-    this.store.dispatch(new GenerateInvoice(order.id));
+  async generateInvoice(order: OrderDetailsModel) {
+    const canDownload = await firstValueFrom(this.canDownloadInvoice(order));
+
+    if (canDownload) {
+      this.dialog
+        .open(ConfirmationDialogComponent, {
+          data: <ConfirmationDialogModel>{
+            title: 'Generowanie faktury',
+            message: 'Czy na pewno chcesz ponownie wygenerować fakturę dla tego zamówienia?',
+          },
+        })
+        .afterClosed()
+        .pipe(
+          filter(Boolean),
+          takeUntilDestroyed(this.destroyRef),
+          tap(() => this.store.dispatch(new GenerateInvoice(order.id)))
+        )
+        .subscribe();
+    } else {
+      this.store.dispatch(new GenerateInvoice(order.id));
+    }
   }
 
   downloadInvoice(order: OrderDetailsModel) {

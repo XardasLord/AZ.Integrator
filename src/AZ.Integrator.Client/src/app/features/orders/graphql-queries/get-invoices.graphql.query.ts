@@ -10,10 +10,12 @@ import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/grap
 export class GetInvoicesGQL extends Query<GraphQLResponseWithoutPaginationVo<InvoiceViewModel[]>> {
   override document = gql`
     query invoices(
-      $where: InvoiceViewModelFilterInput
+      $where: InvoiceViewModelFilterInput,
+      $order: [InvoiceViewModelSortInput!]
     ) {
       result: ${nameof<IntegratorQuery>('invoices')}(
-        where: $where
+        where: $where,
+        order: $order
       ) {
             ${nameof<InvoiceViewModel>('invoiceId')}
             ${nameof<InvoiceViewModel>('invoiceNumber')}

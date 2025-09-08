@@ -1,7 +1,6 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
-using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses;
@@ -35,12 +34,21 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
             TotalCount = ordersCountResponse.Data.OrdersCount.Count
         };
     }
+    public async Task<Order> GetOrderDetails(string orderNumber, TenantId tenantId)
+    {
+        var graphqlClient = await PrepareGraphqlClient(tenantId);
+        
+        var orderResponse = await FetchOrderDetails(graphqlClient, orderNumber);
+        ValidateResponse(orderResponse, "orders");
+
+        return orderResponse.Data.Orders.Edges[0].Node;
+    }
 
     public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, string vendor, string tenantId)
     {
         var graphqlClient = await PrepareGraphqlClient(tenantId);
         
-        var orderResponse = await FetchOrder(graphqlClient, orderNumber);
+        var orderResponse = await FetchOrderForFulfillmentManagement(graphqlClient, orderNumber);
         ValidateResponse(orderResponse, "orders");
 
         var fulfillmentOrderIds = orderResponse.Data.Orders.Edges
@@ -194,7 +202,7 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         return filter;
     }
 
-    private static async Task<GraphQLResponse<GetOrdersResponse>> FetchOrder(GraphQLHttpClient client, string orderNumber)
+    private static async Task<GraphQLResponse<GetOrdersResponse>> FetchOrderForFulfillmentManagement(GraphQLHttpClient client, string orderNumber)
     {
         var request = new GraphQLRequest
         {
@@ -210,6 +218,101 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
                                             id
                                             status
                                             createdAt
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    """,
+            Variables = new
+            {
+                filter = $"name:{orderNumber}"
+            }
+        };
+
+        return await client.SendQueryAsync<GetOrdersResponse>(request);
+    }
+    private static async Task<GraphQLResponse<GetOrdersResponse>> FetchOrderDetails(GraphQLHttpClient client, string orderNumber)
+    {
+        var request = new GraphQLRequest
+        {
+            Query = """
+                    query ($filter: String!) { 
+                        orders(first: 1, query: $filter) {
+                            edges {
+                                node {
+                                    id
+                                    createdAt
+                                    name
+                                    number
+                                    fullyPaid
+                                    note
+                                    displayFinancialStatus
+                                    displayFulfillmentStatus
+                                    billingAddressMatchesShippingAddress
+                                    # shippingAddress {
+                                        # firstName
+                                        # lastName
+                                        # address1
+                                        # address2
+                                        # phone
+                                        # city
+                                        # countryCodeV2
+                                    # }
+                                    # billingAddress {
+                                      # company
+                                      # firstName
+                                      # lastName
+                                      # address1
+                                      # address2
+                                      # phone
+                                      # city
+                                      # zip
+                                      # country
+                                      # countryCodeV2
+                                    # }
+                                    shippingLine {
+                                        title
+                                        currentDiscountedPriceSet {
+                                            presentmentMoney { 
+                                                amount
+                                                currencyCode
+                                            }
+                                            shopMoney { 
+                                                amount
+                                                currencyCode
+                                            }
+                                        }
+                                        originalPriceSet {
+                                            presentmentMoney { 
+                                                amount
+                                                currencyCode
+                                            }
+                                            shopMoney { 
+                                                amount
+                                                currencyCode
+                                            }
+                                        }
+                                    }
+                                    totalPriceSet {
+                                        presentmentMoney { 
+                                            amount
+                                            currencyCode
+                                        }
+                                    }
+                                    lineItems(first: 100) {
+                                        nodes {
+                                            id
+                                            name
+                                            quantity
+                                            sku
+                                            originalUnitPriceSet {
+                                                presentmentMoney {
+                                                    amount
+                                                    currencyCode
+                                                }
+                                            }
                                         }
                                     }
                                 }

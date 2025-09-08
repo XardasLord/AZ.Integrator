@@ -24,30 +24,37 @@
       <None Update="appsettings.Production.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_allegro_accounts_view.sql">
+      <None Update="Repeatable\v_allegro_accounts_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_invoices_view.sql">
+      <None Update="Repeatable\v_invoices_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_shipments_view.sql">
+      <None Update="Repeatable\v_shipments_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_stock_groups_view.sql">
+      <None Update="Repeatable\v_stock_groups_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_stock_logs_view.sql">
+      <None Update="Repeatable\v_stock_logs_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_stocks_view.sql">
+      <None Update="Repeatable\v_stocks_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_tag_parcel_templates_view.sql">
+      <None Update="Repeatable\v_tag_parcel_templates_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Permanent\v_tag_parcels_view.sql">
+      <None Update="Repeatable\v_tag_parcels_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Migrations\Public\V0100__Init.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\Account\" />
     </ItemGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == '' Or '$(Configuration)' == 'Debug'">

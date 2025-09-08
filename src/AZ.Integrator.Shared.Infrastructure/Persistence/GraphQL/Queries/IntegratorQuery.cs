@@ -25,6 +25,7 @@ public class IntegratorQuery
 
     [UseProjection]
     [UseFiltering]
+    [UseSorting]
     public IQueryable<InvoiceViewModel> GetInvoices([Service] InvoiceDataViewContext dataViewContext) 
         => dataViewContext.Invoices.AsQueryable();
 

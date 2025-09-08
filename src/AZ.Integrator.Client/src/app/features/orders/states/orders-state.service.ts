@@ -135,6 +135,7 @@ export class OrdersState {
     return this.orderService.load(query.currentPage, [OrderFulfillmentStatusEnum.Sent], query.searchText).pipe(
       tap(response => {
         this.handleOrdersResponse(ctx, response);
+        ctx.dispatch(new LoadInvoices(response.orders.map(x => x.id)));
       })
     );
   }

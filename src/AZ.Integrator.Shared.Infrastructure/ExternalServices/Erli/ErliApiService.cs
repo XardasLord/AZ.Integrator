@@ -92,6 +92,18 @@ public class ErliApiService(
             Count = orders.Count
         };
     }
+    
+    public async Task<Order> GetOrderDetails(string orderId, TenantId tenantId)
+    {
+        var httpClient = await PrepareHttpClient(tenantId);
+        using var response = await httpClient.GetAsync($"orders/{orderId}");
+
+        response.EnsureSuccessStatusCode();
+
+        var order = await response.Content.ReadFromJsonAsync<Order>();
+
+        return order;
+    }
 
     public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, 
         string vendor, string deliveryTrackingStatus, string tenantId)

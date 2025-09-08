@@ -7,6 +7,7 @@ namespace AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
 public interface IErliService
 {
     Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId);
+    Task<Order> GetOrderDetails(string orderId, TenantId tenantId);
 
     Task AssignTrackingNumber(
         string orderNumber,
