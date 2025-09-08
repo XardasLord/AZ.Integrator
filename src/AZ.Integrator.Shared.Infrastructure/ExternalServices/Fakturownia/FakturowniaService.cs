@@ -39,7 +39,7 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
                 BuyerPostCode = buyerDetails.PostCode,
                 BuyerOverride = true,
                 Positions = [],
-                Status = paymentDetails.IsPaid ? InvoiceDataStatusEnum.Paid.Name : InvoiceDataStatusEnum.Issued.Name,
+                Status = InvoiceDataStatusEnum.Paid.Name,
                 PaymentType = paymentDetails.IsPaid ? InvoiceDataPaymentTypeEnum.Online.Name : InvoiceDataPaymentTypeEnum.Cod.Name
             }
         };
