@@ -32,8 +32,13 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
                 SellerTaxNo = "",
                 BuyerName = buyerDetails.CompanyName ?? $"{buyerDetails.FirstName} {buyerDetails.LastName}",
                 BuyerEmail = buyerDetails.Email,
-                BuyerTaxNo = buyerDetails.PersonalIdentity,
-                Positions = []
+                BuyerTaxNo = buyerDetails.TaxNo,
+                BuyerStreet = buyerDetails.Street,
+                BuyerCity = buyerDetails.City,
+                BuyerPostCode = buyerDetails.PostCode,
+                BuyerOverride = true,
+                Positions = [],
+                Status = paymentDetails.IsPaid ? "paid" : "issued"
             }
         };
         

@@ -18,11 +18,14 @@ public record BuyerDetails(
     string FirstName,
     string LastName,
     string CompanyName,
-    string PersonalIdentity,
-    string PhoneNumber);
+    string TaxNo,
+    string Street,
+    string City,
+    string PostCode,
+    string Country);
 
 public record InvoiceItem(string ItemName, decimal Amount, int Quantity, string Currency);
 
-public record PaymentDetails(DateTime SellDate, DateTime PaymentToDate, DateTime IssueDate);
+public record PaymentDetails(DateTime SellDate, DateTime PaymentToDate, DateTime IssueDate, bool IsPaid);
 
 public record DeliveryDetails(string DeliveryItemName, decimal Amount, int Quantity = 1);

@@ -7,6 +7,7 @@ using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
 using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
+using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using Mediator;
 
 namespace AZ.Integrator.Invoices.Application.UseCases.Invoices.Commands.Register;
@@ -63,11 +64,14 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
                 
         var buyerDetails = new BuyerDetails(
             orderDetails.Buyer.Email,
-            orderDetails.Buyer.FirstName,
-            orderDetails.Buyer.LastName,
-            orderDetails.Buyer.CompanyName?.ToString(),
-            orderDetails.Buyer.PersonalIdentity,
-            orderDetails.Buyer.PhoneNumber?.ToString());
+            orderDetails.Invoice?.Address?.NaturalPerson?.FirstName ?? orderDetails.Buyer.FirstName,
+            orderDetails.Invoice?.Address?.NaturalPerson?.LastName ?? orderDetails.Buyer.LastName,
+            orderDetails.Invoice?.Address?.Company?.Name,
+            orderDetails.Invoice?.Address?.Company?.TaxId,
+            orderDetails.Invoice?.Address?.Street ?? orderDetails.Buyer?.Address?.Street,
+            orderDetails.Invoice?.Address?.City ?? orderDetails.Buyer?.Address?.City, 
+            orderDetails.Invoice?.Address?.ZipCode ?? orderDetails.Buyer?.Address?.ZipCode,
+            orderDetails.Invoice?.Address?.CountryCode ?? orderDetails.Buyer?.Address?.CountryCode);
 
         var invoiceItems = orderDetails.LineItems.Select(x =>
                 new InvoiceItem(x.Offer.Name,
@@ -76,10 +80,17 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
                     x.Price.Currency))
             .ToList();
 
+        DateTime? dueDate = null;
+        if (DateTime.TryParse(orderDetails.Invoice?.DueDate, out var parsed))
+        {
+            dueDate = parsed;
+        }
+        
         var paymentDetails = new PaymentDetails(
             orderDetails.Payment.FinishedAt ?? DateTime.UtcNow,
+            dueDate ?? orderDetails.Payment.FinishedAt ?? DateTime.UtcNow,
             orderDetails.Payment.FinishedAt ?? DateTime.UtcNow,
-            orderDetails.Payment.FinishedAt ?? DateTime.UtcNow);
+            orderDetails.Payment.Type == OrderPaymentType.Online);
 
         var deliveryDetails = new DeliveryDetails(
             "KURIER",
@@ -101,7 +112,10 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
             orderDetails.InvoiceAddress?.LastName ?? orderDetails.User?.DeliveryAddress?.LastName,
             orderDetails.InvoiceAddress?.CompanyName,
             orderDetails.InvoiceAddress?.Nip,
-            null);
+            orderDetails.InvoiceAddress?.Street ?? orderDetails.User?.DeliveryAddress?.Street,
+            orderDetails.InvoiceAddress?.City ?? orderDetails.User?.DeliveryAddress?.City,
+            orderDetails.InvoiceAddress?.Zip ?? orderDetails.User?.DeliveryAddress?.Zip,
+            orderDetails.InvoiceAddress?.Country ?? orderDetails.User?.DeliveryAddress?.Country);
 
         var invoiceItems = orderDetails.Items.Select(x =>
                 new InvoiceItem(x.Name,
@@ -113,7 +127,8 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         var paymentDetails = new PaymentDetails(
             orderDetails.PurchasedAt.Date,
             orderDetails.PurchasedAt.Date,
-            orderDetails.PurchasedAt.Date);
+            orderDetails.PurchasedAt.Date,
+            !orderDetails.Delivery.Cod);
 
         var deliveryDetails = new DeliveryDetails(
             orderDetails.Delivery.Name,
@@ -134,7 +149,10 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
             orderDetails.BillingAddress?.LastName,
             orderDetails.BillingAddress?.Company,
             null,
-            orderDetails.BillingAddress?.Phone);
+            orderDetails.BillingAddress?.Address1 + " " + orderDetails.BillingAddress?.Address2,
+            orderDetails.BillingAddress?.City,
+            orderDetails.BillingAddress?.Zip,
+            orderDetails.BillingAddress?.Country);
 
         var invoiceItems = orderDetails.LineItems.Nodes.Select(x =>
                 new InvoiceItem(x.Name,
@@ -146,7 +164,8 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         var paymentDetails = new PaymentDetails(
             orderDetails.CreatedAt.Date,
             orderDetails.CreatedAt.Date,
-            orderDetails.CreatedAt.Date);
+            orderDetails.CreatedAt.Date,
+            orderDetails.FullyPaid);
 
         var deliveryDetails = new DeliveryDetails(
             orderDetails.ShippingLine.Title,
