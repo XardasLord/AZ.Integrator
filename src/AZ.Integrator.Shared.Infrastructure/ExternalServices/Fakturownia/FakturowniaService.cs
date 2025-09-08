@@ -2,6 +2,7 @@
 using System.Text;
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.Models;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia.Models;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.Extensions.Options;
 using BuyerDetails = AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.BuyerDetails;
@@ -38,7 +39,8 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
                 BuyerPostCode = buyerDetails.PostCode,
                 BuyerOverride = true,
                 Positions = [],
-                Status = paymentDetails.IsPaid ? "paid" : "issued"
+                Status = paymentDetails.IsPaid ? InvoiceDataStatusEnum.Paid.Name : InvoiceDataStatusEnum.Issued.Name,
+                PaymentType = paymentDetails.IsPaid ? InvoiceDataPaymentTypeEnum.Online.Name : InvoiceDataPaymentTypeEnum.Cod.Name
             }
         };
         

@@ -89,7 +89,7 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         var paymentDetails = new PaymentDetails(
             orderDetails.Payment.FinishedAt ?? DateTime.UtcNow,
             dueDate ?? orderDetails.Payment.FinishedAt ?? DateTime.UtcNow,
-            orderDetails.Payment.FinishedAt ?? DateTime.UtcNow,
+            DateTime.UtcNow,
             orderDetails.Payment.Type == OrderPaymentType.Online);
 
         var deliveryDetails = new DeliveryDetails(
@@ -127,7 +127,7 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         var paymentDetails = new PaymentDetails(
             orderDetails.PurchasedAt.Date,
             orderDetails.PurchasedAt.Date,
-            orderDetails.PurchasedAt.Date,
+            DateTime.UtcNow,
             !orderDetails.Delivery.Cod);
 
         var deliveryDetails = new DeliveryDetails(
@@ -164,7 +164,7 @@ public class RegisterInvoiceCommandHandler : IRequestHandler<RegisterInvoiceComm
         var paymentDetails = new PaymentDetails(
             orderDetails.CreatedAt.Date,
             orderDetails.CreatedAt.Date,
-            orderDetails.CreatedAt.Date,
+            DateTime.UtcNow,
             orderDetails.FullyPaid);
 
         var deliveryDetails = new DeliveryDetails(

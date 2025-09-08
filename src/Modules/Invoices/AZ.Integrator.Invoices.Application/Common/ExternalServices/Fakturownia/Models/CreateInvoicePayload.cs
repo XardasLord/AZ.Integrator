@@ -60,6 +60,9 @@ public class InvoiceData
     
     [JsonPropertyName("status")]
     public string Status { get; set; }
+    
+    [JsonPropertyName("payment_type")]
+    public string PaymentType { get; set; }
 }
 
 public class InvoicePosition
