@@ -2,6 +2,7 @@
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Invoice.Configurations;
 
@@ -26,6 +27,16 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoices.Domain.Agg
             .HasColumnName("external_order_number")
             .HasConversion(number => number.Value, number => new ExternalOrderNumber(number))
             .IsRequired();
+
+        // builder.Property(e => e.IdempotencyKey)
+        //     .HasColumnName("idempotency_key")
+        //     .HasConversion(key => key.Value, key => new IdempotencyKey(key))
+        //     .IsRequired();
+        //
+        // builder.Property(e => e.InvoiceProvider)
+        //     .HasColumnName("provider")
+        //     .HasConversion(new EnumToNumberConverter<InvoiceProvider, int>())
+        //     .IsRequired();
         
         builder.OwnsOne(e => e.CreationInformation, ci =>
         {

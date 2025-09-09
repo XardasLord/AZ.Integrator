@@ -1,4 +1,7 @@
 ﻿using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
+using AZ.Integrator.Invoices.Application.Facade;
+using AZ.Integrator.Invoices.Contracts;
+using AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder.Strategy;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +18,12 @@ public static class Extensions
 
         var fakturowniaOptions = configuration.GetOptions<FakturowniaOptions>(OptionsSectionName);
 
+        // TODO: Move to separate module
         services.AddTransient<IInvoiceService, FakturowniaService>();
+        services.AddTransient<IInvoicesFacade, InvoicesFacade>();
+        services.AddTransient<IInvoiceDraftBuilder, AllegroInvoiceDraftBuilder>();
+        services.AddTransient<IInvoiceDraftBuilder, ErliInvoiceDraftBuilder>();
+        services.AddTransient<IInvoiceDraftBuilder, ShopifyInvoiceDraftBuilder>();
         
         services.AddHttpClient(ExternalHttpClientNames.FakturowniaHttpClientName, config =>
         {

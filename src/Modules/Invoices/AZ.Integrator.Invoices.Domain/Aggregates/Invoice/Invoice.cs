@@ -11,16 +11,21 @@ public class Invoice : Entity, IAggregateRoot
     private InvoiceExternalId _externalId;
     private InvoiceNumber _number;
     private ExternalOrderNumber _externalOrderNumber;
+    private IdempotencyKey _idempotencyKey;
+    private InvoiceProvider _invoiceProvider;
     private TenantCreationInformation _creationInformation;
 
     public InvoiceExternalId ExternalId => _externalId;
     public InvoiceNumber Number => _number;
     public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
+    public IdempotencyKey IdempotencyKey => _idempotencyKey;
+    public InvoiceProvider InvoiceProvider => _invoiceProvider;
     public TenantCreationInformation CreationInformation => _creationInformation;
     
     private Invoice() { }
 
-    private Invoice(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private Invoice(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, 
+        InvoiceProvider invoiceProvider, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _externalId = externalId;
         _number = number;
@@ -28,12 +33,20 @@ public class Invoice : Entity, IAggregateRoot
         _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
     }
 
-    public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalExternalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static Invoice Create(InvoiceExternalId externalId, InvoiceNumber number, 
+        ExternalOrderNumber externalExternalOrderNumber, InvoiceProvider invoiceProvider, 
+        TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var invoice = new Invoice(externalId, number, externalExternalOrderNumber, tenantId, currentUser, currentDateTime);
+        var invoice = new Invoice(externalId, number, externalExternalOrderNumber, invoiceProvider, 
+            tenantId, currentUser, currentDateTime);
         
         invoice.AddDomainEvent(new InvoiceCreated(externalId, number, externalExternalOrderNumber));
         
         return invoice;
+    }
+
+    internal void SetIdempotencyKey(string idempotencyKey)
+    {
+        _idempotencyKey = idempotencyKey;
     }
 }

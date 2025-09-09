@@ -4,7 +4,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +22,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Orders\AZ.Integrator.Orders.Application.Interfaces\AZ.Integrator.Orders.Application.Interfaces.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Invoices.Domain\AZ.Integrator.Invoices.Domain.csproj" />
+        <ProjectReference Include="..\AZ.Integrator.Invoices.Contracts\AZ.Integrator.Invoices.Contracts.csproj" />
     </ItemGroup>
 
 </Project>
