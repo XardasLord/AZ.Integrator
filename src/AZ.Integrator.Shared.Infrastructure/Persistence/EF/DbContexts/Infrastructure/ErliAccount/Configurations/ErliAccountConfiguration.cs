@@ -8,7 +8,7 @@ public class ErliAccountConfiguration : IEntityTypeConfiguration<ErliAccountView
 {
     public void Configure(EntityTypeBuilder<ErliAccountViewModel> builder)
     {
-        builder.ToTable("erli", "account");
+        builder.ToTable("erli", SchemaDefinition.Account);
 
         builder.HasKey(e => e.TenantId);
 

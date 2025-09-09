@@ -24,6 +24,8 @@ public class InvoicesFacade(
         
         var invoice = Invoice.Create(response.Id, response.Number, request.ExternalOrderId,
             InvoiceProvider.Fakturownia, request.TenantId, currentUser, currentDateTime);
+
+        invoice.SetIdempotencyKey(request.IdempotencyKey);
         
         await invoiceRepository.AddAsync(invoice, cancellationToken);
 

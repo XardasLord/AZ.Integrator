@@ -8,7 +8,7 @@ public class InvoiceViewModelConfiguration : IEntityTypeConfiguration<InvoiceVie
 {
     public void Configure(EntityTypeBuilder<InvoiceViewModel> builder)
     {
-        builder.ToView("invoices_view");
+        builder.ToView("invoices_view", SchemaDefinition.Billing);
         builder.HasNoKey();
 
         builder.Property(x => x.InvoiceId)

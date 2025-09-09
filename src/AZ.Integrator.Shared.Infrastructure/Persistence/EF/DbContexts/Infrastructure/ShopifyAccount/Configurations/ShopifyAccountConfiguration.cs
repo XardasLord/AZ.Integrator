@@ -8,7 +8,7 @@ public class ShopifyAccountConfiguration : IEntityTypeConfiguration<ShopifyAccou
 {
     public void Configure(EntityTypeBuilder<ShopifyAccountViewModel> builder)
     {
-        builder.ToTable("shopify", "account");
+        builder.ToTable("shopify", SchemaDefinition.Account);
 
         builder.HasKey(e => e.TenantId);
 

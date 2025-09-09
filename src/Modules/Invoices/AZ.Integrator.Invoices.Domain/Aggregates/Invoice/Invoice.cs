@@ -30,6 +30,7 @@ public class Invoice : Entity, IAggregateRoot
         _externalId = externalId;
         _number = number;
         _externalOrderNumber = externalOrderNumber;
+        _invoiceProvider = invoiceProvider;
         _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
     }
 
@@ -45,7 +46,7 @@ public class Invoice : Entity, IAggregateRoot
         return invoice;
     }
 
-    internal void SetIdempotencyKey(string idempotencyKey)
+    public void SetIdempotencyKey(string idempotencyKey)
     {
         _idempotencyKey = idempotencyKey;
     }

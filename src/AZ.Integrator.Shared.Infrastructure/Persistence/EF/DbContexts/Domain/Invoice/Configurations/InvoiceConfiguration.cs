@@ -10,7 +10,7 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoices.Domain.Agg
 {
     public void Configure(EntityTypeBuilder<Invoices.Domain.Aggregates.Invoice.Invoice> builder)
     {
-        builder.ToTable("invoices");
+        builder.ToTable("invoices", SchemaDefinition.Billing);
 
         builder.Ignore(e => e.Events);
         builder.HasKey(e => e.ExternalId);
@@ -28,15 +28,15 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoices.Domain.Agg
             .HasConversion(number => number.Value, number => new ExternalOrderNumber(number))
             .IsRequired();
 
-        // builder.Property(e => e.IdempotencyKey)
-        //     .HasColumnName("idempotency_key")
-        //     .HasConversion(key => key.Value, key => new IdempotencyKey(key))
-        //     .IsRequired();
-        //
-        // builder.Property(e => e.InvoiceProvider)
-        //     .HasColumnName("provider")
-        //     .HasConversion(new EnumToNumberConverter<InvoiceProvider, int>())
-        //     .IsRequired();
+        builder.Property(e => e.IdempotencyKey)
+            .HasColumnName("idempotency_key")
+            .HasConversion(key => key.Value, key => new IdempotencyKey(key))
+            .IsRequired();
+        
+        builder.Property(e => e.InvoiceProvider)
+            .HasColumnName("provider")
+            .HasConversion(new EnumToNumberConverter<InvoiceProvider, int>())
+            .IsRequired();
         
         builder.OwnsOne(e => e.CreationInformation, ci =>
         {
