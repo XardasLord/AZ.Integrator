@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
+using Hangfire.Console;
 using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Shopify.AssignInvoice;
@@ -8,7 +9,10 @@ public class AssignInvoiceInShopifyJobCommandHandler(IShopifyService shopifyServ
 {
     public ValueTask<Unit> Handle(AssignInvoiceInShopifyJobCommand command, CancellationToken cancellationToken)
     {
-        // await allegroService.AssignTrackingNumber(command.OrderNumber, command.TrackingNumbers, command.TenantId);
+        command.PerformContext.WriteLine($"Assigning invoice '{command.InvoiceNumber}' to Allegro order - {command.OrderNumber}");
+        
+        command.PerformContext.SetTextColor(ConsoleTextColor.DarkGreen);
+        command.PerformContext.WriteLine("There is no implementation yet");
         
         return ValueTask.FromResult(Unit.Value);
     }
