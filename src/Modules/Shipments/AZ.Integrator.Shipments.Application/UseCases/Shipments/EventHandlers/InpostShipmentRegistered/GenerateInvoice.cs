@@ -10,14 +10,14 @@ public class GenerateInvoice(IBackgroundJobClient backgroundJobClient)
 {
     public ValueTask Handle(InpostShipmentRegisteredEvent notification, CancellationToken cancellationToken)
     {
-        // backgroundJobClient.Enqueue<GenerateInvoiceJob>(
-        //     job => job.Execute(new GenerateInvoiceJobCommand
-        //     {
-        //         ShippingNumber = notification.ShipmentNumber,
-        //         ExternalOrderNumber = notification.ExternalOrderNumber,
-        //         TenantId = notification.TenantId,
-        //         ShopProvider = notification.TenantId.GetShopProviderType()
-        //     }, null));
+        backgroundJobClient.Enqueue<GenerateInvoiceJob>(
+            job => job.Execute(new GenerateInvoiceJobCommand
+            {
+                ShippingNumber = notification.ShipmentNumber,
+                ExternalOrderNumber = notification.ExternalOrderNumber,
+                TenantId = notification.TenantId,
+                ShopProvider = notification.TenantId.GetShopProviderType()
+            }, null));
         
         return new ValueTask();
     }

@@ -22,7 +22,7 @@ public class InvoicesFacade(
         if (response is null)
             throw new InvalidOperationException("Invoice generation failed");
         
-        var invoice = Invoice.Create(response.Id, response.Number, request.ExternalOrderId,
+        var invoice = Invoice.Generate(response.Id, response.Number, request.ExternalOrderId,
             InvoiceProvider.Fakturownia, request.TenantId, currentUser, currentDateTime);
 
         invoice.SetIdempotencyKey(request.IdempotencyKey);

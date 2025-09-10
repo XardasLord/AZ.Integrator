@@ -69,6 +69,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Operations", "Operations", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Operations.Application", "Modules\Operations\AZ.Integrator.Operations.Application\AZ.Integrator.Operations.Application.csproj", "{A9E6CE6A-757B-4EC2-A1F2-5E5E939B78DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Invoices.Domain.Events", "Modules\Invoices\AZ.Integrator.Invoices.Domain.Events\AZ.Integrator.Invoices.Domain.Events.csproj", "{E043B768-6BE7-483F-ABFA-F47D1A08303F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,6 +177,10 @@ Global
 		{A9E6CE6A-757B-4EC2-A1F2-5E5E939B78DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9E6CE6A-757B-4EC2-A1F2-5E5E939B78DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9E6CE6A-757B-4EC2-A1F2-5E5E939B78DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E043B768-6BE7-483F-ABFA-F47D1A08303F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E043B768-6BE7-483F-ABFA-F47D1A08303F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E043B768-6BE7-483F-ABFA-F47D1A08303F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E043B768-6BE7-483F-ABFA-F47D1A08303F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,5 +210,6 @@ Global
 		{A1961A97-CE80-4DB4-90F6-7383404D9062} = {3015700F-0F86-49D7-8DE7-2A8CAD39202F}
 		{F7455875-B3A7-424A-A5FB-604BA68A83E8} = {AF5A56E9-8FD1-47B5-B69D-17756EDE918E}
 		{A9E6CE6A-757B-4EC2-A1F2-5E5E939B78DD} = {F7455875-B3A7-424A-A5FB-604BA68A83E8}
+		{E043B768-6BE7-483F-ABFA-F47D1A08303F} = {3015700F-0F86-49D7-8DE7-2A8CAD39202F}
 	EndGlobalSection
 EndGlobal
