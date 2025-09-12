@@ -1,4 +1,4 @@
-﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
+﻿using AZ.Integrator.Orders.Application.Common.ExternalServices.Shopify;
 using Hangfire.Console;
 using Mediator;
 

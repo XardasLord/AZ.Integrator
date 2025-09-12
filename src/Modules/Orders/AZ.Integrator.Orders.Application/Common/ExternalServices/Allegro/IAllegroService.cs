@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 
-namespace AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
+namespace AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
 
 public interface IAllegroService
 {

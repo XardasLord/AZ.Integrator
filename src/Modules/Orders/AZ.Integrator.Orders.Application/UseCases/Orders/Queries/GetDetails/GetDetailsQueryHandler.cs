@@ -1,28 +1,51 @@
 ﻿using AutoMapper;
-using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
-using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+using AZ.Integrator.Domain.SharedKernel;
+using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
+using AZ.Integrator.Orders.Application.Common.ExternalServices.Erli;
+using AZ.Integrator.Orders.Application.Common.ExternalServices.Shopify;
+using AZ.Integrator.Orders.Application.UseCases.Orders.Extensions;
+using AZ.Integrator.Orders.Contracts.Dtos;
 using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetDetails;
 
-public class GetDetailsQueryHandler : IRequestHandler<GetDetailsQuery, OrderDetailsDto>
+public class GetDetailsQueryHandler(
+    IAllegroService allegroService,
+    IErliService erliService,
+    IShopifyService shopifyService,
+    IMapper mapper)
+    : IRequestHandler<GetDetailsQuery, OrderDetailsDto>
 {
-    private readonly IAllegroService _allegroService;
-    private readonly IMapper _mapper;
-
-    public GetDetailsQueryHandler(IAllegroService allegroService, IMapper mapper)
-    {
-        _allegroService = allegroService;
-        _mapper = mapper;
-    }
-    
     public async ValueTask<OrderDetailsDto> Handle(GetDetailsQuery query, CancellationToken cancellationToken)
     {
-        // TODO: Unused?
-        var orderDetails = await _allegroService.GetOrderDetails(query.OrderId, query.TenantId);
-
-        var orderDetailsDto = _mapper.Map<OrderDetailsDto>(orderDetails);
+        var shopProvider = TenantHelper.GetShopProviderType(query.TenantId);
         
-        return orderDetailsDto;
+        switch (shopProvider)
+        {
+            case ShopProviderType.Allegro:
+            {
+                var orderResponse = await allegroService.GetOrderDetails(new Guid(query.OrderId), query.TenantId); 
+
+                var orderDetailsDto = orderResponse.MapToDto(mapper);
+                
+                return orderDetailsDto;
+            }
+            case ShopProviderType.Erli:
+            {
+                var orderResponse = await erliService.GetOrderDetails(query.OrderId, query.TenantId);
+
+                return orderResponse.MapToDto();
+            }
+            case ShopProviderType.Shopify:
+            {
+                var ordersResponse = await shopifyService.GetOrderDetails(query.OrderId, query.TenantId);
+
+                return ordersResponse.MapToDto();
+            }
+            case ShopProviderType.System:
+            case ShopProviderType.Unknown:
+            default:
+                return null;
+        }
     }
 }

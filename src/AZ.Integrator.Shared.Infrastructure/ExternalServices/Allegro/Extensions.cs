@@ -1,4 +1,4 @@
-﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
+﻿using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -3,7 +3,7 @@ using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses;
 
-namespace AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
+namespace AZ.Integrator.Orders.Application.Common.ExternalServices.Shopify;
 
 public interface IShopifyService
 {

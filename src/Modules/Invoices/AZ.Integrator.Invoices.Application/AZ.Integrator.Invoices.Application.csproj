@@ -20,7 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Orders\AZ.Integrator.Orders.Application.Interfaces\AZ.Integrator.Orders.Application.Interfaces.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Invoices.Domain\AZ.Integrator.Invoices.Domain.csproj" />
         <ProjectReference Include="..\AZ.Integrator.Invoices.Contracts\AZ.Integrator.Invoices.Contracts.csproj" />
     </ItemGroup>

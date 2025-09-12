@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Web;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
-using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
+using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;

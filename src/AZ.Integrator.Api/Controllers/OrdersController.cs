@@ -17,7 +17,7 @@ public class OrdersController : ApiBaseController
     }
     
     [HttpGet("{orderId}")]
-    public async Task<OkObjectResult> GetOrderDetails(Guid orderId)
+    public async Task<OkObjectResult> GetOrderDetails(string orderId)
     {
         return Ok(await Mediator.Send(new GetDetailsQuery(orderId)));
     }

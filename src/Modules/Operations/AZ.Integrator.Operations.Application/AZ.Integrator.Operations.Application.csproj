@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj" />
       <ProjectReference Include="..\..\Invoices\AZ.Integrator.Invoices.Contracts\AZ.Integrator.Invoices.Contracts.csproj" />
-      <ProjectReference Include="..\..\Orders\AZ.Integrator.Orders.Application.Interfaces\AZ.Integrator.Orders.Application.Interfaces.csproj" />
+      <ProjectReference Include="..\..\Orders\AZ.Integrator.Orders.Contracts\AZ.Integrator.Orders.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

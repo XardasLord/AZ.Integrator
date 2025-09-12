@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AZ.Integrator.Orders.Contracts.Dtos;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 
 namespace AZ.Integrator.Orders.Application.Common.AutoMapper;
@@ -26,12 +27,12 @@ public class OrderDetailsDtoMapper : Profile
         CreateMap<LineItemDetails, LineItemDetailsDto>();
         CreateMap<OfferDetails, OfferDetailsDto>();
         CreateMap<ExternalDetails, ExternalDetailsDto>();
-        CreateMap<ReconciliationDetails, ReconciliationDetailsDto>();
-        CreateMap<AdditionalServiceDetails, AdditionalServiceDetailsDto>();
+        // CreateMap<ReconciliationDetails, ReconciliationDetailsDto>();
+        // CreateMap<AdditionalServiceDetails, AdditionalServiceDetailsDto>();
         CreateMap<SurchargeDetails, SurchargeDetailsDto>();
         CreateMap<DiscountDetails, DiscountDetailsDto>();
         CreateMap<NoteDetails, NoteDetailsDto>();
-        CreateMap<MarketplaceDetails, MarketplaceDetailsDto>();
+        // CreateMap<MarketplaceDetails, MarketplaceDetailsDto>();
         CreateMap<SummaryDetails, SummaryDetailsDto>();
     }
 }

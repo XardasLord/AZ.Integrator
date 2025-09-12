@@ -1,6 +1,5 @@
-﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
+﻿using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
 using Hangfire.Console;
-using Hangfire.Server;
 using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Allegro.AssignInvoice;

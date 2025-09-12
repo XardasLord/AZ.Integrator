@@ -1,4 +1,4 @@
-﻿using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
+﻿using AZ.Integrator.Orders.Application.Common.ExternalServices.Erli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

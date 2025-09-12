@@ -1,18 +1,15 @@
 ﻿using System.Globalization;
-using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Invoices.Contracts.Dtos;
-using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Allegro;
+using AZ.Integrator.Orders.Contracts;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 
-namespace AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder.Strategy;
+namespace AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder;
 
-public sealed class AllegroInvoiceDraftBuilder(IAllegroService allegroService) : IInvoiceDraftBuilder
+public sealed class InvoiceDraftBuilder(IOrdersFacade ordersFacade) : IInvoiceDraftBuilder
 {
-    public ShopProviderType Provider => ShopProviderType.Allegro;
-    
     public async Task<GenerateInvoiceRequest> BuildAsync(string externalOrderNumber, string tenantId, CancellationToken cancellationToken)
     {
-        var orderDetails = await allegroService.GetOrderDetails(Guid.Parse(externalOrderNumber), tenantId);
+        var orderDetails = await ordersFacade.GetOrderDetails(externalOrderNumber, tenantId, cancellationToken);
         
         var buyerDetails = new BuyerDto(
             orderDetails.Buyer.Email,
@@ -45,7 +42,7 @@ public sealed class AllegroInvoiceDraftBuilder(IAllegroService allegroService) :
             orderDetails.Payment.Type == OrderPaymentType.Online);
 
         var deliveryDetails = new DeliveryDto(
-            "KURIER",
+             orderDetails.Delivery.Method?.Name ?? "KURIER",
             decimal.Parse(orderDetails.Delivery.Cost?.Amount ?? 0.ToString(),
                 CultureInfo.InvariantCulture));
         
@@ -54,7 +51,7 @@ public sealed class AllegroInvoiceDraftBuilder(IAllegroService allegroService) :
             InvoiceLines: invoiceItems,
             PaymentTermsDto: paymentDetails,
             DeliveryDto: deliveryDetails,
-            IdempotencyKey: $"{tenantId}:{Provider}:order:{externalOrderNumber}",
+            IdempotencyKey: $"{tenantId}:order:{externalOrderNumber}",
             externalOrderNumber,
             tenantId);
     }

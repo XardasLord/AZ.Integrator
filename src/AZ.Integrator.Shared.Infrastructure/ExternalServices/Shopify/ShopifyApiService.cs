@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
-using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
+using AZ.Integrator.Orders.Application.Common.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify;

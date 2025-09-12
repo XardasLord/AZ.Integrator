@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
-using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Erli;
+using AZ.Integrator.Orders.Application.Common.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;

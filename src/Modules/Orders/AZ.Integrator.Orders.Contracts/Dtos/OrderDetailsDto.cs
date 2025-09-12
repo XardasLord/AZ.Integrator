@@ -1,22 +1,25 @@
-﻿namespace AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+﻿namespace AZ.Integrator.Orders.Contracts.Dtos;
 
 public class OrderDetailsDto
 {
-    public string Id { get; set; } // TODO: Would need to be changed to string
+    public string Id { get; set; }
     public string MessageToSeller { get; set; }
     public BuyerDetailsDto Buyer { get; set; }
     public PaymentDetailsDto Payment { get; set; }
     public string Status { get; set; }
     public FulfillmentDetailsDto Fulfillment { get; set; }
     public DeliveryDetailsDto Delivery { get; set; }
-    // public InvoiceDetails Invoice { get; set; }
+    public InvoiceDetailsDto Invoice { get; set; }
     public List<LineItemDetailsDto> LineItems { get; set; }
     public List<SurchargeDetailsDto> Surcharges { get; set; }
     public List<DiscountDetailsDto> Discounts { get; set; }
     public NoteDetailsDto Note { get; set; }
+    
+    [Obsolete("Available only in Allegro response. Can be removed?")]
     public MarketplaceDetailsDto Marketplace { get; set; }
     public SummaryDetailsDto Summary { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public DateTime PurchasedAt { get; set; }
     public string Revision { get; set; }
 }
 
@@ -44,18 +47,36 @@ public class AddressDetailsDto
 {
     public string Street { get; set; }
     public string City { get; set; }
-    public string PostCode { get; set; }
+    public string ZipCode { get; set; }
     public string CountryCode { get; set; }
+    public InvoiceCompanyDetailsDto Company { get; set; }
+    public InvoiceNaturalPersonDetailsDto NaturalPerson { get; set; }
+}
+
+public class InvoiceCompanyDetailsDto
+{
+    public string Name { get; set; }
+    public string TaxId { get; set; }
+}
+
+public class InvoiceNaturalPersonDetailsDto
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 }
 
 public class PaymentDetailsDto
 {
     public string Id { get; set; }
     public string Type { get; set; }
+    
+    [Obsolete("Available only in Allegro response. Can be removed?")]
     public string Provider { get; set; }
     public DateTime? FinishedAt { get; set; }
-    public AmountDetails PaidAmount { get; set; }
-    public AmountDetails Reconciliation { get; set; }
+    public AmountDetailsDto PaidAmount { get; set; }
+    
+    [Obsolete("Available only in Allegro response. Can be removed?")]
+    public AmountDetailsDto Reconciliation { get; set; }
 }
 
 public class AmountDetailsDto
@@ -79,11 +100,20 @@ public class DeliveryDetailsDto
 {
     public DeliveryAddressDetailsDto Address { get; set; }
     public MethodDetailsDto Method { get; set; }
+    
+    [Obsolete("Available only in Allegro response. Can be removed?")]
     public PickupPointDetailsDto PickupPoint { get; set; }
     public AmountDetailsDto Cost { get; set; }
+    
+    [Obsolete("Available only in Allegro response. Can be removed?")]
     public TimeDetailsDto Time { get; set; }
+
+    [Obsolete("Available only in Allegro response. Can be removed?")]
     public bool Smart { get; set; }
+
+    [Obsolete("Available only in Allegro response. Can be removed?")]
     public int? CalculatedNumberOfPackages { get; set; }
+    public bool Cod { get; set; }
 }
 
 public class DeliveryAddressDetailsDto
@@ -136,7 +166,7 @@ public class InvoiceDetailsDto
 {
     public bool Required { get; set; }
     public AddressDetailsDto Address { get; set; }
-    public DateTime DueDate { get; set; }
+    public string DueDate { get; set; }
 }
 
 public class LineItemDetailsDto
@@ -146,8 +176,8 @@ public class LineItemDetailsDto
     public int Quantity { get; set; }
     public AmountDetailsDto OriginalPrice { get; set; }
     public AmountDetailsDto Price { get; set; }
-    public ReconciliationDetailsDto Reconciliation { get; set; }
-    public List<AdditionalServiceDetailsDto> SelectedAdditionalServices { get; set; }
+    // public ReconciliationDetailsDto Reconciliation { get; set; }
+    // public List<AdditionalServiceDetailsDto> SelectedAdditionalServices { get; set; }
     public DateTime BoughtAt { get; set; }
 }
 
@@ -163,20 +193,20 @@ public class ExternalDetailsDto
     public string Id { get; set; }
 }
 
-public class ReconciliationDetailsDto
-{
-    public AmountDetailsDto Value { get; set; }
-    public string Type { get; set; }
-    public int Quantity { get; set; }
-}
+// public class ReconciliationDetailsDto
+// {
+//     public AmountDetailsDto Value { get; set; }
+//     public string Type { get; set; }
+//     public int Quantity { get; set; }
+// }
 
-public class AdditionalServiceDetailsDto
-{
-    public string DefinitionId { get; set; }
-    public string Name { get; set; }
-    public AmountDetailsDto Price { get; set; }
-    public int Quantity { get; set; }
-}
+// public class AdditionalServiceDetailsDto
+// {
+//     public string DefinitionId { get; set; }
+//     public string Name { get; set; }
+//     public AmountDetailsDto Price { get; set; }
+//     public int Quantity { get; set; }
+// }
 
 public class SurchargeDetailsDto
 {
@@ -198,6 +228,7 @@ public class NoteDetailsDto
     public string Text { get; set; }
 }
 
+[Obsolete("Available only in Allegro response. Can be removed?")]
 public class MarketplaceDetailsDto
 {
     public string Id { get; set; }

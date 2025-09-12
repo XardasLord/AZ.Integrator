@@ -1,7 +1,7 @@
-﻿using AZ.Integrator.Shared.Application;
-using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+﻿using AZ.Integrator.Orders.Contracts.Dtos;
+using AZ.Integrator.Shared.Application;
 using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetDetails;
 
-public record GetDetailsQuery(Guid OrderId) : HeaderRequest, IRequest<OrderDetailsDto>;
+public record GetDetailsQuery(string OrderId) : HeaderRequest, IRequest<OrderDetailsDto>;

@@ -1,5 +1,6 @@
 ﻿namespace AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 
+// TODO: Should be moved to AZ.Integrator.Orders.Application
 public class GetOrderDetailsModelResponse
 {
     public string Id { get; set; }

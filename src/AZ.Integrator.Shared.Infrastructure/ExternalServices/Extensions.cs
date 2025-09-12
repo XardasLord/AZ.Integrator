@@ -1,4 +1,6 @@
-﻿using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
+﻿using AZ.Integrator.Orders.Application.Facade;
+using AZ.Integrator.Orders.Contracts;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Dpd;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia;
@@ -19,6 +21,7 @@ public static class Extensions
             .AddShopify(configuration)
             .AddShipX(configuration)
             .AddDpd(configuration)
-            .AddFakturownia(configuration);
+            .AddFakturownia(configuration)
+            .AddTransient<IOrdersFacade, OrdersFacade>();
     }
 }
