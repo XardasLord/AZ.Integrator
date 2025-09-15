@@ -57,20 +57,20 @@ public class ErliApiService(
 
         var orders = await response.Content.ReadFromJsonAsync<List<Order>>();
 
-        if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.New.Name || status == AllegroFulfillmentStatusEnum.Processing.Name))
+        if (filters.OrderFulfillmentStatus == AllegroFulfillmentStatusEnum.Processing.Name)
         {
             orders = orders
                 .Where(x => x.SellerStatus == ErliOrderSellerStatusEnum.ReadyToProcess.Name)
                 .ToList();
         }
-        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.ReadyForShipment.Name))
+        else if (filters.OrderFulfillmentStatus == AllegroFulfillmentStatusEnum.ReadyForShipment.Name)
         {
             orders = orders
                 .Where(x => x.DeliveryTracking?.Status is "readyToSend")
                 .ToList();
             
         }
-        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.Sent.Name))
+        else if (filters.OrderFulfillmentStatus == AllegroFulfillmentStatusEnum.Sent.Name)
         {
             orders = orders
                 .Where(x => x.DeliveryTracking?.Status is "send" or "delivered")
