@@ -43,8 +43,26 @@ public class InvoiceData
     [JsonPropertyName("buyer_tax_no")]
     public string BuyerTaxNo { get; set; }
     
+    [JsonPropertyName("buyer_post_code")]
+    public string BuyerPostCode { get; set; }
+    
+    [JsonPropertyName("buyer_city")]
+    public string BuyerCity { get; set; }
+    
+    [JsonPropertyName("buyer_street")]
+    public string BuyerStreet { get; set; }
+    
+    [JsonPropertyName("buyer_override")]
+    public bool BuyerOverride { get; set; }
+    
     [JsonPropertyName("positions")]
     public List<InvoicePosition> Positions { get; set; }
+    
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
+    
+    [JsonPropertyName("payment_type")]
+    public string PaymentType { get; set; }
 }
 
 public class InvoicePosition

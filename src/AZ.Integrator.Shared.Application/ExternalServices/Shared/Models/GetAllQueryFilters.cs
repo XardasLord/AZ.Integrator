@@ -1,9 +1,9 @@
 ﻿namespace AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 
-public class GetAllQueryFilters
+public sealed record GetAllQueryFilters
 {
-    public IEnumerable<string> OrderFulfillmentStatus { get; set; }
-    public int Take { get; set; }
-    public int Skip { get; set; }
-    public string SearchText { get; set; }
+    public string OrderFulfillmentStatus { get; init; }
+    public int Take { get; init; }
+    public int Skip { get; init; }
+    public string SearchText { get; init; }
 }

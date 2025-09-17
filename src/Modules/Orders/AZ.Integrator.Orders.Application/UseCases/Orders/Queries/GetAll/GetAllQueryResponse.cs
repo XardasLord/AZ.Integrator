@@ -1,4 +1,4 @@
-﻿using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+﻿using AZ.Integrator.Orders.Contracts.Dtos;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 

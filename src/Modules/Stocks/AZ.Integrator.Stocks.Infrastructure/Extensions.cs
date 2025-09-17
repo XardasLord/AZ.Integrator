@@ -35,7 +35,7 @@ public static class Extensions
         return services;
     }
     
-    public static IEndpointRouteBuilder MapStocksEndpoints(this IEndpointRouteBuilder endpoints)
+    public static IEndpointRouteBuilder MapStocksModuleEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapGet("/api/stocks/info", () => Results.Ok("Stocks module")).AllowAnonymous();
         

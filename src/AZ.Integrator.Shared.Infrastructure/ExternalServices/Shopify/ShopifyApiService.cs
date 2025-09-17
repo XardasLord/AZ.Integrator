@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
-using AZ.Integrator.Orders.Application.Interfaces.ExternalServices.Shopify;
+using AZ.Integrator.Orders.Application.Common.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
@@ -192,11 +192,11 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
     {
         var filter = string.Empty;
         
-        if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.New.Name || status == AllegroFulfillmentStatusEnum.Processing.Name))
+        if (filters.OrderFulfillmentStatus == AllegroFulfillmentStatusEnum.Processing.Name)
             filter = $"{ShopifyFulfillmentStatusGraphqlFilterEnum.New.Name} AND {ShopifyOrderStatusGraphqlFilterEnum.Open}";
-        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.ReadyForShipment.Name))
+        else if (filters.OrderFulfillmentStatus == AllegroFulfillmentStatusEnum.ReadyForShipment.Name)
             filter = $"{ShopifyFulfillmentStatusGraphqlFilterEnum.ReadyToProcess.Name} AND {ShopifyOrderStatusGraphqlFilterEnum.Open}";
-        else if (filters.OrderFulfillmentStatus.Any(status => status == AllegroFulfillmentStatusEnum.Sent.Name))
+        else if (filters.OrderFulfillmentStatus == AllegroFulfillmentStatusEnum.Sent.Name)
             filter = $"{ShopifyFulfillmentStatusGraphqlFilterEnum.Sent.Name} AND {ShopifyOrderStatusGraphqlFilterEnum.Closed}";
         
         return filter;

@@ -1,5 +1,6 @@
 ﻿namespace AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 
+// TODO: Should be moved to AZ.Integrator.Orders.Application
 public class GetOrderDetailsModelResponse
 {
     public string Id { get; set; }
@@ -9,12 +10,12 @@ public class GetOrderDetailsModelResponse
     public string Status { get; set; }
     public FulfillmentDetails Fulfillment { get; set; }
     public DeliveryDetails Delivery { get; set; }
-    // public InvoiceDetails Invoice { get; set; }
+    public InvoiceDetails Invoice { get; set; }
     public List<LineItemDetails> LineItems { get; set; }
     public List<SurchargeDetails> Surcharges { get; set; }
     public List<DiscountDetails> Discounts { get; set; }
     public NoteDetails Note { get; set; }
-    public MarketplaceDetails Marketplace { get; set; }
+    // public MarketplaceDetails Marketplace { get; set; }
     public SummaryDetails Summary { get; set; }
     public DateTime UpdatedAt { get; set; }
     public string Revision { get; set; }
@@ -44,8 +45,22 @@ public class AddressDetails
 {
     public string Street { get; set; }
     public string City { get; set; }
-    public string PostCode { get; set; }
+    public string ZipCode { get; set; }
     public string CountryCode { get; set; }
+    public InvoiceCompanyDetails Company { get; set; }
+    public InvoiceNaturalPersonDetails NaturalPerson { get; set; }
+}
+
+public class InvoiceCompanyDetails
+{
+    public string Name { get; set; }
+    public string TaxId { get; set; }
+}
+
+public class InvoiceNaturalPersonDetails
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 }
 
 public class PaymentDetails
@@ -136,7 +151,7 @@ public class InvoiceDetails
 {
     public bool Required { get; set; }
     public AddressDetails Address { get; set; }
-    public DateTime DueDate { get; set; }
+    public string DueDate { get; set; }
 }
 
 public class LineItemDetails

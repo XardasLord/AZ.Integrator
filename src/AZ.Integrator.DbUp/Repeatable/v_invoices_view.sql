@@ -1,6 +1,6 @@
-DROP VIEW IF EXISTS invoices_view;
+DROP VIEW IF EXISTS billing.invoices_view;
 
-CREATE OR REPLACE VIEW invoices_view
+CREATE OR REPLACE VIEW billing.invoices_view
 AS
 SELECT
     external_id,
@@ -8,4 +8,4 @@ SELECT
     external_order_number,
     created_at,
     tenant_id
-FROM invoices;
+FROM billing.invoices;

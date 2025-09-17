@@ -8,10 +8,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
+        <ProjectReference Include="..\AZ.Integrator.Invoices.Domain.Events\AZ.Integrator.Invoices.Domain.Events.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Aggregates\Invoice\DomainEvents\" />
     </ItemGroup>
 
 </Project>

@@ -22,14 +22,21 @@ const string JournalPublicSchema  = "public";
 const string MigrationsAccountDir  = "Migrations/Account";
 const string JournalAccountSchema  = "account";
 
+// Billing schema
+const string MigrationsBillingDir  = "Migrations/Billing";
+const string JournalBillingSchema  = "billing";
+
 const string RepeatablesDir = "Repeatable";
 
 ValidateDirectories(MigrationsPublicDir);
+ValidateDirectories(MigrationsBillingDir);
+// ValidateDirectories(MigrationsAccountDir); // No migrations yet
 ValidateConnectionString(connectionString);
 
 EnsureDatabase.For.PostgresqlDatabase(connectionString);
 
 RunMigrations(connectionString, MigrationsPublicDir, JournalPublicSchema, JournalTable);
+RunMigrations(connectionString, MigrationsBillingDir, JournalBillingSchema, JournalTable);
 // RunMigrations(connectionString, MigrationsAccountDir, JournalAccountSchema, JournalTable); // No migrations yet
 
 RunRepeatables(connectionString, RepeatablesDir);

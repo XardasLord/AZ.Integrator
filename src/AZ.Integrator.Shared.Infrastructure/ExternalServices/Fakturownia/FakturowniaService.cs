@@ -2,11 +2,11 @@
 using System.Text;
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.Models;
+using AZ.Integrator.Invoices.Contracts.Dtos;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia.Models;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.Extensions.Options;
-using BuyerDetails = AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.BuyerDetails;
-using DeliveryDetails = AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.DeliveryDetails;
-using PaymentDetails = AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.PaymentDetails;
+using BuyerDto = AZ.Integrator.Invoices.Contracts.Dtos.BuyerDto;
 
 namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia;
 
@@ -16,7 +16,7 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
     private readonly HttpClient _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.FakturowniaHttpClientName);
     private readonly FakturowniaOptions _options = fakturowniaOptions.Value;
 
-    public async Task<CreateInvoiceResponse> GenerateInvoice(BuyerDetails buyerDetails, List<InvoiceItem> invoiceItems, PaymentDetails paymentDetails, DeliveryDetails deliveryDetails)
+    public async Task<CreateInvoiceResponse> GenerateInvoice(BuyerDto buyerDto, IReadOnlyList<InvoiceLineDto> invoiceItems, PaymentTermsDto paymentTermsDto, DeliveryDto deliveryDto)
     {
         var payload = new CreateInvoicePayload
         {
@@ -25,20 +25,26 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
             {
                 Kind = "vat",
                 Number = null,
-                SellDate = paymentDetails.SellDate.ToString("yyyy-MM-dd"),
-                IssueDate = paymentDetails.IssueDate.ToString("yyyy-MM-dd"),
-                PaymentTo = paymentDetails.PaymentToDate.ToString("yyyy-MM-dd"),
+                SellDate = paymentTermsDto.SellDate.ToString("yyyy-MM-dd"),
+                IssueDate = paymentTermsDto.IssueDate.ToString("yyyy-MM-dd"),
+                PaymentTo = paymentTermsDto.PaymentToDate.ToString("yyyy-MM-dd"),
                 SellerName = "",
                 SellerTaxNo = "",
-                BuyerName = buyerDetails.CompanyName ?? $"{buyerDetails.FirstName} {buyerDetails.LastName}",
-                BuyerEmail = buyerDetails.Email,
-                BuyerTaxNo = buyerDetails.PersonalIdentity,
-                Positions = []
+                BuyerName = buyerDto.CompanyName ?? $"{buyerDto.FirstName} {buyerDto.LastName}",
+                BuyerEmail = buyerDto.Email,
+                BuyerTaxNo = buyerDto.TaxNo,
+                BuyerStreet = buyerDto.Street,
+                BuyerCity = buyerDto.City,
+                BuyerPostCode = buyerDto.PostCode,
+                BuyerOverride = true,
+                Positions = [],
+                Status = InvoiceDataStatusEnum.Paid.Name,
+                PaymentType = paymentTermsDto.IsPaid ? InvoiceDataPaymentTypeEnum.Online.Name : InvoiceDataPaymentTypeEnum.Cod.Name
             }
         };
         
         AddInvoiceItems(invoiceItems, payload);
-        AddDeliveryCost(deliveryDetails, payload);
+        AddDeliveryCost(deliveryDto, payload);
         
         var invoiceJson = System.Text.Json.JsonSerializer.Serialize(payload);
         var invoiceContent = new StringContent(invoiceJson, Encoding.UTF8, "application/json");
@@ -80,9 +86,9 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
         return label;
     }
 
-    private static void AddInvoiceItems(List<InvoiceItem> invoiceItems, CreateInvoicePayload payload)
+    private static void AddInvoiceItems(IReadOnlyList<InvoiceLineDto> invoiceLines, CreateInvoicePayload payload)
     {
-        invoiceItems.ForEach(item =>
+        invoiceLines.ToList().ForEach(item =>
         {
             payload.Invoice.Positions.Add(new InvoicePosition
             {
@@ -94,20 +100,20 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
         });
     }
 
-    private static void AddDeliveryCost(DeliveryDetails deliveryDetails, CreateInvoicePayload payload)
+    private static void AddDeliveryCost(DeliveryDto deliveryDto, CreateInvoicePayload payload)
     {
-        if (deliveryDetails.Amount == 0)
+        if (deliveryDto.Amount == 0)
             return;
         
-        payload.Invoice.Positions.Add(GetDeliveryCostPosition(deliveryDetails));
+        payload.Invoice.Positions.Add(GetDeliveryCostPosition(deliveryDto));
     }
 
-    private static InvoicePosition GetDeliveryCostPosition(DeliveryDetails deliveryDetails) 
+    private static InvoicePosition GetDeliveryCostPosition(DeliveryDto deliveryDto) 
         => new()
         {
-            Name = deliveryDetails.DeliveryItemName,
-            Quantity = deliveryDetails.Quantity,
+            Name = deliveryDto.DeliveryItemName,
+            Quantity = deliveryDto.Quantity,
             Tax = 23,
-            TotalPriceGross = deliveryDetails.Amount * deliveryDetails.Quantity
+            TotalPriceGross = deliveryDto.Amount * deliveryDto.Quantity
         };
 }

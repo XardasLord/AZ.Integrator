@@ -1,6 +1,7 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Invoices.Application;
 using AZ.Integrator.Orders.Application;
+using AZ.Integrator.Orders.Infrastructure;
 using AZ.Integrator.Shared.Infrastructure.Authentication;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.DomainServices;
@@ -38,7 +39,6 @@ public static class Extensions
         services.AddHttpClient();
         services.AddCors();
         
-        services.AddOrdersModuleApplication(configuration);
         services.AddShipmentsModuleApplication(configuration);
         services.AddInvoicesModuleApplication(configuration);
         services.AddTagParcelTemplatesModuleApplication(configuration);
@@ -68,6 +68,7 @@ public static class Extensions
         
         // Infrastructure dedicated modules
         services.RegisterStocksModule(configuration);
+        services.RegisterOrdersModule(configuration);
 
         return services;
     }

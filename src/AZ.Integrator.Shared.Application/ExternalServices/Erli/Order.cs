@@ -10,7 +10,6 @@ public class Order
     public string Comment { get; set; }
     public int TotalPrice { get; set; }
     public DeliveryTracking DeliveryTracking { get; set; }
-    public InvoiceAddress InvoiceAddress { get; set; }
     public DateTime Created { get; set; }
     public DateTime Updated { get; set; }
     public DateTime PurchasedAt { get; set; }
@@ -22,6 +21,7 @@ public class User
 {
     public string Email { get; set; }
     public DeliveryAddress DeliveryAddress { get; set; }
+    public InvoiceAddress InvoiceAddress { get; set; }
 }
 
 public class DeliveryAddress

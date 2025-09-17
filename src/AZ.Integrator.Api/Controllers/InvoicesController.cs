@@ -1,5 +1,5 @@
-﻿using AZ.Integrator.Invoices.Application.UseCases.Invoices.Commands.Register;
-using AZ.Integrator.Invoices.Application.UseCases.Invoices.Queries.Download;
+﻿using AZ.Integrator.Invoices.Application.UseCases.Invoices.Queries.Download;
+using AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +10,13 @@ namespace AZ.Integrator.Api.Controllers;
 public class InvoicesController : ApiBaseController
 {
     [HttpPost]
-    public async Task<IActionResult> RegisterInvoice(RegisterInvoiceCommand command)
+    public async Task<IActionResult> GenerateInvoice(GenerateInvoiceForOrderCommand command)
     {
         return Ok(await Mediator.Send(command));
     }
     
     [HttpGet("{invoiceId}")]
-    public async Task<IActionResult> GetShipmentLabel(long invoiceId)
+    public async Task<IActionResult> DownloadInvoice(long invoiceId)
     {
         var result = await Mediator.Send(new DownloadQuery(invoiceId));
 
