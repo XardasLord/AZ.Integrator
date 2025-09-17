@@ -34,5 +34,7 @@ public class OrderDetailsDtoMapper : Profile
         CreateMap<NoteDetails, NoteDetailsDto>();
         // CreateMap<MarketplaceDetails, MarketplaceDetailsDto>();
         CreateMap<SummaryDetails, SummaryDetailsDto>();
+        CreateMap<InvoiceCompanyDetails, InvoiceCompanyDetailsDto>();
+        CreateMap<InvoiceNaturalPersonDetails, InvoiceNaturalPersonDetailsDto>();
     }
 }

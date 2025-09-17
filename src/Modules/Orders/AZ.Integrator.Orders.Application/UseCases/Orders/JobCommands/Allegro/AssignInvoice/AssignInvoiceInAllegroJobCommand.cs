@@ -7,5 +7,6 @@ public class AssignInvoiceInAllegroJobCommand : JobCommandBase
     public Guid OrderNumber { get; set; }
     public string InvoiceNumber { get; set; }
     public string ExternalInvoiceId { get; set; }
+    public int InvoiceProvider { get; set; }
     public string TenantId { get; set; }
 }

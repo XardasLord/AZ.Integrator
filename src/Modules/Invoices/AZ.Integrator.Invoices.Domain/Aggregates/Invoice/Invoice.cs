@@ -41,7 +41,7 @@ public class Invoice : Entity, IAggregateRoot
         var invoice = new Invoice(externalId, number, externalOrderNumber, invoiceProvider, 
             tenantId, currentUser, currentDateTime);
         
-        invoice.AddDomainEvent(new InvoiceGenerated(externalId.ToString(), number, externalOrderNumber, tenantId));
+        invoice.AddDomainEvent(new InvoiceGenerated(externalId.ToString(), number, externalOrderNumber, (int)invoiceProvider, tenantId));
         
         return invoice;
     }

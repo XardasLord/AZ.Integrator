@@ -15,7 +15,7 @@ public class GetOrderDetailsModelResponse
     public List<SurchargeDetails> Surcharges { get; set; }
     public List<DiscountDetails> Discounts { get; set; }
     public NoteDetails Note { get; set; }
-    public MarketplaceDetails Marketplace { get; set; }
+    // public MarketplaceDetails Marketplace { get; set; }
     public SummaryDetails Summary { get; set; }
     public DateTime UpdatedAt { get; set; }
     public string Revision { get; set; }

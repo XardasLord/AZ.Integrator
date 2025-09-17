@@ -10,4 +10,5 @@ public interface IAllegroService
     Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId, string tenantId);
     Task ChangeStatus(Guid orderNumber, AllegroFulfillmentStatusEnum allegroFulfillmentStatus, string tenantId);
     Task AssignTrackingNumber(Guid orderNumber, IEnumerable<string> trackingNumbers, string tenantId);
+    Task AssignInvoice(Guid orderNumber, byte[] invoice, string invoiceNumber, string tenantId);
 }

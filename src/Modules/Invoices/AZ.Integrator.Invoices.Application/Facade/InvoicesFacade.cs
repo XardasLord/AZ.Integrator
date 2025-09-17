@@ -1,8 +1,10 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Invoices.Application.Common.Exceptions;
 using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
 using AZ.Integrator.Invoices.Contracts;
 using AZ.Integrator.Invoices.Contracts.Dtos;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
+using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.Specifications;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
 
 namespace AZ.Integrator.Invoices.Application.Facade;
@@ -33,6 +35,25 @@ public class InvoicesFacade(
         {
             Id = response.Id,
             Number = response.Number,
+        };
+    }
+
+    public async Task<GetInvoiceResponse> GetInvoice(GetInvoiceRequest request, CancellationToken cancellationToken)
+    {
+        var spec = new InvoiceByNumberSpec(request.InvoiceId, request.ExternalOrderId, 
+            request.InvoiceProvider, request.TenantId);
+        
+        var invoice = await invoiceRepository.SingleOrDefaultAsync(spec, cancellationToken);
+        
+        if (invoice is null)
+            throw new InvoiceNotFoundException($"Invoice for order '{request.ExternalOrderId}' was not found in database");
+        
+        var response = await invoiceService.Download(long.Parse(request.InvoiceId));
+
+        return new GetInvoiceResponse()
+        {
+            File = response,
+            InvoiceNumber = invoice.Number
         };
     }
 }

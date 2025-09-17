@@ -7,6 +7,7 @@ using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.ResponseModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -95,6 +96,48 @@ public class AllegroApiService(
 
             response.EnsureSuccessStatusCode();
         }
+    }
+
+    public async Task AssignInvoice(Guid orderNumber, byte[] invoice, string invoiceNumber, string tenantId)
+    {
+        var httpClient = await PrepareHttpClient(tenantId);
+
+        var invoiceId = await PostNewInvoice(orderNumber, invoiceNumber, httpClient);
+        await UploadInvoice(orderNumber, invoiceId, invoice, httpClient);
+    }
+
+    private static async Task<string> PostNewInvoice(Guid orderNumber, string invoiceNumber, HttpClient httpClient)
+    {
+        var payload = new PostNewInvoiceRequestPayload
+        {
+            InvoiceNumber = invoiceNumber,
+            File = new CheckFormsNewOrderInvoiceFile
+            {
+                Name = $"{invoiceNumber}.pdf"
+            }
+        };
+        var payloadContent = PrepareContentRequest(payload);
+        
+        using var response = await httpClient.PostAsync($"order/checkout-forms/{orderNumber}/invoices", payloadContent);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Request failed: {(int)response.StatusCode} - {response.ReasonPhrase}. Body: {error}");
+        }
+        
+        var requestResponse = await response.Content.ReadFromJsonAsync<PostNewInvoiceResponse>();
+        return requestResponse.Id;
+    }
+
+    private static async Task UploadInvoice(Guid orderNumber, string invoiceId, byte[] invoiceFile, HttpClient httpClient)
+    {
+        using var payloadContent = new ByteArrayContent(invoiceFile);
+        payloadContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/pdf"));
+        
+        using var response = await httpClient.PutAsync($"order/checkout-forms/{orderNumber}/invoices/{invoiceId}/file", payloadContent);
+        response.EnsureSuccessStatusCode();
     }
 
     private static string ApplyFilters(GetAllQueryFilters filters)

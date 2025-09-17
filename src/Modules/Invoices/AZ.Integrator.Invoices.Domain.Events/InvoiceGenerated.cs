@@ -7,4 +7,5 @@ public record InvoiceGenerated(
     string InvoiceExternalId,
     string InvoiceNumber,
     ExternalOrderNumber ExternalOrderNumber,
+    int InvoiceProvider,
     TenantId TenantId) : INotification;

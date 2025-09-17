@@ -23,6 +23,7 @@ public class AssignInvoiceToOrderInExternalSystem(IBackgroundJobClient backgroun
                         OrderNumber = Guid.Parse(notification.ExternalOrderNumber),
                         InvoiceNumber = notification.InvoiceNumber,
                         ExternalInvoiceId = notification.InvoiceExternalId,
+                        InvoiceProvider = notification.InvoiceProvider,
                         TenantId = notification.TenantId
                     }, null));
                 break;
@@ -36,8 +37,13 @@ public class AssignInvoiceToOrderInExternalSystem(IBackgroundJobClient backgroun
                         OrderNumber = notification.ExternalOrderNumber,
                         InvoiceNumber = notification.InvoiceNumber,
                         ExternalInvoiceId = notification.InvoiceExternalId,
+                        InvoiceProvider = notification.InvoiceProvider,
                         TenantId = notification.TenantId
                     }, null));
+                break;
+            case ShopProviderType.System:
+            case ShopProviderType.Unknown:
+            default:
                 break;
         }
         
