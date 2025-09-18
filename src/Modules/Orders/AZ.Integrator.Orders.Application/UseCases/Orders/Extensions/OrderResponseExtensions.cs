@@ -85,7 +85,7 @@ public static class OrderResponseExtensions
                 Cod = order.Delivery.Cod,
                 Cost = new AmountDetailsDto
                 {
-                    Amount = (order.Delivery?.Price ?? 0 / 100m).ToString(CultureInfo.InvariantCulture),
+                    Amount = ((order.Delivery?.Price ?? 0) / 100m).ToString(CultureInfo.InvariantCulture),
                     Currency = CurrencyEnum.Pln.Name
                 }
             },
