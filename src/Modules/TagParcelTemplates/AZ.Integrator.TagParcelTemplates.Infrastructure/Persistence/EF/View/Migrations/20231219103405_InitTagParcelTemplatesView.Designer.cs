@@ -2,6 +2,7 @@
 
 #nullable disable
 
+using AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.EF.View;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;

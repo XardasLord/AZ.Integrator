@@ -1,5 +1,4 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
@@ -30,7 +29,6 @@ public static class Extensions
             .AddAuthorization()
             .RegisterDbContext<ShipmentDataViewContext>()
             .RegisterDbContext<InvoiceDataViewContext>()
-            .RegisterDbContext<TagParcelTemplateDataViewContext>()
             .AddQueryType(q => q.Name(nameof(IntegratorQuery)))
             .AddType<IntegratorQuery>()
             .AddProjections()

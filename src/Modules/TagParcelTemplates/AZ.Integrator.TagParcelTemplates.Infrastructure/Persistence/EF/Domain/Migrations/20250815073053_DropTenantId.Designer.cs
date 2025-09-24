@@ -11,9 +11,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.ParcelTemplate.Migrations
 {
-    [DbContext(typeof(TagParcelTemplateDbContext))]
-    [Migration("20250717091916_AddTimeZone")]
-    partial class AddTimeZone
+    [DbContext(typeof(TagParcelTemplates.Infrastructure.Persistence.EF.Domain.TagParcelTemplateDbContext))]
+    [Migration("20250815073053_DropTenantId")]
+    partial class DropTenantId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,18 +39,13 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.P
                         .HasColumnType("text")
                         .HasColumnName("tag");
 
-                    b.Property<string>("TenantId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("tenant_id");
-
                     b.Property<double>("Weight")
                         .HasColumnType("double precision")
                         .HasColumnName("weight");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Tag", "TenantId");
+                    b.HasIndex("Tag");
 
                     b.ToTable("tag_parcels", (string)null);
                 });
@@ -61,11 +56,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.P
                         .HasColumnType("text")
                         .HasColumnName("tag");
 
-                    b.Property<string>("TenantId")
-                        .HasColumnType("text")
-                        .HasColumnName("tenant_id");
-
-                    b.HasKey("Tag", "TenantId");
+                    b.HasKey("Tag");
 
                     b.ToTable("tag_parcel_templates", (string)null);
                 });
@@ -74,7 +65,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.P
                 {
                     b.HasOne("AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate.TagParcelTemplate", null)
                         .WithMany("Parcels")
-                        .HasForeignKey("Tag", "TenantId")
+                        .HasForeignKey("Tag")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -113,9 +104,6 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.P
                             b1.Property<string>("TagParcelTemplateTag")
                                 .HasColumnType("text");
 
-                            b1.Property<string>("TagParcelTemplateTenantId")
-                                .HasColumnType("text");
-
                             b1.Property<DateTimeOffset>("CreatedAt")
                                 .HasColumnType("timestamp with time zone")
                                 .HasColumnName("created_at");
@@ -124,12 +112,12 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.P
                                 .HasColumnType("uuid")
                                 .HasColumnName("created_by");
 
-                            b1.HasKey("TagParcelTemplateTag", "TagParcelTemplateTenantId");
+                            b1.HasKey("TagParcelTemplateTag");
 
                             b1.ToTable("tag_parcel_templates");
 
                             b1.WithOwner()
-                                .HasForeignKey("TagParcelTemplateTag", "TagParcelTemplateTenantId");
+                                .HasForeignKey("TagParcelTemplateTag");
                         });
 
                     b.Navigation("CreationInformation")

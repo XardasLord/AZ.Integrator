@@ -1,22 +1,16 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Mediator;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.ParcelTemplate.Configurations;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
+using AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.EF.Domain.Configurations;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.ParcelTemplate;
+namespace AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.EF.Domain;
 
-public class TagParcelTemplateDbContext : DbContext
+public class TagParcelTemplateDbContext(DbContextOptions<TagParcelTemplateDbContext> options, IMediator mediator)
+    : DbContext(options)
 {
-    private readonly IMediator _mediator;
-    
     public virtual DbSet<TagParcelTemplate> TagParcelTemplates { get; set; }
-    
-    public TagParcelTemplateDbContext(DbContextOptions<TagParcelTemplateDbContext> options, IMediator mediator) : base(options)
-    {
-        _mediator = mediator;
-    }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new TagParcelTemplateConfiguration());
@@ -26,6 +20,6 @@ public class TagParcelTemplateDbContext : DbContext
     public async Task SaveAggregateAsync(CancellationToken cancellationToken)
     {
         await base.SaveChangesAsync(cancellationToken);
-        await _mediator.DispatchDomainEventsAsync(this);
+        await mediator.DispatchDomainEventsAsync(this);
     }
 }

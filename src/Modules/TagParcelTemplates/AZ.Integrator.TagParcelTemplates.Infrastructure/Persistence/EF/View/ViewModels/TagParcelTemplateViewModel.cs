@@ -1,4 +1,4 @@
-﻿namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+﻿namespace AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.EF.View.ViewModels;
 
 public class TagParcelTemplateViewModel
 {

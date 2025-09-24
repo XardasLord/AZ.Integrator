@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tag = AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate.ValueObjects.Tag;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.ParcelTemplate.Configurations;
+namespace AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.EF.Domain.Configurations;
 
 public class TagParcelTemplateConfiguration : IEntityTypeConfiguration<TagParcelTemplate>
 {

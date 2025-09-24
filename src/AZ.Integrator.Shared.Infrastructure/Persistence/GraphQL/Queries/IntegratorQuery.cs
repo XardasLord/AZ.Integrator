@@ -1,5 +1,4 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
 
@@ -28,11 +27,4 @@ public class IntegratorQuery
     [UseSorting]
     public IQueryable<InvoiceViewModel> GetInvoices([Service] InvoiceDataViewContext dataViewContext) 
         => dataViewContext.Invoices.AsQueryable();
-
-    [UsePaging]
-    [UseProjection]
-    [UseFiltering]
-    [UseSorting]
-    public IQueryable<TagParcelTemplateViewModel> GetTagParcelTemplates([Service] TagParcelTemplateDataViewContext dataViewContext) 
-        => dataViewContext.TagParcelTemplates.AsQueryable();
 }

@@ -1,8 +1,8 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+﻿using AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.EF.View.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ParcelTemplate.Configurations;
+namespace AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.EF.View.Configurations;
 
 public class TagParcelTemplateViewModelConfiguration : IEntityTypeConfiguration<TagParcelTemplateViewModel>
 {

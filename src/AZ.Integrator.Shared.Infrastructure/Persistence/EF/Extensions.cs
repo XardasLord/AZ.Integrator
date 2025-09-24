@@ -1,5 +1,4 @@
 ﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Invoice;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Shipment;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ErliAccount;
@@ -7,7 +6,6 @@ using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructu
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.UserIdentity;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ParcelTemplate;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -61,12 +59,6 @@ public static class Extensions
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
-
-        services.AddDbContext<TagParcelTemplateDbContext>(options =>
-        {
-            options.EnableDetailedErrors();
-            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
-        });
         
         services.AddDbContext<ShipmentDataViewContext>(options =>
         {
@@ -83,13 +75,6 @@ public static class Extensions
         });
         
         services.AddDbContext<AllegroAccountDataViewContext>(options =>
-        {
-            options.EnableDetailedErrors();
-            options.UseNpgsql(postgresOptions.ConnectionStringApplication)
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-        });
-        
-        services.AddDbContext<TagParcelTemplateDataViewContext>(options =>
         {
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)

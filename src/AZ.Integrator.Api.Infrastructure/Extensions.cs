@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Invoices.Application;
-using AZ.Integrator.Orders.Application;
 using AZ.Integrator.Orders.Infrastructure;
+using AZ.Integrator.TagParcelTemplates.Infrastructure;
 using AZ.Integrator.Shared.Infrastructure.Authentication;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.DomainServices;
@@ -17,7 +17,6 @@ using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
 using AZ.Integrator.Shipments.Application;
 using AZ.Integrator.Stocks.Infrastructure;
-using AZ.Integrator.TagParcelTemplates.Application;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +40,6 @@ public static class Extensions
         
         services.AddShipmentsModuleApplication(configuration);
         services.AddInvoicesModuleApplication(configuration);
-        services.AddTagParcelTemplatesModuleApplication(configuration);
         
         services.AddScoped<ICurrentDateTime, CurrentDateTime>();
         
@@ -57,7 +55,8 @@ public static class Extensions
         
         services.AddPostgres(configuration);
         services.AddIntegratorGraphQl(configuration)
-            .AddStocksModuleGraphQlObjects();
+            .AddStocksModuleGraphQlObjects()
+            .AddTagParcelTemplatesModuleGraphQlObjects();
         services.AddIntegratorOpenApi(configuration);
         
         services.AddDomainServices();
@@ -69,6 +68,7 @@ public static class Extensions
         // Infrastructure dedicated modules
         services.RegisterStocksModule(configuration);
         services.RegisterOrdersModule(configuration);
+        services.RegisterTagParcelTemplatesModule(configuration);
 
         return services;
     }
