@@ -22,23 +22,25 @@ public static class Extensions
     
     public static IEndpointRouteBuilder MapOrdersModuleEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/api/orders/info", () => Results.Ok("Orders module")).AllowAnonymous();
+        const string swaggerGroupName = "Orders";
         
-        endpoints.MapGet("/api/orders", async ([AsParameters] GetAllQueryFilters filters, IMediator mediator, CancellationToken cancellationToken) =>
-            {
-                var orders = await mediator.Send(new GetAllQuery(filters), cancellationToken);
-                
-                return Results.Ok(orders);
-            })
-            .RequireAuthorization();
+        var ordersGroup = endpoints.MapGroup("/api/orders").WithTags(swaggerGroupName).RequireAuthorization();
         
-        endpoints.MapPut("/api/orders/{orderId}", async (string orderId, IMediator mediator, CancellationToken cancellationToken) =>
-            {
-                var order = await mediator.Send(new GetDetailsQuery(orderId), cancellationToken);
+        ordersGroup.MapGet("/info", () => Results.Ok("Orders module")).AllowAnonymous();
+        
+        ordersGroup.MapGet("/", async ([AsParameters] GetAllQueryFilters filters, IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            var orders = await mediator.Send(new GetAllQuery(filters), cancellationToken);
                 
-                return Results.Ok(order);
-            })
-            .RequireAuthorization();
+            return Results.Ok(orders);
+        });
+        
+        ordersGroup.MapPut("/{orderId}", async (string orderId, IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            var order = await mediator.Send(new GetDetailsQuery(orderId), cancellationToken);
+                
+            return Results.Ok(order);
+        });
         
         return endpoints;
     }

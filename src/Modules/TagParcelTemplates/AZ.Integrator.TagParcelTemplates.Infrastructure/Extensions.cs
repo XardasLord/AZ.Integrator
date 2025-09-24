@@ -37,21 +37,23 @@ public static class Extensions
     
     public static IEndpointRouteBuilder MapTagParcelTemplatesModuleEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/api/parcelTemplates/info", () => Results.Ok("Parcel Templates module")).AllowAnonymous();
+        const string swaggerGroupName = "Parcel templates";
         
-        endpoints.MapPut("/api/parcelTemplates/{*tag}", async (string tag, SaveParcelTemplateCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        var parcelTemplates = endpoints.MapGroup("/api/parcelTemplates").WithTags(swaggerGroupName).RequireAuthorization();
+        
+        parcelTemplates.MapGet("/info", () => Results.Ok("Parcel Templates module")).AllowAnonymous();
+        
+        parcelTemplates.MapPut("/{*tag}", async (string tag, SaveParcelTemplateCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            command = command with
             {
-                command = command with
-                {
-                    Tag = tag
-                };
-        
-                await mediator.Send(command, cancellationToken);
-                
-                return Results.NoContent();
-            })
-            .RequireAuthorization();
-        
+                Tag = tag
+            };
+            
+            await mediator.Send(command, cancellationToken);
+            
+            return Results.NoContent();
+        });
         
         return endpoints;
     }
