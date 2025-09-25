@@ -9,6 +9,7 @@ public static class Extensions
 {
     private const string OptionsSectionName = "Infrastructure:ShipX";
     
+    // TODO: Move to Shipments infrastructure module
     public static IServiceCollection AddShipX(this IServiceCollection services, IConfiguration configuration)
     {
         var shipXOptions = new ShipXOptions();

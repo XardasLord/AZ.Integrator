@@ -1,6 +1,4 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Invoice;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Shipment;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
@@ -16,10 +14,8 @@ public static class Extensions
         return services
             .AddScoped(typeof(IAggregateRepository<InpostShipment>), typeof(AggregateRepository<InpostShipment, ShipmentDbContext>))
             .AddScoped(typeof(IAggregateRepository<DpdShipment>), typeof(AggregateRepository<DpdShipment, ShipmentDbContext>))
-            .AddScoped(typeof(IAggregateRepository<Invoice>), typeof(AggregateRepository<Invoice, InvoiceDbContext>))
             
             .AddScoped(typeof(IAggregateReadRepository<InpostShipment>), typeof(AggregateReadRepository<InpostShipment, ShipmentDbContext>))
-            .AddScoped(typeof(IAggregateReadRepository<DpdShipment>), typeof(AggregateReadRepository<DpdShipment, ShipmentDbContext>))
-            .AddScoped(typeof(IAggregateReadRepository<Invoice>), typeof(AggregateReadRepository<Invoice, InvoiceDbContext>));
+            .AddScoped(typeof(IAggregateReadRepository<DpdShipment>), typeof(AggregateReadRepository<DpdShipment, ShipmentDbContext>));
     }
 }

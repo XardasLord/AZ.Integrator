@@ -1,5 +1,4 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
+﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
 
 namespace AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
@@ -21,10 +20,4 @@ public class IntegratorQuery
     [UseFiltering]
     public IQueryable<ShipmentViewModel> GetShipments([Service] ShipmentDataViewContext dataViewContext) 
         => dataViewContext.Shipments.AsQueryable();
-
-    [UseProjection]
-    [UseFiltering]
-    [UseSorting]
-    public IQueryable<InvoiceViewModel> GetInvoices([Service] InvoiceDataViewContext dataViewContext) 
-        => dataViewContext.Invoices.AsQueryable();
 }

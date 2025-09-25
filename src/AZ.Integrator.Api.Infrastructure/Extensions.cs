@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Invoices.Application;
+using AZ.Integrator.Invoices.Infrastructure;
 using AZ.Integrator.Orders.Infrastructure;
 using AZ.Integrator.TagParcelTemplates.Infrastructure;
 using AZ.Integrator.Shared.Infrastructure.Authentication;
@@ -39,7 +39,6 @@ public static class Extensions
         services.AddCors();
         
         services.AddShipmentsModuleApplication(configuration);
-        services.AddInvoicesModuleApplication(configuration);
         
         services.AddScoped<ICurrentDateTime, CurrentDateTime>();
         
@@ -56,7 +55,9 @@ public static class Extensions
         services.AddPostgres(configuration);
         services.AddIntegratorGraphQl(configuration)
             .AddStocksModuleGraphQlObjects()
-            .AddTagParcelTemplatesModuleGraphQlObjects();
+            .AddTagParcelTemplatesModuleGraphQlObjects()
+            .AddInvoicesModuleGraphQlObjects();
+        
         services.AddIntegratorOpenApi(configuration);
         
         services.AddDomainServices();
@@ -69,6 +70,7 @@ public static class Extensions
         services.RegisterStocksModule(configuration);
         services.RegisterOrdersModule(configuration);
         services.RegisterTagParcelTemplatesModule(configuration);
+        services.RegisterInvoicesModule(configuration);
 
         return services;
     }

@@ -8,6 +8,7 @@ public static class Extensions
 {
     private const string OptionsSectionName = "Infrastructure:Dpd";
     
+    // TODO: Move Shipments infrastructure module
     public static IServiceCollection AddDpd(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<DpdOptions>(configuration.GetRequiredSection(OptionsSectionName));

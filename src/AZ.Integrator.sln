@@ -75,6 +75,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Orders.Infras
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.TagParcelTemplates.Infrastructure", "Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Infrastructure\AZ.Integrator.TagParcelTemplates.Infrastructure.csproj", "{57A65F13-5350-4F64-9B47-8A8D55E741D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Invoices.Infrastructure", "Modules\Invoices\AZ.Integrator.Invoices.Infrastructure\AZ.Integrator.Invoices.Infrastructure.csproj", "{11ABE9E4-3010-41B8-85D5-FDD4EF315D13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -193,6 +195,10 @@ Global
 		{57A65F13-5350-4F64-9B47-8A8D55E741D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57A65F13-5350-4F64-9B47-8A8D55E741D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57A65F13-5350-4F64-9B47-8A8D55E741D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11ABE9E4-3010-41B8-85D5-FDD4EF315D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11ABE9E4-3010-41B8-85D5-FDD4EF315D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11ABE9E4-3010-41B8-85D5-FDD4EF315D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11ABE9E4-3010-41B8-85D5-FDD4EF315D13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,5 +231,6 @@ Global
 		{CD2AA08B-884D-46A1-957B-4B1A0358EA96} = {BCF47A2C-C937-414E-BC62-F92919A698BA}
 		{19259E04-13FF-4334-BB74-59BC0D137413} = {BCF47A2C-C937-414E-BC62-F92919A698BA}
 		{57A65F13-5350-4F64-9B47-8A8D55E741D7} = {A78791CF-DB1C-4382-82A5-E3A792F464FA}
+		{11ABE9E4-3010-41B8-85D5-FDD4EF315D13} = {3015700F-0F86-49D7-8DE7-2A8CAD39202F}
 	EndGlobalSection
 EndGlobal

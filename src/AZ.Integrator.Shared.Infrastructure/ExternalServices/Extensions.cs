@@ -3,7 +3,6 @@ using AZ.Integrator.Orders.Contracts;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Dpd;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices.Fakturownia;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Shopify;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +20,6 @@ public static class Extensions
             .AddShopify(configuration)
             .AddShipX(configuration)
             .AddDpd(configuration)
-            .AddFakturownia(configuration)
             .AddTransient<IOrdersFacade, OrdersFacade>();
     }
 }

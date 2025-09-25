@@ -105,7 +105,7 @@ export type IntegratorQuery = {
   barcodeScannerLogs: Array<StockLogViewModel>;
   dpdShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
   inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
-  invoices?: Maybe<Array<Maybe<InvoiceViewModel>>>;
+  invoices: Array<InvoiceViewModel>;
   shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
   stockGroups: Array<StockGroupViewModel>;
   stocks: Array<StockViewModel>;
@@ -364,8 +364,8 @@ export type StringOperationFilterInput = {
 
 export type TagParcelTemplateViewModel = {
   __typename?: 'TagParcelTemplateViewModel';
-  parcels?: Maybe<Array<Maybe<TagParcelViewModel>>>;
-  tag?: Maybe<Scalars['String']['output']>;
+  parcels: Array<TagParcelViewModel>;
+  tag: Scalars['String']['output'];
 };
 
 export type TagParcelTemplateViewModelFilterInput = {
@@ -385,7 +385,7 @@ export type TagParcelTemplatesConnection = {
   /** A list of edges. */
   edges?: Maybe<Array<TagParcelTemplatesEdge>>;
   /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Maybe<TagParcelTemplateViewModel>>>;
+  nodes?: Maybe<Array<TagParcelTemplateViewModel>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** Identifies the total count of items in the connection. */
@@ -398,7 +398,7 @@ export type TagParcelTemplatesEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
-  node?: Maybe<TagParcelTemplateViewModel>;
+  node: TagParcelTemplateViewModel;
 };
 
 export type TagParcelViewModel = {
@@ -406,7 +406,7 @@ export type TagParcelViewModel = {
   height: Scalars['Float']['output'];
   id: Scalars['Int']['output'];
   length: Scalars['Float']['output'];
-  tag?: Maybe<Scalars['String']['output']>;
+  tag: Scalars['String']['output'];
   weight: Scalars['Float']['output'];
   width: Scalars['Float']['output'];
 };

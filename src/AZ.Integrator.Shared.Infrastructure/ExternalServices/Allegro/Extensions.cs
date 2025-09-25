@@ -8,6 +8,7 @@ public static class Extensions
 {
     private const string OptionsSectionName = "Infrastructure:Allegro";
     
+    // TODO: Move to Orders infrastructure module
     public static IServiceCollection AddAllegro(this IServiceCollection services, IConfiguration configuration)
     {
         var allegroOptions = new AllegroOptions();

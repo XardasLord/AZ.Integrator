@@ -1,5 +1,4 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Invoice;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
+﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using HotChocolate.AspNetCore;
@@ -28,7 +27,6 @@ public static class Extensions
             .InitializeOnStartup()
             .AddAuthorization()
             .RegisterDbContext<ShipmentDataViewContext>()
-            .RegisterDbContext<InvoiceDataViewContext>()
             .AddQueryType(q => q.Name(nameof(IntegratorQuery)))
             .AddType<IntegratorQuery>()
             .AddProjections()
