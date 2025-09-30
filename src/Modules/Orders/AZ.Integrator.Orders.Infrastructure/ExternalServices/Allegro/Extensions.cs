@@ -1,14 +1,15 @@
 ﻿using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
+using AZ.Integrator.Shared.Infrastructure.Authentication;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro;
 
 public static class Extensions
 {
     private const string OptionsSectionName = "Infrastructure:Allegro";
     
-    // TODO: Move to Orders infrastructure module
     public static IServiceCollection AddAllegro(this IServiceCollection services, IConfiguration configuration)
     {
         var allegroOptions = new AllegroOptions();

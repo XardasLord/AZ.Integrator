@@ -1,14 +1,14 @@
 ﻿using AZ.Integrator.Orders.Application.Common.ExternalServices.Erli;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli;
 
 public static class Extensions
 {
     private const string OptionsSectionName = "Infrastructure:Erli";
     
-    // TODO: Move to Orders infrastructure module
     public static IServiceCollection AddErli(this IServiceCollection services, IConfiguration configuration)
     {
         var erliOptions = new ErliOptions();

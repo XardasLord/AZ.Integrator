@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.RequestModels;
 
 public sealed class AssignTrackingNumberRequestPayload
 {

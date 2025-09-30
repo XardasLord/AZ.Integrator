@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli.RequestModels;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli.RequestModels;
 
 public sealed class GetOrdersFiltersRequestPayload
 {

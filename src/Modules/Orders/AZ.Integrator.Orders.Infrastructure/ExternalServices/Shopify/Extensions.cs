@@ -2,11 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Shopify;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Shopify;
 
 public static class Extensions
 {
-    // TODO: Move to Orders infrastructure module
     public static IServiceCollection AddShopify(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<IShopifyService, ShopifyApiService>();

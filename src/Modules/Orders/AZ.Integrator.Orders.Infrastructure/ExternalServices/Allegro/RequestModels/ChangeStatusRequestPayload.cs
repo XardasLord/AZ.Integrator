@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Ardalis.SmartEnum;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.RequestModels;
 
 public sealed class ChangeStatusRequestPayload
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.OAuth;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
+namespace AZ.Integrator.Shared.Infrastructure.Authentication;
 
 public class TokenExchangeAuthorizingHandler : DelegatingHandler
 {

@@ -4,15 +4,16 @@ using System.Text;
 using System.Web;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
+using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.RequestModels;
+using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.ResponseModels;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.RequestModels;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro.ResponseModels;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Allegro;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro;
 
 public class AllegroApiService(
     IHttpClientFactory httpClientFactory,

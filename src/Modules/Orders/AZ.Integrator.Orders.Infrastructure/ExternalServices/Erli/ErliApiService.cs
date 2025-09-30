@@ -6,15 +6,16 @@ using System.Text.Json;
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Orders.Application.Common.ExternalServices.Erli;
+using AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli.RequestModels;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli.RequestModels;
+using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ErliAccount;
 using Microsoft.EntityFrameworkCore;
 using Order = AZ.Integrator.Shared.Application.ExternalServices.Erli.Order;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Erli;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli;
 
 public class ErliApiService(
     IHttpClientFactory httpClientFactory,

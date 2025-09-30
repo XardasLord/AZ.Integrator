@@ -1,6 +1,11 @@
 ﻿using AZ.Integrator.Orders.Application;
+using AZ.Integrator.Orders.Application.Facade;
 using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetAll;
 using AZ.Integrator.Orders.Application.UseCases.Orders.Queries.GetDetails;
+using AZ.Integrator.Orders.Contracts;
+using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro;
+using AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli;
+using AZ.Integrator.Orders.Infrastructure.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +21,11 @@ public static class Extensions
     public static IServiceCollection RegisterOrdersModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddModuleApplication(configuration);
+
+        services.AddAllegro(configuration);
+        services.AddErli(configuration);
+        services.AddShopify(configuration);
+        services.AddTransient<IOrdersFacade, OrdersFacade>();
         
         return services;
     }

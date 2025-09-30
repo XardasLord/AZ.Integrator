@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using GetOrdersModelResponse = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GetOrdersModelResponse;
 using Order = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses.Order;
 
-namespace AZ.Integrator.Shared.Infrastructure.ExternalServices.Shopify;
+namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Shopify;
 
 public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) : IShopifyService
 {
