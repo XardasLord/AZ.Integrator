@@ -4,9 +4,7 @@ using AZ.Integrator.Orders.Infrastructure;
 using AZ.Integrator.TagParcelTemplates.Infrastructure;
 using AZ.Integrator.Shared.Infrastructure.Authentication;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
-using AZ.Integrator.Shared.Infrastructure.DomainServices;
 using AZ.Integrator.Shared.Infrastructure.ErrorHandling;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using AZ.Integrator.Shared.Infrastructure.Hangfire;
 using AZ.Integrator.Shared.Infrastructure.Hangfire.RecurringJobs;
 using AZ.Integrator.Shared.Infrastructure.Identity;
@@ -15,7 +13,7 @@ using AZ.Integrator.Shared.Infrastructure.OpenApi;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
-using AZ.Integrator.Shipments.Application;
+using AZ.Integrator.Shipments.Infrastructure;
 using AZ.Integrator.Stocks.Infrastructure;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -38,8 +36,6 @@ public static class Extensions
         services.AddHttpClient();
         services.AddCors();
         
-        services.AddShipmentsModuleApplication(configuration);
-        
         services.AddScoped<ICurrentDateTime, CurrentDateTime>();
         
         services.AddIntegratorAuthentication(configuration);
@@ -56,12 +52,10 @@ public static class Extensions
         services.AddIntegratorGraphQl(configuration)
             .AddStocksModuleGraphQlObjects()
             .AddTagParcelTemplatesModuleGraphQlObjects()
-            .AddInvoicesModuleGraphQlObjects();
+            .AddInvoicesModuleGraphQlObjects()
+            .AddShipmentsModuleGraphQlObjects();
         
         services.AddIntegratorOpenApi(configuration);
-        
-        services.AddDomainServices();
-        services.AddExternalServices(configuration);
         
         services.AddIntegratorJobManager(configuration)
             .AddRecurringJob<RefreshTenantAccessTokensRecurringJob>();
@@ -71,6 +65,7 @@ public static class Extensions
         services.RegisterOrdersModule(configuration);
         services.RegisterTagParcelTemplatesModule(configuration);
         services.RegisterInvoicesModule(configuration);
+        services.RegisterShipmentsModule(configuration);
 
         return services;
     }

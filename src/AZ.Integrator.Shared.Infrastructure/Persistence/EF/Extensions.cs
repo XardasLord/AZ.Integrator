@@ -1,10 +1,8 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Domain.Shipment;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.AllegroAccount;
+﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ErliAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ShopifyAccount;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.UserIdentity;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Shipment;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,12 +26,6 @@ public static class Extensions
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
 
-        services.AddDbContext<ShipmentDbContext>(options =>
-        {
-            options.EnableDetailedErrors();
-            options.UseNpgsql(postgresOptions.ConnectionStringApplication);
-        });
-
         services.AddDbContext<ErliAccountDbContext>(options =>
         {
             options.EnableDetailedErrors();
@@ -50,13 +42,6 @@ public static class Extensions
         {
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
-        });
-        
-        services.AddDbContext<ShipmentDataViewContext>(options =>
-        {
-            options.EnableDetailedErrors();
-            options.UseNpgsql(postgresOptions.ConnectionStringApplication)
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
         
         services.AddDbContext<AllegroAccountDataViewContext>(options =>

@@ -16,8 +16,9 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Infrastructure\AZ.Integrator.Invoices.Infrastructure.csproj" />
-      <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Infrastructure\AZ.Integrator.Stocks.Infrastructure.csproj" />
+        <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Infrastructure\AZ.Integrator.Invoices.Infrastructure.csproj" />
+        <ProjectReference Include="..\Modules\Shipments\AZ.Integrator.Shipments.Infrastructure\AZ.Integrator.Shipments.Infrastructure.csproj" />
+        <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Infrastructure\AZ.Integrator.Stocks.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Orders\AZ.Integrator.Orders.Infrastructure\AZ.Integrator.Orders.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Infrastructure\AZ.Integrator.TagParcelTemplates.Infrastructure.csproj" />
     </ItemGroup>

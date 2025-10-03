@@ -43,8 +43,8 @@ export type DateTimeOperationFilterInput = {
 export type DpdShipmentViewModel = {
   __typename?: 'DpdShipmentViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
-  shipmentNumber?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
+  shipmentNumber: Scalars['String']['output'];
 };
 
 export type DpdShipmentViewModelFilterInput = {
@@ -73,8 +73,8 @@ export type FloatOperationFilterInput = {
 export type InpostShipmentViewModel = {
   __typename?: 'InpostShipmentViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
-  shipmentNumber?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
+  shipmentNumber: Scalars['String']['output'];
 };
 
 export type InpostShipmentViewModelFilterInput = {
@@ -103,10 +103,10 @@ export type IntOperationFilterInput = {
 export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
   barcodeScannerLogs: Array<StockLogViewModel>;
-  dpdShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
-  inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
+  dpdShipments: Array<DpdShipmentViewModel>;
+  inpostShipments: Array<InpostShipmentViewModel>;
   invoices: Array<InvoiceViewModel>;
-  shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
+  shipments: Array<ShipmentViewModel>;
   stockGroups: Array<StockGroupViewModel>;
   stocks: Array<StockViewModel>;
   tagParcelTemplates?: Maybe<TagParcelTemplatesConnection>;
@@ -164,9 +164,9 @@ export type IntegratorQueryTagParcelTemplatesArgs = {
 export type InvoiceViewModel = {
   __typename?: 'InvoiceViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
   invoiceId: Scalars['Long']['output'];
-  invoiceNumber?: Maybe<Scalars['String']['output']>;
+  invoiceNumber: Scalars['String']['output'];
 };
 
 export type InvoiceViewModelFilterInput = {
@@ -237,9 +237,9 @@ export type PageInfo = {
 export type ShipmentViewModel = {
   __typename?: 'ShipmentViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
-  shipmentNumber?: Maybe<Scalars['String']['output']>;
-  shipmentProvider?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
+  shipmentNumber: Scalars['String']['output'];
+  shipmentProvider: Scalars['String']['output'];
 };
 
 export type ShipmentViewModelFilterInput = {

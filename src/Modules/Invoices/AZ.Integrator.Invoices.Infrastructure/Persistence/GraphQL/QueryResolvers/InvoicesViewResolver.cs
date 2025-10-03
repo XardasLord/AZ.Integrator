@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Invoices.Infrastructure.Persistence.EF.View;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+using AZ.Integrator.Invoices.Infrastructure.Persistence.EF.View.ViewModels;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using HotChocolate;
 using HotChocolate.Data;

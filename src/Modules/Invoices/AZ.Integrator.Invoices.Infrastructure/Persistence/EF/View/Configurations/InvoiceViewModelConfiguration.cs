@@ -1,5 +1,5 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
+﻿using AZ.Integrator.Invoices.Infrastructure.Persistence.EF.View.ViewModels;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

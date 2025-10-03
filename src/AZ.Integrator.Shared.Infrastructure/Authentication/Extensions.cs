@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices.ShipX;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.AspNetCore.Authentication;
@@ -18,7 +17,6 @@ public static class Extensions
 {
     private const string IdentityOptionsSectionName = "Infrastructure:Identity";
     private const string AllegroOptionsSectionName = "Infrastructure:Allegro";
-    private const string ShipXOptionsSectionName = "Infrastructure:ShipX";
     
     public static IServiceCollection AddIntegratorAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
@@ -27,9 +25,6 @@ public static class Extensions
         
         services.Configure<AllegroOptions>(configuration.GetRequiredSection(AllegroOptionsSectionName));
         var allegroOptions = configuration.GetOptions<AllegroOptions>(AllegroOptionsSectionName);
-        
-        services.Configure<ShipXOptions>(configuration.GetRequiredSection(ShipXOptionsSectionName));
-        var shipXOptions = configuration.GetOptions<ShipXOptions>(ShipXOptionsSectionName);
 
         var clientUrlAppRedirect = configuration["Application:ClientAppUrl"];
             
@@ -103,7 +98,7 @@ public static class Extensions
                 options.CallbackPath = new PathString(allegroOptions.AzTeamTenant.RedirectUri);
                 options.SignInScheme = allegroAzTeamTenantCookieAuthenticationScheme;
                 
-                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
+                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, clientUrlAppRedirect);
             })
             .AddOAuth(allegroMyTestTenantOAuthAuthenticationScheme, options =>
             {
@@ -112,7 +107,7 @@ public static class Extensions
                 options.CallbackPath = new PathString(allegroOptions.MyTestTenant.RedirectUri);
                 options.SignInScheme = allegroMyTestTenantCookieAuthenticationScheme;
                 
-                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
+                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, clientUrlAppRedirect);
             })
             .AddOAuth(allegroMebleplTenantOAuthAuthenticationScheme, options =>
             {
@@ -121,7 +116,7 @@ public static class Extensions
                 options.CallbackPath = new PathString(allegroOptions.MebleplTenant.RedirectUri);
                 options.SignInScheme = allegroMebleplTenantCookieAuthenticationScheme;
                 
-                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, shipXOptions, clientUrlAppRedirect);
+                ConfigureCommonOAuthOptions(services, options, allegroOptions, identityOptions, clientUrlAppRedirect);
             });
         
         return services;
@@ -132,7 +127,6 @@ public static class Extensions
         OAuthOptions options,
         AllegroOptions allegroOptions,
         IdentityOptions identityOptions,
-        ShipXOptions shipXOptions,
         string clientUrlAppRedirect)
     {
         options.AuthorizationEndpoint = allegroOptions.AuthorizationEndpoint;
@@ -165,7 +159,7 @@ public static class Extensions
                 // TODO: This can be removed after introducment of the new authentication flow using Keycloak
                 
                 // Account exists, so we don't need to force login
-                var jwtToken = GenerateJwtToken(tenantId, identityOptions, shipXOptions);
+                var jwtToken = GenerateJwtToken(tenantId, identityOptions);
                 
                 ctx.Properties.StoreTokens(new[]
                 {
@@ -196,7 +190,7 @@ public static class Extensions
             
             // TODO: This can be removed after introducment of the new authentication flow using Keycloak
             
-            var jwtToken = GenerateJwtToken(tenantId, identityOptions, shipXOptions);
+            var jwtToken = GenerateJwtToken(tenantId, identityOptions);
 
             ctx.Properties.StoreTokens([
                 new AuthenticationToken
@@ -211,7 +205,7 @@ public static class Extensions
         };
     }
 
-    private static string GenerateJwtToken(string tenantId, IdentityOptions identityOptions, ShipXOptions shipXOptions)
+    private static string GenerateJwtToken(string tenantId, IdentityOptions identityOptions)
     {
         // var claims = new List<Claim>
         // {
