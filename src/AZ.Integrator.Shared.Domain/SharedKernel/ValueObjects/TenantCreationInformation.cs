@@ -8,15 +8,18 @@ public record TenantCreationInformation
     public DateTimeOffset CreatedAt { get; }
     public Guid CreatedBy { get; }
     public TenantId TenantId { get; }
+    public SourceSystemId SourceSystemId { get; }
     
 
     protected TenantCreationInformation() { }
 	
-    public TenantCreationInformation(DateTimeOffset creationDate, Guid createdBy, string tenantId)
+    public TenantCreationInformation(DateTimeOffset creationDate, Guid createdBy, string tenantId, string sourceSystemId)
+        : this()
     {
         CreatedAt = Guard.Against.CreationInformationDate(creationDate);
         CreatedBy = Guard.Against.CreationInformationCreator(createdBy);
         TenantId = tenantId;
+        SourceSystemId = sourceSystemId;
     }
         
     public static implicit operator DateTimeOffset(TenantCreationInformation info)

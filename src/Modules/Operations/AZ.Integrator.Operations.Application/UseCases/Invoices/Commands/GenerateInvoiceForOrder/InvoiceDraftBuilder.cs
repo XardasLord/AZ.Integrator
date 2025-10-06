@@ -7,7 +7,7 @@ namespace AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.Genera
 
 public sealed class InvoiceDraftBuilder(IOrdersFacade ordersFacade) : IInvoiceDraftBuilder
 {
-    public async Task<GenerateInvoiceRequest> BuildAsync(string externalOrderNumber, string tenantId, CancellationToken cancellationToken)
+    public async Task<GenerateInvoiceRequest> BuildAsync(string externalOrderNumber, string tenantId, string sourceSystemId, CancellationToken cancellationToken)
     {
         var orderDetails = await ordersFacade.GetOrderDetails(externalOrderNumber, tenantId, cancellationToken);
         
@@ -53,6 +53,7 @@ public sealed class InvoiceDraftBuilder(IOrdersFacade ordersFacade) : IInvoiceDr
             DeliveryDto: deliveryDetails,
             IdempotencyKey: $"{tenantId}:order:{externalOrderNumber}",
             externalOrderNumber,
-            tenantId);
+            tenantId,
+            sourceSystemId);
     }
 }

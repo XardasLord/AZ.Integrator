@@ -7,19 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shipments.Infrastructure.Persistence.EF.Domain;
 
-public class ShipmentDbContext : DbContext
+public class ShipmentDbContext(DbContextOptions<ShipmentDbContext> options, IMediator mediator)
+    : DbContext(options)
 {
-    private readonly IMediator _mediator;
-    
     public virtual DbSet<InpostShipment> InpostShipments { get; set; }
     
     public virtual DbSet<DpdShipment> DpdShipments { get; set; }
-    
-    public ShipmentDbContext(DbContextOptions<ShipmentDbContext> options, IMediator mediator) : base(options)
-    {
-        _mediator = mediator;
-    }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new InpostShipmentConfiguration());
@@ -32,6 +26,6 @@ public class ShipmentDbContext : DbContext
     public async Task SaveAggregateAsync(CancellationToken cancellationToken)
     {
         await base.SaveChangesAsync(cancellationToken);
-        await _mediator.DispatchDomainEventsAsync(this);
+        await mediator.DispatchDomainEventsAsync(this);
     }
 }

@@ -60,6 +60,12 @@
       <None Update="Migrations\Public\V0102__move_invoices_to_billing.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Migrations\Public\V0103__add_source_system_id_to_shipments.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Billing\V0101__add_source_system_id_to_invoices.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

@@ -12,16 +12,18 @@ public class HeaderRequestMiddleware<TRequest, TResponse>(IHttpContextAccessor h
     {
         var context = httpContextAccessor.HttpContext;
 
-        if (request is HeaderRequest headerRequest && context is not null)
+        if (request is not HeaderRequest headerRequest || context is null)
+            return await next(request, cancellationToken);
+        
+        var shopProviderHeader = context.Request.Headers["Az-Integrator-Shop-Provider"].ToString();
+        if (Enum.TryParse<ShopProviderType>(shopProviderHeader, true, out var shopProvider))
         {
-            var shopProviderHeader = context.Request.Headers["Az-Integrator-Shop-Provider"].ToString();
-            if (Enum.TryParse<ShopProviderType>(shopProviderHeader, true, out var shopProvider))
-            {
-                headerRequest.ShopProvider = shopProvider;
-            }
-            
-            headerRequest.TenantId = context.Request.Headers["Az-Integrator-Tenant-Id"].ToString();
+            headerRequest.ShopProvider = shopProvider;
         }
+            
+        // TODO: TenantId should be obtained from the authentication token
+        headerRequest.TenantId = context.Request.Headers["Az-Integrator-Tenant-Id"].ToString();
+        headerRequest.SourceSystemId = context.Request.Headers["Az-Integrator-Source-System-Id"].ToString();
 
         return await next(request, cancellationToken);
     }

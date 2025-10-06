@@ -23,16 +23,22 @@ public class InpostShipment : Entity, IAggregateRoot
         _parcels = [];
     }
 
-    private InpostShipment(ShipmentNumber number, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private InpostShipment(
+        ShipmentNumber number, ExternalOrderNumber externalOrderNumber, 
+        TenantId tenantId, SourceSystemId sourceSystemId, 
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _number = number;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId, sourceSystemId);
     }
 
-    public static InpostShipment Create(ShipmentNumber number, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static InpostShipment Create(
+        ShipmentNumber number, ExternalOrderNumber externalOrderNumber,
+        TenantId tenantId, SourceSystemId sourceSystemId,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var shipment = new InpostShipment(number, externalOrderNumber, tenantId, currentUser, currentDateTime);
+        var shipment = new InpostShipment(number, externalOrderNumber, tenantId, sourceSystemId, currentUser, currentDateTime);
         
         shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalOrderNumber, shipment.CreationInformation.TenantId));
         

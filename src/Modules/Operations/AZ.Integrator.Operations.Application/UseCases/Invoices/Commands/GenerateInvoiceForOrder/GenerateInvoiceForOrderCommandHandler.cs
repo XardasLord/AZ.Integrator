@@ -12,7 +12,7 @@ public class GenerateInvoiceForOrderCommandHandler(
 {
     public async ValueTask<GenerateInvoiceResponse> Handle(GenerateInvoiceForOrderCommand command, CancellationToken cancellationToken)
     {
-        var request = await invoiceDraftBuilder.BuildAsync(command.OrderNumber, command.TenantId, cancellationToken);
+        var request = await invoiceDraftBuilder.BuildAsync(command.OrderNumber, command.TenantId, command.SourceSystemId, cancellationToken);
 
         var result = await invoicesFacade.GenerateInvoice(request, cancellationToken);
 

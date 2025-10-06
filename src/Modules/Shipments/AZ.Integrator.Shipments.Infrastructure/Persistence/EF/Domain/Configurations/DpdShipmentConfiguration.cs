@@ -31,6 +31,10 @@ public class DpdShipmentConfiguration : IEntityTypeConfiguration<DpdShipment>
                 .HasConversion(id => id.Value, id => new TenantId(id))
                 .HasColumnName("tenant_id")
                 .IsRequired();
+            ci.Property(c => c.SourceSystemId)
+                .HasConversion(id => id.Value, id => new SourceSystemId(id))
+                .HasColumnName("source_system_id")
+                .IsRequired();
         });
 
         builder.Navigation(e => e.CreationInformation).IsRequired();

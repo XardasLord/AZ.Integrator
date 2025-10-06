@@ -24,22 +24,27 @@ public class Invoice : Entity, IAggregateRoot
     
     private Invoice() { }
 
-    private Invoice(InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, 
-        InvoiceProvider invoiceProvider, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private Invoice(
+        InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, 
+        InvoiceProvider invoiceProvider, TenantId tenantId, SourceSystemId sourceSystemId,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _externalId = externalId;
         _number = number;
         _externalOrderNumber = externalOrderNumber;
         _invoiceProvider = invoiceProvider;
-        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId, sourceSystemId);
     }
 
-    public static Invoice Generate(InvoiceExternalId externalId, InvoiceNumber number, 
-        ExternalOrderNumber externalOrderNumber, InvoiceProvider invoiceProvider, 
-        TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static Invoice Generate(
+        InvoiceExternalId externalId, InvoiceNumber number, ExternalOrderNumber externalOrderNumber, 
+        InvoiceProvider invoiceProvider, TenantId tenantId, SourceSystemId sourceSystemId, 
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var invoice = new Invoice(externalId, number, externalOrderNumber, invoiceProvider, 
-            tenantId, currentUser, currentDateTime);
+        var invoice = new Invoice(
+            externalId, number, externalOrderNumber, 
+            invoiceProvider, tenantId, sourceSystemId,
+            currentUser, currentDateTime);
         
         invoice.AddDomainEvent(new InvoiceGenerated(externalId.ToString(), number, externalOrderNumber, (int)invoiceProvider, tenantId));
         

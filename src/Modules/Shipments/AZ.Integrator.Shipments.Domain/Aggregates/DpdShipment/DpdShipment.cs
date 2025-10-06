@@ -23,18 +23,26 @@ public class DpdShipment : Entity, IAggregateRoot
         _packages = [];
     }
 
-    private DpdShipment(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
+    private DpdShipment(
+        SessionNumber sessionNumber, IEnumerable<DpdPackage> packages,
+        ExternalOrderNumber externalOrderNumber,
+        TenantId tenantId, SourceSystemId sourceSystemId,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
         : this()
     {
         _sessionNumber = sessionNumber;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId, sourceSystemId);
         _packages.AddRange(packages);
     }
 
-    public static DpdShipment Create(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, ExternalOrderNumber externalExternalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static DpdShipment Create(
+        SessionNumber sessionNumber, IEnumerable<DpdPackage> packages,
+        ExternalOrderNumber externalExternalOrderNumber,
+        TenantId tenantId, SourceSystemId sourceSystemId,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var shipment = new DpdShipment(sessionNumber, packages, externalExternalOrderNumber, tenantId, currentUser, currentDateTime);
+        var shipment = new DpdShipment(sessionNumber, packages, externalExternalOrderNumber, tenantId, sourceSystemId, currentUser, currentDateTime);
         
         shipment.AddDomainEvent(new DpdShipmentRegistered(sessionNumber, externalExternalOrderNumber));
         

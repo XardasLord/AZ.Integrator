@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -8,7 +8,6 @@ import { TenantState } from '../../shared/states/tenant.state';
 export class TenantHeadersInterceptor implements HttpInterceptor {
   private store = inject(Store);
 
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const tenant = this.store.selectSnapshot(TenantState.getTenant);
 
@@ -16,7 +15,8 @@ export class TenantHeadersInterceptor implements HttpInterceptor {
       req = req.clone({
         headers: req.headers
           .set('Az-Integrator-Tenant-Id', tenant.tenantId)
-          .set('Az-Integrator-Shop-Provider', tenant.authorizationProvider.toString()),
+          .set('Az-Integrator-Shop-Provider', tenant.authorizationProvider.toString())
+          .set('Az-Integrator-Source-System-Id', tenant.tenantId),
       });
     }
 
