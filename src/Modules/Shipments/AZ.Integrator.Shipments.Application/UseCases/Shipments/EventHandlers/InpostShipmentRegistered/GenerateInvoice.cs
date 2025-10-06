@@ -15,8 +15,10 @@ public class GenerateInvoice(IBackgroundJobClient backgroundJobClient)
             {
                 ShippingNumber = notification.ShipmentNumber,
                 ExternalOrderNumber = notification.ExternalOrderNumber,
+                SourceSystemId = notification.SourceSystemId,
                 TenantId = notification.TenantId,
-                ShopProvider = notification.TenantId.GetShopProviderType()
+                ShopProvider = notification.ShopProviderType,
+                CorrelationId = notification.CorrelationId
             }, null));
         
         return new ValueTask();

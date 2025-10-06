@@ -5,7 +5,7 @@ public sealed record GenerateInvoiceRequest(
     IReadOnlyList<InvoiceLineDto> InvoiceLines,
     PaymentTermsDto PaymentTermsDto,
     DeliveryDto DeliveryDto,
-    string IdempotencyKey,
+    string CorrelationKey,
     string ExternalOrderId,
     string TenantId,
     string SourceSystemId);

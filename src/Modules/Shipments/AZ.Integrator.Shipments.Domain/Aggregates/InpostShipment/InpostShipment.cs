@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.ValueObjects;
@@ -39,8 +40,14 @@ public class InpostShipment : Entity, IAggregateRoot
         ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         var shipment = new InpostShipment(number, externalOrderNumber, tenantId, sourceSystemId, currentUser, currentDateTime);
-        
-        shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalOrderNumber, shipment.CreationInformation.TenantId));
+            
+        shipment.AddDomainEvent(new InpostShipmentRegistered(
+            shipment.Number,
+            shipment.ExternalOrderNumber,
+            shipment.CreationInformation.SourceSystemId,
+            shipment.CreationInformation.TenantId,
+            shipment.CreationInformation.SourceSystemId.GetShopProviderType(),
+            CorrelationIdHelper.New()));
         
         return shipment;
     }

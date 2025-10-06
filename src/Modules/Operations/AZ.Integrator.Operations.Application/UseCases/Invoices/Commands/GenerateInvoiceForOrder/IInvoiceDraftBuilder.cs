@@ -4,5 +4,10 @@ namespace AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.Genera
 
 public interface IInvoiceDraftBuilder
 {
-    Task<GenerateInvoiceRequest> BuildAsync(string externalOrderNumber, string tenantId, string sourceSystemId, CancellationToken cancellationToken);
+    Task<GenerateInvoiceRequest> BuildAsync(
+        string externalOrderNumber,
+        string tenantId,
+        string sourceSystemId, 
+        string correlationKey,
+        CancellationToken cancellationToken);
 }

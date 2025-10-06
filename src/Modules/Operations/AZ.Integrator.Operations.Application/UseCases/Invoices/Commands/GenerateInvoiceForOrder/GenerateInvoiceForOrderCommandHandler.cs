@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Invoices.Contracts;
+﻿using AZ.Integrator.Domain.Extensions;
+using AZ.Integrator.Invoices.Contracts;
 using AZ.Integrator.Invoices.Contracts.Dtos;
 using Mediator;
 
@@ -11,7 +12,17 @@ public class GenerateInvoiceForOrderCommandHandler(
 {
     public async ValueTask<GenerateInvoiceResponse> Handle(GenerateInvoiceForOrderCommand command, CancellationToken cancellationToken)
     {
-        var request = await invoiceDraftBuilder.BuildAsync(command.OrderNumber, command.TenantId, command.SourceSystemId, cancellationToken);
+        command = command with
+        {
+            CorrelationId = command.CorrelationId ?? CorrelationIdHelper.New()
+        };
+        
+        var request = await invoiceDraftBuilder.BuildAsync(
+            command.OrderNumber,
+            command.TenantId,
+            command.SourceSystemId, 
+            command.CorrelationId,
+            cancellationToken);
 
         var result = await invoicesFacade.GenerateInvoice(request, cancellationToken);
 

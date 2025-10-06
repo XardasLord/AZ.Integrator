@@ -39,6 +39,8 @@ public class CreateInpostShipmentCommandHandler(
                 currentUser.UserName,
                 inpostShipment.CreationInformation.CreatedAt.DateTime,
                 MonitoringSourceModuleEnum.Shipments.Name,
+                inpostShipment.Number,
+                inpostShipment.Number,
                 null!,
                 cancellationToken);
         }

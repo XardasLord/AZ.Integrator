@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder;
+﻿using AZ.Integrator.Domain.Extensions;
+using AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder;
 using AZ.Integrator.Shared.Application;
 using Mediator;
 
@@ -8,13 +9,16 @@ public class GenerateInvoiceJobCommandHandler(IMediator mediator) : IRequestHand
 {
     public async ValueTask<Unit> Handle(GenerateInvoiceJobCommand command, CancellationToken cancellationToken)
     {
+        command.CorrelationId ??= CorrelationIdHelper.New();
+        
         var ctx = command.PerformContext;
         
         ctx.Step($"Starting generating invoice for order - '{command.ExternalOrderNumber}'");
         
-        var commandRequest = new GenerateInvoiceForOrderCommand(command.ExternalOrderNumber)
+        var commandRequest = new GenerateInvoiceForOrderCommand(command.ExternalOrderNumber, command.CorrelationId)
         {
             TenantId = command.TenantId,
+            SourceSystemId = command.SourceSystemId,
             ShopProvider = command.ShopProvider
         };
 

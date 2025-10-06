@@ -2,7 +2,7 @@ START TRANSACTION;
 
 CREATE TABLE IF NOT EXISTS monitoring.event_logs (
     id BIGSERIAL PRIMARY KEY,
-    tenant_id UUID NOT NULL,
+    tenant_id VARCHAR(100) NOT NULL,
     event_name VARCHAR(200) NOT NULL,
     event_type VARCHAR(100) NULL,        -- e.g. DomainEvent / IntegrationEvent / SystemEvent
     source_module VARCHAR(100) NOT NULL, -- e.g. Shipments, Invoices, Orders
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS monitoring.event_logs (
     created_by_id UUID NOT NULL,
     created_by_name VARCHAR(100) NULL,
     created_at TIMESTAMP with time zone NOT NULL DEFAULT NOW(),
-    correlation_id UUID NULL,            -- e.g. request chain
+    correlation_id VARCHAR(200) NULL,    -- e.g. request chain
     metadata JSONB NULL                  -- elastic field e.g. { "durationMs": 320, "source": "HangfireJob" }
 );
 

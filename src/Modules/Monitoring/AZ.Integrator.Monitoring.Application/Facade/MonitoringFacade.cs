@@ -11,12 +11,14 @@ public class MonitoringFacade(IAggregateRepository<EventLogEntry> repository) : 
     private const string DomainEventNameConst = "DomainEvent";
     
     public async Task LogDomainEvent(
-        INotification domainEvent,
+        object domainEvent,
         string tenantId,
         Guid userId,
         string userName,
         DateTime dateTime,
         string sourceModule,
+        string referenceId,
+        string referenceNumber,
         string correlationId,
         CancellationToken cancellationToken = default)
     {
@@ -26,7 +28,9 @@ public class MonitoringFacade(IAggregateRepository<EventLogEntry> repository) : 
             EventName = domainEvent.GetType().Name,
             EventType = DomainEventNameConst,
             SourceModule = sourceModule,
-            Payload = JsonSerializer.Serialize(domainEvent),
+            Payload = JsonSerializer.SerializeToDocument(domainEvent),
+            ReferenceId = null,
+            ReferenceNumber = null,
             CreatedById = userId,
             CreatedByName = userName,
             CreatedAt = dateTime,

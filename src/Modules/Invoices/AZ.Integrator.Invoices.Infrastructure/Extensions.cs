@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Invoices.Application;
 using AZ.Integrator.Invoices.Application.UseCases.Invoices.Queries.Download;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
@@ -42,6 +43,11 @@ public static class Extensions
         
         invoiceGroup.MapPost("/", async (GenerateInvoiceForOrderCommand command, IMediator mediator, CancellationToken cancellationToken) =>
         {
+            command = command with
+            {
+                CorrelationId = command.CorrelationId ?? CorrelationIdHelper.New()
+            };
+            
             await mediator.Send(command, cancellationToken);
             
             return Results.Ok();

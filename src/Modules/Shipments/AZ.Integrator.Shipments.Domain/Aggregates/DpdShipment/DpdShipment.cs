@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.ValueObjects;
@@ -44,7 +45,13 @@ public class DpdShipment : Entity, IAggregateRoot
     {
         var shipment = new DpdShipment(sessionNumber, packages, externalExternalOrderNumber, tenantId, sourceSystemId, currentUser, currentDateTime);
         
-        shipment.AddDomainEvent(new DpdShipmentRegistered(sessionNumber, externalExternalOrderNumber));
+        shipment.AddDomainEvent(new DpdShipmentRegistered(
+            shipment.SessionNumber, 
+            shipment.ExternalOrderNumber,
+            shipment.CreationInformation.SourceSystemId,
+            shipment.CreationInformation.TenantId,
+            shipment.CreationInformation.SourceSystemId.GetShopProviderType(),
+            CorrelationIdHelper.New()));
         
         return shipment;
     }

@@ -21,11 +21,17 @@ public class MonitoringConfiguration : IEntityTypeConfiguration<EventLogEntry>
         builder.Property(e => e.SourceModule).HasColumnName("source_module");
         builder.Property(e => e.ReferenceId).HasColumnName("reference_id");
         builder.Property(e => e.ReferenceNumber).HasColumnName("reference_number");
-        builder.Property(e => e.Payload).HasColumnName("payload");
         builder.Property(e => e.CreatedById).HasColumnName("created_by_id");
         builder.Property(e => e.CreatedByName).HasColumnName("created_by_name");
         builder.Property(e => e.CreatedAt).HasColumnName("created_at");
         builder.Property(e => e.CorrelationId).HasColumnName("correlation_id");
-        builder.Property(e => e.Metadata).HasColumnName("metadata");
+
+        builder.Property(e => e.Payload)
+            .HasColumnName("payload")
+            .HasColumnType("jsonb");
+
+        builder.Property(e => e.Metadata)
+            .HasColumnName("metadata")
+            .HasColumnType("jsonb");
     }
 }

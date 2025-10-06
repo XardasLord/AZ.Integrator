@@ -89,6 +89,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Monitoring.In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Monitoring.Application", "Modules\Monitoring\AZ.Integrator.Monitoring.Application\AZ.Integrator.Monitoring.Application.csproj", "{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Shipments.Contracts", "Modules\Shipments\AZ.Integrator.Shipments.Contracts\AZ.Integrator.Shipments.Contracts.csproj", "{05213FDE-A0FA-4D30-BBE4-3994C4C29C7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.TagParcelTemplates.Contracts", "Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Contracts\AZ.Integrator.TagParcelTemplates.Contracts.csproj", "{F7DDD90D-8B27-49FF-B9EB-F8851B142C78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -231,6 +235,14 @@ Global
 		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05213FDE-A0FA-4D30-BBE4-3994C4C29C7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05213FDE-A0FA-4D30-BBE4-3994C4C29C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05213FDE-A0FA-4D30-BBE4-3994C4C29C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05213FDE-A0FA-4D30-BBE4-3994C4C29C7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DDD90D-8B27-49FF-B9EB-F8851B142C78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DDD90D-8B27-49FF-B9EB-F8851B142C78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DDD90D-8B27-49FF-B9EB-F8851B142C78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DDD90D-8B27-49FF-B9EB-F8851B142C78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -270,5 +282,7 @@ Global
 		{536162CB-DBED-4349-8AE5-FA154FF29446} = {248FF580-BD5F-4F62-BDCD-EA17EC9651C9}
 		{DF790BFC-F38A-4E89-A7AC-3243A8C7FA04} = {248FF580-BD5F-4F62-BDCD-EA17EC9651C9}
 		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2} = {248FF580-BD5F-4F62-BDCD-EA17EC9651C9}
+		{05213FDE-A0FA-4D30-BBE4-3994C4C29C7A} = {4F3FDA55-588A-4702-8CEF-B0DE277668EC}
+		{F7DDD90D-8B27-49FF-B9EB-F8851B142C78} = {A78791CF-DB1C-4382-82A5-E3A792F464FA}
 	EndGlobalSection
 EndGlobal

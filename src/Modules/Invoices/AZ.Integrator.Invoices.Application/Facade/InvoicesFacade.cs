@@ -31,7 +31,7 @@ public class InvoicesFacade(
             request.TenantId, request.SourceSystemId,
             currentUser, currentDateTime);
 
-        invoice.SetIdempotencyKey(request.IdempotencyKey);
+        invoice.SetIdempotencyKey(request.CorrelationKey);
         
         await invoiceRepository.AddAsync(invoice, cancellationToken);
         
@@ -44,6 +44,8 @@ public class InvoicesFacade(
                 currentUser.UserName,
                 invoice.CreationInformation.CreatedAt.DateTime,
                 MonitoringSourceModuleEnum.Invoices.Name,
+                invoice.ExternalId.Value.ToString(),
+                invoice.Number.Value,
                 invoice.IdempotencyKey!,
                 cancellationToken);
         }
