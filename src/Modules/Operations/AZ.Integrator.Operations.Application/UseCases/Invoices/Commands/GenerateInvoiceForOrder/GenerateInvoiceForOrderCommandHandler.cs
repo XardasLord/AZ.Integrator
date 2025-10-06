@@ -1,6 +1,5 @@
 ﻿using AZ.Integrator.Invoices.Contracts;
 using AZ.Integrator.Invoices.Contracts.Dtos;
-using AZ.Integrator.Orders.Contracts;
 using Mediator;
 
 namespace AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder;

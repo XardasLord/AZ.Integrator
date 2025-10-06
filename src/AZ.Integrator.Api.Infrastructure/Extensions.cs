@@ -15,6 +15,7 @@ using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
 using AZ.Integrator.Shipments.Infrastructure;
 using AZ.Integrator.Stocks.Infrastructure;
+using AZ.Integrator.Monitoring.Infrastructure;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,7 +54,8 @@ public static class Extensions
             .AddStocksModuleGraphQlObjects()
             .AddTagParcelTemplatesModuleGraphQlObjects()
             .AddInvoicesModuleGraphQlObjects()
-            .AddShipmentsModuleGraphQlObjects();
+            .AddShipmentsModuleGraphQlObjects()
+            .AddMonitoringModuleGraphQlObjects();
         
         services.AddIntegratorOpenApi(configuration);
         
@@ -66,6 +68,7 @@ public static class Extensions
         services.RegisterTagParcelTemplatesModule(configuration);
         services.RegisterInvoicesModule(configuration);
         services.RegisterShipmentsModule(configuration);
+        services.RegisterMonitoringModule(configuration);
 
         return services;
     }

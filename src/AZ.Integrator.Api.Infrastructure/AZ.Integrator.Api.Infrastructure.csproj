@@ -21,6 +21,7 @@
         <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Infrastructure\AZ.Integrator.Stocks.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Orders\AZ.Integrator.Orders.Infrastructure\AZ.Integrator.Orders.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Infrastructure\AZ.Integrator.TagParcelTemplates.Infrastructure.csproj" />
+        <ProjectReference Include="..\Modules\Monitoring\AZ.Integrator.Monitoring.Infrastructure\AZ.Integrator.Monitoring.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

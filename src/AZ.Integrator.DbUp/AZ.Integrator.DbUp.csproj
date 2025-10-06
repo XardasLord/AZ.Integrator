@@ -66,6 +66,12 @@
       <None Update="Migrations\Billing\V0101__add_source_system_id_to_invoices.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Migrations\Public\V0104__create_monitoring_schema.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Monitoring\V0100__Init.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

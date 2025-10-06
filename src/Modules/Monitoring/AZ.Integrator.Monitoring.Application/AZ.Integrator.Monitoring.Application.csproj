@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,11 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Application\AZ.Integrator.Shared.Application.csproj" />
-      <ProjectReference Include="..\..\Invoices\AZ.Integrator.Invoices.Contracts\AZ.Integrator.Invoices.Contracts.csproj" />
-        <ProjectReference Include="..\..\Monitoring\AZ.Integrator.Monitoring.Contracts\AZ.Integrator.Monitoring.Contracts.csproj" />
-      <ProjectReference Include="..\..\Operations\AZ.Integrator.Operations.Application\AZ.Integrator.Operations.Application.csproj" />
-      <ProjectReference Include="..\AZ.Integrator.Shipments.Domain\AZ.Integrator.Shipments.Domain.csproj" />
+        <ProjectReference Include="..\AZ.Integrator.Monitoring.Domain\AZ.Integrator.Monitoring.Domain.csproj" />
+        <ProjectReference Include="..\AZ.Integrator.Monitoring.Contracts\AZ.Integrator.Monitoring.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

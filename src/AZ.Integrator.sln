@@ -79,6 +79,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Invoices.Infr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Shipments.Infrastructure", "Modules\Shipments\AZ.Integrator.Shipments.Infrastructure\AZ.Integrator.Shipments.Infrastructure.csproj", "{177D3BBB-96E9-4B01-AD13-E0BB8C0B1FF2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monitoring", "Monitoring", "{248FF580-BD5F-4F62-BDCD-EA17EC9651C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Monitoring.Domain", "Modules\Monitoring\AZ.Integrator.Monitoring.Domain\AZ.Integrator.Monitoring.Domain.csproj", "{84D628F2-DD6F-4FF2-AA48-78204D923FDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Monitoring.Contracts", "Modules\Monitoring\AZ.Integrator.Monitoring.Contracts\AZ.Integrator.Monitoring.Contracts.csproj", "{536162CB-DBED-4349-8AE5-FA154FF29446}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Monitoring.Infrastructure", "Modules\Monitoring\AZ.Integrator.Monitoring.Infrastructure\AZ.Integrator.Monitoring.Infrastructure.csproj", "{DF790BFC-F38A-4E89-A7AC-3243A8C7FA04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Monitoring.Application", "Modules\Monitoring\AZ.Integrator.Monitoring.Application\AZ.Integrator.Monitoring.Application.csproj", "{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -205,6 +215,22 @@ Global
 		{177D3BBB-96E9-4B01-AD13-E0BB8C0B1FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{177D3BBB-96E9-4B01-AD13-E0BB8C0B1FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{177D3BBB-96E9-4B01-AD13-E0BB8C0B1FF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84D628F2-DD6F-4FF2-AA48-78204D923FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D628F2-DD6F-4FF2-AA48-78204D923FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D628F2-DD6F-4FF2-AA48-78204D923FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D628F2-DD6F-4FF2-AA48-78204D923FDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{536162CB-DBED-4349-8AE5-FA154FF29446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{536162CB-DBED-4349-8AE5-FA154FF29446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{536162CB-DBED-4349-8AE5-FA154FF29446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{536162CB-DBED-4349-8AE5-FA154FF29446}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF790BFC-F38A-4E89-A7AC-3243A8C7FA04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF790BFC-F38A-4E89-A7AC-3243A8C7FA04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF790BFC-F38A-4E89-A7AC-3243A8C7FA04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF790BFC-F38A-4E89-A7AC-3243A8C7FA04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,5 +265,10 @@ Global
 		{57A65F13-5350-4F64-9B47-8A8D55E741D7} = {A78791CF-DB1C-4382-82A5-E3A792F464FA}
 		{11ABE9E4-3010-41B8-85D5-FDD4EF315D13} = {3015700F-0F86-49D7-8DE7-2A8CAD39202F}
 		{177D3BBB-96E9-4B01-AD13-E0BB8C0B1FF2} = {4F3FDA55-588A-4702-8CEF-B0DE277668EC}
+		{248FF580-BD5F-4F62-BDCD-EA17EC9651C9} = {AF5A56E9-8FD1-47B5-B69D-17756EDE918E}
+		{84D628F2-DD6F-4FF2-AA48-78204D923FDA} = {248FF580-BD5F-4F62-BDCD-EA17EC9651C9}
+		{536162CB-DBED-4349-8AE5-FA154FF29446} = {248FF580-BD5F-4F62-BDCD-EA17EC9651C9}
+		{DF790BFC-F38A-4E89-A7AC-3243A8C7FA04} = {248FF580-BD5F-4F62-BDCD-EA17EC9651C9}
+		{AD53DEBE-C29C-45E7-8C75-513B47EF70A2} = {248FF580-BD5F-4F62-BDCD-EA17EC9651C9}
 	EndGlobalSection
 EndGlobal

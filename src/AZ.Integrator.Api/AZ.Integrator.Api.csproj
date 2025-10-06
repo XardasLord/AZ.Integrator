@@ -36,6 +36,7 @@
       <ProjectReference Include="..\Modules\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
       <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Application\AZ.Integrator.TagParcelTemplates.Application.csproj" />
         <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Application\AZ.Integrator.Stocks.Application.csproj" />
+        <ProjectReference Include="..\Modules\Monitoring\AZ.Integrator.Monitoring.Application\AZ.Integrator.Monitoring.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>

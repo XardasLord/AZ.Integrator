@@ -15,8 +15,4 @@
       <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Aggregates\Invoice\DomainEvents\" />
-    </ItemGroup>
-
 </Project>

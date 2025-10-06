@@ -6,12 +6,14 @@ using AZ.Integrator.Invoices.Contracts.Dtos;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.Specifications;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
+using AZ.Integrator.Monitoring.Contracts;
 
 namespace AZ.Integrator.Invoices.Application.Facade;
 
 public class InvoicesFacade(
     IInvoiceService invoiceService,
     IAggregateRepository<Invoice> invoiceRepository,
+    IMonitoringFacade monitoringFacade,
     ICurrentUser currentUser,
     ICurrentDateTime currentDateTime) : IInvoicesFacade
 {
@@ -32,6 +34,19 @@ public class InvoicesFacade(
         invoice.SetIdempotencyKey(request.IdempotencyKey);
         
         await invoiceRepository.AddAsync(invoice, cancellationToken);
+        
+        foreach (var @event in invoice.Events)
+        {
+            await monitoringFacade.LogDomainEvent(
+                @event, 
+                invoice.CreationInformation.TenantId,
+                invoice.CreationInformation.CreatedBy,
+                currentUser.UserName,
+                invoice.CreationInformation.CreatedAt.DateTime,
+                MonitoringSourceModuleEnum.Invoices.Name,
+                invoice.IdempotencyKey!,
+                cancellationToken);
+        }
 
         return new GenerateInvoiceResponse
         {
@@ -52,7 +67,7 @@ public class InvoicesFacade(
         
         var response = await invoiceService.Download(long.Parse(request.InvoiceId));
 
-        return new GetInvoiceResponse()
+        return new GetInvoiceResponse
         {
             File = response,
             InvoiceNumber = invoice.Number

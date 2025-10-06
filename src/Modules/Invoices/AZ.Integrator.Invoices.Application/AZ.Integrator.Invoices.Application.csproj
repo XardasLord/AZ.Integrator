@@ -22,6 +22,7 @@
     <ItemGroup>
       <ProjectReference Include="..\AZ.Integrator.Invoices.Domain\AZ.Integrator.Invoices.Domain.csproj" />
         <ProjectReference Include="..\AZ.Integrator.Invoices.Contracts\AZ.Integrator.Invoices.Contracts.csproj" />
+        <ProjectReference Include="..\..\Monitoring\AZ.Integrator.Monitoring.Contracts\AZ.Integrator.Monitoring.Contracts.csproj" />
     </ItemGroup>
 
 </Project>
