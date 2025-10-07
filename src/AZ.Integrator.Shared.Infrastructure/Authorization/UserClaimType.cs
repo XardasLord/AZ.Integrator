@@ -9,4 +9,6 @@ public static class UserClaimType
     public const string UserName = "preferred_username";
     public const string Email = ClaimTypes.Email;
     public const string Roles = ClaimTypes.Role;
+    public const string TenantName = "tenant_name";
+    public const string TenantId = "tenant_id";
 }
