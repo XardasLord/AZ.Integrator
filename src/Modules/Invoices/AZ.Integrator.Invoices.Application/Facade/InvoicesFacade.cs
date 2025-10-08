@@ -32,14 +32,17 @@ public class InvoicesFacade(
             currentUser, currentDateTime);
 
         invoice.SetIdempotencyKey(request.CorrelationKey);
+
+        var events = invoice.Events.ToList();
         
         await invoiceRepository.AddAsync(invoice, cancellationToken);
         
-        foreach (var @event in invoice.Events)
+        foreach (var @event in events)
         {
             await monitoringFacade.LogDomainEvent(
                 @event, 
                 invoice.CreationInformation.TenantId,
+                invoice.CreationInformation.SourceSystemId,
                 invoice.CreationInformation.CreatedBy,
                 currentUser.UserName,
                 invoice.CreationInformation.CreatedAt.DateTime,
@@ -60,7 +63,7 @@ public class InvoicesFacade(
     public async Task<GetInvoiceResponse> GetInvoice(GetInvoiceRequest request, CancellationToken cancellationToken)
     {
         var spec = new InvoiceByNumberSpec(request.InvoiceId, request.ExternalOrderId, 
-            request.InvoiceProvider, request.TenantId);
+            request.InvoiceProvider, request.TenantId, request.SourceSystemId);
         
         var invoice = await invoiceRepository.SingleOrDefaultAsync(spec, cancellationToken);
         

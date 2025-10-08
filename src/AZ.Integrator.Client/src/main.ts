@@ -11,7 +11,7 @@ import { AppComponent } from './app/app.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideStates, provideStore, withNgxsDevelopmentOptions } from '@ngxs/store';
 import { AuthState } from './app/shared/states/auth.state';
-import { TenantState } from './app/shared/states/tenant.state';
+import { SourceSystemState } from './app/shared/states/source-system.state';
 import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
@@ -43,7 +43,7 @@ bootstrapApplication(AppComponent, {
 
 function provideNgxsStore() {
   return provideStore(
-    [AuthState, TenantState],
+    [AuthState, SourceSystemState],
     withNgxsLoggerPlugin({
       collapsed: true,
       disabled: !isDevMode(),

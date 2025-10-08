@@ -13,7 +13,8 @@ public class AssignTrackingNumbersInErliJobCommandHandler(IErliService erliServi
             command.TrackingNumbers,
             command.Vendor,
             command.DeliveryTrackingStatus,
-            command.TenantId);
+            command.TenantId,
+            command.SourceSystemId);
         
         return Unit.Value;
     }

@@ -6,7 +6,7 @@ public interface IInvoiceDraftBuilder
 {
     Task<GenerateInvoiceRequest> BuildAsync(
         string externalOrderNumber,
-        string tenantId,
+        Guid tenantId,
         string sourceSystemId, 
         string correlationKey,
         CancellationToken cancellationToken);

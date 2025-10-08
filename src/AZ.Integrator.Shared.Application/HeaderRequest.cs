@@ -4,7 +4,7 @@ namespace AZ.Integrator.Shared.Application;
 
 public record HeaderRequest
 {
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
     public string SourceSystemId { get; set; }
     public ShopProviderType ShopProvider { get; set; }
 }

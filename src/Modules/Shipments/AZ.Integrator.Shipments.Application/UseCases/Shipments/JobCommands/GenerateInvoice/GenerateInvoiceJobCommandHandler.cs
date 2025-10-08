@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Domain.Extensions;
+using AZ.Integrator.Domain.SharedKernel;
 using AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.GenerateInvoiceForOrder;
 using AZ.Integrator.Shared.Application;
 using Mediator;
@@ -12,6 +13,12 @@ public class GenerateInvoiceJobCommandHandler(IMediator mediator) : IRequestHand
         command.CorrelationId ??= CorrelationIdHelper.New();
         
         var ctx = command.PerformContext;
+
+        if (command.ShopProvider == ShopProviderType.Shopify)
+        {
+            ctx.Warning("Current plan of Shopify is not ready to obtain customer details, so Invoice generation is skipped.'");
+            return Unit.Value;
+        }
         
         ctx.Step($"Starting generating invoice for order - '{command.ExternalOrderNumber}'");
         

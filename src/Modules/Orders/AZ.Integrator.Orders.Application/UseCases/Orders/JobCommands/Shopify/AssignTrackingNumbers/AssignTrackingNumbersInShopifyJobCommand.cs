@@ -7,5 +7,6 @@ public class AssignTrackingNumbersInShopifyJobCommand : JobCommandBase
     public string OrderNumber { get; set; }
     public string[] TrackingNumbers { get; set; }
     public string Vendor { get; set; }
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
+    public string SourceSystemId { get; set; }
 }

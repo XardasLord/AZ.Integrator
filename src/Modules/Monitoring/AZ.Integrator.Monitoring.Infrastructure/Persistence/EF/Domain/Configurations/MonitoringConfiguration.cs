@@ -18,6 +18,7 @@ public class MonitoringConfiguration : IEntityTypeConfiguration<EventLogEntry>
         builder.Property(e => e.TenantId).HasColumnName("tenant_id");
         builder.Property(e => e.EventName).HasColumnName("event_name");
         builder.Property(e => e.EventType).HasColumnName("event_type");
+        builder.Property(e => e.SourceSystemId).HasColumnName("source_system_id");
         builder.Property(e => e.SourceModule).HasColumnName("source_module");
         builder.Property(e => e.ReferenceId).HasColumnName("reference_id");
         builder.Property(e => e.ReferenceNumber).HasColumnName("reference_number");

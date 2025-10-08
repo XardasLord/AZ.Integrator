@@ -19,7 +19,7 @@ public static class Extensions
 {
     public static IServiceCollection RegisterMonitoringModule(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMonitoringModuleApplication(configuration);
+        services.AddModuleApplication(configuration);
         services.AddModulePostgres(configuration);
         services.AddModuleDomainServices();
 

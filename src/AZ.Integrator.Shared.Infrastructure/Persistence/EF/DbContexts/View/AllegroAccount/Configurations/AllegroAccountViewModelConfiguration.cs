@@ -8,12 +8,16 @@ public class AllegroAccountViewModelConfiguration : IEntityTypeConfiguration<All
 {
     public void Configure(EntityTypeBuilder<AllegroAccountViewModel> builder)
     {
-        builder.ToView("allegro_accounts_view");
+        builder.ToView("allegro_accounts_view", SchemaDefinition.Account);
 
         builder.HasNoKey();
 
         builder.Property(e => e.TenantId)
             .HasColumnName("tenant_id")
+            .IsRequired();
+
+        builder.Property(e => e.SourceSystemId)
+            .HasColumnName("source_system_id")
             .IsRequired();
 
         builder.Property(e => e.AccessToken)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Monitoring.Contracts;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
@@ -27,21 +28,24 @@ public class CreateInpostShipmentCommandHandler(
             response.Id.ToString(), command.ExternalOrderId, 
             command.TenantId, command.SourceSystemId,
             currentUser, currentDateTime);
+
+        var events = inpostShipment.Events.ToList();
         
         await shipmentRepository.AddAsync(inpostShipment, cancellationToken);
         
-        foreach (var @event in inpostShipment.Events)
+        foreach (var @event in events)
         {
             await monitoringFacade.LogDomainEvent(
                 @event, 
                 inpostShipment.CreationInformation.TenantId,
+                inpostShipment.CreationInformation.SourceSystemId,
                 inpostShipment.CreationInformation.CreatedBy,
                 currentUser.UserName,
                 inpostShipment.CreationInformation.CreatedAt.DateTime,
                 MonitoringSourceModuleEnum.Shipments.Name,
                 inpostShipment.Number,
                 inpostShipment.Number,
-                null!,
+                (@event is ITrackableNotification notification ? notification.CorrelationId : null) ?? string.Empty,
                 cancellationToken);
         }
 

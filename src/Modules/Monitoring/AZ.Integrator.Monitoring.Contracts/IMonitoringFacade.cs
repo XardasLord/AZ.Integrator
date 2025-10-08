@@ -4,7 +4,8 @@ public interface IMonitoringFacade
 {
     Task LogDomainEvent(
         object domainEvent,
-        string tenantId,
+        Guid tenantId,
+        string sourceSystemId,
         Guid userId,
         string userName,
         DateTime dateTime,

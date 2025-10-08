@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Invoices.Application;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices.Dpd;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
+using AZ.Integrator.Shipments.Application;
 using AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateDpdShipment;
 using AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateInpostShipment;
 using AZ.Integrator.Shipments.Application.UseCases.Shipments.Queries.GetDpdLabel;
@@ -28,7 +28,7 @@ public static class Extensions
 {
     public static IServiceCollection RegisterShipmentsModule(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddInvoicesModuleApplication(configuration);
+        services.AddModuleApplication(configuration);
         services.AddModulePostgres(configuration);
         services.AddModuleDomainServices();
 

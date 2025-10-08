@@ -27,7 +27,7 @@ public class AssignInvoiceInAllegroJobCommandHandler(
         ctx.Step($"Starting assignment of invoice '{command.InvoiceNumber}' to Allegro order {command.OrderNumber}");
 
         var request = new GetInvoiceRequest(command.ExternalInvoiceId, command.OrderNumber.ToString(),
-            command.InvoiceProvider, command.TenantId);
+            command.InvoiceProvider, command.TenantId, command.SourceSystemId);
             
         ctx.Info("Fetching invoice file from Invoice Module...");
         
@@ -36,7 +36,12 @@ public class AssignInvoiceInAllegroJobCommandHandler(
         ctx.Success($"Invoice file retrieved successfully (InvoiceNumber: {invoiceResponse.InvoiceNumber})");
         ctx.Step($"Uploading invoice '{invoiceResponse.InvoiceNumber}' to Allegro order {command.OrderNumber}");
         
-        await allegroService.AssignInvoice(command.OrderNumber, invoiceResponse.File, invoiceResponse.InvoiceNumber, command.TenantId);
+        await allegroService.AssignInvoice(
+            command.OrderNumber,
+            invoiceResponse.File,
+            invoiceResponse.InvoiceNumber,
+            command.TenantId,
+            command.SourceSystemId);
         
         ctx.Success("Invoice file successfully uploaded to Allegro order");
         

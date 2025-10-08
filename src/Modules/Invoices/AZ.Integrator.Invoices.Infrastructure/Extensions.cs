@@ -24,7 +24,7 @@ public static class Extensions
 {
     public static IServiceCollection RegisterInvoicesModule(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddInvoicesModuleApplication(configuration);
+        services.AddModuleApplication(configuration);
         services.AddModulePostgres(configuration);
         services.AddModuleDomainServices();
         

@@ -27,7 +27,7 @@ public class ErliApiService(
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
     };
 
-    public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId)
+    public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId, SourceSystemId sourceSystemId)
     {
         var request = new GetOrdersFiltersRequestPayload
         {
@@ -51,7 +51,7 @@ public class ErliApiService(
         
         var payloadContent = PrepareContentRequest(request);
 
-        var httpClient = await PrepareHttpClient(tenantId);
+        var httpClient = await PrepareHttpClient(tenantId, sourceSystemId);
         using var response = await httpClient.PostAsync("orders/_search", payloadContent);
 
         response.EnsureSuccessStatusCode();
@@ -94,9 +94,9 @@ public class ErliApiService(
         };
     }
     
-    public async Task<Order> GetOrderDetails(string orderId, TenantId tenantId)
+    public async Task<Order> GetOrderDetails(string orderId, TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var httpClient = await PrepareHttpClient(tenantId);
+        var httpClient = await PrepareHttpClient(tenantId, sourceSystemId);
         using var response = await httpClient.GetAsync($"orders/{orderId}");
 
         response.EnsureSuccessStatusCode();
@@ -107,7 +107,7 @@ public class ErliApiService(
     }
 
     public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, 
-        string vendor, string deliveryTrackingStatus, string tenantId)
+        string vendor, string deliveryTrackingStatus, Guid tenantId, string sourceSystemId)
     {
         foreach (var trackingNumber in trackingNumbers)
         {
@@ -123,7 +123,7 @@ public class ErliApiService(
             };
             var payloadContent = PrepareContentRequest(payload);
 
-            var httpClient = await PrepareHttpClient(tenantId);
+            var httpClient = await PrepareHttpClient(tenantId, sourceSystemId);
             using var response = await httpClient.PatchAsync($"orders/{orderNumber}", payloadContent);
 
             response.EnsureSuccessStatusCode();
@@ -138,17 +138,19 @@ public class ErliApiService(
         return payloadContent;
     }
 
-    private async Task<HttpClient> PrepareHttpClient(TenantId tenantId)
+    private async Task<HttpClient> PrepareHttpClient(TenantId tenantId, SourceSystemId sourceSystemId)
     {
         var httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.ErliHttpClientName);
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetApiKey(tenantId));
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetApiKey(tenantId, sourceSystemId));
 
         return httpClient;
     }
 
-    private async Task<string> GetApiKey(TenantId tenantId)
+    private async Task<string> GetApiKey(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var tenantAccount = await dataViewContext.ErliAccounts.SingleOrDefaultAsync(x => x.TenantId == tenantId.Value);
+        var tenantAccount = await dataViewContext.ErliAccounts
+            .Where(x => x.SourceSystemId == sourceSystemId.Value)
+            .SingleOrDefaultAsync(x => x.TenantId == tenantId.Value.ToString());
 
         if (tenantAccount is null)
             throw new ApplicationException($"Tenant {tenantId.Value} does not exist");

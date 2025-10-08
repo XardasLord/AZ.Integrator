@@ -8,7 +8,7 @@ public class GenerateInvoiceJobCommand : JobCommandBase
     public string ShippingNumber { get; set; }
     public string ExternalOrderNumber { get; set; }
     public string SourceSystemId { get; set; }
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
     public ShopProviderType ShopProvider { get; set; }
     public string CorrelationId { get; set; }
 }

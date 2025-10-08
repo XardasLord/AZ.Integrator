@@ -17,9 +17,9 @@ namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Shopify;
 
 public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) : IShopifyService
 {
-    public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId)
+    public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var graphqlClient = await PrepareGraphqlClient(tenantId);
+        var graphqlClient = await PrepareGraphqlClient(tenantId, sourceSystemId);
         
         var ordersResponse = await FetchOrders(graphqlClient, filters);
         ValidateResponse(ordersResponse, "orders");
@@ -34,9 +34,9 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
             TotalCount = ordersCountResponse.Data.OrdersCount.Count
         };
     }
-    public async Task<Order> GetOrderDetails(string orderNumber, TenantId tenantId)
+    public async Task<Order> GetOrderDetails(string orderNumber, TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var graphqlClient = await PrepareGraphqlClient(tenantId);
+        var graphqlClient = await PrepareGraphqlClient(tenantId, sourceSystemId);
         
         var orderResponse = await FetchOrderDetails(graphqlClient, orderNumber);
         ValidateResponse(orderResponse, "orders");
@@ -44,9 +44,9 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         return orderResponse.Data.Orders.Edges[0].Node;
     }
 
-    public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, string vendor, string tenantId)
+    public async Task AssignTrackingNumber(string orderNumber, IEnumerable<string> trackingNumbers, string vendor, Guid tenantId, string sourceSystemId)
     {
-        var graphqlClient = await PrepareGraphqlClient(tenantId);
+        var graphqlClient = await PrepareGraphqlClient(tenantId, sourceSystemId);
         
         var orderResponse = await FetchOrderForFulfillmentManagement(graphqlClient, orderNumber);
         ValidateResponse(orderResponse, "orders");
@@ -64,9 +64,9 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         }
     }
 
-    private async Task<GraphQLHttpClient> PrepareGraphqlClient(TenantId tenantId)
+    private async Task<GraphQLHttpClient> PrepareGraphqlClient(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var account = await GetAccount(tenantId);
+        var account = await GetAccount(tenantId, sourceSystemId);
         
         var graphqlClient = new GraphQLHttpClient(
             account.ApiUrl,
@@ -78,9 +78,11 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         return graphqlClient;
     }
 
-    private async Task<ShopifyAccountViewModel> GetAccount(TenantId tenantId)
+    private async Task<ShopifyAccountViewModel> GetAccount(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var tenantAccount = await shopifyAccountDbContext.ShopifyAccounts.SingleOrDefaultAsync(x => x.TenantId == tenantId.Value);
+        var tenantAccount = await shopifyAccountDbContext.ShopifyAccounts
+            .Where(x => x.SourceSystemId == sourceSystemId.Value)
+            .SingleOrDefaultAsync(x => x.TenantId == tenantId.Value.ToString());
 
         if (tenantAccount is null)
             throw new ApplicationException($"Tenant '{tenantId.Value}' does not exist");

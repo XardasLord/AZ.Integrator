@@ -65,6 +65,7 @@ public class InpostShipment : Entity, IAggregateRoot
             Number,
             trackingNumbers.Select(x => x.Value).ToArray(), 
             ExternalOrderNumber,
-            CreationInformation.TenantId ?? tenantId));
+            CreationInformation.TenantId ?? tenantId,
+            CreationInformation.SourceSystemId));
     }
 }

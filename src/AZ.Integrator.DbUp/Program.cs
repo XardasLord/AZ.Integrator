@@ -35,7 +35,7 @@ const string RepeatablesDir = "Repeatable";
 ValidateDirectories(MigrationsPublicDir);
 ValidateDirectories(MigrationsBillingDir);
 ValidateDirectories(MigrationsMonitoringDir);
-// ValidateDirectories(MigrationsAccountDir); // No migrations yet
+ValidateDirectories(MigrationsAccountDir);
 ValidateConnectionString(connectionString);
 
 EnsureDatabase.For.PostgresqlDatabase(connectionString);
@@ -43,7 +43,7 @@ EnsureDatabase.For.PostgresqlDatabase(connectionString);
 RunMigrations(connectionString, MigrationsPublicDir, JournalPublicSchema, JournalTable);
 RunMigrations(connectionString, MigrationsBillingDir, JournalBillingSchema, JournalTable);
 RunMigrations(connectionString, MigrationsMonitoringDir, JournalMonitoringSchema, JournalTable);
-// RunMigrations(connectionString, MigrationsAccountDir, JournalAccountSchema, JournalTable); // No migrations yet
+RunMigrations(connectionString, MigrationsAccountDir, JournalAccountSchema, JournalTable);
 
 RunRepeatables(connectionString, RepeatablesDir);
 

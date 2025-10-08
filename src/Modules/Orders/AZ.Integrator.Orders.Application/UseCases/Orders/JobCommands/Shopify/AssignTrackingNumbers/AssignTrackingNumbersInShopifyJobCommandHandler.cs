@@ -12,7 +12,8 @@ public class AssignTrackingNumbersInShopifyJobCommandHandler(IShopifyService sho
             command.OrderNumber,
             command.TrackingNumbers,
             command.Vendor,
-            command.TenantId);
+            command.TenantId,
+            command.SourceSystemId);
         
         return Unit.Value;
     }

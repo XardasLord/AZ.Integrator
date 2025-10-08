@@ -52,7 +52,6 @@ public class FakturowniaService(IHttpClientFactory httpClientFactory, IOptions<F
         
         using var response = await _httpClient.PostAsync("invoices.json", invoiceContent);
         
-
         if (!response.IsSuccessStatusCode)
         {
             var responseBody = await response.Content.ReadAsStringAsync();

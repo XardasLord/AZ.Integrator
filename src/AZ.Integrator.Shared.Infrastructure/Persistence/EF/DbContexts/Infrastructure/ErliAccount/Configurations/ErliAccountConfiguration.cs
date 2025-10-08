@@ -10,10 +10,14 @@ public class ErliAccountConfiguration : IEntityTypeConfiguration<ErliAccountView
     {
         builder.ToTable("erli", SchemaDefinition.Account);
 
-        builder.HasKey(e => e.TenantId);
+        builder.HasKey(e => new { e.TenantId, e.SourceSystemId });
 
         builder.Property(e => e.TenantId)
             .HasColumnName("tenant_id")
+            .IsRequired();
+
+        builder.Property(e => e.SourceSystemId)
+            .HasColumnName("source_system_id")
             .IsRequired();
 
         builder.Property(e => e.ApiKey)

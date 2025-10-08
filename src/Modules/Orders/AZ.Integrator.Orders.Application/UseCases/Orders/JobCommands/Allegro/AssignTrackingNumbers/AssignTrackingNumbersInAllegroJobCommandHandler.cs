@@ -8,7 +8,11 @@ public class AssignTrackingNumbersInAllegroJobCommandHandler(IAllegroService all
 {
     public async ValueTask<Unit> Handle(AssignTrackingNumbersInAllegroJobCommand command, CancellationToken cancellationToken)
     {
-        await allegroService.AssignTrackingNumber(command.OrderNumber, command.TrackingNumbers, command.TenantId);
+        await allegroService.AssignTrackingNumber(
+            command.OrderNumber,
+            command.TrackingNumbers,
+            command.TenantId,
+            command.SourceSystemId);
         
         return Unit.Value;
     }

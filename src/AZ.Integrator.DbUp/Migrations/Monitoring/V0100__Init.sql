@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS monitoring.event_logs (
     event_name VARCHAR(200) NOT NULL,
     event_type VARCHAR(100) NULL,        -- e.g. DomainEvent / IntegrationEvent / SystemEvent
     source_module VARCHAR(100) NOT NULL, -- e.g. Shipments, Invoices, Orders
-    reference_id UUID NULL,              -- e.g. ShipmentId, InvoiceId itp.
+    source_system_id VARCHAR(100) NOT NULL,
+    reference_id VARCHAR(100) NULL,              -- e.g. ShipmentId, InvoiceId itp.
     reference_number VARCHAR(100) NULL,  -- e.g. ShipmentNumber, InvoiceNumber
     payload JSONB NULL,                  -- event serialized
     created_by_id UUID NOT NULL,

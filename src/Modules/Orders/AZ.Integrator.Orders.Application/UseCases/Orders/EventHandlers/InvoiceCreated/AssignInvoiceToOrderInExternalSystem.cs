@@ -12,7 +12,7 @@ public class AssignInvoiceToOrderInExternalSystem(IBackgroundJobClient backgroun
 {
     public ValueTask Handle(InvoiceGenerated notification, CancellationToken cancellationToken)
     {
-        var shopProvider = notification.TenantId.GetShopProviderType();
+        var shopProvider = ShopProviderHelper.GetShopProviderType(notification.SourceSystemId);
         
         switch (shopProvider)
         {
@@ -24,7 +24,8 @@ public class AssignInvoiceToOrderInExternalSystem(IBackgroundJobClient backgroun
                         InvoiceNumber = notification.InvoiceNumber,
                         ExternalInvoiceId = notification.InvoiceExternalId,
                         InvoiceProvider = notification.InvoiceProvider,
-                        TenantId = notification.TenantId
+                        TenantId = notification.TenantId,
+                        SourceSystemId = notification.SourceSystemId
                     }, null));
                 break;
             case ShopProviderType.Erli:
@@ -38,7 +39,8 @@ public class AssignInvoiceToOrderInExternalSystem(IBackgroundJobClient backgroun
                         InvoiceNumber = notification.InvoiceNumber,
                         ExternalInvoiceId = notification.InvoiceExternalId,
                         InvoiceProvider = notification.InvoiceProvider,
-                        TenantId = notification.TenantId
+                        TenantId = notification.TenantId,
+                        SourceSystemId = notification.SourceSystemId
                     }, null));
                 break;
             case ShopProviderType.System:

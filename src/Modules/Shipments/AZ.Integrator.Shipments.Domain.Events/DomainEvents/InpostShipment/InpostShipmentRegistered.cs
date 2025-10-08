@@ -1,5 +1,5 @@
-﻿using AZ.Integrator.Domain.SharedKernel;
-using Mediator;
+﻿using AZ.Integrator.Domain.SeedWork;
+using AZ.Integrator.Domain.SharedKernel;
 
 namespace AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
 
@@ -7,6 +7,6 @@ public record InpostShipmentRegistered(
     string ShipmentNumber,
     string ExternalOrderNumber,
     string SourceSystemId,
-    string TenantId,
+    Guid TenantId,
     ShopProviderType ShopProviderType,
-    string CorrelationId) : INotification;
+    string CorrelationId) : ITrackableNotification;

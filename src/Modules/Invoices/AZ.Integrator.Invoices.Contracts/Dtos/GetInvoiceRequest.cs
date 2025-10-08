@@ -4,4 +4,5 @@ public sealed record GetInvoiceRequest(
     string InvoiceId,
     string ExternalOrderId,
     int InvoiceProvider,
-    string TenantId);
+    Guid TenantId,
+    string SourceSystemId);

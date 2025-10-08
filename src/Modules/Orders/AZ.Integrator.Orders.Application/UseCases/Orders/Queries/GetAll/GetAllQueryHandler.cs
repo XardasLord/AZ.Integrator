@@ -16,13 +16,13 @@ public class GetAllQueryHandler(
 {
     public async ValueTask<GetAllQueryResponse> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        var shopProvider = TenantHelper.GetShopProviderType(query.TenantId);
+        var shopProvider = ShopProviderHelper.GetShopProviderType(query.SourceSystemId);
         
         switch (shopProvider)
         {
             case ShopProviderType.Allegro:
             {
-                var ordersResponse = await allegroService.GetOrders(query.Filters, query.TenantId); 
+                var ordersResponse = await allegroService.GetOrders(query.Filters, query.TenantId, query.SourceSystemId); 
             
                 var orderDtos = ordersResponse.CheckoutForms.Select(order => order.MapToDto(mapper));
                 
@@ -30,7 +30,7 @@ public class GetAllQueryHandler(
             }
             case ShopProviderType.Erli:
             {
-                var ordersResponse = await erliService.GetOrders(query.Filters, query.TenantId);
+                var ordersResponse = await erliService.GetOrders(query.Filters, query.TenantId, query.SourceSystemId);
 
                 var orderDtos = ordersResponse.Orders.Select(order => order.MapToDto());
 
@@ -38,7 +38,7 @@ public class GetAllQueryHandler(
             }
             case ShopProviderType.Shopify:
             {
-                var ordersResponse = await shopifyService.GetOrders(query.Filters, query.TenantId);
+                var ordersResponse = await shopifyService.GetOrders(query.Filters, query.TenantId, query.SourceSystemId);
 
                 var orderDtos = ordersResponse.Orders.Select(order => order.MapToDto());
 

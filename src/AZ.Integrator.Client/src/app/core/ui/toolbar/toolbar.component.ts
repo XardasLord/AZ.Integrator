@@ -5,8 +5,12 @@ import { Store } from '@ngxs/store';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthState } from '../../../shared/states/auth.state';
 import { environment } from '../../../../environments/environment';
-import { AuthorizationProvider, Tenant, TenantGroup } from '../../../shared/auth/models/tenant.model';
-import { ChangeTenant } from '../../../shared/states/tenant.action';
+import {
+  AuthorizationProvider,
+  SourceSystem,
+  SourceSystemGroup,
+} from '../../../shared/auth/models/source-system.model';
+import { ChangeSourceSystem } from '../../../shared/states/source-system.action';
 import { RoutePaths } from '../../modules/app-routing.module';
 import { LoadNew } from '../../../features/orders/states/orders.action';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
@@ -28,18 +32,18 @@ export class ToolbarComponent {
   toggleSideNav: EventEmitter<boolean> = new EventEmitter();
   user$ = this.store.select(AuthState.getProfile);
 
-  tenantGroups: TenantGroup[] = [
+  tenantGroups: SourceSystemGroup[] = [
     {
       groupName: 'ALLEGRO',
-      tenants: [
+      sourceSystems: [
         {
-          tenantId: environment.allegroAzTeamTenantId,
+          sourceSystemId: environment.allegroAzTeamTenantId,
           displayName: 'AZ TEAM',
           subtitle: 'ALLEGRO',
           authorizationProvider: AuthorizationProvider.Allegro,
         },
         {
-          tenantId: environment.allegroMebleplTenantId,
+          sourceSystemId: environment.allegroMebleplTenantId,
           displayName: 'meblepl_24',
           subtitle: 'ALLEGRO',
           authorizationProvider: AuthorizationProvider.Allegro,
@@ -48,9 +52,9 @@ export class ToolbarComponent {
     },
     {
       groupName: 'ERLI',
-      tenants: [
+      sourceSystems: [
         {
-          tenantId: environment.erliAzTeamTenantId,
+          sourceSystemId: environment.erliAzTeamTenantId,
           displayName: 'AZ TEAM',
           subtitle: 'ERLI',
           authorizationProvider: AuthorizationProvider.Erli,
@@ -59,9 +63,9 @@ export class ToolbarComponent {
     },
     {
       groupName: 'SHOPIFY',
-      tenants: [
+      sourceSystems: [
         {
-          tenantId: environment.shopifyUmeblovaneTenantId,
+          sourceSystemId: environment.shopifyUmeblovaneTenantId,
           displayName: 'Umeblovane',
           subtitle: 'umeblovane.pl',
           authorizationProvider: AuthorizationProvider.Shopify,
@@ -70,12 +74,12 @@ export class ToolbarComponent {
     },
   ];
 
-  onSelected(tenant: Tenant) {
+  onSelected(tenant: SourceSystem) {
     this.changeTenant(tenant);
   }
 
-  changeTenant(tenant: Tenant) {
-    this.store.dispatch(new ChangeTenant(tenant));
+  changeTenant(tenant: SourceSystem) {
+    this.store.dispatch(new ChangeSourceSystem(tenant));
 
     switch (this.route.url) {
       case `/${RoutePaths.Orders}`:

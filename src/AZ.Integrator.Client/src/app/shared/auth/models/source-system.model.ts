@@ -1,13 +1,13 @@
-export class Tenant {
-  public tenantId!: string;
+export class SourceSystem {
+  public sourceSystemId!: string;
   public displayName!: string;
   public subtitle?: string;
   public authorizationProvider!: AuthorizationProvider;
 }
 
-export class TenantGroup {
+export class SourceSystemGroup {
   public groupName!: string;
-  public tenants!: Tenant[];
+  public sourceSystems!: SourceSystem[];
 }
 
 export enum AuthorizationProvider {

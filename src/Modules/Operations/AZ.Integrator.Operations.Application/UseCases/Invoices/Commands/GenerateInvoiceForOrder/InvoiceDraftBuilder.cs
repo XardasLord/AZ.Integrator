@@ -9,12 +9,12 @@ public sealed class InvoiceDraftBuilder(IOrdersFacade ordersFacade) : IInvoiceDr
 {
     public async Task<GenerateInvoiceRequest> BuildAsync(
         string externalOrderNumber,
-        string tenantId,
+        Guid tenantId,
         string sourceSystemId,
         string correlationKey,
         CancellationToken cancellationToken)
     {
-        var orderDetails = await ordersFacade.GetOrderDetails(externalOrderNumber, tenantId, cancellationToken);
+        var orderDetails = await ordersFacade.GetOrderDetails(externalOrderNumber, tenantId, sourceSystemId, cancellationToken);
         
         var buyerDetails = new BuyerDto(
             orderDetails.Buyer.Email,

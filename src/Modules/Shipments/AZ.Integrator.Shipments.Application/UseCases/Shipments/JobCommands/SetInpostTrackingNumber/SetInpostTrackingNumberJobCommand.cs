@@ -10,6 +10,6 @@ public class SetInpostTrackingNumberJobCommand : JobCommandBase
     public string SourceSystemId { get; set; }
 
     [Obsolete("In the future we will be able to remove this parameter, because already the Shipment itself tracks this information about TenantId")]
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
     public string CorrelationId { get; set; }
 }

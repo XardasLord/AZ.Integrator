@@ -13,7 +13,7 @@ public record TenantCreationInformation
 
     protected TenantCreationInformation() { }
 	
-    public TenantCreationInformation(DateTimeOffset creationDate, Guid createdBy, string tenantId, string sourceSystemId)
+    public TenantCreationInformation(DateTimeOffset creationDate, Guid createdBy, Guid tenantId, string sourceSystemId)
         : this()
     {
         CreatedAt = Guard.Against.CreationInformationDate(creationDate);

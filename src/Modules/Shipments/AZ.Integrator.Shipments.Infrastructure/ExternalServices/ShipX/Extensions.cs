@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices;
+using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +13,9 @@ public static class Extensions
     
     public static IServiceCollection AddShipX(this IServiceCollection services, IConfiguration configuration)
     {
-        var shipXOptions = new ShipXOptions();
-        configuration.Bind(OptionsSectionName, shipXOptions);
-        services.AddSingleton(shipXOptions);
+        services.Configure<ShipXOptions>(configuration.GetRequiredSection(OptionsSectionName));
+        
+        var shipXOptions = configuration.GetOptions<ShipXOptions>(OptionsSectionName);
 
         services.AddTransient<IShipXService, ShipXApiService>();
             

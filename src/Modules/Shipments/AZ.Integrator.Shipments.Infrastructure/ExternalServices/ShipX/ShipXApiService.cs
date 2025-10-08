@@ -9,23 +9,26 @@ using Microsoft.Extensions.Options;
 
 namespace AZ.Integrator.Shipments.Infrastructure.ExternalServices.ShipX;
 
-public class ShipXApiService : IShipXService
+public class ShipXApiService(IOptions<ShipXOptions> shipXOptions, IHttpClientFactory httpClientFactory)
+    : IShipXService
 {
-    private readonly IOptions<ShipXOptions> _shipXOptions;
-    private readonly HttpClient _httpClient;
-
-    public ShipXApiService(IOptions<ShipXOptions> shipXOptions, IHttpClientFactory httpClientFactory)
-    {
-        _shipXOptions = shipXOptions;
-        _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.ShipXHttpClientName);
-    }
+    private readonly HttpClient _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.ShipXHttpClientName);
 
     public async Task<ShipmentResponse> CreateShipment(Shipment shipment)
     {
         var shipmentJson = System.Text.Json.JsonSerializer.Serialize(shipment);
         var shipmentContent = new StringContent(shipmentJson, Encoding.UTF8, "application/json");
         
-        using var response = await _httpClient.PostAsync($"v1/organizations/{_shipXOptions.Value.OrganizationId}/shipments", shipmentContent);
+        using var response = await _httpClient.PostAsync($"v1/organizations/{shipXOptions.Value.OrganizationId}/shipments", shipmentContent);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            
+            Console.WriteLine($"Błąd {response.StatusCode}: {responseBody}");
+
+            throw new Exception($"Request failed: {response.StatusCode}, {responseBody}");
+        }
         
         response.EnsureSuccessStatusCode();
 
@@ -43,6 +46,15 @@ public class ShipXApiService : IShipXService
         }.ToHttpQueryString();
         
         using var response = await _httpClient.GetAsync($"v1/shipments/{number.Value}/label?{queryParams}");
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            
+            Console.WriteLine($"Błąd {response.StatusCode}: {responseBody}");
+
+            throw new Exception($"Request failed: {response.StatusCode}, {responseBody}");
+        }
         
         response.EnsureSuccessStatusCode();
 
@@ -65,7 +77,16 @@ public class ShipXApiService : IShipXService
 
         var httpParams = queryParams.ToHttpQueryString();
         
-        using var response = await _httpClient.GetAsync($"v1/organizations/{_shipXOptions.Value.OrganizationId}/shipments/labels?{httpParams}");
+        using var response = await _httpClient.GetAsync($"v1/organizations/{shipXOptions.Value.OrganizationId}/shipments/labels?{httpParams}");
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            
+            Console.WriteLine($"Błąd {response.StatusCode}: {responseBody}");
+
+            throw new Exception($"Request failed: {response.StatusCode}, {responseBody}");
+        }
         
         response.EnsureSuccessStatusCode();
 
@@ -79,6 +100,15 @@ public class ShipXApiService : IShipXService
     public async Task<ShipmentResponse> GetDetails(ShipmentNumber number)
     {
         using var response = await _httpClient.GetAsync($"v1/shipments/{number.Value}");
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync();
+            
+            Console.WriteLine($"Błąd {response.StatusCode}: {responseBody}");
+
+            throw new Exception($"Request failed: {response.StatusCode}, {responseBody}");
+        }
         
         response.EnsureSuccessStatusCode();
 

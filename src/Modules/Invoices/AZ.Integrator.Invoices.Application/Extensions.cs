@@ -7,7 +7,7 @@ namespace AZ.Integrator.Invoices.Application;
 
 public static class Extensions
 {
-    public static IServiceCollection AddInvoicesModuleApplication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddModuleApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services
             .AddAutoMapper(Assembly.GetExecutingAssembly())

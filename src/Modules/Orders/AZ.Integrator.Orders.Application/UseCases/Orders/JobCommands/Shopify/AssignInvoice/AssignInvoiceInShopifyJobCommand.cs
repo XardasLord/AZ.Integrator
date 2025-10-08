@@ -8,5 +8,6 @@ public class AssignInvoiceInShopifyJobCommand : JobCommandBase
     public string InvoiceNumber { get; set; }
     public string ExternalInvoiceId { get; set; }
     public int InvoiceProvider { get; set; }
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
+    public string SourceSystemId { get; set; }
 }

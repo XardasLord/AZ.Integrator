@@ -6,5 +6,6 @@ public class AssignTrackingNumbersInAllegroJobCommand : JobCommandBase
 {
     public Guid OrderNumber { get; set; }
     public string[] TrackingNumbers { get; set; }
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
+    public string SourceSystemId { get; set; }
 }

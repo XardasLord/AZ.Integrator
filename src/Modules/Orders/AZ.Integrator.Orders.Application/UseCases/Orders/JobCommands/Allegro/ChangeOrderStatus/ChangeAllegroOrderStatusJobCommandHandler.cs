@@ -9,7 +9,11 @@ public class ChangeAllegroOrderStatusJobCommandHandler(IAllegroService allegroSe
 {
     public async ValueTask<Unit> Handle(ChangeAllegroOrderStatusJobCommand command, CancellationToken cancellationToken)
     {
-        await allegroService.ChangeStatus(command.OrderNumber, AllegroFulfillmentStatusEnum.FromValue(command.OrderStatus), command.TenantId);
+        await allegroService.ChangeStatus(
+            command.OrderNumber,
+            AllegroFulfillmentStatusEnum.FromValue(command.OrderStatus),
+            command.TenantId,
+            command.SourceSystemId);
         
         return Unit.Value;
     }

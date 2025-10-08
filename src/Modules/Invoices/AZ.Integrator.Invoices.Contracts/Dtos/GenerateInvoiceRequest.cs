@@ -7,7 +7,7 @@ public sealed record GenerateInvoiceRequest(
     DeliveryDto DeliveryDto,
     string CorrelationKey,
     string ExternalOrderId,
-    string TenantId,
+    Guid TenantId,
     string SourceSystemId);
     
 public sealed record BuyerDto(
