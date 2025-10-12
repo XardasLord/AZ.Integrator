@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Domain.Abstractions;
+﻿using AZ.Integrator.Catalog.Infrastructure;
+using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Invoices.Infrastructure;
 using AZ.Integrator.Orders.Infrastructure;
 using AZ.Integrator.TagParcelTemplates.Infrastructure;
@@ -55,7 +56,8 @@ public static class Extensions
             .AddTagParcelTemplatesModuleGraphQlObjects()
             .AddInvoicesModuleGraphQlObjects()
             .AddShipmentsModuleGraphQlObjects()
-            .AddMonitoringModuleGraphQlObjects();
+            .AddMonitoringModuleGraphQlObjects()
+            .AddCatalogModuleGraphQlObjects();
         
         services.AddIntegratorOpenApi(configuration);
         
@@ -69,6 +71,7 @@ public static class Extensions
         services.RegisterInvoicesModule(configuration);
         services.RegisterShipmentsModule(configuration);
         services.RegisterMonitoringModule(configuration);
+        services.RegisterCatalogModule(configuration);
 
         return services;
     }

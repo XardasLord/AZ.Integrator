@@ -13,14 +13,14 @@ public class Invoice : Entity, IAggregateRoot
     private ExternalOrderNumber _externalOrderNumber;
     private IdempotencyKey _idempotencyKey;
     private InvoiceProvider _invoiceProvider;
-    private TenantCreationInformation _creationInformation;
+    private TenantWithSourceSystemCreationInformation _creationInformation;
 
     public InvoiceExternalId ExternalId => _externalId;
     public InvoiceNumber Number => _number;
     public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
     public IdempotencyKey IdempotencyKey => _idempotencyKey;
     public InvoiceProvider InvoiceProvider => _invoiceProvider;
-    public TenantCreationInformation CreationInformation => _creationInformation;
+    public TenantWithSourceSystemCreationInformation CreationInformation => _creationInformation;
     
     private Invoice() { }
 
@@ -33,7 +33,7 @@ public class Invoice : Entity, IAggregateRoot
         _number = number;
         _externalOrderNumber = externalOrderNumber;
         _invoiceProvider = invoiceProvider;
-        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId, sourceSystemId);
+        _creationInformation = new TenantWithSourceSystemCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId, sourceSystemId);
     }
 
     public static Invoice Generate(

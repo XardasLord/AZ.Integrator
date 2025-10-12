@@ -1,4 +1,5 @@
 using AZ.Integrator.Api.Infrastructure;
+using AZ.Integrator.Catalog.Infrastructure;
 using AZ.Integrator.Invoices.Infrastructure;
 using AZ.Integrator.Monitoring.Infrastructure;
 using AZ.Integrator.Orders.Infrastructure;
@@ -19,6 +20,7 @@ app.MapOrdersModuleEndpoints();
 app.MapTagParcelTemplatesModuleEndpoints();
 app.MapStocksModuleEndpoints();
 app.MapMonitoringModuleEndpoints();
+app.MapCatalogModuleEndpoints();
 
 app.MapGet("/", () => "Hello from HTTPS!");
 app.MapGet("/cert", () => Results.File(Path.Combine(Directory.GetCurrentDirectory(), "https", "cert.pfx"), "application/x-pkcs12"));

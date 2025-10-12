@@ -4,5 +4,6 @@ public static class SchemaDefinition
 {
     public const string Account = "account";
     public const string Billing = "billing";
+    public const string Catalog = "catalog";
     public const string Monitoring = "monitoring";
 }
