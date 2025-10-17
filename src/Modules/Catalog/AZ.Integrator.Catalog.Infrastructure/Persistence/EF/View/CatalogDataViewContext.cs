@@ -11,5 +11,6 @@ public class CatalogDataViewContext(DbContextOptions<CatalogDataViewContext> opt
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new FurnitureModelViewModelConfiguration());
+        modelBuilder.ApplyConfiguration(new PartDefinitionViewModelConfiguration());
     }
 }

@@ -17,7 +17,11 @@ public record PartDefinitionViewModel(
     DimensionsViewModel Dimensions,
     string Color,
     string AdditionalInfo
-);
+)
+{
+    public string FurnitureCode { get; init; }
+    public Guid TenantId { get; init; }
+};
 
 public record DimensionsViewModel(
     int LengthMm,

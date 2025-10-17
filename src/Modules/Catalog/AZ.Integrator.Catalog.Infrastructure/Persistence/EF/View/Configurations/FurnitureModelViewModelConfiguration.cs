@@ -32,5 +32,9 @@ public class FurnitureModelViewModelConfiguration : IEntityTypeConfiguration<Fur
         
         builder.Property(x => x.Version)
             .HasColumnName("version");
+        
+        builder.HasMany(x => x.PartDefinitions)
+            .WithOne()
+            .HasForeignKey(x => x.FurnitureCode);
     }
 }
