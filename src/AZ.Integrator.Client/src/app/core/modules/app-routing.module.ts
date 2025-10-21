@@ -27,6 +27,12 @@ export const RoutePaths = {
   BarcodeScanner: 'barcode-scanner',
 };
 
+export const FurnitureFormatsRoutePath = {
+  Formats: 'furniture-formats/bom',
+  Suppliers: 'furniture-formats/suppliers',
+  Orders: 'furniture-formats/orders',
+};
+
 const routes: Routes = [
   {
     path: '',
@@ -86,6 +92,37 @@ const routes: Routes = [
           allowRoles: [AuthRoles.Admin],
         }),
         providers: [provideStates([StockLogsState]), StocksService],
+      },
+      {
+        path: FurnitureFormatsRoutePath.Formats,
+        loadComponent: () =>
+          import('../../features/furniture-formats/formats/pages/formats/formats.component').then(
+            c => c.FormatsComponent
+          ),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.Admin],
+        }),
+      },
+      {
+        path: FurnitureFormatsRoutePath.Suppliers,
+        loadComponent: () =>
+          import('../../features/furniture-formats/suppliers/pages/suppliers/suppliers.component').then(
+            c => c.SuppliersComponent
+          ),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.Admin],
+        }),
+      },
+      {
+        path: FurnitureFormatsRoutePath.Orders,
+        loadComponent: () =>
+          import('../../features/furniture-formats/orders/pages/orders/orders.component').then(c => c.OrdersComponent),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.Admin],
+        }),
       },
       {
         path: RoutePaths.BarcodeScanner,

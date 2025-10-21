@@ -4,10 +4,44 @@
   <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="sidenavOpened" fixedInViewport="true">
     <mat-nav-list>
       @for (item of navigationItems; track item) {
-        <mat-list-item [routerLink]="item.route" routerLinkActive="active-route" *appRoleAllow="item.roles">
-          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-          <span matListItemTitle *ngIf="sidenav.opened">{{ item.title }}</span>
-        </mat-list-item>
+        <div *appRoleAllow="item.roles">
+          @if (hasSubItems(item)) {
+            <!-- Parent item with sub-items -->
+            <div class="menu-item-wrapper">
+              <mat-list-item (click)="toggleExpand(item)" class="cursor-pointer">
+                <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+                <span matListItemTitle *ngIf="sidenav.opened">{{ item.title }}</span>
+              </mat-list-item>
+              @if (sidenav.opened) {
+                <mat-icon class="expand-icon">
+                  {{ isExpanded(item) ? 'expand_less' : 'expand_more' }}
+                </mat-icon>
+              }
+            </div>
+
+            <!-- Sub-items -->
+            @if (isExpanded(item) && sidenav.opened) {
+              <div class="sub-items">
+                @for (subItem of item.subItems; track subItem) {
+                  <mat-list-item
+                    [routerLink]="subItem.route"
+                    routerLinkActive="active-route"
+                    *appRoleAllow="subItem.roles"
+                    class="sub-item">
+                    <mat-icon matListItemIcon class="sub-item-icon">{{ subItem.icon }}</mat-icon>
+                    <span matListItemTitle>{{ subItem.title }}</span>
+                  </mat-list-item>
+                }
+              </div>
+            }
+          } @else {
+            <!-- Regular item without sub-items -->
+            <mat-list-item [routerLink]="item.route" routerLinkActive="active-route">
+              <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+              <span matListItemTitle *ngIf="sidenav.opened">{{ item.title }}</span>
+            </mat-list-item>
+          }
+        </div>
       }
     </mat-nav-list>
 

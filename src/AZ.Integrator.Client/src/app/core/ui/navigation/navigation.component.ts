@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { RoutePaths } from '../../modules/app-routing.module';
+import { FurnitureFormatsRoutePath, RoutePaths } from '../../modules/app-routing.module';
 import { environment } from '../../../../environments/environment';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
@@ -12,7 +12,7 @@ import { MaterialModule } from '../../../shared/modules/material.module';
 export type NavigationItem = {
   title: string;
   icon: string;
-  route: string;
+  route?: string;
   roles: AuthRoles[];
   subItems?: NavigationItem[];
 };
@@ -27,8 +27,8 @@ export class NavigationComponent implements OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   sidenavMode: 'side' | 'over' = 'side';
   sidenavOpened = true;
+  expandedItems: Set<string> = new Set();
 
-  RoutePaths = RoutePaths;
   AuthRoles = AuthRoles;
 
   navigationItems: NavigationItem[] = [
@@ -57,6 +57,31 @@ export class NavigationComponent implements OnInit {
       roles: [AuthRoles.Admin],
     },
     {
+      title: 'Zarządzanie formatkami',
+      icon: 'description',
+      roles: [AuthRoles.Admin],
+      subItems: [
+        {
+          title: 'Formatki',
+          icon: 'folder',
+          route: FurnitureFormatsRoutePath.Formats,
+          roles: [AuthRoles.Admin],
+        },
+        {
+          title: 'Dostawcy',
+          icon: 'folder',
+          route: FurnitureFormatsRoutePath.Suppliers,
+          roles: [AuthRoles.Admin],
+        },
+        {
+          title: 'Zamówienia',
+          icon: 'folder',
+          route: FurnitureFormatsRoutePath.Orders,
+          roles: [AuthRoles.Admin],
+        },
+      ],
+    },
+    {
       title: 'Statystyki',
       icon: 'bar_chart',
       route: RoutePaths.StocksStatistics,
@@ -81,6 +106,24 @@ export class NavigationComponent implements OnInit {
   @HostListener('window:resize', [])
   onResize() {
     this.updateSidenavMode();
+  }
+
+  toggleExpand(item: NavigationItem): void {
+    if (item.subItems && item.subItems.length > 0) {
+      if (this.expandedItems.has(item.title)) {
+        this.expandedItems.delete(item.title);
+      } else {
+        this.expandedItems.add(item.title);
+      }
+    }
+  }
+
+  isExpanded(item: NavigationItem): boolean {
+    return this.expandedItems.has(item.title);
+  }
+
+  hasSubItems(item: NavigationItem): boolean {
+    return !!item.subItems && item.subItems.length > 0;
   }
 
   private updateSidenavMode() {
