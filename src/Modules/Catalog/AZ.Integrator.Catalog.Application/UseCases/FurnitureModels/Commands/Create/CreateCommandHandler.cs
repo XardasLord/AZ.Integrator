@@ -2,6 +2,7 @@
 using AZ.Integrator.Catalog.Contracts.FurnitureModels;
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel;
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel.Specifications;
+using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel.ValueObjects;
 using AZ.Integrator.Domain.Abstractions;
 using Mediator;
 
@@ -22,24 +23,37 @@ public class CreateCommandHandler(
             throw new FurnitureModelNotFoundException(command.FurnitureCode);
 
         var furnitureModel = FurnitureModel.Create(command.FurnitureCode, currentUser, currentDateTime);
+        command.PartDefinitions.ToList().ForEach(pd =>
+        {
+            furnitureModel.AddPartDefinition(pd.Name, new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), pd.Color);
+        });
 
         await repository.AddAsync(furnitureModel, cancellationToken);
 
-        return new FurnitureModelViewModel(
-            furnitureModel.FurnitureCode,
-            furnitureModel.TenantId,
-            furnitureModel.Version,
-            furnitureModel.IsDeleted,
-            furnitureModel.DeletedAt,
-            furnitureModel.CreationInformation.CreatedBy,
-            furnitureModel.CreationInformation.CreatedAt.Date,
-            furnitureModel.PartDefinitions.Select(p => new PartDefinitionViewModel(
-                p.Id,
-                p.Name,
-                new DimensionsViewModel(p.Dimensions.LengthMm, p.Dimensions.WidthMm, p.Dimensions.ThicknessMm),
-                p.Color,
-                p.AdditionalInfo
-            )).ToList()
-        );
+        return new FurnitureModelViewModel
+        {
+            FurnitureCode = furnitureModel.FurnitureCode,
+            TenantId = furnitureModel.TenantId,
+            Version = furnitureModel.Version,
+            IsDeleted = furnitureModel.IsDeleted,
+            DeletedAt = furnitureModel.DeletedAt,
+            CreatedBy = furnitureModel.CreationInformation.CreatedBy,
+            CreatedAt = furnitureModel.CreationInformation.CreatedAt.Date,
+            PartDefinitions = furnitureModel.PartDefinitions.Select(p => new PartDefinitionViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Dimensions = new DimensionsViewModel
+                {
+                    LengthMm = p.Dimensions.LengthMm,
+                    WidthMm = p.Dimensions.WidthMm,
+                    ThicknessMm = p.Dimensions.ThicknessMm
+                },
+                Color = p.Color,
+                AdditionalInfo = p.AdditionalInfo,
+                FurnitureCode = furnitureModel.FurnitureCode,
+                TenantId = furnitureModel.TenantId
+            }).ToList()
+        };
     }
 }

@@ -10,7 +10,7 @@ public class FurnitureModelViewModelConfiguration : IEntityTypeConfiguration<Fur
     public void Configure(EntityTypeBuilder<FurnitureModelViewModel> builder)
     {
         builder.ToView("furniture_models_view", SchemaDefinition.Catalog);
-        builder.HasNoKey();
+        builder.HasKey(x => new { x.FurnitureCode, x.TenantId });
 
         builder.Property(x => x.FurnitureCode)
             .HasColumnName("furniture_code");
@@ -35,6 +35,6 @@ public class FurnitureModelViewModelConfiguration : IEntityTypeConfiguration<Fur
         
         builder.HasMany(x => x.PartDefinitions)
             .WithOne()
-            .HasForeignKey(x => x.FurnitureCode);
+            .HasForeignKey(x => new { x.FurnitureCode, x.TenantId });
     }
 }

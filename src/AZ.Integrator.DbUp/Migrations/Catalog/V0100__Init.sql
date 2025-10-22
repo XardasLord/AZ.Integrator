@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS catalog.furniture_models (
     created_at timestamp with time zone NOT NULL,
     created_by uuid NOT NULL,
     version integer NOT NULL,
-    is_deleted bit default '0',
+    is_deleted bool default false,
     deleted_at timestamp with time zone NULL,
     PRIMARY KEY (furniture_code, tenant_id)
 );

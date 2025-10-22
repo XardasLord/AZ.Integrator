@@ -13,6 +13,8 @@ import { StocksService } from '../../features/stocks/services/stocks.service';
 import { BarcodeScannerState } from '../../features/stocks/states/barcode-scanner.state';
 import { StockLogsState } from '../../features/stocks/states/stock-logs.state';
 import { StockGroupsService } from '../../features/stocks/services/stock-groups.service';
+import { FormatsState } from '../../features/furniture-formats/formats/states/formats.state';
+import { FurnitureFormatsService } from '../../features/furniture-formats/formats/services/furniture-formats.service';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -99,6 +101,7 @@ const routes: Routes = [
           import('../../features/furniture-formats/formats/pages/formats/formats.component').then(
             c => c.FormatsComponent
           ),
+        providers: [provideStates([FormatsState]), FurnitureFormatsService],
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],

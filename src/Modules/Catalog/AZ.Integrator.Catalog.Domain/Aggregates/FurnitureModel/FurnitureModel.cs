@@ -43,17 +43,17 @@ public class FurnitureModel : Entity, IAggregateRoot
         };
     }
 
-    public void AddPartDefinition(PartName name, Dimensions dimensions, Color color)
+    public void AddPartDefinition(PartName name, Dimensions dimensions, Color color, string? additionalInfo = null)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot add part definition to deleted furniture model");
 
-        var partDefinition = new PartDefinition(name, dimensions, color);
+        var partDefinition = new PartDefinition(name, dimensions, color, additionalInfo);
         _partDefinitions.Add(partDefinition);
         _version++;
     }
 
-    public void UpdatePartDefinition(Guid partDefinitionId, PartName name, Dimensions dimensions, Color color)
+    public void UpdatePartDefinition(int partDefinitionId, PartName name, Dimensions dimensions, Color color, string? additionalInfo = null)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot update part definition in deleted furniture model");
@@ -64,10 +64,12 @@ public class FurnitureModel : Entity, IAggregateRoot
         partDefinition.UpdateName(name);
         partDefinition.UpdateDimensions(dimensions);
         partDefinition.UpdateColor(color);
+        partDefinition.UpdateAdditionalInfo(additionalInfo);
+        
         _version++;
     }
 
-    public void RemovePartDefinition(Guid partDefinitionId)
+    public void RemovePartDefinition(int partDefinitionId)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot remove part definition from deleted furniture model");

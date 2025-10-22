@@ -1,0 +1,127 @@
+<div mat-dialog-title>
+  <div class="flex justify-between items-center text-xl">
+    <div>{{ editMode ? 'Edytuj definicję mebla' : 'Nowa definicja mebla' }}</div>
+    <mat-icon class="cursor-pointer" mat-dialog-close>close</mat-icon>
+  </div>
+</div>
+
+<mat-divider />
+
+<div mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-section mt-4">
+      <mat-form-field class="w-full">
+        <mat-label>Kod mebla</mat-label>
+        <input type="text" matInput formControlName="furnitureCode" />
+        <mat-error *ngIf="form.controls.furnitureCode.hasError('required')"> Kod mebla jest wymagany </mat-error>
+        <mat-error *ngIf="form.controls.furnitureCode.hasError('minlength')">
+          Kod mebla musi mieć co najmniej 1 znak
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-divider class="my-4" />
+
+    <div class="flex items-center justify-between mb-2 mt-2">
+      <div class="text-lg font-semibold">Formatki</div>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="addPartDefinition()"
+        matTooltip="Dodaj nową formatkę">
+        <mat-icon>add</mat-icon>
+        Dodaj formatkę
+      </button>
+    </div>
+
+    <div *ngIf="partDefinitions.length === 0" class="text-center text-gray-500 py-4">
+      Brak formatek. Dodaj co najmniej jedną formatkę.
+    </div>
+
+    <div formArrayName="partDefinitions" class="parts-list">
+      <mat-card *ngFor="let part of partDefinitions.controls; let i = index" class="part-card mb-4">
+        <mat-card-header class="part-card-header">
+          <mat-card-title class="text-base">Formatka {{ i + 1 }}</mat-card-title>
+          <button
+            mat-icon-button
+            type="button"
+            (click)="removePartDefinition(i)"
+            matTooltip="Usuń formatkę"
+            class="delete-button">
+            <mat-icon class="!text-red-600">delete</mat-icon>
+          </button>
+        </mat-card-header>
+
+        <mat-card-content [formGroupName]="i">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <mat-form-field class="w-full">
+              <mat-label>Nazwa</mat-label>
+              <input type="text" matInput formControlName="name" />
+              <mat-error *ngIf="partDefinitions.controls[i].get('name')?.hasError('required')">
+                Nazwa jest wymagana
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+              <mat-label>Kolor</mat-label>
+              <input type="text" matInput formControlName="color" />
+              <mat-error *ngIf="partDefinitions.controls[i].get('color')?.hasError('required')">
+                Kolor jest wymagany
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <mat-form-field class="w-full">
+              <mat-label>Długość [mm]</mat-label>
+              <input type="number" matInput formControlName="lengthMm" />
+              <mat-error *ngIf="partDefinitions.controls[i].get('lengthMm')?.hasError('required')">
+                Długość jest wymagana
+              </mat-error>
+              <mat-error *ngIf="partDefinitions.controls[i].get('lengthMm')?.hasError('min')">
+                Wartość musi być większa niż 0
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+              <mat-label>Szerokość [mm]</mat-label>
+              <input type="number" matInput formControlName="widthMm" />
+              <mat-error *ngIf="partDefinitions.controls[i].get('widthMm')?.hasError('required')">
+                Szerokość jest wymagana
+              </mat-error>
+              <mat-error *ngIf="partDefinitions.controls[i].get('widthMm')?.hasError('min')">
+                Wartość musi być większa niż 0
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+              <mat-label>Grubość [mm]</mat-label>
+              <input type="number" matInput formControlName="thicknessMm" />
+              <mat-error *ngIf="partDefinitions.controls[i].get('thicknessMm')?.hasError('required')">
+                Grubość jest wymagana
+              </mat-error>
+              <mat-error *ngIf="partDefinitions.controls[i].get('thicknessMm')?.hasError('min')">
+                Wartość musi być większa niż 0
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field class="w-full">
+            <mat-label>Dodatkowe informacje</mat-label>
+            <textarea matInput formControlName="additionalInfo" rows="2"></textarea>
+          </mat-form-field>
+
+          <input type="hidden" formControlName="id" />
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </form>
+</div>
+
+<mat-divider />
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button [disabled]="form.invalid" color="primary" (click)="onSubmit()">Zapisz definicję</button>
+  <button mat-stroked-button color="primary" mat-dialog-close (click)="onCancel()">Anuluj</button>
+</div>

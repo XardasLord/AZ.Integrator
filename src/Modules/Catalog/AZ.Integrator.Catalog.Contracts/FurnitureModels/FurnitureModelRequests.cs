@@ -1,7 +1,8 @@
 namespace AZ.Integrator.Catalog.Contracts.FurnitureModels;
 
 public record CreateFurnitureModelRequest(
-    string FurnitureCode
+    string FurnitureCode,
+    IEnumerable<AddPartDefinitionRequest> PartDefinitions
 );
 
 public record AddPartDefinitionRequest(

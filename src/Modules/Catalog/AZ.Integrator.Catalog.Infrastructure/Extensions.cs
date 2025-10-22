@@ -44,7 +44,7 @@ public static class Extensions
         furnitureModelsGroup.MapPost("/", 
             async (CreateFurnitureModelRequest request, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            var response = await mediator.Send(new CreateCommand(request.FurnitureCode), cancellationToken);
+            var response = await mediator.Send(new CreateCommand(request.FurnitureCode, request.PartDefinitions), cancellationToken);
             
             return Results.Ok(response);
         });
@@ -75,7 +75,7 @@ public static class Extensions
         });
 
         furnitureModelsGroup.MapPut("/{furnitureCode}/parts/{partDefinitionId}", 
-            async (string furnitureCode, Guid partDefinitionId, UpdatePartDefinitionRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            async (string furnitureCode, int partDefinitionId, UpdatePartDefinitionRequest request, IMediator mediator, CancellationToken cancellationToken) =>
         {
             var command = new UpdatePartDefinitionCommand(
                 furnitureCode,
@@ -93,7 +93,7 @@ public static class Extensions
         });
 
         furnitureModelsGroup.MapDelete("/{furnitureCode}/parts/{partDefinitionId}", 
-            async (string furnitureCode, Guid partDefinitionId, IMediator mediator, CancellationToken cancellationToken) =>
+            async (string furnitureCode, int partDefinitionId, IMediator mediator, CancellationToken cancellationToken) =>
         {
             var response = await mediator.Send(new RemovePartDefinitionCommand(furnitureCode, partDefinitionId), cancellationToken);
             

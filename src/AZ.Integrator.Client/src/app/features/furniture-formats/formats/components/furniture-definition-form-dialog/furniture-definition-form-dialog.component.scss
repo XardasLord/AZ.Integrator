@@ -1,0 +1,37 @@
+.form-section {
+  margin-bottom: 1rem;
+}
+
+.parts-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.part-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+}
+
+.part-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+.delete-button {
+  margin-left: auto;
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+

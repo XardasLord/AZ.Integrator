@@ -3,7 +3,7 @@ using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel.ValueObjects;
 
 namespace AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel;
 
-public class PartDefinition : Entity<Guid>
+public class PartDefinition : Entity<int>
 {
     private PartName _name;
     private Dimensions _dimensions;
@@ -40,5 +40,10 @@ public class PartDefinition : Entity<Guid>
     internal void UpdateColor(Color color)
     {
         _color = color;
+    }
+
+    internal void UpdateAdditionalInfo(string? additionalInfo)
+    {
+        _additionalInfo = additionalInfo;
     }
 }

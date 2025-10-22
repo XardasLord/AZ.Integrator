@@ -1,5 +1,6 @@
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel;
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel.ValueObjects;
+using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -51,12 +52,14 @@ public class PartDefinitionConfiguration : IEntityTypeConfiguration<PartDefiniti
         builder.Navigation(e => e.Dimensions).IsRequired();
 
         // Foreign key properties for composite key relationship
-        builder.Property<string>("FurnitureCode")
+        builder.Property<FurnitureCode>("FurnitureCode")
             .HasColumnName("furniture_code")
+            .HasConversion(code => code.Value, code => new FurnitureCode(code))
             .IsRequired();
 
-        builder.Property<Guid>("TenantId")
+        builder.Property<TenantId>("TenantId")
             .HasColumnName("tenant_id")
+            .HasConversion(id => id.Value, id => new TenantId(id))
             .IsRequired();
     }
 }

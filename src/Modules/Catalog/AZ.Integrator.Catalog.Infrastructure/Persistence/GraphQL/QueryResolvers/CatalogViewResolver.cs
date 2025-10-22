@@ -10,6 +10,7 @@ namespace AZ.Integrator.Catalog.Infrastructure.Persistence.GraphQL.QueryResolver
 [ExtendObjectType(Name = nameof(IntegratorQuery))]
 public class CatalogViewResolver
 {
+    [UsePaging]
     [UseProjection]
     [UseFiltering]
     [UseSorting]

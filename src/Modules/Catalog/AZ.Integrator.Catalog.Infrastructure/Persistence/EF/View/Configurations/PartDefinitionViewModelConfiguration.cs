@@ -10,7 +10,7 @@ public class PartDefinitionViewModelConfiguration : IEntityTypeConfiguration<Par
     public void Configure(EntityTypeBuilder<PartDefinitionViewModel> builder)
     {
         builder.ToView("part_definition_view", SchemaDefinition.Catalog);
-        builder.HasNoKey();
+        builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
             .HasColumnName("id");

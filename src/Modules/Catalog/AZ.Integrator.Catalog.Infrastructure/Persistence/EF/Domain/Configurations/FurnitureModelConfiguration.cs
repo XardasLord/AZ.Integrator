@@ -51,7 +51,6 @@ public class FurnitureModelConfiguration : IEntityTypeConfiguration<FurnitureMod
 
         builder.Navigation(e => e.CreationInformation).IsRequired();
 
-        // Configure one-to-many relationship with PartDefinitions
         builder.HasMany(x => x.PartDefinitions)
             .WithOne()
             .HasForeignKey("FurnitureCode", "TenantId")

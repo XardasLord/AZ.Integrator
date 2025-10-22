@@ -17,6 +17,7 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
   /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: { input: any; output: any; }
+  UUID: { input: any; output: any; }
 };
 
 export enum ApplyPolicy {
@@ -24,6 +25,11 @@ export enum ApplyPolicy {
   BeforeResolver = 'BEFORE_RESOLVER',
   Validation = 'VALIDATION'
 }
+
+export type BooleanOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  neq?: InputMaybe<Scalars['Boolean']['input']>;
+};
 
 export type DateTimeOperationFilterInput = {
   eq?: InputMaybe<Scalars['DateTime']['input']>;
@@ -38,6 +44,21 @@ export type DateTimeOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
   nlt?: InputMaybe<Scalars['DateTime']['input']>;
   nlte?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type DimensionsViewModel = {
+  __typename?: 'DimensionsViewModel';
+  lengthMm: Scalars['Int']['output'];
+  thicknessMm: Scalars['Int']['output'];
+  widthMm: Scalars['Int']['output'];
+};
+
+export type DimensionsViewModelFilterInput = {
+  and?: InputMaybe<Array<DimensionsViewModelFilterInput>>;
+  lengthMm?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<DimensionsViewModelFilterInput>>;
+  thicknessMm?: InputMaybe<IntOperationFilterInput>;
+  widthMm?: InputMaybe<IntOperationFilterInput>;
 };
 
 export type DpdShipmentViewModel = {
@@ -68,6 +89,63 @@ export type FloatOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
   nlt?: InputMaybe<Scalars['Float']['input']>;
   nlte?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type FurnitureModelViewModel = {
+  __typename?: 'FurnitureModelViewModel';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['UUID']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  furnitureCode: Scalars['String']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  partDefinitions: Array<PartDefinitionViewModel>;
+  tenantId: Scalars['UUID']['output'];
+  version: Scalars['Int']['output'];
+};
+
+export type FurnitureModelViewModelFilterInput = {
+  and?: InputMaybe<Array<FurnitureModelViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdBy?: InputMaybe<UuidOperationFilterInput>;
+  deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  furnitureCode?: InputMaybe<StringOperationFilterInput>;
+  isDeleted?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<FurnitureModelViewModelFilterInput>>;
+  partDefinitions?: InputMaybe<ListFilterInputTypeOfPartDefinitionViewModelFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+  version?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type FurnitureModelViewModelSortInput = {
+  createdAt?: InputMaybe<SortEnumType>;
+  createdBy?: InputMaybe<SortEnumType>;
+  deletedAt?: InputMaybe<SortEnumType>;
+  furnitureCode?: InputMaybe<SortEnumType>;
+  isDeleted?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+  version?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type FurnitureModelsConnection = {
+  __typename?: 'FurnitureModelsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<FurnitureModelsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<FurnitureModelViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type FurnitureModelsEdge = {
+  __typename?: 'FurnitureModelsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: FurnitureModelViewModel;
 };
 
 export type InpostShipmentViewModel = {
@@ -104,6 +182,7 @@ export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
   barcodeScannerLogs: Array<StockLogViewModel>;
   dpdShipments: Array<DpdShipmentViewModel>;
+  furnitureModels?: Maybe<FurnitureModelsConnection>;
   inpostShipments: Array<InpostShipmentViewModel>;
   invoices: Array<InvoiceViewModel>;
   shipments: Array<ShipmentViewModel>;
@@ -121,6 +200,16 @@ export type IntegratorQueryBarcodeScannerLogsArgs = {
 
 export type IntegratorQueryDpdShipmentsArgs = {
   where?: InputMaybe<DpdShipmentViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryFurnitureModelsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<FurnitureModelViewModelSortInput>>;
+  where?: InputMaybe<FurnitureModelViewModelFilterInput>;
 };
 
 
@@ -185,6 +274,13 @@ export type InvoiceViewModelSortInput = {
   invoiceNumber?: InputMaybe<SortEnumType>;
 };
 
+export type ListFilterInputTypeOfPartDefinitionViewModelFilterInput = {
+  all?: InputMaybe<PartDefinitionViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PartDefinitionViewModelFilterInput>;
+  some?: InputMaybe<PartDefinitionViewModelFilterInput>;
+};
+
 export type ListFilterInputTypeOfStockLogViewModelFilterInput = {
   all?: InputMaybe<StockLogViewModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
@@ -232,6 +328,29 @@ export type PageInfo = {
   hasPreviousPage: Scalars['Boolean']['output'];
   /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+export type PartDefinitionViewModel = {
+  __typename?: 'PartDefinitionViewModel';
+  additionalInfo: Scalars['String']['output'];
+  color: Scalars['String']['output'];
+  dimensions: DimensionsViewModel;
+  furnitureCode: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type PartDefinitionViewModelFilterInput = {
+  additionalInfo?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<PartDefinitionViewModelFilterInput>>;
+  color?: InputMaybe<StringOperationFilterInput>;
+  dimensions?: InputMaybe<DimensionsViewModelFilterInput>;
+  furnitureCode?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PartDefinitionViewModelFilterInput>>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type ShipmentViewModel = {
@@ -420,4 +539,19 @@ export type TagParcelViewModelFilterInput = {
   tag?: InputMaybe<StringOperationFilterInput>;
   weight?: InputMaybe<FloatOperationFilterInput>;
   width?: InputMaybe<FloatOperationFilterInput>;
+};
+
+export type UuidOperationFilterInput = {
+  eq?: InputMaybe<Scalars['UUID']['input']>;
+  gt?: InputMaybe<Scalars['UUID']['input']>;
+  gte?: InputMaybe<Scalars['UUID']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
+  lt?: InputMaybe<Scalars['UUID']['input']>;
+  lte?: InputMaybe<Scalars['UUID']['input']>;
+  neq?: InputMaybe<Scalars['UUID']['input']>;
+  ngt?: InputMaybe<Scalars['UUID']['input']>;
+  ngte?: InputMaybe<Scalars['UUID']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
+  nlt?: InputMaybe<Scalars['UUID']['input']>;
+  nlte?: InputMaybe<Scalars['UUID']['input']>;
 };

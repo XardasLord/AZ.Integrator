@@ -1,4 +1,5 @@
 <mat-form-field appearance="fill">
   <mat-label>Kod paczki</mat-label>
   <input matInput (valueChanged)="searchTextChanged($event)" [value]="searchText$ | async" appDebounce />
+  <mat-icon matPrefix>search</mat-icon>
 </mat-form-field>
