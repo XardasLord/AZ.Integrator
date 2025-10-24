@@ -5,6 +5,11 @@ public record CreateFurnitureModelRequest(
     IEnumerable<AddPartDefinitionRequest> PartDefinitions
 );
 
+public record ImportFurnitureModelRequest(
+    string FurnitureCode,
+    IEnumerable<ImportPartDefinitionRequest> PartDefinitions
+);
+
 public record AddPartDefinitionRequest(
     string Name,
     int LengthMm,
@@ -21,6 +26,15 @@ public record UpdateFurnitureModelRequest(
 
 public record UpdatePartDefinitionRequest(
     int? Id,
+    string Name,
+    int LengthMm,
+    int WidthMm,
+    int ThicknessMm,
+    string Color,
+    string AdditionalInfo
+);
+
+public record ImportPartDefinitionRequest(
     string Name,
     int LengthMm,
     int WidthMm,
