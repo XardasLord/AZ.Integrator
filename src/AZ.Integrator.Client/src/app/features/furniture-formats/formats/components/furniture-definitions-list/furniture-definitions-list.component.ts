@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { Store } from '@ngxs/store';
 import { MaterialModule } from '../../../../../shared/modules/material.module';
 import { FormatsState } from '../../states/formats.state';
@@ -14,7 +14,7 @@ import { FurnitureModelViewModel } from '../../../../../shared/graphql/graphql-i
   selector: 'app-furniture-definitions-list',
   templateUrl: './furniture-definitions-list.component.html',
   styleUrls: ['./furniture-definitions-list.component.scss'],
-  imports: [MaterialModule, AsyncPipe, ScrollTableComponent],
+  imports: [MaterialModule, AsyncPipe, ScrollTableComponent, DatePipe],
   standalone: true,
 })
 export class FurnitureDefinitionsListComponent implements OnInit {

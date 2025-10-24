@@ -14,8 +14,13 @@ public record AddPartDefinitionRequest(
     string AdditionalInfo
 );
 
+public record UpdateFurnitureModelRequest(
+    string FurnitureCode,
+    IEnumerable<UpdatePartDefinitionRequest> PartDefinitions
+);
+
 public record UpdatePartDefinitionRequest(
-    Guid PartDefinitionId,
+    int? Id,
     string Name,
     int LengthMm,
     int WidthMm,

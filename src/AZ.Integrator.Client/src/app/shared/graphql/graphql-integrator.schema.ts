@@ -98,6 +98,8 @@ export type FurnitureModelViewModel = {
   deletedAt?: Maybe<Scalars['DateTime']['output']>;
   furnitureCode: Scalars['String']['output'];
   isDeleted: Scalars['Boolean']['output'];
+  modifiedAt: Scalars['DateTime']['output'];
+  modifiedBy: Scalars['UUID']['output'];
   partDefinitions: Array<PartDefinitionViewModel>;
   tenantId: Scalars['UUID']['output'];
   version: Scalars['Int']['output'];
@@ -110,6 +112,8 @@ export type FurnitureModelViewModelFilterInput = {
   deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
   furnitureCode?: InputMaybe<StringOperationFilterInput>;
   isDeleted?: InputMaybe<BooleanOperationFilterInput>;
+  modifiedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  modifiedBy?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<FurnitureModelViewModelFilterInput>>;
   partDefinitions?: InputMaybe<ListFilterInputTypeOfPartDefinitionViewModelFilterInput>;
   tenantId?: InputMaybe<UuidOperationFilterInput>;
@@ -122,6 +126,8 @@ export type FurnitureModelViewModelSortInput = {
   deletedAt?: InputMaybe<SortEnumType>;
   furnitureCode?: InputMaybe<SortEnumType>;
   isDeleted?: InputMaybe<SortEnumType>;
+  modifiedAt?: InputMaybe<SortEnumType>;
+  modifiedBy?: InputMaybe<SortEnumType>;
   tenantId?: InputMaybe<SortEnumType>;
   version?: InputMaybe<SortEnumType>;
 };
@@ -332,7 +338,7 @@ export type PageInfo = {
 
 export type PartDefinitionViewModel = {
   __typename?: 'PartDefinitionViewModel';
-  additionalInfo: Scalars['String']['output'];
+  additionalInfo?: Maybe<Scalars['String']['output']>;
   color: Scalars['String']['output'];
   dimensions: DimensionsViewModel;
   furnitureCode: Scalars['String']['output'];

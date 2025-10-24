@@ -77,7 +77,7 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
           part.dimensions.widthMm,
           part.dimensions.thicknessMm,
           part.color,
-          part.additionalInfo
+          part.additionalInfo!
         );
       });
     } else {

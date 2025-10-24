@@ -18,11 +18,17 @@ public class FurnitureModelViewModelConfiguration : IEntityTypeConfiguration<Fur
         builder.Property(x => x.TenantId)
             .HasColumnName("tenant_id");
         
+        builder.Property(x => x.CreatedAt)
+            .HasColumnName("created_at");
+        
         builder.Property(x => x.CreatedBy)
             .HasColumnName("created_by");
         
-        builder.Property(x => x.CreatedAt)
-            .HasColumnName("created_at");
+        builder.Property(x => x.ModifiedAt)
+            .HasColumnName("modified_at");
+        
+        builder.Property(x => x.ModifiedBy)
+            .HasColumnName("modified_by");
         
         builder.Property(x => x.DeletedAt)
             .HasColumnName("deleted_at");

@@ -7,7 +7,12 @@
     <ng-container matColumnDef="furnitureCode">
       <th mat-header-cell *matHeaderCellDef>Kod mebla</th>
       <td mat-cell *matCellDef="let definition">
-        <span class="font-semibold">{{ definition.furnitureCode }}</span>
+        <div class="flex flex-col gap1">
+          <span class="font-semibold">{{ definition.furnitureCode }}</span>
+          <span class="text-xs text-gray-500">
+            Zmodyfikowano: {{ definition.modifiedAt | date: 'dd.MM.yyyy HH:mm' }}
+          </span>
+        </div>
       </td>
     </ng-container>
 

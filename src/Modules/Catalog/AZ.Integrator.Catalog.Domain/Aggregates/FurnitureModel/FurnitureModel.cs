@@ -13,6 +13,7 @@ public class FurnitureModel : Entity, IAggregateRoot
     private bool _isDeleted;
     private DateTime? _deletedAt;
     private TenantCreationInformation _creationInformation;
+    private ModificationInformation _modificationInformation;
     private readonly List<PartDefinition> _partDefinitions;
 
     public FurnitureCode FurnitureCode => _furnitureCode;
@@ -21,6 +22,7 @@ public class FurnitureModel : Entity, IAggregateRoot
     public bool IsDeleted => _isDeleted;
     public DateTime? DeletedAt => _deletedAt;
     public TenantCreationInformation CreationInformation => _creationInformation;
+    public ModificationInformation ModificationInformation => _modificationInformation;
     public IReadOnlyCollection<PartDefinition> PartDefinitions => _partDefinitions.AsReadOnly();
 
     private FurnitureModel()
@@ -39,21 +41,23 @@ public class FurnitureModel : Entity, IAggregateRoot
             _creationInformation = new TenantCreationInformation(
                 currentDateTime.CurrentDate(), 
                 currentUser.UserId, 
-                currentUser.TenantId)
+                currentUser.TenantId),
+            _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId)
         };
     }
 
-    public void AddPartDefinition(PartName name, Dimensions dimensions, Color color, string? additionalInfo = null)
+    public void AddPartDefinition(PartName name, Dimensions dimensions, Color color, string? additionalInfo, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot add part definition to deleted furniture model");
 
         var partDefinition = new PartDefinition(name, dimensions, color, additionalInfo);
         _partDefinitions.Add(partDefinition);
+        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
         _version++;
     }
 
-    public void UpdatePartDefinition(int partDefinitionId, PartName name, Dimensions dimensions, Color color, string? additionalInfo = null)
+    public void UpdatePartDefinition(int partDefinitionId, PartName name, Dimensions dimensions, Color color, string? additionalInfo, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot update part definition in deleted furniture model");
@@ -66,10 +70,11 @@ public class FurnitureModel : Entity, IAggregateRoot
         partDefinition.UpdateColor(color);
         partDefinition.UpdateAdditionalInfo(additionalInfo);
         
+        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
         _version++;
     }
 
-    public void RemovePartDefinition(int partDefinitionId)
+    public void RemovePartDefinition(int partDefinitionId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot remove part definition from deleted furniture model");
@@ -78,6 +83,7 @@ public class FurnitureModel : Entity, IAggregateRoot
             ?? throw new ArgumentException($"Part definition with ID {partDefinitionId} not found");
 
         _partDefinitions.Remove(partDefinition);
+        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
         _version++;
     }
 

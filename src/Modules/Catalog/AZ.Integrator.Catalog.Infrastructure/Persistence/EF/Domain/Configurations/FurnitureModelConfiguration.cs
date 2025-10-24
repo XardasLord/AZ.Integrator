@@ -48,8 +48,15 @@ public class FurnitureModelConfiguration : IEntityTypeConfiguration<FurnitureMod
                 .HasColumnName("tenant_id")
                 .IsRequired();
         });
+        
+        builder.OwnsOne(e => e.ModificationInformation, mi =>
+        {
+            mi.Property(c => c.ModifiedAt).HasColumnName("modified_at").IsRequired();
+            mi.Property(c => c.ModifiedBy).HasColumnName("modified_by").IsRequired();
+        });
 
         builder.Navigation(e => e.CreationInformation).IsRequired();
+        builder.Navigation(e => e.ModificationInformation).IsRequired();
 
         builder.HasMany(x => x.PartDefinitions)
             .WithOne()

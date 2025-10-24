@@ -40,6 +40,8 @@ export class GetFurnitureDefinitionsGQL extends Query<GraphQLResponse<FurnitureM
           ${nameof<FurnitureModelViewModel>('deletedAt')}
           ${nameof<FurnitureModelViewModel>('createdAt')}
           ${nameof<FurnitureModelViewModel>('createdBy')}
+          ${nameof<FurnitureModelViewModel>('modifiedAt')}
+          ${nameof<FurnitureModelViewModel>('modifiedBy')}
 
           ${nameof<FurnitureModelViewModel>('partDefinitions')} {
             ${nameof<PartDefinitionViewModel>('id')}

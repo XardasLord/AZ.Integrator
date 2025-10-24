@@ -1,9 +1,7 @@
 using AZ.Integrator.Catalog.Application;
-using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.AddPartDefinition;
 using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.Create;
 using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.Delete;
-using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.RemovePartDefinition;
-using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.UpdatePartDefinition;
+using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.Update;
 using AZ.Integrator.Catalog.Contracts.FurnitureModels;
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel;
 using AZ.Integrator.Catalog.Infrastructure.Persistence.EF;
@@ -48,6 +46,14 @@ public static class Extensions
             
             return Results.Ok(response);
         });
+        
+        furnitureModelsGroup.MapPut("/{furnitureCode}", 
+            async (UpdateFurnitureModelRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                var response = await mediator.Send(new UpdateCommand(request.FurnitureCode, request.PartDefinitions), cancellationToken);
+            
+                return Results.Ok(response);
+            });
 
         furnitureModelsGroup.MapDelete("/{furnitureCode}", 
             async (string furnitureCode, IMediator mediator, CancellationToken cancellationToken) =>
@@ -55,49 +61,6 @@ public static class Extensions
             await mediator.Send(new DeleteCommand(furnitureCode), cancellationToken);
             
             return Results.NoContent();
-        });
-
-        furnitureModelsGroup.MapPost("/{furnitureCode}/parts", 
-            async (string furnitureCode, AddPartDefinitionRequest request,  IMediator mediator, CancellationToken cancellationToken) =>
-        {
-            var command = new AddPartDefinitionCommand(
-                furnitureCode,
-                request.Name,
-                request.LengthMm,
-                request.WidthMm,
-                request.ThicknessMm,
-                request.Color,
-                request.AdditionalInfo);
-            
-            var response = await mediator.Send(command, cancellationToken);
-            
-            return Results.Ok(response);
-        });
-
-        furnitureModelsGroup.MapPut("/{furnitureCode}/parts/{partDefinitionId}", 
-            async (string furnitureCode, int partDefinitionId, UpdatePartDefinitionRequest request, IMediator mediator, CancellationToken cancellationToken) =>
-        {
-            var command = new UpdatePartDefinitionCommand(
-                furnitureCode,
-                partDefinitionId,
-                request.Name,
-                request.LengthMm,
-                request.WidthMm,
-                request.ThicknessMm,
-                request.Color,
-                request.AdditionalInfo);
-            
-            var response = await mediator.Send(command, cancellationToken);
-            
-            return Results.Ok(response);
-        });
-
-        furnitureModelsGroup.MapDelete("/{furnitureCode}/parts/{partDefinitionId}", 
-            async (string furnitureCode, int partDefinitionId, IMediator mediator, CancellationToken cancellationToken) =>
-        {
-            var response = await mediator.Send(new RemovePartDefinitionCommand(furnitureCode, partDefinitionId), cancellationToken);
-            
-            return Results.Ok(response);
         });
         
         return endpoints;

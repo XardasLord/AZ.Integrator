@@ -8,6 +8,7 @@ public sealed class FurnitureModelByCodeSpec : Specification<FurnitureModel>, IS
     public FurnitureModelByCodeSpec(string code, Guid tenantId)
     {
         Query
+            .Include(x => x.PartDefinitions)
             .Where(x => x.FurnitureCode == code)
             .Where(x => x.CreationInformation.TenantId == new TenantId(tenantId));
     }

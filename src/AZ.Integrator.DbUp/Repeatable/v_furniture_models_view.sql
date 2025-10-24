@@ -7,6 +7,8 @@ SELECT
     tenant_id,
     created_at,
     created_by,
+    modified_at,
+    modified_by,
     is_deleted,
     deleted_at,
     version

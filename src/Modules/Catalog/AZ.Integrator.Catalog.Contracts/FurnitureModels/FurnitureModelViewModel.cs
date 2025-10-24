@@ -9,6 +9,8 @@ public class FurnitureModelViewModel
     public DateTime? DeletedAt { get; init; }
     public Guid CreatedBy { get; init; }
     public DateTime CreatedAt { get; init; }
+    public Guid ModifiedBy { get; init; }
+    public DateTime ModifiedAt { get; init; }
     public IReadOnlyCollection<PartDefinitionViewModel> PartDefinitions { get; init; }
 };
 

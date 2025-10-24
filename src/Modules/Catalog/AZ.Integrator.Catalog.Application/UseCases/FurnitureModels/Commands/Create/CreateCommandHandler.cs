@@ -25,7 +25,9 @@ public class CreateCommandHandler(
         var furnitureModel = FurnitureModel.Create(command.FurnitureCode, currentUser, currentDateTime);
         command.PartDefinitions.ToList().ForEach(pd =>
         {
-            furnitureModel.AddPartDefinition(pd.Name, new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), pd.Color);
+            furnitureModel.AddPartDefinition(
+                pd.Name, new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), pd.Color, pd.AdditionalInfo, 
+                currentUser, currentDateTime);
         });
 
         await repository.AddAsync(furnitureModel, cancellationToken);
