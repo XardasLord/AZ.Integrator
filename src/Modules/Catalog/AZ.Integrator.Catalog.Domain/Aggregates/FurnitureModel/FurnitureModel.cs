@@ -30,51 +30,98 @@ public class FurnitureModel : Entity, IAggregateRoot
         _partDefinitions = [];
     }
 
-    public static FurnitureModel Create(FurnitureCode furnitureCode, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static FurnitureModel Create(
+        FurnitureCode furnitureCode,
+        IEnumerable<PartDefinitionVo> partDefinitionVos, 
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        return new FurnitureModel
+        var date = currentDateTime.CurrentDate();
+        
+        var furnitureModel = new FurnitureModel
         {
             _furnitureCode = furnitureCode ?? throw new ArgumentNullException(nameof(furnitureCode)),
             _tenantId = currentUser.TenantId,
             _version = 1,
             _isDeleted = false,
             _creationInformation = new TenantCreationInformation(
-                currentDateTime.CurrentDate(), 
+                date, 
                 currentUser.UserId, 
                 currentUser.TenantId),
-            _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId)
+            _modificationInformation = new ModificationInformation(date, currentUser.UserId)
         };
+
+        foreach (var partDefinitionVo in partDefinitionVos)
+        {
+            furnitureModel.AddPartDefinition(partDefinitionVo);
+        }
+
+        return furnitureModel;
+    }
+    
+    public void UpdatePartDefinitions(
+        IEnumerable<PartDefinitionVo> partDefinitionVos,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
+    {
+        var definitionVos = partDefinitionVos.ToList();
+        
+        DeleteRemovedPartDefinitions(definitionVos);
+        
+        // Process updates and additions
+        definitionVos.ForEach(pd =>
+        {
+            if (pd.PartDefinitionId.HasValue)
+                UpdatePartDefinition(pd);
+            else
+                AddPartDefinition(pd);
+        });
+
+        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
+        _version++;
+    }
+    
+    private void DeleteRemovedPartDefinitions(IEnumerable<PartDefinitionVo> partDefinitionVos)
+    {
+        // Get existing part definition IDs
+        var existingPartIds = PartDefinitions.Select(p => p.Id).ToHashSet();
+        
+        // Get part definition IDs from VO (only those that have IDs)
+        var voPartIds = partDefinitionVos
+            .Where(pd => pd.PartDefinitionId.HasValue)
+            .Select(pd => pd.PartDefinitionId.Value)
+            .ToHashSet();
+        
+        // Find part definitions to delete (exist in aggregate but not in VO)
+        var partIdsToDelete = existingPartIds.Except(voPartIds).ToList();
+        
+        // Delete part definitions that are no longer present in the VO
+        partIdsToDelete.ForEach(RemovePartDefinition);
     }
 
-    public void AddPartDefinition(PartName name, Dimensions dimensions, Color color, string? additionalInfo, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private void AddPartDefinition(PartDefinitionVo partDefinitionVo)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot add part definition to deleted furniture model");
 
-        var partDefinition = new PartDefinition(name, dimensions, color, additionalInfo);
+        var partDefinition = partDefinitionVo.ToPartDefinitionDomain();
+        
         _partDefinitions.Add(partDefinition);
-        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
-        _version++;
     }
 
-    public void UpdatePartDefinition(int partDefinitionId, PartName name, Dimensions dimensions, Color color, string? additionalInfo, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private void UpdatePartDefinition(PartDefinitionVo partDefinitionVo)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot update part definition in deleted furniture model");
 
-        var partDefinition = _partDefinitions.FirstOrDefault(p => p.Id == partDefinitionId)
-            ?? throw new ArgumentException($"Part definition with ID {partDefinitionId} not found");
+        var partDefinition = _partDefinitions.FirstOrDefault(p => p.Id == partDefinitionVo.PartDefinitionId)
+            ?? throw new ArgumentException($"Part definition with ID {partDefinitionVo.PartDefinitionId} not found");
 
-        partDefinition.UpdateName(name);
-        partDefinition.UpdateDimensions(dimensions);
-        partDefinition.UpdateColor(color);
-        partDefinition.UpdateAdditionalInfo(additionalInfo);
-        
-        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
-        _version++;
+        partDefinition.UpdateName(partDefinitionVo.Name);
+        partDefinition.UpdateDimensions(partDefinitionVo.Dimensions);
+        partDefinition.UpdateColor(partDefinitionVo.Color);
+        partDefinition.UpdateAdditionalInfo(partDefinitionVo.AdditionalInfo);
     }
 
-    public void RemovePartDefinition(int partDefinitionId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private void RemovePartDefinition(int partDefinitionId)
     {
         if (_isDeleted)
             throw new InvalidOperationException("Cannot remove part definition from deleted furniture model");
@@ -83,8 +130,6 @@ public class FurnitureModel : Entity, IAggregateRoot
             ?? throw new ArgumentException($"Part definition with ID {partDefinitionId} not found");
 
         _partDefinitions.Remove(partDefinition);
-        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
-        _version++;
     }
 
     public void Delete(ICurrentDateTime currentDateTime)

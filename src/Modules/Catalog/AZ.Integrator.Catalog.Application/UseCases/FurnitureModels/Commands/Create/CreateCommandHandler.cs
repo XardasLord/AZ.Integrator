@@ -21,14 +21,19 @@ public class CreateCommandHandler(
 
         if (existingModel != null)
             throw new FurnitureModelNotFoundException(command.FurnitureCode);
+        
+        var partDefinitionVos = new List<PartDefinitionVo>();
 
-        var furnitureModel = FurnitureModel.Create(command.FurnitureCode, currentUser, currentDateTime);
         command.PartDefinitions.ToList().ForEach(pd =>
         {
-            furnitureModel.AddPartDefinition(
-                pd.Name, new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), pd.Color, pd.AdditionalInfo, 
-                currentUser, currentDateTime);
+            var partDefinitionVo = new PartDefinitionVo(null, pd.Name,
+                new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), 
+                pd.Color,pd.AdditionalInfo);
+
+            partDefinitionVos.Add(partDefinitionVo);
         });
+
+        var furnitureModel = FurnitureModel.Create(command.FurnitureCode, partDefinitionVos, currentUser, currentDateTime);
 
         await repository.AddAsync(furnitureModel, cancellationToken);
 

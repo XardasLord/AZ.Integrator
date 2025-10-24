@@ -20,8 +20,18 @@ public class UpdateCommandHandler(
         var furnitureModel = await repository.FirstOrDefaultAsync(spec, cancellationToken)
             ?? throw new FurnitureModelNotFoundException(command.FurnitureCode);
         
-        DeleteRemovedPartDefinitions(command, furnitureModel);
-        AddAndUpdateParts(command, furnitureModel);
+        var partDefinitionVos = new List<PartDefinitionVo>();
+
+        command.PartDefinitions.ToList().ForEach(pd =>
+        {
+            var partDefinitionVo = new PartDefinitionVo(pd.Id, pd.Name,
+                new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), 
+                pd.Color,pd.AdditionalInfo);
+
+            partDefinitionVos.Add(partDefinitionVo);
+        });
+        
+        furnitureModel.UpdatePartDefinitions(partDefinitionVos, currentUser, currentDateTime);
 
         await repository.SaveChangesAsync(cancellationToken);
 
@@ -50,41 +60,5 @@ public class UpdateCommandHandler(
                 TenantId = furnitureModel.TenantId
             }).ToList()
         };
-    }
-
-    private void DeleteRemovedPartDefinitions(UpdateCommand command, FurnitureModel furnitureModel)
-    {
-        // Get existing part definition IDs
-        var existingPartIds = furnitureModel.PartDefinitions.Select(p => p.Id).ToHashSet();
-        
-        // Get part definition IDs from command (only those that have IDs)
-        var commandPartIds = command.PartDefinitions
-            .Where(pd => pd.Id.HasValue)
-            .Select(pd => pd.Id.Value)
-            .ToHashSet();
-        
-        // Find part definitions to delete (exist in aggregate but not in command)
-        var partIdsToDelete = existingPartIds.Except(commandPartIds).ToList();
-        
-        // Delete part definitions that are no longer present in the command
-        partIdsToDelete.ForEach(id => furnitureModel.RemovePartDefinition(id, currentUser, currentDateTime));
-    }
-
-    private void AddAndUpdateParts(UpdateCommand command, FurnitureModel furnitureModel)
-    {
-        // Process updates and additions
-        command.PartDefinitions.ToList().ForEach(pd =>
-        {
-            var dimensions = new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm);
-            
-            if (pd.Id.HasValue)
-                furnitureModel.UpdatePartDefinition(
-                    pd.Id.Value, pd.Name, dimensions, pd.Color, pd.AdditionalInfo, currentUser, currentDateTime);
-            else
-            {
-                furnitureModel.AddPartDefinition(
-                    pd.Name, dimensions, pd.Color, pd.AdditionalInfo, currentUser, currentDateTime);
-            }
-        });
     }
 }
