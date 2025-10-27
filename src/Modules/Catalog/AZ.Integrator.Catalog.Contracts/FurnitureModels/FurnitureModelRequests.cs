@@ -10,18 +10,18 @@ public record ImportFurnitureModelRequest(
     IEnumerable<ImportPartDefinitionRequest> PartDefinitions
 );
 
+public record UpdateFurnitureModelRequest(
+    string FurnitureCode,
+    IEnumerable<UpdatePartDefinitionRequest> PartDefinitions
+);
+
 public record AddPartDefinitionRequest(
     string Name,
     int LengthMm,
     int WidthMm,
     int ThicknessMm,
-    string Color,
+    int Quantity,
     string AdditionalInfo
-);
-
-public record UpdateFurnitureModelRequest(
-    string FurnitureCode,
-    IEnumerable<UpdatePartDefinitionRequest> PartDefinitions
 );
 
 public record UpdatePartDefinitionRequest(
@@ -30,7 +30,7 @@ public record UpdatePartDefinitionRequest(
     int LengthMm,
     int WidthMm,
     int ThicknessMm,
-    string Color,
+    int Quantity,
     string AdditionalInfo
 );
 
@@ -39,6 +39,6 @@ public record ImportPartDefinitionRequest(
     int LengthMm,
     int WidthMm,
     int ThicknessMm,
-    string Color,
+    int Quantity,
     string AdditionalInfo
 );

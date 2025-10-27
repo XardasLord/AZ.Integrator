@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS catalog.part_definitions (
     furniture_code varchar(100) NOT NULL,
     tenant_id uuid NOT NULL,
     name varchar(100) NOT NULL,
-    color varchar(100) NULL,
+    quantity integer NOT NULL,
     additional_info varchar(100) NULL,
     length_mm integer NOT NULL,
     width_mm integer NOT NULL,

@@ -52,7 +52,7 @@ export class GetFurnitureDefinitionsGQL extends Query<GraphQLResponse<FurnitureM
               ${nameof<DimensionsViewModel>('widthMm')}
               ${nameof<DimensionsViewModel>('thicknessMm')}
             }
-            ${nameof<PartDefinitionViewModel>('color')}
+            ${nameof<PartDefinitionViewModel>('quantity')}
             ${nameof<PartDefinitionViewModel>('additionalInfo')}
           }
         }

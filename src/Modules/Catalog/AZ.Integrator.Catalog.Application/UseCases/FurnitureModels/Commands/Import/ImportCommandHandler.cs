@@ -23,7 +23,7 @@ public class ImportCommandHandler(
         {
             var partDefinitionVo = new PartDefinitionVo(null, pd.Name,
                 new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), 
-                pd.Color,pd.AdditionalInfo);
+                pd.Quantity, pd.AdditionalInfo);
 
             partDefinitionVos.Add(partDefinitionVo);
         });

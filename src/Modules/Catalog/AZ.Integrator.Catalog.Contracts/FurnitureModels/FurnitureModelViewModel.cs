@@ -21,7 +21,7 @@ public class PartDefinitionViewModel
     public Guid TenantId { get; init; }
     public string Name { get; init; }
     public DimensionsViewModel Dimensions { get; init; }
-    public string Color { get; init; }
+    public int Quantity { get; init; }
     public string? AdditionalInfo { get; init; }
 };
 

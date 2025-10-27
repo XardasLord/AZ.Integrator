@@ -4,11 +4,11 @@ public record PartDefinitionVo(
     int? PartDefinitionId,
     PartName Name,
     Dimensions Dimensions,
-    Color Color,
+    Quantity Quantity,
     string? AdditionalInfo)
 {
     internal PartDefinition ToPartDefinitionDomain()
     {
-        return new PartDefinition(Name, Dimensions, Color, AdditionalInfo);
+        return new PartDefinition(Name, Dimensions, Quantity, AdditionalInfo);
     }
 }

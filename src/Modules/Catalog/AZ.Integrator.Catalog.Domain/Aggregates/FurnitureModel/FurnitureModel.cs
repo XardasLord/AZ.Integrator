@@ -117,7 +117,7 @@ public class FurnitureModel : Entity, IAggregateRoot
 
         partDefinition.UpdateName(partDefinitionVo.Name);
         partDefinition.UpdateDimensions(partDefinitionVo.Dimensions);
-        partDefinition.UpdateColor(partDefinitionVo.Color);
+        partDefinition.UpdateQuantity(partDefinitionVo.Quantity);
         partDefinition.UpdateAdditionalInfo(partDefinitionVo.AdditionalInfo);
     }
 

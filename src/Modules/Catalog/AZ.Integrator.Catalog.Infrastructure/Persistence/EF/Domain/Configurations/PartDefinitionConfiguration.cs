@@ -24,10 +24,10 @@ public class PartDefinitionConfiguration : IEntityTypeConfiguration<PartDefiniti
             .HasConversion(name => name.Value, name => new PartName(name))
             .IsRequired();
 
-        builder.Property(e => e.Color)
-            .HasColumnName("color")
-            .HasConversion(color => color.Value, color => new Color(color))
-            .IsRequired(false);
+        builder.Property(e => e.Quantity)
+            .HasColumnName("quantity")
+            .HasConversion(quantity => quantity.Value, quantity => new Quantity(quantity))
+            .IsRequired();
 
         builder.Property(e => e.AdditionalInfo)
             .HasColumnName("additional_info")

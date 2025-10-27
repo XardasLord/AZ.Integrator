@@ -7,23 +7,23 @@ public class PartDefinition : Entity<int>
 {
     private PartName _name;
     private Dimensions _dimensions;
-    private Color _color;
+    private Quantity _quantity;
     private string? _additionalInfo;
 
     public PartName Name => _name;
     public Dimensions Dimensions => _dimensions;
-    public Color Color => _color;
+    public Quantity Quantity => _quantity;
     public string? AdditionalInfo => _additionalInfo;
 
     private PartDefinition()
     {
     }
 
-    internal PartDefinition(PartName name, Dimensions dimensions, Color color, string? additionalInfo = null)
+    internal PartDefinition(PartName name, Dimensions dimensions, Quantity quantity, string? additionalInfo = null)
     {
         _name = name ?? throw new ArgumentNullException(nameof(name));
         _dimensions = dimensions ?? throw new ArgumentNullException(nameof(dimensions));
-        _color = color;
+        _quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
         _additionalInfo = additionalInfo;
     }
 
@@ -37,9 +37,9 @@ public class PartDefinition : Entity<int>
         _dimensions = dimensions ?? throw new ArgumentNullException(nameof(dimensions));
     }
 
-    internal void UpdateColor(Color color)
+    internal void UpdateQuantity(Quantity quantity)
     {
-        _color = color;
+        _quantity = quantity;
     }
 
     internal void UpdateAdditionalInfo(string? additionalInfo)

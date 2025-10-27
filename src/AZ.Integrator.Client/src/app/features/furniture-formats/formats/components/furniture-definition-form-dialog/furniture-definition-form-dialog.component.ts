@@ -28,7 +28,7 @@ interface PartFormValue {
   lengthMm?: number | null;
   widthMm?: number | null;
   thicknessMm?: number | null;
-  color?: string | null;
+  quantity?: number | null;
   additionalInfo?: string | null;
 }
 
@@ -76,7 +76,7 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
           part.dimensions.lengthMm,
           part.dimensions.widthMm,
           part.dimensions.thicknessMm,
-          part.color,
+          part.quantity,
           part.additionalInfo!
         );
       });
@@ -87,14 +87,14 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
     this.form.markAllAsTouched();
   }
 
-  addPartDefinition(name = '', lengthMm = 0, widthMm = 0, thicknessMm = 0, color = '', additionalInfo = ''): void {
+  addPartDefinition(name = '', lengthMm = 0, widthMm = 0, thicknessMm = 0, quantity = 1, additionalInfo = ''): void {
     const partGroup = this.fb.group<PartDefinitionFormGroup>({
       id: new FormControl(null),
       name: new FormControl<string>(name, [Validators.required]),
       lengthMm: new FormControl<number>(lengthMm, [Validators.required, Validators.min(1)]),
       widthMm: new FormControl<number>(widthMm, [Validators.required, Validators.min(1)]),
       thicknessMm: new FormControl<number>(thicknessMm, [Validators.required, Validators.min(1)]),
-      color: new FormControl<string>(color, [Validators.required]),
+      quantity: new FormControl<number>(quantity, [Validators.required, Validators.min(1)]),
       additionalInfo: new FormControl<string>(additionalInfo, []),
     });
 
@@ -116,7 +116,7 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
       lengthMm: part.lengthMm!,
       widthMm: part.widthMm!,
       thicknessMm: part.thicknessMm!,
-      color: part.color!,
+      quantity: part.quantity!,
       additionalInfo: part.additionalInfo || '',
     }));
 

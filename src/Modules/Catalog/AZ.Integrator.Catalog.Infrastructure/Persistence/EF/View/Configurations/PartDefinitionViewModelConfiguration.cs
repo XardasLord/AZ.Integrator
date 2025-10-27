@@ -24,8 +24,8 @@ public class PartDefinitionViewModelConfiguration : IEntityTypeConfiguration<Par
         builder.Property(x => x.Name)
             .HasColumnName("name");
             
-        builder.Property(x => x.Color)
-            .HasColumnName("color");
+        builder.Property(x => x.Quantity)
+            .HasColumnName("quantity");
             
         builder.Property(x => x.AdditionalInfo)
             .HasColumnName("additional_info");

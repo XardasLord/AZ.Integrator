@@ -339,23 +339,23 @@ export type PageInfo = {
 export type PartDefinitionViewModel = {
   __typename?: 'PartDefinitionViewModel';
   additionalInfo?: Maybe<Scalars['String']['output']>;
-  color: Scalars['String']['output'];
   dimensions: DimensionsViewModel;
   furnitureCode: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
   tenantId: Scalars['UUID']['output'];
 };
 
 export type PartDefinitionViewModelFilterInput = {
   additionalInfo?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<PartDefinitionViewModelFilterInput>>;
-  color?: InputMaybe<StringOperationFilterInput>;
   dimensions?: InputMaybe<DimensionsViewModelFilterInput>;
   furnitureCode?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<IntOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<PartDefinitionViewModelFilterInput>>;
+  quantity?: InputMaybe<IntOperationFilterInput>;
   tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 

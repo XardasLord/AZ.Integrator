@@ -7,7 +7,7 @@ SELECT
     furniture_code,
     tenant_id,
     name,
-    color,
+    quantity,
     additional_info,
     length_mm,
     width_mm,

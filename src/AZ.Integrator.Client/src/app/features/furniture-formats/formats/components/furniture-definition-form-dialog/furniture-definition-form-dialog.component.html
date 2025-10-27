@@ -64,10 +64,13 @@
             </mat-form-field>
 
             <mat-form-field class="w-full">
-              <mat-label>Kolor</mat-label>
-              <input type="text" matInput formControlName="color" />
-              <mat-error *ngIf="partDefinitions.controls[i].get('color')?.hasError('required')">
-                Kolor jest wymagany
+              <mat-label>Ilość</mat-label>
+              <input type="number" matInput formControlName="quantity" />
+              <mat-error *ngIf="partDefinitions.controls[i].get('quantity')?.hasError('required')">
+                Ilość jest wymagana
+              </mat-error>
+              <mat-error *ngIf="partDefinitions.controls[i].get('quantity')?.hasError('min')">
+                Wartość musi być większa niż 0
               </mat-error>
             </mat-form-field>
           </div>

@@ -26,7 +26,7 @@ public class UpdateCommandHandler(
         {
             var partDefinitionVo = new PartDefinitionVo(pd.Id, pd.Name,
                 new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), 
-                pd.Color,pd.AdditionalInfo);
+                pd.Quantity, pd.AdditionalInfo);
 
             partDefinitionVos.Add(partDefinitionVo);
         });
@@ -54,7 +54,7 @@ public class UpdateCommandHandler(
                     WidthMm = p.Dimensions.WidthMm,
                     ThicknessMm = p.Dimensions.ThicknessMm
                 },
-                Color = p.Color,
+                Quantity = p.Quantity.Value,
                 AdditionalInfo = p.AdditionalInfo,
                 FurnitureCode = furnitureModel.FurnitureCode,
                 TenantId = furnitureModel.TenantId
