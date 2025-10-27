@@ -17,6 +17,7 @@ using AZ.Integrator.Shared.Infrastructure.Time;
 using AZ.Integrator.Shipments.Infrastructure;
 using AZ.Integrator.Stocks.Infrastructure;
 using AZ.Integrator.Monitoring.Infrastructure;
+using AZ.Integrator.Procurement.Infrastructure;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,7 +58,8 @@ public static class Extensions
             .AddInvoicesModuleGraphQlObjects()
             .AddShipmentsModuleGraphQlObjects()
             .AddMonitoringModuleGraphQlObjects()
-            .AddCatalogModuleGraphQlObjects();
+            .AddCatalogModuleGraphQlObjects()
+            .AddProcurementModuleGraphQlObjects();
         
         services.AddIntegratorOpenApi(configuration);
         
@@ -72,6 +74,7 @@ public static class Extensions
         services.RegisterShipmentsModule(configuration);
         services.RegisterMonitoringModule(configuration);
         services.RegisterCatalogModule(configuration);
+        services.RegisterProcurementModule(configuration);
 
         return services;
     }

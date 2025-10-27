@@ -103,6 +103,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Catalog.Infra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Catalog.Contracts", "Modules\Catalog\AZ.Integrator.Catalog.Contracts\AZ.Integrator.Catalog.Contracts.csproj", "{31F80205-BCB9-4A9B-96FA-3D8B2776668F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Procurement", "Procurement", "{AC387D09-35D5-4B19-8ED0-82FB974E1FCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Procurement.Domain", "Modules\Procurement\AZ.Integrator.Procurement.Domain\AZ.Integrator.Procurement.Domain.csproj", "{FF654CED-51A6-4779-8D86-F6A1AF1FFB34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Procurement.Infrastructure", "Modules\Procurement\AZ.Integrator.Procurement.Infrastructure\AZ.Integrator.Procurement.Infrastructure.csproj", "{0675D2E2-B434-457D-9BDD-E8943F56646F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Procurement.Application", "Modules\Procurement\AZ.Integrator.Procurement.Application\AZ.Integrator.Procurement.Application.csproj", "{17B8B7BD-EAB6-4452-88AD-CBD72B0F06B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Integrator.Procurement.Contracts", "Modules\Procurement\AZ.Integrator.Procurement.Contracts\AZ.Integrator.Procurement.Contracts.csproj", "{6C8FCA07-DC1D-423A-BF26-EACE6FC659E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -269,6 +279,22 @@ Global
 		{31F80205-BCB9-4A9B-96FA-3D8B2776668F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31F80205-BCB9-4A9B-96FA-3D8B2776668F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31F80205-BCB9-4A9B-96FA-3D8B2776668F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF654CED-51A6-4779-8D86-F6A1AF1FFB34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF654CED-51A6-4779-8D86-F6A1AF1FFB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF654CED-51A6-4779-8D86-F6A1AF1FFB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF654CED-51A6-4779-8D86-F6A1AF1FFB34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0675D2E2-B434-457D-9BDD-E8943F56646F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0675D2E2-B434-457D-9BDD-E8943F56646F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0675D2E2-B434-457D-9BDD-E8943F56646F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0675D2E2-B434-457D-9BDD-E8943F56646F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B8B7BD-EAB6-4452-88AD-CBD72B0F06B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B8B7BD-EAB6-4452-88AD-CBD72B0F06B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B8B7BD-EAB6-4452-88AD-CBD72B0F06B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B8B7BD-EAB6-4452-88AD-CBD72B0F06B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C8FCA07-DC1D-423A-BF26-EACE6FC659E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C8FCA07-DC1D-423A-BF26-EACE6FC659E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C8FCA07-DC1D-423A-BF26-EACE6FC659E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C8FCA07-DC1D-423A-BF26-EACE6FC659E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -315,5 +341,10 @@ Global
 		{5487538A-A835-492C-8804-D6002D282648} = {1C7E2258-5F57-49AA-9BF8-AAE88A5FD0AB}
 		{BEDC3D2C-88B4-4BD8-A003-009E931C3AF5} = {1C7E2258-5F57-49AA-9BF8-AAE88A5FD0AB}
 		{31F80205-BCB9-4A9B-96FA-3D8B2776668F} = {1C7E2258-5F57-49AA-9BF8-AAE88A5FD0AB}
+		{AC387D09-35D5-4B19-8ED0-82FB974E1FCE} = {AF5A56E9-8FD1-47B5-B69D-17756EDE918E}
+		{FF654CED-51A6-4779-8D86-F6A1AF1FFB34} = {AC387D09-35D5-4B19-8ED0-82FB974E1FCE}
+		{0675D2E2-B434-457D-9BDD-E8943F56646F} = {AC387D09-35D5-4B19-8ED0-82FB974E1FCE}
+		{17B8B7BD-EAB6-4452-88AD-CBD72B0F06B6} = {AC387D09-35D5-4B19-8ED0-82FB974E1FCE}
+		{6C8FCA07-DC1D-423A-BF26-EACE6FC659E2} = {AC387D09-35D5-4B19-8ED0-82FB974E1FCE}
 	EndGlobalSection
 EndGlobal
