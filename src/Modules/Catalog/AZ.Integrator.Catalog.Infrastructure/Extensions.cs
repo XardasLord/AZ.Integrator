@@ -1,7 +1,6 @@
 using AZ.Integrator.Catalog.Application;
 using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.Create;
 using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.Delete;
-using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.Import;
 using AZ.Integrator.Catalog.Application.UseCases.FurnitureModels.Commands.Update;
 using AZ.Integrator.Catalog.Contracts.FurnitureModels;
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel;
@@ -47,14 +46,6 @@ public static class Extensions
             
             return Results.Ok(response);
         });
-        
-        furnitureModelsGroup.MapPost("/import", 
-            async (ImportFurnitureModelRequest request, IMediator mediator, CancellationToken cancellationToken) =>
-            {
-                var response = await mediator.Send(new ImportCommand(request.FurnitureCode, request.PartDefinitions), cancellationToken);
-            
-                return Results.Ok(response);
-            });
         
         furnitureModelsGroup.MapPut("/{furnitureCode}", 
             async (UpdateFurnitureModelRequest request, IMediator mediator, CancellationToken cancellationToken) =>

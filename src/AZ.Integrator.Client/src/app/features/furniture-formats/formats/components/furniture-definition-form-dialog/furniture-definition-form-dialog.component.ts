@@ -23,6 +23,8 @@ import {
   PartDefinitionViewModel,
 } from '../../../../../shared/graphql/graphql-integrator.schema';
 import { EdgeBandingTypeHelper } from '../../helpers/edge-banding-type.helper';
+import { ExcelImportService } from '../../services/excel-import.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface PartFormValue {
   id?: number | null;
@@ -48,9 +50,12 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<FurnitureDefinitionFormDialogComponent>);
   private store = inject(Store);
+  private excelImportService = inject(ExcelImportService);
+  private toastr = inject(ToastrService);
 
   form!: FormGroup<FurnitureDefinitionFormGroup>;
   editMode: boolean = false;
+  isImporting: boolean = false;
 
   edgeBandingOptions = [
     { value: EdgeBandingTypeViewModel.None, label: 'Brak' },
@@ -164,5 +169,63 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
 
   onCancel(): void {
     this.dialogRef.close();
+  }
+
+  /**
+   * Obsługuje kliknięcie przycisku importu z Excel
+   */
+  onImportFromExcel(): void {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlsx,.xls';
+    input.onchange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (file) {
+        this.importExcelFile(file);
+      }
+    };
+    input.click();
+  }
+
+  /**
+   * Importuje dane z pliku Excel i wypełnia formularz
+   */
+  private async importExcelFile(file: File): Promise<void> {
+    this.isImporting = true;
+
+    try {
+      const importData = await this.excelImportService.importFurnitureFromExcel(file);
+
+      // Wypełnij kod mebla (tylko jeśli nie jesteśmy w trybie edycji)
+      if (!this.editMode) {
+        this.form.controls.furnitureCode.setValue(importData.furnitureCode);
+      }
+
+      // Wyczyść istniejące formatki
+      this.partDefinitions.clear();
+
+      // Dodaj formatki z importu
+      importData.parts.forEach(part => {
+        this.addPartDefinition(
+          part.name,
+          part.lengthMm,
+          part.widthMm,
+          part.thicknessMm,
+          EdgeBandingTypeHelper.fromNumber(part.lengthEdgeBandingType),
+          EdgeBandingTypeHelper.fromNumber(part.widthEdgeBandingType),
+          part.quantity,
+          part.additionalInfo
+        );
+      });
+
+      this.toastr.success(`Zaimportowano ${importData.parts.length} formatek`, 'Import zakończony sukcesem');
+    } catch (error: unknown) {
+      console.error('Błąd importu:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Wystąpił błąd podczas importu pliku Excel';
+      this.toastr.error(errorMessage, 'Błąd importu');
+    } finally {
+      this.isImporting = false;
+    }
   }
 }

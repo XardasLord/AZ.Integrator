@@ -10,14 +10,30 @@
 <div mat-dialog-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-section mt-4">
-      <mat-form-field class="w-full">
-        <mat-label>Kod mebla</mat-label>
-        <input type="text" matInput formControlName="furnitureCode" />
-        <mat-error *ngIf="form.controls.furnitureCode.hasError('required')"> Kod mebla jest wymagany </mat-error>
-        <mat-error *ngIf="form.controls.furnitureCode.hasError('minlength')">
-          Kod mebla musi mieć co najmniej 1 znak
-        </mat-error>
-      </mat-form-field>
+      <div class="flex gap-4 items-start">
+        <mat-form-field class="flex-1">
+          <mat-label>Kod mebla</mat-label>
+          <input type="text" matInput formControlName="furnitureCode" />
+          <mat-error *ngIf="form.controls.furnitureCode.hasError('required')"> Kod mebla jest wymagany </mat-error>
+          <mat-error *ngIf="form.controls.furnitureCode.hasError('minlength')">
+            Kod mebla musi mieć co najmniej 1 znak
+          </mat-error>
+        </mat-form-field>
+
+        @if (!editMode) {
+          <button
+            mat-raised-button
+            color="accent"
+            type="button"
+            (click)="onImportFromExcel()"
+            [disabled]="isImporting"
+            matTooltip="Importuj definicję z pliku Excel"
+            class="mt-1">
+            <mat-icon>upload_file</mat-icon>
+            {{ isImporting ? 'Importowanie...' : 'Import z Excel' }}
+          </button>
+        }
+      </div>
     </div>
 
     <mat-divider class="my-4" />

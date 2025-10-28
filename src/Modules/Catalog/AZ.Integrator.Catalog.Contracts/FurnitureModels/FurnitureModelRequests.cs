@@ -5,11 +5,6 @@ public record CreateFurnitureModelRequest(
     IEnumerable<AddPartDefinitionRequest> PartDefinitions
 );
 
-public record ImportFurnitureModelRequest(
-    string FurnitureCode,
-    IEnumerable<ImportPartDefinitionRequest> PartDefinitions
-);
-
 public record UpdateFurnitureModelRequest(
     string FurnitureCode,
     IEnumerable<UpdatePartDefinitionRequest> PartDefinitions
@@ -28,17 +23,6 @@ public record AddPartDefinitionRequest(
 
 public record UpdatePartDefinitionRequest(
     int? Id,
-    string Name,
-    int LengthMm,
-    int WidthMm,
-    int ThicknessMm,
-    int Quantity,
-    string AdditionalInfo,
-    EdgeBandingTypeViewModel LengthEdgeBandingType,
-    EdgeBandingTypeViewModel WidthEdgeBandingType
-);
-
-public record ImportPartDefinitionRequest(
     string Name,
     int LengthMm,
     int WidthMm,
