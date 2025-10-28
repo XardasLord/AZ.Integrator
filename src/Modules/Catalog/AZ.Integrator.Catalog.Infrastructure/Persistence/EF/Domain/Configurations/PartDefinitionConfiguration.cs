@@ -4,6 +4,7 @@ using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AZ.Integrator.Catalog.Infrastructure.Persistence.EF.Domain.Configurations;
 
@@ -46,6 +47,16 @@ public class PartDefinitionConfiguration : IEntityTypeConfiguration<PartDefiniti
 
             dimensions.Property(d => d.ThicknessMm)
                 .HasColumnName("thickness_mm")
+                .IsRequired();
+
+            dimensions.Property(d => d.LengthEdgeBandingType)
+                .HasColumnName("edge_band_length_sides")
+                .HasConversion(new EnumToNumberConverter<EdgeBandingType, int>())
+                .IsRequired();
+
+            dimensions.Property(d => d.WidthEdgeBandingType)
+                .HasColumnName("edge_band_width_sides")
+                .HasConversion(new EnumToNumberConverter<EdgeBandingType, int>())
                 .IsRequired();
         });
 

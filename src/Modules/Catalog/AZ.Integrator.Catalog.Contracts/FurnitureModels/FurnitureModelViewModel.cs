@@ -30,4 +30,13 @@ public class DimensionsViewModel
     public int LengthMm { get; init; }
     public int WidthMm { get; init; }
     public int ThicknessMm { get; init; }
+    public EdgeBandingTypeViewModel LengthEdgeBandingType { get; init; }
+    public EdgeBandingTypeViewModel WidthEdgeBandingType { get; init; }
 };
+
+public enum EdgeBandingTypeViewModel
+{
+    None = 0,
+    One = 1,
+    Two = 2
+}

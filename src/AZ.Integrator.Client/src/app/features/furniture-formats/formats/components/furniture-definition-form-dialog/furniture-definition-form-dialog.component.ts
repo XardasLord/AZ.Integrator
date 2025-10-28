@@ -18,9 +18,11 @@ import { SaveFurnitureDefinitionCommand } from '../../models/commands/save-furni
 import { PartDefinitionDto } from '../../models/part-definition.dto';
 import { AddFurnitureDefinition, UpdateFurnitureDefinition } from '../../states/formats.action';
 import {
+  EdgeBandingTypeViewModel,
   FurnitureModelViewModel,
   PartDefinitionViewModel,
 } from '../../../../../shared/graphql/graphql-integrator.schema';
+import { EdgeBandingTypeHelper } from '../../helpers/edge-banding-type.helper';
 
 interface PartFormValue {
   id?: number | null;
@@ -28,6 +30,8 @@ interface PartFormValue {
   lengthMm?: number | null;
   widthMm?: number | null;
   thicknessMm?: number | null;
+  lengthEdgeBandingType?: EdgeBandingTypeViewModel | null;
+  widthEdgeBandingType?: EdgeBandingTypeViewModel | null;
   quantity?: number | null;
   additionalInfo?: string | null;
 }
@@ -47,6 +51,12 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
 
   form!: FormGroup<FurnitureDefinitionFormGroup>;
   editMode: boolean = false;
+
+  edgeBandingOptions = [
+    { value: EdgeBandingTypeViewModel.None, label: 'Brak' },
+    { value: EdgeBandingTypeViewModel.One, label: 'Jedna krawędź' },
+    { value: EdgeBandingTypeViewModel.Two, label: 'Dwie krawędzie' },
+  ];
 
   get partDefinitions(): FormArray<FormGroup<PartDefinitionFormGroup>> {
     return this.form.controls.partDefinitions;
@@ -76,6 +86,8 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
           part.dimensions.lengthMm,
           part.dimensions.widthMm,
           part.dimensions.thicknessMm,
+          part.dimensions.lengthEdgeBandingType,
+          part.dimensions.widthEdgeBandingType,
           part.quantity,
           part.additionalInfo!
         );
@@ -87,13 +99,24 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
     this.form.markAllAsTouched();
   }
 
-  addPartDefinition(name = '', lengthMm = 0, widthMm = 0, thicknessMm = 0, quantity = 1, additionalInfo = ''): void {
+  addPartDefinition(
+    name = '',
+    lengthMm = 0,
+    widthMm = 0,
+    thicknessMm = 0,
+    lengthEdgeBandingType = EdgeBandingTypeViewModel.None,
+    widthEdgeBankingType = EdgeBandingTypeViewModel.None,
+    quantity = 1,
+    additionalInfo = ''
+  ): void {
     const partGroup = this.fb.group<PartDefinitionFormGroup>({
       id: new FormControl(null),
       name: new FormControl<string>(name, [Validators.required]),
       lengthMm: new FormControl<number>(lengthMm, [Validators.required, Validators.min(1)]),
       widthMm: new FormControl<number>(widthMm, [Validators.required, Validators.min(1)]),
       thicknessMm: new FormControl<number>(thicknessMm, [Validators.required, Validators.min(1)]),
+      lengthEdgeBandingType: new FormControl<EdgeBandingTypeViewModel>(lengthEdgeBandingType, [Validators.required]),
+      widthEdgeBandingType: new FormControl<EdgeBandingTypeViewModel>(widthEdgeBankingType, [Validators.required]),
       quantity: new FormControl<number>(quantity, [Validators.required, Validators.min(1)]),
       additionalInfo: new FormControl<string>(additionalInfo, []),
     });
@@ -116,6 +139,8 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
       lengthMm: part.lengthMm!,
       widthMm: part.widthMm!,
       thicknessMm: part.thicknessMm!,
+      lengthEdgeBandingType: EdgeBandingTypeHelper.toNumber(part.lengthEdgeBandingType!),
+      widthEdgeBandingType: EdgeBandingTypeHelper.toNumber(part.widthEdgeBandingType!),
       quantity: part.quantity!,
       additionalInfo: part.additionalInfo || '',
     }));

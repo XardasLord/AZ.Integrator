@@ -2,6 +2,7 @@
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AZ.Integrator.Catalog.Infrastructure.Persistence.EF.View.Configurations;
 
@@ -40,6 +41,14 @@ public class PartDefinitionViewModelConfiguration : IEntityTypeConfiguration<Par
 
             d.Property(p => p.ThicknessMm)
                 .HasColumnName("thickness_mm");
+
+            d.Property(p => p.LengthEdgeBandingType)
+                .HasColumnName("edge_band_length_sides")
+                .HasConversion(new EnumToNumberConverter<EdgeBandingTypeViewModel, int>());
+
+            d.Property(p => p.WidthEdgeBandingType)
+                .HasColumnName("edge_band_width_sides")
+                .HasConversion(new EnumToNumberConverter<EdgeBandingTypeViewModel, int>());
         });
     }
 }

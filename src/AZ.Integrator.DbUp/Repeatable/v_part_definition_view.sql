@@ -11,5 +11,7 @@ SELECT
     additional_info,
     length_mm,
     width_mm,
-    thickness_mm
+    thickness_mm,
+    edge_band_length_sides,
+    edge_band_width_sides
 FROM catalog.part_definitions;

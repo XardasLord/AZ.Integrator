@@ -22,7 +22,7 @@ public class ImportCommandHandler(
         command.PartDefinitions.ToList().ForEach(pd =>
         {
             var partDefinitionVo = new PartDefinitionVo(null, pd.Name,
-                new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), 
+                new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm, (EdgeBandingType)pd.LengthEdgeBandingType, (EdgeBandingType)pd.WidthEdgeBandingType), 
                 pd.Quantity, pd.AdditionalInfo);
 
             partDefinitionVos.Add(partDefinitionVo);

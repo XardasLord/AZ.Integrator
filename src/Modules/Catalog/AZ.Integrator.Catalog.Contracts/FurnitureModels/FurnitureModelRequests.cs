@@ -21,7 +21,9 @@ public record AddPartDefinitionRequest(
     int WidthMm,
     int ThicknessMm,
     int Quantity,
-    string AdditionalInfo
+    string AdditionalInfo,
+    EdgeBandingTypeViewModel LengthEdgeBandingType,
+    EdgeBandingTypeViewModel WidthEdgeBandingType
 );
 
 public record UpdatePartDefinitionRequest(
@@ -31,7 +33,9 @@ public record UpdatePartDefinitionRequest(
     int WidthMm,
     int ThicknessMm,
     int Quantity,
-    string AdditionalInfo
+    string AdditionalInfo,
+    EdgeBandingTypeViewModel LengthEdgeBandingType,
+    EdgeBandingTypeViewModel WidthEdgeBandingType
 );
 
 public record ImportPartDefinitionRequest(
@@ -40,5 +44,7 @@ public record ImportPartDefinitionRequest(
     int WidthMm,
     int ThicknessMm,
     int Quantity,
-    string AdditionalInfo
+    string AdditionalInfo,
+    EdgeBandingTypeViewModel LengthEdgeBandingType,
+    EdgeBandingTypeViewModel WidthEdgeBandingType
 );

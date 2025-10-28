@@ -4,6 +4,8 @@ export interface PartDefinitionDto {
   lengthMm: number;
   widthMm: number;
   thicknessMm: number;
+  lengthEdgeBandingType: number;
+  widthEdgeBandingType: number;
   quantity: number;
   additionalInfo: string;
 }

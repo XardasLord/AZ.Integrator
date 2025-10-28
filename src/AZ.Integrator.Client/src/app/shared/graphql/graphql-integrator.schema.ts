@@ -48,16 +48,20 @@ export type DateTimeOperationFilterInput = {
 
 export type DimensionsViewModel = {
   __typename?: 'DimensionsViewModel';
+  lengthEdgeBandingType: EdgeBandingTypeViewModel;
   lengthMm: Scalars['Int']['output'];
   thicknessMm: Scalars['Int']['output'];
+  widthEdgeBandingType: EdgeBandingTypeViewModel;
   widthMm: Scalars['Int']['output'];
 };
 
 export type DimensionsViewModelFilterInput = {
   and?: InputMaybe<Array<DimensionsViewModelFilterInput>>;
+  lengthEdgeBandingType?: InputMaybe<EdgeBandingTypeViewModelOperationFilterInput>;
   lengthMm?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<DimensionsViewModelFilterInput>>;
   thicknessMm?: InputMaybe<IntOperationFilterInput>;
+  widthEdgeBandingType?: InputMaybe<EdgeBandingTypeViewModelOperationFilterInput>;
   widthMm?: InputMaybe<IntOperationFilterInput>;
 };
 
@@ -74,6 +78,19 @@ export type DpdShipmentViewModelFilterInput = {
   externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
+};
+
+export enum EdgeBandingTypeViewModel {
+  None = 'NONE',
+  One = 'ONE',
+  Two = 'TWO'
+}
+
+export type EdgeBandingTypeViewModelOperationFilterInput = {
+  eq?: InputMaybe<EdgeBandingTypeViewModel>;
+  in?: InputMaybe<Array<EdgeBandingTypeViewModel>>;
+  neq?: InputMaybe<EdgeBandingTypeViewModel>;
+  nin?: InputMaybe<Array<EdgeBandingTypeViewModel>>;
 };
 
 export type FloatOperationFilterInput = {

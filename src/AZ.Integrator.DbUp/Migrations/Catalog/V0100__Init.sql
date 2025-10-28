@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS catalog.part_definitions (
     additional_info varchar(100) NULL,
     length_mm integer NOT NULL,
     width_mm integer NOT NULL,
-    thickness_mm integer NOT NULL
+    thickness_mm integer NOT NULL,
+    edge_band_length_sides smallint NOT NULL DEFAULT 0,
+    edge_band_width_sides smallint NOT NULL DEFAULT 0
 );
 
 COMMIT;

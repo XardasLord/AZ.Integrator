@@ -110,6 +110,32 @@
             </mat-form-field>
           </div>
 
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <mat-form-field class="w-full">
+              <mat-label>Oklejenie długości krawędzi</mat-label>
+              <mat-select formControlName="lengthEdgeBandingType">
+                <mat-option *ngFor="let option of edgeBandingOptions" [value]="option.value">
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="partDefinitions.controls[i].get('lengthEdgeBandingType')?.hasError('required')">
+                Wartość jest wymagana
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+              <mat-label>Oklejenie szerokości krawędzi</mat-label>
+              <mat-select formControlName="widthEdgeBandingType">
+                <mat-option *ngFor="let option of edgeBandingOptions" [value]="option.value">
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="partDefinitions.controls[i].get('widthEdgeBandingType')?.hasError('required')">
+                Wartość jest wymagana
+              </mat-error>
+            </mat-form-field>
+          </div>
+
           <mat-form-field class="w-full">
             <mat-label>Dodatkowe informacje</mat-label>
             <textarea matInput formControlName="additionalInfo" rows="2"></textarea>

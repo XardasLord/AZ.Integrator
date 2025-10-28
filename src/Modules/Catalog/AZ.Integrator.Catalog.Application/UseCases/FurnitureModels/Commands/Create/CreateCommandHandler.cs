@@ -27,7 +27,7 @@ public class CreateCommandHandler(
         command.PartDefinitions.ToList().ForEach(pd =>
         {
             var partDefinitionVo = new PartDefinitionVo(null, pd.Name,
-                new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm), 
+                new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm, (EdgeBandingType)pd.LengthEdgeBandingType, (EdgeBandingType)pd.WidthEdgeBandingType), 
                 pd.Quantity, pd.AdditionalInfo);
 
             partDefinitionVos.Add(partDefinitionVo);
@@ -54,7 +54,9 @@ public class CreateCommandHandler(
                 {
                     LengthMm = p.Dimensions.LengthMm,
                     WidthMm = p.Dimensions.WidthMm,
-                    ThicknessMm = p.Dimensions.ThicknessMm
+                    ThicknessMm = p.Dimensions.ThicknessMm,
+                    LengthEdgeBandingType = (EdgeBandingTypeViewModel)p.Dimensions.LengthEdgeBandingType,
+                    WidthEdgeBandingType = (EdgeBandingTypeViewModel)p.Dimensions.WidthEdgeBandingType
                 },
                 Quantity = p.Quantity.Value,
                 AdditionalInfo = p.AdditionalInfo,
