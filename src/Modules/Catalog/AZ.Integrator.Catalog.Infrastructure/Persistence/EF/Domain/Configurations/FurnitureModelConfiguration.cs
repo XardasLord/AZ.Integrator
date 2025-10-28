@@ -39,7 +39,7 @@ public class FurnitureModelConfiguration : IEntityTypeConfiguration<FurnitureMod
             .HasColumnName("deleted_at")
             .IsRequired(false);
         
-        builder.OwnsOne(e => e.CreationInformation, ci =>
+        builder.ComplexProperty(e => e.CreationInformation, ci =>
         {
             ci.Property(c => c.CreatedAt).HasColumnName("created_at").IsRequired();
             ci.Property(c => c.CreatedBy).HasColumnName("created_by").IsRequired();
@@ -47,16 +47,17 @@ public class FurnitureModelConfiguration : IEntityTypeConfiguration<FurnitureMod
                 .HasConversion(id => id.Value, id => new TenantId(id))
                 .HasColumnName("tenant_id")
                 .IsRequired();
+
+            ci.IsRequired();
         });
         
-        builder.OwnsOne(e => e.ModificationInformation, mi =>
+        builder.ComplexProperty(e => e.ModificationInformation, mi =>
         {
             mi.Property(c => c.ModifiedAt).HasColumnName("modified_at").IsRequired();
             mi.Property(c => c.ModifiedBy).HasColumnName("modified_by").IsRequired();
-        });
 
-        builder.Navigation(e => e.CreationInformation).IsRequired();
-        builder.Navigation(e => e.ModificationInformation).IsRequired();
+            mi.IsRequired();
+        });
 
         builder.HasMany(x => x.PartDefinitions)
             .WithOne()

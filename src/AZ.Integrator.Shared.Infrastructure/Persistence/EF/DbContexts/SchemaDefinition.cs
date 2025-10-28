@@ -6,4 +6,5 @@ public static class SchemaDefinition
     public const string Billing = "billing";
     public const string Catalog = "catalog";
     public const string Monitoring = "monitoring";
+    public const string Procurement = "procurement";
 }
