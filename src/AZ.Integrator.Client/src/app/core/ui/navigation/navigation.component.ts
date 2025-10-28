@@ -63,7 +63,7 @@ export class NavigationComponent implements OnInit {
       subItems: [
         {
           title: 'Formatki',
-          icon: 'folder',
+          icon: 'view_module',
           route: FurnitureFormatsRoutePath.Formats,
           roles: [AuthRoles.Admin],
         },
