@@ -44,6 +44,8 @@ public class UpdateCommandHandler(
             DeletedAt = furnitureModel.DeletedAt,
             CreatedBy = furnitureModel.CreationInformation.CreatedBy,
             CreatedAt = furnitureModel.CreationInformation.CreatedAt.Date,
+            ModifiedBy = furnitureModel.ModificationInformation.ModifiedBy,
+            ModifiedAt = furnitureModel.ModificationInformation.ModifiedAt.Date,
             PartDefinitions = furnitureModel.PartDefinitions.Select(p => new PartDefinitionViewModel
             {
                 Id = p.Id,

@@ -15,6 +15,8 @@ import { StockLogsState } from '../../features/stocks/states/stock-logs.state';
 import { StockGroupsService } from '../../features/stocks/services/stock-groups.service';
 import { FormatsState } from '../../features/furniture-formats/formats/states/formats.state';
 import { FurnitureFormatsService } from '../../features/furniture-formats/formats/services/furniture-formats.service';
+import { SuppliersState } from '../../features/furniture-formats/suppliers/states/suppliers.state';
+import { SuppliersService } from '../../features/furniture-formats/suppliers/services/suppliers.service';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -113,6 +115,7 @@ const routes: Routes = [
           import('../../features/furniture-formats/suppliers/pages/suppliers/suppliers.component').then(
             c => c.SuppliersComponent
           ),
+        providers: [provideStates([SuppliersState]), SuppliersService],
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],

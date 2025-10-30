@@ -1,10 +1,17 @@
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Procurement.Application;
+using AZ.Integrator.Procurement.Application.UseCases.Suppliers.Commands.Create;
+using AZ.Integrator.Procurement.Contracts.Suppliers;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF.Domain;
+using AZ.Integrator.Procurement.Infrastructure.Persistence.EF.View;
+using AZ.Integrator.Procurement.Infrastructure.Persistence.GraphQL.QueryResolvers;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using HotChocolate.Execution.Configuration;
+using Mediator;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,14 +33,26 @@ public static class Extensions
     {
         const string swaggerGroupName = "Procurement";
         
+        var suppliersGroup = endpoints.MapGroup("/api/procurement/suppliers").WithTags(swaggerGroupName).RequireAuthorization();
+        
+        suppliersGroup.MapGet("/info", () => Results.Ok("Suppliers module")).AllowAnonymous();
+        
+        suppliersGroup.MapPost("/", 
+            async (CreateSupplierRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                var response = await mediator.Send(new CreateCommand(request.Name, request.TelephoneNumber, request.Mailboxes), cancellationToken);
+            
+                return Results.Ok(response);
+            });
+        
         return endpoints;
     }
     
     public static IRequestExecutorBuilder AddProcurementModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
-        return builder;
-        // .RegisterDbContext<CatalogDataViewContext>()
-        // .AddType<CatalogViewResolver>();
+        return builder
+            .RegisterDbContext<ProcurementDataViewContext>()
+            .AddType<ProcurementViewResolver>();
     }
     
     private static IServiceCollection AddModuleDomainServices(this IServiceCollection services)

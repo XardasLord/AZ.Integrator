@@ -211,6 +211,7 @@ export type IntegratorQuery = {
   shipments: Array<ShipmentViewModel>;
   stockGroups: Array<StockGroupViewModel>;
   stocks: Array<StockViewModel>;
+  suppliers?: Maybe<SuppliersConnection>;
   tagParcelTemplates?: Maybe<TagParcelTemplatesConnection>;
 };
 
@@ -261,6 +262,16 @@ export type IntegratorQueryStockGroupsArgs = {
 export type IntegratorQueryStocksArgs = {
   order?: InputMaybe<Array<StockViewModelSortInput>>;
   where?: InputMaybe<StockViewModelFilterInput>;
+};
+
+
+export type IntegratorQuerySuppliersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<SupplierViewModelSortInput>>;
+  where?: InputMaybe<SupplierViewModelFilterInput>;
 };
 
 
@@ -316,6 +327,13 @@ export type ListFilterInputTypeOfStockViewModelFilterInput = {
   any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<StockViewModelFilterInput>;
   some?: InputMaybe<StockViewModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfSupplierMailboxViewModelFilterInput = {
+  all?: InputMaybe<SupplierMailboxViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SupplierMailboxViewModelFilterInput>;
+  some?: InputMaybe<SupplierMailboxViewModelFilterInput>;
 };
 
 export type ListFilterInputTypeOfTagParcelViewModelFilterInput = {
@@ -502,6 +520,81 @@ export type StringOperationFilterInput = {
   nstartsWith?: InputMaybe<Scalars['String']['input']>;
   or?: InputMaybe<Array<StringOperationFilterInput>>;
   startsWith?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SupplierMailboxViewModel = {
+  __typename?: 'SupplierMailboxViewModel';
+  email: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  supplierId: Scalars['Int']['output'];
+};
+
+export type SupplierMailboxViewModelFilterInput = {
+  and?: InputMaybe<Array<SupplierMailboxViewModelFilterInput>>;
+  email?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<SupplierMailboxViewModelFilterInput>>;
+  supplierId?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type SupplierViewModel = {
+  __typename?: 'SupplierViewModel';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['UUID']['output'];
+  id: Scalars['Int']['output'];
+  mailboxes: Array<SupplierMailboxViewModel>;
+  modifiedAt: Scalars['DateTime']['output'];
+  modifiedBy: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
+  telephoneNumber: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type SupplierViewModelFilterInput = {
+  and?: InputMaybe<Array<SupplierViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdBy?: InputMaybe<UuidOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  mailboxes?: InputMaybe<ListFilterInputTypeOfSupplierMailboxViewModelFilterInput>;
+  modifiedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  modifiedBy?: InputMaybe<UuidOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SupplierViewModelFilterInput>>;
+  telephoneNumber?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type SupplierViewModelSortInput = {
+  createdAt?: InputMaybe<SortEnumType>;
+  createdBy?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  modifiedAt?: InputMaybe<SortEnumType>;
+  modifiedBy?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+  telephoneNumber?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type SuppliersConnection = {
+  __typename?: 'SuppliersConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<SuppliersEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<SupplierViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type SuppliersEdge = {
+  __typename?: 'SuppliersEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: SupplierViewModel;
 };
 
 export type TagParcelTemplateViewModel = {

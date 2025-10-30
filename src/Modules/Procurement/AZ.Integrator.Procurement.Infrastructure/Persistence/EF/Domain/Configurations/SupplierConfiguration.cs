@@ -20,7 +20,7 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
         builder.Property(e => e.Id)
             .HasColumnName("id")
             .HasConversion(id => id.Value, id => new SupplierId(id))
-            .IsRequired();
+            .UseIdentityColumn();
 
         builder.Property(e => e.Name)
             .HasColumnName("name")
