@@ -1,6 +1,7 @@
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Procurement.Application;
 using AZ.Integrator.Procurement.Application.UseCases.Suppliers.Commands.Create;
+using AZ.Integrator.Procurement.Application.UseCases.Suppliers.Commands.Update;
 using AZ.Integrator.Procurement.Contracts.Suppliers;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF;
@@ -41,6 +42,14 @@ public static class Extensions
             async (CreateSupplierRequest request, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 var response = await mediator.Send(new CreateCommand(request.Name, request.TelephoneNumber, request.Mailboxes), cancellationToken);
+            
+                return Results.Ok(response);
+            });
+        
+        suppliersGroup.MapPut("/{supplierId}", 
+            async (int supplierId, UpdateSupplierRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                var response = await mediator.Send(new UpdateCommand(supplierId, request.Name, request.TelephoneNumber, request.Mailboxes), cancellationToken);
             
                 return Results.Ok(response);
             });

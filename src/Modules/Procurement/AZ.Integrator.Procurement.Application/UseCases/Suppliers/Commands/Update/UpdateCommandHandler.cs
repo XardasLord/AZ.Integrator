@@ -6,29 +6,27 @@ using AZ.Integrator.Procurement.Domain.Aggregates.Supplier;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier.Specifications;
 using Mediator;
 
-namespace AZ.Integrator.Procurement.Application.UseCases.Suppliers.Commands.Create;
+namespace AZ.Integrator.Procurement.Application.UseCases.Suppliers.Commands.Update;
 
-public class CreateCommandHandler(
+public class UpdateCommandHandler(
     IAggregateRepository<Supplier> repository,
     ICurrentUser currentUser,
     ICurrentDateTime currentDateTime)
-    : ICommandHandler<CreateCommand, SupplierViewModel>
+    : ICommandHandler<UpdateCommand, SupplierViewModel>
 {
-    public async ValueTask<SupplierViewModel> Handle(CreateCommand command, CancellationToken cancellationToken)
+    public async ValueTask<SupplierViewModel> Handle(UpdateCommand command, CancellationToken cancellationToken)
     {
-        var spec = new SupplierByNameSpec(command.SupplierName, currentUser.TenantId);
-        var existingSupplier = await repository.FirstOrDefaultAsync(spec, cancellationToken);
-
-        if (existingSupplier != null)
-            throw new SupplierAlreadyExistsException(command.SupplierName);
-
-        var supplier = Supplier.Create(
+        var spec = new SupplierByIdSpec(command.SupplierId, currentUser.TenantId);
+        var supplier = await repository.FirstOrDefaultAsync(spec, cancellationToken)
+            ?? throw new SupplierNotFoundException(command.SupplierName);
+        
+        supplier.Update(
             command.SupplierName, 
             command.TelephoneNumber,
             command.Mailboxes.Select(x => new Email(x.Email)).ToList(),
             currentUser, currentDateTime);
 
-        await repository.AddAsync(supplier, cancellationToken);
+        await repository.SaveChangesAsync(cancellationToken);
 
         return new SupplierViewModel
         {

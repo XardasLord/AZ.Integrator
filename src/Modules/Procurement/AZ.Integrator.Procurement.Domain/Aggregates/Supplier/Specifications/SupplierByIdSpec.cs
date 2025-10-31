@@ -3,13 +3,13 @@ using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 
 namespace AZ.Integrator.Procurement.Domain.Aggregates.Supplier.Specifications;
 
-public sealed class SupplierByNameSpec : Specification<Supplier>, ISingleResultSpecification<Supplier>
+public sealed class SupplierByIdSpec : Specification<Supplier>, ISingleResultSpecification<Supplier>
 {
-    public SupplierByNameSpec(string name, Guid tenantId)
+    public SupplierByIdSpec(int id, Guid tenantId)
     {
         Query
             .Include(x => x.Mailboxes)
-            .Where(x => x.Name == name)
+            .Where(x => x.Id == id)
             .Where(x => x.CreationInformation.TenantId == new TenantId(tenantId));
     }
 }
