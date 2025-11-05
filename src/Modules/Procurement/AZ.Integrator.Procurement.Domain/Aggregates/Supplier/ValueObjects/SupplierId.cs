@@ -2,11 +2,11 @@
 
 public sealed record SupplierId(uint Value)
 {
-    public static implicit operator uint(SupplierId tenantId)
-        => tenantId.Value;
+    public static implicit operator uint(SupplierId id)
+        => id.Value;
 
-    public static implicit operator SupplierId(uint tenantId)
-        => new(tenantId);
+    public static implicit operator SupplierId(uint id)
+        => new(id);
 
     public override string ToString() => Value.ToString();
 }
