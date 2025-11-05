@@ -3,7 +3,7 @@ START TRANSACTION;
 CREATE TABLE IF NOT EXISTS procurement.orders (
     id bigserial NOT NULL PRIMARY KEY,
     tenant_id uuid NOT NULL,
-    order_number varchar(100) NOT NULL,
+    number varchar(100) NOT NULL,
     supplier_id bigint NOT NULL,
     status integer NOT NULL,
     created_at timestamp with time zone NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS procurement.order_furniture_lines (
     CONSTRAINT fk_order_furniture_lines__furniture_code FOREIGN KEY (furniture_code, tenant_id) REFERENCES catalog.furniture_models(furniture_code, tenant_id)
 );
 
-CREATE TABLE IF NOT EXISTS procurement.order_part_lines (
+CREATE TABLE IF NOT EXISTS procurement.order_furniture_part_lines (
     id bigserial NOT NULL PRIMARY KEY,
     order_furniture_line_id bigint NOT NULL,
     part_name varchar(100) NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS procurement.order_part_lines (
     edge_band_length_sides smallint NOT NULL DEFAULT 0,
     edge_band_width_sides smallint NOT NULL DEFAULT 0,
 
-    CONSTRAINT fk_order_furniture_lines__order_furniture_line_id FOREIGN KEY (order_furniture_line_id) REFERENCES procurement.order_furniture_lines(id)
+    CONSTRAINT fk_order_furniture_part_lines__order_furniture_line_id FOREIGN KEY (order_furniture_line_id) REFERENCES procurement.order_furniture_lines(id)
 );
 
 COMMIT;

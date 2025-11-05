@@ -17,7 +17,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
     private TenantCreationInformation _creationInformation = null!;
     private ModificationInformation _modificationInformation = null!;
 
-    private List<FurnitureModelLine> _furnitureModelLines;
+    private List<OrderFurnitureLine> _furnitureModelLines;
 
     public OrderNumber Number => _number;
     public TenantId TenantId => _tenantId;
@@ -26,7 +26,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
     public TenantCreationInformation CreationInformation => _creationInformation;
     public ModificationInformation ModificationInformation => _modificationInformation;
     
-    public IReadOnlyCollection<FurnitureModelLine> FurnitureModelLines => _furnitureModelLines.AsReadOnly();
+    public IReadOnlyCollection<OrderFurnitureLine> FurnitureModelLines => _furnitureModelLines.AsReadOnly();
 
     private PartDefinitionsOrder()
     {
@@ -109,7 +109,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
 
     private void AddFurnitureModelLine(FurnitureModelLineData lineData)
     {
-        var line = FurnitureModelLine.Create(
+        var line = OrderFurnitureLine.Create(
             lineData.FurnitureCode,
             lineData.FurnitureVersion,
             lineData.QuantityOrdered,
@@ -136,7 +136,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
         
         var dataLineIds = furnitureModelLinesData
             .Where(ld => ld.FurnitureModelLineId.HasValue)
-            .Select(ld => ld.FurnitureModelLineId!.Value)
+            .Select(ld => (OrderFurnitureLineId)ld.FurnitureModelLineId!.Value)
             .ToHashSet();
         
         var lineIdsToDelete = existingLineIds.Except(dataLineIds).ToList();
@@ -144,7 +144,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
         lineIdsToDelete.ForEach(RemoveFurnitureModelLine);
     }
 
-    private void RemoveFurnitureModelLine(uint lineId)
+    private void RemoveFurnitureModelLine(OrderFurnitureLineId lineId)
     {
         var line = _furnitureModelLines.FirstOrDefault(l => l.Id == lineId)
             ?? throw new ArgumentException($"Furniture model line with ID {lineId} not found");

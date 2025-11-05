@@ -3,7 +3,7 @@ using AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder.ValueObje
 
 namespace AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder;
 
-public class PartDefinitionLine : Entity<uint>
+public class OrderFurniturePartLine : Entity<OrderFurniturePartLineId>
 {
     private PartName _partName = null!;
     private Dimensions _dimensions = null!;
@@ -15,11 +15,11 @@ public class PartDefinitionLine : Entity<uint>
     public Quantity Quantity => _quantity;
     public string? AdditionalInfo => _additionalInfo;
 
-    private PartDefinitionLine()
+    private OrderFurniturePartLine()
     {
     }
 
-    internal static PartDefinitionLine Create(
+    internal static OrderFurniturePartLine Create(
         PartName partName,
         Dimensions dimensions,
         Quantity quantity,
@@ -28,7 +28,7 @@ public class PartDefinitionLine : Entity<uint>
         if (quantity.Value <= 0)
             throw new ArgumentException("Quantity must be greater than 0", nameof(quantity));
 
-        return new PartDefinitionLine
+        return new OrderFurniturePartLine
         {
             _partName = partName ?? throw new ArgumentNullException(nameof(partName)),
             _dimensions = dimensions ?? throw new ArgumentNullException(nameof(dimensions)),

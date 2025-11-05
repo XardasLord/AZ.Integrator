@@ -4,28 +4,28 @@ using AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder.ValueObje
 
 namespace AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder;
 
-public class FurnitureModelLine : Entity<uint>
+public class OrderFurnitureLine : Entity<OrderFurnitureLineId>
 {
     private string _furnitureCode;
     private int _furnitureVersion;
     private Quantity _quantityOrdered = null!;
     private TenantId _tenantId = null!;
     
-    private List<PartDefinitionLine> _lines;
+    private List<OrderFurniturePartLine> _lines;
     
     public string FurnitureCode => _furnitureCode;
     public int FurnitureVersion => _furnitureVersion;
     public Quantity QuantityOrdered => _quantityOrdered;
     public TenantId TenantId => _tenantId;
     
-    public IReadOnlyCollection<PartDefinitionLine> Lines => _lines.AsReadOnly();
+    public IReadOnlyCollection<OrderFurniturePartLine> Lines => _lines.AsReadOnly();
 
-    private FurnitureModelLine()
+    private OrderFurnitureLine()
     {
         _lines = [];
     }
 
-    internal static FurnitureModelLine Create(
+    internal static OrderFurnitureLine Create(
         string furnitureCode,
         int furnitureVersion,
         Quantity quantityOrdered,
@@ -35,7 +35,7 @@ public class FurnitureModelLine : Entity<uint>
         if (quantityOrdered.Value <= 0)
             throw new ArgumentException("Quantity ordered must be greater than 0", nameof(quantityOrdered));
 
-        var line = new FurnitureModelLine
+        var line = new OrderFurnitureLine
         {
             _furnitureCode = furnitureCode,
             _furnitureVersion = furnitureVersion,
@@ -77,7 +77,7 @@ public class FurnitureModelLine : Entity<uint>
 
     private void AddPartDefinitionLine(PartDefinitionLineData lineData)
     {
-        var line = PartDefinitionLine.Create(
+        var line = OrderFurniturePartLine.Create(
             lineData.PartName,
             lineData.Dimensions,
             lineData.Quantity,
@@ -103,7 +103,7 @@ public class FurnitureModelLine : Entity<uint>
         
         var dataLineIds = partDefinitionLinesData
             .Where(ld => ld.PartDefinitionLineId.HasValue)
-            .Select(ld => ld.PartDefinitionLineId!.Value)
+            .Select(ld => (OrderFurniturePartLineId)ld.PartDefinitionLineId!.Value)
             .ToHashSet();
         
         var lineIdsToDelete = existingLineIds.Except(dataLineIds).ToList();
@@ -111,7 +111,7 @@ public class FurnitureModelLine : Entity<uint>
         lineIdsToDelete.ForEach(RemovePartDefinitionLine);
     }
 
-    private void RemovePartDefinitionLine(uint lineId)
+    private void RemovePartDefinitionLine(OrderFurniturePartLineId lineId)
     {
         var line = _lines.FirstOrDefault(l => l.Id == lineId)
                    ?? throw new ArgumentException($"Part definition line with ID {lineId} not found");

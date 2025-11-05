@@ -1,8 +1,8 @@
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Procurement.Application;
-using AZ.Integrator.Procurement.Application.UseCases.Suppliers.Commands.Create;
-using AZ.Integrator.Procurement.Application.UseCases.Suppliers.Commands.Update;
+using AZ.Integrator.Procurement.Contracts.PartDefinitionOrders;
 using AZ.Integrator.Procurement.Contracts.Suppliers;
+using AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder;
 using AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder.DomainServices;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier;
 using AZ.Integrator.Procurement.Infrastructure.DomainServices;
@@ -36,6 +36,14 @@ public static class Extensions
     {
         const string swaggerGroupName = "Procurement";
         
+        MapSupplierEndpoints(endpoints, swaggerGroupName);
+        MapOrderEndpoints(endpoints, swaggerGroupName);
+
+        return endpoints;
+    }
+
+    private static void MapSupplierEndpoints(IEndpointRouteBuilder endpoints, string swaggerGroupName)
+    {
         var suppliersGroup = endpoints.MapGroup("/api/procurement/suppliers").WithTags(swaggerGroupName).RequireAuthorization();
         
         suppliersGroup.MapGet("/info", () => Results.Ok("Suppliers module")).AllowAnonymous();
@@ -43,7 +51,10 @@ public static class Extensions
         suppliersGroup.MapPost("/", 
             async (CreateSupplierRequest request, IMediator mediator, CancellationToken cancellationToken) =>
             {
-                var response = await mediator.Send(new CreateCommand(request.Name, request.TelephoneNumber, request.Mailboxes), cancellationToken);
+                var command = new Application.UseCases.Suppliers.Commands.Create.CreateCommand(request.Name,
+                        request.TelephoneNumber, request.Mailboxes);
+                
+                var response = await mediator.Send(command, cancellationToken);
             
                 return Results.Ok(response);
             });
@@ -51,14 +62,33 @@ public static class Extensions
         suppliersGroup.MapPut("/{supplierId}", 
             async (int supplierId, UpdateSupplierRequest request, IMediator mediator, CancellationToken cancellationToken) =>
             {
-                var response = await mediator.Send(new UpdateCommand(supplierId, request.Name, request.TelephoneNumber, request.Mailboxes), cancellationToken);
+                var command = new Application.UseCases.Suppliers.Commands.Update.UpdateCommand(supplierId, request.Name,
+                    request.TelephoneNumber, request.Mailboxes);
+                
+                var response = await mediator.Send(command, cancellationToken);
             
                 return Results.Ok(response);
             });
-        
-        return endpoints;
     }
     
+    private static void MapOrderEndpoints(IEndpointRouteBuilder endpoints, string swaggerGroupName)
+    {
+        var ordersGroup = endpoints.MapGroup("/api/procurement/orders").WithTags(swaggerGroupName).RequireAuthorization();
+        
+        ordersGroup.MapGet("/info", () => Results.Ok("Orders module")).AllowAnonymous();
+        
+        ordersGroup.MapPost("/", 
+            async (CreateOrderRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                var command = new Application.UseCases.PartDefinitionsOrders.Commands.Create.CreateCommand(
+                    request.SupplierId, request.FurnitureLineRequests);
+                
+                var response = await mediator.Send(command, cancellationToken);
+            
+                return Results.Ok(response);
+            });
+    }
+
     public static IRequestExecutorBuilder AddProcurementModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
         return builder
@@ -70,7 +100,11 @@ public static class Extensions
     {
         return services
             .AddScoped<IOrderNumberGenerator, OrderNumberGenerator>()
+            
             .AddScoped(typeof(IAggregateRepository<Supplier>), typeof(AggregateRepository<Supplier, ProcurementDbContext>))
-            .AddScoped(typeof(IAggregateReadRepository<Supplier>), typeof(AggregateReadRepository<Supplier, ProcurementDbContext>));
+            .AddScoped(typeof(IAggregateReadRepository<Supplier>), typeof(AggregateReadRepository<Supplier, ProcurementDbContext>))
+            
+            .AddScoped(typeof(IAggregateRepository<PartDefinitionsOrder>), typeof(AggregateRepository<PartDefinitionsOrder, ProcurementDbContext>))
+            .AddScoped(typeof(IAggregateReadRepository<PartDefinitionsOrder>), typeof(AggregateReadRepository<PartDefinitionsOrder, ProcurementDbContext>));
     }
 }
