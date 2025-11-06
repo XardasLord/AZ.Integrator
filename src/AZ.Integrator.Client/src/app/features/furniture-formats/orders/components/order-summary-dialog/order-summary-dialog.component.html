@@ -1,0 +1,119 @@
+<div class="order-summary-dialog">
+  <h1 mat-dialog-title class="dialog-title">
+    <mat-icon class="title-icon">summarize</mat-icon>
+    Podsumowanie zamówienia
+  </h1>
+
+  <div mat-dialog-content class="dialog-content">
+    <!-- Supplier Information -->
+    <mat-card class="summary-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>store</mat-icon>
+          Dostawca
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="supplier-info">
+          <strong>{{ data.supplier?.name || 'Nieznany dostawca' }}</strong>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Order Statistics -->
+    <mat-card class="summary-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>analytics</mat-icon>
+          Statystyki zamówienia
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">Liczba definicji mebli:</div>
+            <div class="stat-value">{{ data.orderData.furnitureLines.length || 0 }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Suma zamówionych mebli:</div>
+            <div class="stat-value">{{ getTotalFurnitureQuantity() }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Łączna liczba formatek:</div>
+            <div class="stat-value">{{ getTotalPartLines() }}</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Furniture Lines Detail -->
+    <mat-card class="summary-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>view_list</mat-icon>
+          Szczegóły zamówienia
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="furniture-lines">
+          <mat-expansion-panel
+            *ngFor="let line of data.orderData.furnitureLines; let i = index"
+            class="furniture-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <strong>{{ getFurnitureDisplay(line) }}</strong>
+                <span class="quantity-badge">Ilość: {{ line.quantityOrdered }}</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="parts-list">
+              <div *ngFor="let part of line.partLines; let j = index" class="part-item">
+                <div class="part-header">
+                  <strong>{{ j + 1 }}. {{ part.partName }}</strong>
+                  <span class="part-quantity">Ilość: {{ part.quantity }}</span>
+                </div>
+                <div class="part-details">
+                  <div class="detail-row">
+                    <span class="detail-label">Wymiary:</span>
+                    <span class="detail-value"
+                      >{{ part.lengthMm }} × {{ part.widthMm }} × {{ part.thicknessMm }} mm</span
+                    >
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Oklejka długość:</span>
+                    <span class="detail-value">{{ getEdgeBandingDisplay(part.lengthEdgeBandingType) }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Oklejka szerokość:</span>
+                    <span class="detail-value">{{ getEdgeBandingDisplay(part.widthEdgeBandingType) }}</span>
+                  </div>
+                  <div class="detail-row" *ngIf="part.additionalInfo">
+                    <span class="detail-label">Dodatkowe info:</span>
+                    <span class="detail-value">{{ part.additionalInfo }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Confirmation Notice -->
+    <div class="confirmation-notice">
+      <mat-icon>info</mat-icon>
+      <p>Po potwierdzeniu zamówienie zostanie utworzone i zapisane w systemie.</p>
+    </div>
+  </div>
+
+  <div mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button (click)="onCancel()" type="button">
+      <mat-icon>close</mat-icon>
+      Anuluj
+    </button>
+    <button mat-raised-button color="primary" (click)="onConfirm()" type="button">
+      <mat-icon>check</mat-icon>
+      Potwierdź i utwórz zamówienie
+    </button>
+  </div>
+</div>

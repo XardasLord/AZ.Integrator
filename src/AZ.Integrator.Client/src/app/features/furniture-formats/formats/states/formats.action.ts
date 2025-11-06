@@ -7,6 +7,10 @@ export class LoadFurnitureDefinitions {
   static readonly type = `${prefix} ${LoadFurnitureDefinitions.name}`;
 }
 
+export class LoadAllFurnitureDefinitions {
+  static readonly type = `${prefix} ${LoadAllFurnitureDefinitions.name}`;
+}
+
 export class ChangePage {
   static readonly type = `${prefix} ${ChangePage.name}`;
 

@@ -10,6 +10,7 @@ import {
   ApplyFilter,
   ChangePage,
   DeleteFurnitureDefinition,
+  LoadAllFurnitureDefinitions,
   LoadFurnitureDefinitions,
   OpenFurnitureDefinitionDialog,
   UpdateFurnitureDefinition,
@@ -56,6 +57,11 @@ export class FormatsState {
   }
 
   @Selector([FORMATS_STATE_TOKEN])
+  static getAllFurnitureDefinitions(state: FormatsStateModel): FurnitureModelViewModel[] {
+    return state.furnitureDefinitions;
+  }
+
+  @Selector([FORMATS_STATE_TOKEN])
   static getTotalCount(state: FormatsStateModel): number {
     return state.graphQLResponse?.result?.totalCount ?? 0;
   }
@@ -78,6 +84,24 @@ export class FormatsState {
   @Action(LoadFurnitureDefinitions)
   loadFurnitureDefinitions(ctx: StateContext<FormatsStateModel>) {
     return this.furnitureFormatsService.loadFurnitureDefinitions(ctx.getState().graphQLFilters).pipe(
+      tap(response => {
+        ctx.patchState({
+          furnitureDefinitions: response.result.nodes,
+          graphQLResponse: {
+            result: response.result,
+          },
+        });
+      })
+    );
+  }
+
+  @Action(LoadAllFurnitureDefinitions)
+  loadAllFurnitureDefinitions(ctx: StateContext<FormatsStateModel>) {
+    const filter: IntegratorQueryFurnitureModelsArgs = {
+      first: 500,
+    };
+
+    return this.furnitureFormatsService.loadFurnitureDefinitions(filter).pipe(
       tap(response => {
         ctx.patchState({
           furnitureDefinitions: response.result.nodes,

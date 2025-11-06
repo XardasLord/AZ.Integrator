@@ -17,6 +17,8 @@ import { FormatsState } from '../../features/furniture-formats/formats/states/fo
 import { FurnitureFormatsService } from '../../features/furniture-formats/formats/services/furniture-formats.service';
 import { SuppliersState } from '../../features/furniture-formats/suppliers/states/suppliers.state';
 import { SuppliersService } from '../../features/furniture-formats/suppliers/services/suppliers.service';
+import { OrdersState } from '../../features/furniture-formats/orders/states/orders.state';
+import { OrdersService } from '../../features/furniture-formats/orders/services/orders.service';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -125,6 +127,29 @@ const routes: Routes = [
         path: FurnitureFormatsRoutePath.Orders,
         loadComponent: () =>
           import('../../features/furniture-formats/orders/pages/orders/orders.component').then(c => c.OrdersComponent),
+        providers: [
+          provideStates([OrdersState, SuppliersState, FormatsState]),
+          OrdersService,
+          SuppliersService,
+          FurnitureFormatsService,
+        ],
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.Admin],
+        }),
+      },
+      {
+        path: `${FurnitureFormatsRoutePath.Orders}/create`,
+        loadComponent: () =>
+          import('../../features/furniture-formats/orders/pages/create-order/create-order.component').then(
+            c => c.CreateOrderComponent
+          ),
+        providers: [
+          provideStates([OrdersState, SuppliersState, FormatsState]),
+          OrdersService,
+          SuppliersService,
+          FurnitureFormatsService,
+        ],
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],

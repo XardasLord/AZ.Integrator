@@ -16,22 +16,24 @@ public class CreateCommandHandler(
 {
     public async ValueTask<PartDefinitionsOrderViewModel> Handle(CreateCommand command, CancellationToken cancellationToken)
     {
-        var furniturePartLines = command.FurnitureLineRequests
-            .SelectMany(x => x.PartDefinitionLines.Select(pd =>
-                new PartDefinitionLineData(
-                    null, 
-                    pd.PartName,
-                    new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm, (EdgeBandingType)pd.LengthOrderFurniturePartLineDimensionsEdgeBandingType, (EdgeBandingType)pd.WidthOrderFurniturePartLineDimensionsEdgeBandingType), 
-                    pd.Quantity, 
-                    pd.AdditionalInfo)));
-
         var furnitureLines = command.FurnitureLineRequests
             .Select(x => new FurnitureModelLineData(
                 null,
                 x.FurnitureCode,
                 x.FurnitureVersion,
                 x.QuantityOrdered,
-                furniturePartLines));
+                x.PartDefinitionLines.Select(pd =>
+                    new PartDefinitionLineData(
+                        null,
+                        pd.PartName,
+                        new Dimensions(
+                            pd.LengthMm,
+                            pd.WidthMm,
+                            pd.ThicknessMm,
+                            (EdgeBandingType)pd.LengthEdgeBandingType,
+                            (EdgeBandingType)pd.WidthEdgeBandingType),
+                        pd.Quantity,
+                        pd.AdditionalInfo))));
         
         var order = PartDefinitionsOrder.Create(
             command.SupplierId,

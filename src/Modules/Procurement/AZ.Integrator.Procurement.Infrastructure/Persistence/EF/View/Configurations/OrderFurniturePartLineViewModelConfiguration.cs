@@ -28,7 +28,7 @@ public class OrderFurniturePartLineViewModelConfiguration : IEntityTypeConfigura
         builder.Property(x => x.AdditionalInfo)
             .HasColumnName("additional_info");
 
-        builder.ComplexProperty(x => x.Dimensions, d =>
+        builder.OwnsOne(x => x.Dimensions, d =>
         {
             d.Property(p => p.LengthMm)
                 .HasColumnName("length_mm");
@@ -46,8 +46,6 @@ public class OrderFurniturePartLineViewModelConfiguration : IEntityTypeConfigura
             d.Property(p => p.WidthEdgeBandingType)
                 .HasColumnName("edge_band_width_sides")
                 .HasConversion(new EnumToNumberConverter<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel, int>());
-
-            d.IsRequired();
         });
     }
 }

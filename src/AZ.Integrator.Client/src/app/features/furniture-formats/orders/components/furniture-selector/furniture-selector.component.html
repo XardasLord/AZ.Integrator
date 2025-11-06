@@ -1,0 +1,75 @@
+<div class="furniture-selector">
+  <div class="selector-info">
+    <p class="info-text">
+      Wybrano: <strong>{{ selectedDefinitions.length }}</strong> definicji mebli
+    </p>
+  </div>
+
+  <!-- Search Bar -->
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Szukaj definicji mebli</mat-label>
+    <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChange()" placeholder="Wpisz kod mebla..." />
+    <mat-icon matPrefix>search</mat-icon>
+    <button
+      mat-icon-button
+      matSuffix
+      *ngIf="searchText"
+      (click)="searchText = ''; onSearchChange()"
+      aria-label="Wyczyść">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- Results Info -->
+  <div class="results-info" *ngIf="filteredDefinitions.length > 0">
+    <p class="info-text">
+      Znaleziono: <strong>{{ filteredDefinitions.length }}</strong> definicji
+    </p>
+  </div>
+
+  <div class="furniture-grid">
+    <mat-card
+      *ngFor="let definition of pagedDefinitions"
+      class="furniture-card"
+      [class.selected]="isSelected(definition)"
+      (click)="toggleSelection(definition)">
+      <mat-card-content>
+        <div class="card-header">
+          <mat-checkbox
+            [checked]="isSelected(definition)"
+            (click)="$event.stopPropagation()"
+            (change)="toggleSelection(definition)"></mat-checkbox>
+          <h4 class="furniture-code">{{ getDefinitionDisplay(definition) }}</h4>
+        </div>
+
+        <div class="card-details">
+          <div class="detail-item">
+            <mat-icon class="detail-icon">view_module</mat-icon>
+            <span>{{ getPartCount(definition) }} formatek</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Paginator -->
+  <mat-paginator
+    *ngIf="filteredDefinitions.length > pageSize"
+    [length]="filteredDefinitions.length"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+
+  <div *ngIf="!furnitureDefinitions || furnitureDefinitions.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">inventory_2</mat-icon>
+    <p>Brak dostępnych definicji mebli</p>
+  </div>
+
+  <div *ngIf="filteredDefinitions.length === 0 && searchText" class="empty-state">
+    <mat-icon class="empty-icon">search_off</mat-icon>
+    <p>Nie znaleziono definicji pasujących do: "{{ searchText }}"</p>
+  </div>
+</div>
