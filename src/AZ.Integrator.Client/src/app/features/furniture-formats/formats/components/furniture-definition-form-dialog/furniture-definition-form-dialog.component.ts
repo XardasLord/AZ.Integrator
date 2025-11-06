@@ -56,6 +56,7 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
   form!: FormGroup<FurnitureDefinitionFormGroup>;
   editMode: boolean = false;
   isImporting: boolean = false;
+  isDragOver: boolean = false;
 
   edgeBandingOptions = [
     { value: EdgeBandingTypeViewModel.None, label: 'Brak' },
@@ -227,5 +228,43 @@ export class FurnitureDefinitionFormDialogComponent implements OnInit {
     } finally {
       this.isImporting = false;
     }
+  }
+
+  /**
+   * Obsługuje zdarzenie upuszczenia pliku
+   */
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      // Sprawdź czy to plik Excel
+      if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+        this.importExcelFile(file);
+      } else {
+        this.toastr.error('Proszę wybrać plik Excel (.xlsx lub .xls)', 'Nieprawidłowy format pliku');
+      }
+    }
+  }
+
+  /**
+   * Obsługuje zdarzenie przeciągania nad obszarem
+   */
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  /**
+   * Obsługuje zdarzenie opuszczenia obszaru podczas przeciągania
+   */
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
   }
 }

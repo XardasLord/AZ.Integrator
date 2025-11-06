@@ -28,17 +28,20 @@
         </mat-form-field>
 
         @if (!editMode) {
-          <button
-            mat-raised-button
-            color="accent"
-            type="button"
+          <div
+            class="drop-zone"
+            [class.drag-over]="isDragOver"
             (click)="onImportFromExcel()"
-            [disabled]="isImporting"
-            matTooltip="Importuj definicję z pliku Excel"
-            class="mt-1">
-            <mat-icon>{{ isImporting ? 'sync' : 'upload_file' }}</mat-icon>
-            {{ isImporting ? 'Importowanie...' : 'Import z Excel' }}
-          </button>
+            (drop)="onDrop($event)"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            matTooltip="Kliknij lub przeciągnij plik Excel">
+            <mat-icon class="drop-zone-icon">{{ isImporting ? 'sync' : 'upload_file' }}</mat-icon>
+            <div class="drop-zone-text">
+              <div class="drop-zone-title">{{ isImporting ? 'Importowanie...' : 'Import z Excel' }}</div>
+              <div class="drop-zone-subtitle">Kliknij lub przeciągnij plik</div>
+            </div>
+          </div>
         }
       </div>
     </div>
