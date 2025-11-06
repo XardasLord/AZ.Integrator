@@ -208,6 +208,7 @@ export type IntegratorQuery = {
   furnitureModels?: Maybe<FurnitureModelsConnection>;
   inpostShipments: Array<InpostShipmentViewModel>;
   invoices: Array<InvoiceViewModel>;
+  partDefinitionOrders?: Maybe<PartDefinitionOrdersConnection>;
   shipments: Array<ShipmentViewModel>;
   stockGroups: Array<StockGroupViewModel>;
   stocks: Array<StockViewModel>;
@@ -245,6 +246,16 @@ export type IntegratorQueryInpostShipmentsArgs = {
 export type IntegratorQueryInvoicesArgs = {
   order?: InputMaybe<Array<InvoiceViewModelSortInput>>;
   where?: InputMaybe<InvoiceViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryPartDefinitionOrdersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<PartDefinitionsOrderViewModelSortInput>>;
+  where?: InputMaybe<PartDefinitionsOrderViewModelFilterInput>;
 };
 
 
@@ -308,6 +319,20 @@ export type InvoiceViewModelSortInput = {
   invoiceNumber?: InputMaybe<SortEnumType>;
 };
 
+export type ListFilterInputTypeOfOrderFurnitureLineViewModelFilterInput = {
+  all?: InputMaybe<OrderFurnitureLineViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<OrderFurnitureLineViewModelFilterInput>;
+  some?: InputMaybe<OrderFurnitureLineViewModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfOrderFurniturePartLineViewModelFilterInput = {
+  all?: InputMaybe<OrderFurniturePartLineViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<OrderFurniturePartLineViewModelFilterInput>;
+  some?: InputMaybe<OrderFurniturePartLineViewModelFilterInput>;
+};
+
 export type ListFilterInputTypeOfPartDefinitionViewModelFilterInput = {
   all?: InputMaybe<PartDefinitionViewModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
@@ -358,6 +383,94 @@ export type LongOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Long']['input']>;
 };
 
+export type OrderFurnitureLineViewModel = {
+  __typename?: 'OrderFurnitureLineViewModel';
+  furnitureCode: Scalars['String']['output'];
+  furnitureVersion: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  orderId: Scalars['Int']['output'];
+  partLines: Array<OrderFurniturePartLineViewModel>;
+  quantityOrdered: Scalars['Int']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type OrderFurnitureLineViewModelFilterInput = {
+  and?: InputMaybe<Array<OrderFurnitureLineViewModelFilterInput>>;
+  furnitureCode?: InputMaybe<StringOperationFilterInput>;
+  furnitureVersion?: InputMaybe<IntOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<OrderFurnitureLineViewModelFilterInput>>;
+  orderId?: InputMaybe<IntOperationFilterInput>;
+  partLines?: InputMaybe<ListFilterInputTypeOfOrderFurniturePartLineViewModelFilterInput>;
+  quantityOrdered?: InputMaybe<IntOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export enum OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel {
+  None = 'NONE',
+  One = 'ONE',
+  Two = 'TWO'
+}
+
+export type OrderFurniturePartLineDimensionsEdgeBandingTypeViewModelOperationFilterInput = {
+  eq?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>;
+  in?: InputMaybe<Array<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>>;
+  neq?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>;
+  nin?: InputMaybe<Array<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>>;
+};
+
+export type OrderFurniturePartLineDimensionsViewModel = {
+  __typename?: 'OrderFurniturePartLineDimensionsViewModel';
+  lengthEdgeBandingType: OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel;
+  lengthMm: Scalars['Int']['output'];
+  thicknessMm: Scalars['Int']['output'];
+  widthEdgeBandingType: OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel;
+  widthMm: Scalars['Int']['output'];
+};
+
+export type OrderFurniturePartLineDimensionsViewModelFilterInput = {
+  and?: InputMaybe<Array<OrderFurniturePartLineDimensionsViewModelFilterInput>>;
+  lengthEdgeBandingType?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModelOperationFilterInput>;
+  lengthMm?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<OrderFurniturePartLineDimensionsViewModelFilterInput>>;
+  thicknessMm?: InputMaybe<IntOperationFilterInput>;
+  widthEdgeBandingType?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModelOperationFilterInput>;
+  widthMm?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type OrderFurniturePartLineViewModel = {
+  __typename?: 'OrderFurniturePartLineViewModel';
+  additionalInfo?: Maybe<Scalars['String']['output']>;
+  dimensions: OrderFurniturePartLineDimensionsViewModel;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  orderFurnitureLineId: Scalars['Int']['output'];
+  quantity: Scalars['Int']['output'];
+};
+
+export type OrderFurniturePartLineViewModelFilterInput = {
+  additionalInfo?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<OrderFurniturePartLineViewModelFilterInput>>;
+  dimensions?: InputMaybe<OrderFurniturePartLineDimensionsViewModelFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<OrderFurniturePartLineViewModelFilterInput>>;
+  orderFurnitureLineId?: InputMaybe<IntOperationFilterInput>;
+  quantity?: InputMaybe<IntOperationFilterInput>;
+};
+
+export enum OrderStatusViewModel {
+  Registered = 'REGISTERED',
+  Sent = 'SENT'
+}
+
+export type OrderStatusViewModelOperationFilterInput = {
+  eq?: InputMaybe<OrderStatusViewModel>;
+  in?: InputMaybe<Array<OrderStatusViewModel>>;
+  neq?: InputMaybe<OrderStatusViewModel>;
+  nin?: InputMaybe<Array<OrderStatusViewModel>>;
+};
+
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -369,6 +482,28 @@ export type PageInfo = {
   hasPreviousPage: Scalars['Boolean']['output'];
   /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/** A connection to a list of items. */
+export type PartDefinitionOrdersConnection = {
+  __typename?: 'PartDefinitionOrdersConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<PartDefinitionOrdersEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<PartDefinitionsOrderViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type PartDefinitionOrdersEdge = {
+  __typename?: 'PartDefinitionOrdersEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: PartDefinitionsOrderViewModel;
 };
 
 export type PartDefinitionViewModel = {
@@ -392,6 +527,47 @@ export type PartDefinitionViewModelFilterInput = {
   or?: InputMaybe<Array<PartDefinitionViewModelFilterInput>>;
   quantity?: InputMaybe<IntOperationFilterInput>;
   tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type PartDefinitionsOrderViewModel = {
+  __typename?: 'PartDefinitionsOrderViewModel';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['UUID']['output'];
+  furnitureLines: Array<OrderFurnitureLineViewModel>;
+  id: Scalars['Int']['output'];
+  modifiedAt: Scalars['DateTime']['output'];
+  modifiedBy: Scalars['UUID']['output'];
+  number: Scalars['String']['output'];
+  status: OrderStatusViewModel;
+  supplierId: Scalars['Int']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type PartDefinitionsOrderViewModelFilterInput = {
+  and?: InputMaybe<Array<PartDefinitionsOrderViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdBy?: InputMaybe<UuidOperationFilterInput>;
+  furnitureLines?: InputMaybe<ListFilterInputTypeOfOrderFurnitureLineViewModelFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  modifiedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  modifiedBy?: InputMaybe<UuidOperationFilterInput>;
+  number?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PartDefinitionsOrderViewModelFilterInput>>;
+  status?: InputMaybe<OrderStatusViewModelOperationFilterInput>;
+  supplierId?: InputMaybe<IntOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type PartDefinitionsOrderViewModelSortInput = {
+  createdAt?: InputMaybe<SortEnumType>;
+  createdBy?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  modifiedAt?: InputMaybe<SortEnumType>;
+  modifiedBy?: InputMaybe<SortEnumType>;
+  number?: InputMaybe<SortEnumType>;
+  status?: InputMaybe<SortEnumType>;
+  supplierId?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
 };
 
 export type ShipmentViewModel = {
