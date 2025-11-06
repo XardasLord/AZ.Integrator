@@ -19,6 +19,6 @@ public record CreateFurniturePartLineRequest(
     int ThicknessMm,
     int Quantity,
     string AdditionalInfo,
-    EdgeBandingTypeViewModel LengthEdgeBandingType,
-    EdgeBandingTypeViewModel WidthEdgeBandingType
+    OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel LengthOrderFurniturePartLineDimensionsEdgeBandingType,
+    OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel WidthOrderFurniturePartLineDimensionsEdgeBandingType
 );

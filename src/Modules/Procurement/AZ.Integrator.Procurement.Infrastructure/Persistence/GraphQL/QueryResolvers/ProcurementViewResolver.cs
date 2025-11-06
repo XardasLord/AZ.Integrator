@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Procurement.Contracts.Suppliers;
+﻿using AZ.Integrator.Procurement.Contracts.PartDefinitionOrders;
+using AZ.Integrator.Procurement.Contracts.Suppliers;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF.View;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using HotChocolate;
@@ -16,4 +17,11 @@ public class ProcurementViewResolver
     [UseSorting]
     public IQueryable<SupplierViewModel> GetSuppliers([Service] ProcurementDataViewContext dataViewContext) 
         => dataViewContext.Suppliers.AsQueryable();
+    
+    [UsePaging]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<PartDefinitionsOrderViewModel> GetPartDefinitionOrders([Service] ProcurementDataViewContext dataViewContext) 
+        => dataViewContext.Orders.AsQueryable();
 }

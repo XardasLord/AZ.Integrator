@@ -30,18 +30,18 @@ public class OrderFurniturePartLineViewModel
     public int Id { get; init; }
     public int OrderFurnitureLineId { get; init; }
     public required string Name { get; init; }
-    public DimensionsViewModel Dimensions { get; init; }
+    public required OrderFurniturePartLineDimensionsViewModel Dimensions { get; init; }
     public int Quantity { get; init; }
     public string? AdditionalInfo { get; init; }
 }
 
-public class DimensionsViewModel
+public class OrderFurniturePartLineDimensionsViewModel
 {
     public int LengthMm { get; init; }
     public int WidthMm { get; init; }
     public int ThicknessMm { get; init; }
-    public EdgeBandingTypeViewModel LengthEdgeBandingType { get; init; }
-    public EdgeBandingTypeViewModel WidthEdgeBandingType { get; init; }
+    public OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel LengthEdgeBandingType { get; init; }
+    public OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel WidthEdgeBandingType { get; init; }
 }
 
 public enum OrderStatusViewModel
@@ -50,7 +50,7 @@ public enum OrderStatusViewModel
     Sent = 20
 }
 
-public enum EdgeBandingTypeViewModel
+public enum OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel
 {
     None = 0,
     One = 1,

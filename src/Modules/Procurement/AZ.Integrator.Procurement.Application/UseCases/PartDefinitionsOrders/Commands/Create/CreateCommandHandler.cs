@@ -21,7 +21,7 @@ public class CreateCommandHandler(
                 new PartDefinitionLineData(
                     null, 
                     pd.PartName,
-                    new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm, (EdgeBandingType)pd.LengthEdgeBandingType, (EdgeBandingType)pd.WidthEdgeBandingType), 
+                    new Dimensions(pd.LengthMm, pd.WidthMm, pd.ThicknessMm, (EdgeBandingType)pd.LengthOrderFurniturePartLineDimensionsEdgeBandingType, (EdgeBandingType)pd.WidthOrderFurniturePartLineDimensionsEdgeBandingType), 
                     pd.Quantity, 
                     pd.AdditionalInfo)));
 
@@ -65,13 +65,13 @@ public class CreateCommandHandler(
                     Id = (int)pl.Id.Value,
                     OrderFurnitureLineId = (int)fm.Id.Value,
                     Name = pl.PartName,
-                    Dimensions = new DimensionsViewModel
+                    Dimensions = new OrderFurniturePartLineDimensionsViewModel
                     {
                         LengthMm = pl.Dimensions.LengthMm,
                         WidthMm = pl.Dimensions.WidthMm,
                         ThicknessMm = pl.Dimensions.ThicknessMm,
-                        LengthEdgeBandingType = (EdgeBandingTypeViewModel)pl.Dimensions.LengthEdgeBandingType,
-                        WidthEdgeBandingType = (EdgeBandingTypeViewModel)pl.Dimensions.WidthEdgeBandingType
+                        LengthEdgeBandingType = (OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel)pl.Dimensions.LengthEdgeBandingType,
+                        WidthEdgeBandingType = (OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel)pl.Dimensions.WidthEdgeBandingType
                     },
                     Quantity = pl.Quantity.Value,
                     AdditionalInfo = pl.AdditionalInfo
