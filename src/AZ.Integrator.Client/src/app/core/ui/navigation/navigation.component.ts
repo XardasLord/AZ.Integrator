@@ -69,13 +69,13 @@ export class NavigationComponent implements OnInit {
         },
         {
           title: 'Dostawcy',
-          icon: 'folder',
+          icon: 'factory',
           route: FurnitureFormatsRoutePath.Suppliers,
           roles: [AuthRoles.Admin],
         },
         {
           title: 'Zamówienia',
-          icon: 'folder',
+          icon: 'assignment',
           route: FurnitureFormatsRoutePath.Orders,
           roles: [AuthRoles.Admin],
         },
