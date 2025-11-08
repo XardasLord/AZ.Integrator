@@ -1,5 +1,6 @@
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Procurement.Application;
+using AZ.Integrator.Procurement.Application.UseCases.PartDefinitionsOrders;
 using AZ.Integrator.Procurement.Contracts.PartDefinitionOrders;
 using AZ.Integrator.Procurement.Contracts.Suppliers;
 using AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder;
@@ -100,6 +101,7 @@ public static class Extensions
     {
         return services
             .AddScoped<IOrderNumberGenerator, OrderNumberGenerator>()
+            .AddTransient<IProcurementDataViewContext, ProcurementDataViewContext>()
             
             .AddScoped(typeof(IAggregateRepository<Supplier>), typeof(AggregateRepository<Supplier, ProcurementDbContext>))
             .AddScoped(typeof(IAggregateReadRepository<Supplier>), typeof(AggregateReadRepository<Supplier, ProcurementDbContext>))
