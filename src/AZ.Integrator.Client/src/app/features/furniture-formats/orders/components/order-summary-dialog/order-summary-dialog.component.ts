@@ -25,6 +25,7 @@ export interface PartLineData {
 export interface OrderData {
   supplierId: number;
   furnitureLines: FurnitureLineData[];
+  additionalNotes?: string;
 }
 
 export interface OrderSummaryData {

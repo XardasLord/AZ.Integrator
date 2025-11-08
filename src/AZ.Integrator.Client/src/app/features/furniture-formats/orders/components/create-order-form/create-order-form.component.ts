@@ -60,6 +60,7 @@ export class CreateOrderFormComponent implements OnInit {
     this.orderForm = this.fb.group<OrderFormGroup>({
       supplierId: this.fb.control(null, [Validators.required]),
       furnitureLines: this.fb.array<FormGroup<FurnitureLineFormGroup>>([]),
+      additionalNotes: this.fb.control(''),
     });
   }
 
@@ -207,6 +208,7 @@ export class CreateOrderFormComponent implements OnInit {
 
   private prepareFormData(): OrderData {
     const supplierId = this.orderForm.get('supplierId')!.value;
+    const additionalNotes = this.orderForm.get('additionalNotes')?.value;
     const furnitureLines: FurnitureLineData[] = [];
 
     this.furnitureLines.controls.forEach((furnitureLineControl, furnitureIndex) => {
@@ -239,6 +241,7 @@ export class CreateOrderFormComponent implements OnInit {
     return {
       supplierId: supplierId!,
       furnitureLines: furnitureLines,
+      additionalNotes: additionalNotes || undefined,
     };
   }
 
@@ -260,7 +263,7 @@ export class CreateOrderFormComponent implements OnInit {
         })) || [],
     }));
 
-    this.store.dispatch(new CreateOrder(formValue.supplierId!, furnitureLineRequests));
+    this.store.dispatch(new CreateOrder(formValue.supplierId!, furnitureLineRequests, formValue.additionalNotes));
   }
 
   onCancel(): void {

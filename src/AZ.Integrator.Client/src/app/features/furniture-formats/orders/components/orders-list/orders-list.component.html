@@ -61,6 +61,17 @@
           <div class="detail-content">
             <h3 class="detail-title">Szczegóły zamówienia</h3>
 
+            <!-- Additional Notes Section -->
+            <div class="additional-notes-section" *ngIf="order.additionalNotes">
+              <div class="notes-header">
+                <mat-icon>note</mat-icon>
+                <h4>Dodatkowe uwagi</h4>
+              </div>
+              <div class="notes-content">
+                {{ order.additionalNotes }}
+              </div>
+            </div>
+
             <div class="furniture-lines" *ngIf="order.furnitureLines && order.furnitureLines.length > 0">
               <div *ngFor="let furnitureLine of order.furnitureLines" class="furniture-line-card">
                 <div class="furniture-line-header">

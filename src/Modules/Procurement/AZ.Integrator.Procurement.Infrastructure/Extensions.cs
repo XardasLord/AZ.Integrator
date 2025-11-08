@@ -81,7 +81,7 @@ public static class Extensions
             async (CreateOrderRequest request, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 var command = new Application.UseCases.PartDefinitionsOrders.Commands.Create.CreateCommand(
-                    request.SupplierId, request.FurnitureLineRequests);
+                    request.SupplierId, request.FurnitureLineRequests, request.AdditionalNotes);
                 
                 var response = await mediator.Send(command, cancellationToken);
             

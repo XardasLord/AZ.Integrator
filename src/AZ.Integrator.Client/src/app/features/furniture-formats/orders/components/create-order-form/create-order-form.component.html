@@ -201,6 +201,38 @@
             mat-raised-button
             color="primary"
             type="button"
+            matStepperNext
+            [disabled]="!orderForm.valid || furnitureLines.length === 0">
+            Dalej
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 4: Additional Notes -->
+      <mat-step>
+        <ng-template matStepLabel>Dodatkowe informacje</ng-template>
+        <mat-card class="step-card">
+          <mat-card-header>
+            <mat-card-title>Dodatkowe uwagi do zamówienia</mat-card-title>
+            <mat-card-subtitle>Wpisz dodatkowe informacje, które zostaną dołączone do maila</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Dodatkowe uwagi</mat-label>
+              <textarea
+                matInput
+                formControlName="additionalNotes"
+                rows="8"
+                placeholder="Wpisz tutaj dodatkowe informacje lub uwagi do zamówienia..."></textarea>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+        <div class="step-actions">
+          <button mat-button type="button" matStepperPrevious>Wstecz</button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
             (click)="onSubmit()"
             [disabled]="!orderForm.valid || furnitureLines.length === 0">
             Utwórz zamówienie

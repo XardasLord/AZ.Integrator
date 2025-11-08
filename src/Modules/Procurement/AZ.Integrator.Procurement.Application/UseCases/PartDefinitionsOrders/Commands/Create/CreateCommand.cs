@@ -3,4 +3,4 @@ using Mediator;
 
 namespace AZ.Integrator.Procurement.Application.UseCases.PartDefinitionsOrders.Commands.Create;
 
-public record CreateCommand(uint SupplierId, IEnumerable<CreateFurnitureLineRequest> FurnitureLineRequests) : ICommand<PartDefinitionsOrderViewModel>;
+public record CreateCommand(uint SupplierId, IEnumerable<CreateFurnitureLineRequest> FurnitureLineRequests, string AdditionalNotes) : ICommand<PartDefinitionsOrderViewModel>;

@@ -38,6 +38,7 @@ public class CreateCommandHandler(
         var order = PartDefinitionsOrder.Create(
             command.SupplierId,
             furnitureLines,
+            command.AdditionalNotes,
             orderNumberGenerator,
             currentUser, 
             currentDateTime);
@@ -49,6 +50,7 @@ public class CreateCommandHandler(
             Id = (int)order.Id.Value,
             Number = order.Number,
             SupplierId = (int)order.SupplierId.Value,
+            AdditionalNotes = order.AdditionalNotes,
             Status = (OrderStatusViewModel)order.Status,
             CreatedBy = order.CreationInformation.CreatedBy,
             CreatedAt = order.CreationInformation.CreatedAt.Date,

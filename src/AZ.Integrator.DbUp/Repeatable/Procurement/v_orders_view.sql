@@ -7,6 +7,7 @@ SELECT
     tenant_id,
     number,
     supplier_id,
+    additional_notes,
     status,
     created_at,
     created_by,

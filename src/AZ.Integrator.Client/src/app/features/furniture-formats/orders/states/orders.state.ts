@@ -25,7 +25,9 @@ const ORDERS_STATE_TOKEN = new StateToken<OrdersStateModel>('furnitureOrders');
     orders: [],
     graphQLQuery: new GraphQLQueryVo(),
     graphQLResponse: new GraphQLResponse<PartDefinitionsOrderViewModel[]>(),
-    graphQLFilters: {},
+    graphQLFilters: {
+      order: [{ id: SortEnumType.Desc }],
+    },
   },
 })
 @Injectable()
@@ -97,7 +99,16 @@ export class OrdersState {
         IntegratorQueryPartDefinitionOrdersArgs,
         PartDefinitionsOrderViewModel,
         PartDefinitionsOrderViewModelSortInput
-      >(ctx.getState(), action.searchText, ['number'])
+      >(
+        ctx.getState(),
+        action.searchText,
+        ['number'],
+        [
+          {
+            id: SortEnumType.Desc,
+          },
+        ]
+      )
     );
 
     return ctx.dispatch(new LoadOrders());
@@ -109,6 +120,7 @@ export class OrdersState {
       .createOrder({
         supplierId: action.supplierId,
         furnitureLineRequests: action.furnitureLineRequests,
+        additionalNotes: action.additionalNotes,
       })
       .pipe(
         tap(() => {

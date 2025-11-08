@@ -12,7 +12,8 @@ export class CreateOrder {
 
   constructor(
     public supplierId: number,
-    public furnitureLineRequests: CreateFurnitureLineRequest[]
+    public furnitureLineRequests: CreateFurnitureLineRequest[],
+    public additionalNotes?: string
   ) {}
 }
 

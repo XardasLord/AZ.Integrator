@@ -42,6 +42,7 @@ export class GetPartDefinitionOrdersGQL extends Query<GraphQLResponse<PartDefini
           ${nameof<PartDefinitionsOrderViewModel>('modifiedBy')}
           ${nameof<PartDefinitionsOrderViewModel>('status')}
           ${nameof<PartDefinitionsOrderViewModel>('supplierId')}
+          ${nameof<PartDefinitionsOrderViewModel>('additionalNotes')}
           ${nameof<PartDefinitionsOrderViewModel>('tenantId')}
 
           ${nameof<PartDefinitionsOrderViewModel>('furnitureLines')} {

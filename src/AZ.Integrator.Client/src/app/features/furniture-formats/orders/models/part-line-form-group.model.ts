@@ -15,6 +15,7 @@ export interface PartLineFormGroup {
 export interface CreateOrderRequest {
   supplierId: number;
   furnitureLineRequests: CreateFurnitureLineRequest[];
+  additionalNotes?: string;
 }
 
 export interface CreateFurnitureLineRequest {

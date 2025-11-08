@@ -2,7 +2,8 @@ namespace AZ.Integrator.Procurement.Contracts.PartDefinitionOrders;
 
 public record CreateOrderRequest(
     uint SupplierId,
-    IEnumerable<CreateFurnitureLineRequest> FurnitureLineRequests
+    IEnumerable<CreateFurnitureLineRequest> FurnitureLineRequests,
+    string AdditionalNotes
 );
 
 public record CreateFurnitureLineRequest(

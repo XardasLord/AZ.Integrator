@@ -6,6 +6,7 @@ public class PartDefinitionsOrderViewModel
     public required string Number { get; init; }
     public Guid TenantId { get; init; }
     public int SupplierId { get; init; }
+    public string? AdditionalNotes { get; init; }
     public OrderStatusViewModel Status { get; init; }
     public Guid CreatedBy { get; init; }
     public DateTime CreatedAt { get; init; }

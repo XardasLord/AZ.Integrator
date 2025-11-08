@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS procurement.orders (
     tenant_id uuid NOT NULL,
     number varchar(100) NOT NULL,
     supplier_id bigint NOT NULL,
+    additional_notes text NOT NULL,
     status integer NOT NULL,
     created_at timestamp with time zone NOT NULL,
     created_by uuid NOT NULL,

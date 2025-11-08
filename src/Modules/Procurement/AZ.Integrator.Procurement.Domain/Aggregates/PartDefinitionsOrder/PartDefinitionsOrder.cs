@@ -13,6 +13,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
     private OrderNumber _number = null!;
     private TenantId _tenantId = null!;
     private SupplierId _supplierId = null!;
+    private string? _additionalNotes;
     private OrderStatus _status;
     private TenantCreationInformation _creationInformation = null!;
     private ModificationInformation _modificationInformation = null!;
@@ -22,6 +23,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
     public OrderNumber Number => _number;
     public TenantId TenantId => _tenantId;
     public SupplierId SupplierId => _supplierId;
+    public string? AdditionalNotes => _additionalNotes;
     public OrderStatus Status => _status;
     public TenantCreationInformation CreationInformation => _creationInformation;
     public ModificationInformation ModificationInformation => _modificationInformation;
@@ -38,6 +40,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
     public static PartDefinitionsOrder Create(
         SupplierId supplierId,
         IEnumerable<FurnitureModelLineData> furnitureModelLinesData,
+        string additionalNotes,
         IOrderNumberGenerator orderNumberGenerator,
         ICurrentUser currentUser,
         ICurrentDateTime currentDateTime)
@@ -49,6 +52,7 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
             _number = orderNumberGenerator.Generate(),
             _tenantId = currentUser.TenantId,
             _supplierId = supplierId ?? throw new ArgumentNullException(nameof(supplierId)),
+            _additionalNotes = additionalNotes,
             _status = OrderStatus.Registered,
             _creationInformation = new TenantCreationInformation(
                 date,

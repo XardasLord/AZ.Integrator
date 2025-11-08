@@ -34,6 +34,10 @@ public class PartDefinitionsOrderConfiguration : IEntityTypeConfiguration<PartDe
             .HasConversion(id => id.Value, id => new TenantId(id))
             .IsRequired();
 
+        builder.Property(e => e.AdditionalNotes)
+            .HasColumnName("additional_notes")
+            .IsRequired(false);
+
         builder.Property(e => e.SupplierId)
             .HasColumnName("supplier_id")
             .HasConversion(id => id.Value, id => new SupplierId(id))

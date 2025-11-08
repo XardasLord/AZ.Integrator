@@ -23,6 +23,9 @@ public class OrderViewModelConfiguration : IEntityTypeConfiguration<PartDefiniti
             
         builder.Property(x => x.SupplierId)
             .HasColumnName("supplier_id");
+
+        builder.Property(e => e.AdditionalNotes)
+            .HasColumnName("additional_notes");
         
         builder.Property(x => x.Status)
             .HasColumnName("status");

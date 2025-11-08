@@ -531,6 +531,7 @@ export type PartDefinitionViewModelFilterInput = {
 
 export type PartDefinitionsOrderViewModel = {
   __typename?: 'PartDefinitionsOrderViewModel';
+  additionalNotes?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   createdBy: Scalars['UUID']['output'];
   furnitureLines: Array<OrderFurnitureLineViewModel>;
@@ -544,6 +545,7 @@ export type PartDefinitionsOrderViewModel = {
 };
 
 export type PartDefinitionsOrderViewModelFilterInput = {
+  additionalNotes?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<PartDefinitionsOrderViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   createdBy?: InputMaybe<UuidOperationFilterInput>;
@@ -559,6 +561,7 @@ export type PartDefinitionsOrderViewModelFilterInput = {
 };
 
 export type PartDefinitionsOrderViewModelSortInput = {
+  additionalNotes?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
   createdBy?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
