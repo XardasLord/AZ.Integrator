@@ -37,6 +37,7 @@ export const FurnitureFormatsRoutePath = {
   Formats: 'furniture-formats/bom',
   Suppliers: 'furniture-formats/suppliers',
   Orders: 'furniture-formats/orders',
+  OrdersCreate: 'furniture-formats/orders/create',
 };
 
 const routes: Routes = [
@@ -139,7 +140,7 @@ const routes: Routes = [
         }),
       },
       {
-        path: `${FurnitureFormatsRoutePath.Orders}/create`,
+        path: `${FurnitureFormatsRoutePath.OrdersCreate}`,
         loadComponent: () =>
           import('../../features/furniture-formats/orders/pages/create-order/create-order.component').then(
             c => c.CreateOrderComponent

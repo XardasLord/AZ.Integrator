@@ -72,30 +72,6 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
         return order;
     }
 
-    // TODO: To verify if Update is needed
-    public void UpdateFurnitureModelLines(
-        IEnumerable<FurnitureModelLineData> furnitureModelLinesData,
-        ICurrentUser currentUser,
-        ICurrentDateTime currentDateTime)
-    {
-        if (_status != OrderStatus.Registered)
-            throw new InvalidOperationException($"Cannot update order in status {_status}");
-
-        var linesData = furnitureModelLinesData.ToList();
-        
-        DeleteRemovedFurnitureModelLines(linesData);
-        
-        linesData.ForEach(lineData =>
-        {
-            if (lineData.FurnitureModelLineId.HasValue)
-                UpdateFurnitureModelLine(lineData);
-            else
-                AddFurnitureModelLine(lineData);
-        });
-
-        _modificationInformation = new ModificationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
-    }
-
     public void MarkAsSent(ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         if (_status != OrderStatus.Registered)
@@ -122,55 +98,14 @@ public class PartDefinitionsOrder : Entity<OrderId>, IAggregateRoot
 
         _furnitureModelLines.Add(line);
     }
-
-    private void UpdateFurnitureModelLine(FurnitureModelLineData lineData)
-    {
-        if (!lineData.FurnitureModelLineId.HasValue)
-            throw new ArgumentException("FurnitureModelLineId must have value for update operation");
-
-        var line = _furnitureModelLines.FirstOrDefault(l => l.Id == lineData.FurnitureModelLineId.Value)
-            ?? throw new ArgumentException($"Furniture model line with ID {lineData.FurnitureModelLineId.Value} not found");
-
-        line.Update(lineData.QuantityOrdered, lineData.PartDefinitionLines);
-    }
-
-    private void DeleteRemovedFurnitureModelLines(IEnumerable<FurnitureModelLineData> furnitureModelLinesData)
-    {
-        var existingLineIds = _furnitureModelLines.Select(l => l.Id).ToHashSet();
-        
-        var dataLineIds = furnitureModelLinesData
-            .Where(ld => ld.FurnitureModelLineId.HasValue)
-            .Select(ld => (OrderFurnitureLineId)ld.FurnitureModelLineId!.Value)
-            .ToHashSet();
-        
-        var lineIdsToDelete = existingLineIds.Except(dataLineIds).ToList();
-        
-        lineIdsToDelete.ForEach(RemoveFurnitureModelLine);
-    }
-
-    private void RemoveFurnitureModelLine(OrderFurnitureLineId lineId)
-    {
-        var line = _furnitureModelLines.FirstOrDefault(l => l.Id == lineId)
-            ?? throw new ArgumentException($"Furniture model line with ID {lineId} not found");
-
-        _furnitureModelLines.Remove(line);
-    }
 }
 
-/// <summary>
-/// Data transfer object for creating or updating furniture model lines in a part definitions order.
-/// </summary>
 public sealed record FurnitureModelLineData(
-    uint? FurnitureModelLineId,
     string FurnitureCode,
     int FurnitureVersion,
     Quantity QuantityOrdered,
     IEnumerable<PartDefinitionLineData> PartDefinitionLines);
 
-/// <summary>
-/// Data transfer object for creating or updating part definition lines.
-/// Represents a snapshot of furniture part specifications at the time of order creation.
-/// </summary>
 public sealed record PartDefinitionLineData(
     uint? PartDefinitionLineId,
     PartName PartName,

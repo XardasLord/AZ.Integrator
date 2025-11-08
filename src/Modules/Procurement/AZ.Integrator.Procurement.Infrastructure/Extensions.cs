@@ -1,5 +1,6 @@
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Procurement.Application;
+using AZ.Integrator.Procurement.Application.Common.Email;
 using AZ.Integrator.Procurement.Application.UseCases.PartDefinitionsOrders;
 using AZ.Integrator.Procurement.Contracts.PartDefinitionOrders;
 using AZ.Integrator.Procurement.Contracts.Suppliers;
@@ -7,6 +8,7 @@ using AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder;
 using AZ.Integrator.Procurement.Domain.Aggregates.PartDefinitionsOrder.DomainServices;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier;
 using AZ.Integrator.Procurement.Infrastructure.DomainServices;
+using AZ.Integrator.Procurement.Infrastructure.Email;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF.Domain;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF.View;
@@ -26,7 +28,8 @@ public static class Extensions
 {
     public static IServiceCollection RegisterProcurementModule(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddModuleApplication();
+        services.AddModuleApplication(configuration);
+        services.AddModuleEmailServices(configuration);
         services.AddModulePostgres(configuration);
         services.AddModuleDomainServices();
 
@@ -108,5 +111,19 @@ public static class Extensions
             
             .AddScoped(typeof(IAggregateRepository<PartDefinitionsOrder>), typeof(AggregateRepository<PartDefinitionsOrder, ProcurementDbContext>))
             .AddScoped(typeof(IAggregateReadRepository<PartDefinitionsOrder>), typeof(AggregateReadRepository<PartDefinitionsOrder, ProcurementDbContext>));
+    }
+    
+    private static IServiceCollection AddModuleEmailServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<SmtpSettings>(configuration.GetSection(SmtpSettings.SectionName));
+        
+        services.AddScoped<IEmailService, SmtpEmailService>();
+        services.AddScoped<IEmailTemplateRenderer>(sp =>
+        {
+            var logger = sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<RazorEmailTemplateRenderer>>();
+            return new RazorEmailTemplateRenderer(logger, "EmailTemplates/Procurement");
+        });
+        
+        return services;
     }
 }

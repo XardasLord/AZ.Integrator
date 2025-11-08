@@ -18,7 +18,6 @@ public class CreateCommandHandler(
     {
         var furnitureLines = command.FurnitureLineRequests
             .Select(x => new FurnitureModelLineData(
-                null,
                 x.FurnitureCode,
                 x.FurnitureVersion,
                 x.QuantityOrdered,

@@ -1,9 +1,9 @@
-using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier.ValueObjects;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using EmailValueObject = AZ.Integrator.Domain.SharedKernel.ValueObjects.Email;
 
 namespace AZ.Integrator.Procurement.Infrastructure.Persistence.EF.Domain.Configurations;
 
@@ -21,7 +21,7 @@ public class SupplierMailboxConfiguration : IEntityTypeConfiguration<SupplierMai
 
         builder.Property(e => e.Email)
             .HasColumnName("email")
-            .HasConversion(email => email.Value, email => new Email(email))
+            .HasConversion(email => email.Value, email => new EmailValueObject(email))
             .IsRequired();
 
         // Foreign key properties for composite key relationship

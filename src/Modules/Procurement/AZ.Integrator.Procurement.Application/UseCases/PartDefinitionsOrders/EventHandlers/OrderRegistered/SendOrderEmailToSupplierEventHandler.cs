@@ -1,4 +1,4 @@
-using AZ.Integrator.Procurement.Application.UseCases.PartDefinitionsOrders.JobCommands;
+using AZ.Integrator.Procurement.Application.UseCases.PartDefinitionsOrders.JobCommands.SendOrderEmailToSupplier;
 using AZ.Integrator.Procurement.Domain.Events;
 using Hangfire;
 using Mediator;
@@ -10,8 +10,8 @@ public class SendOrderEmailToSupplierEventHandler(IBackgroundJobClient backgroun
 {
     public ValueTask Handle(PartDefinitionsOrderRegistered notification, CancellationToken cancellationToken)
     {
-        backgroundJobClient.Enqueue<SendPartDefinitionOrderEmailToSupplierJob>(
-            job => job.Execute(new SendPartDefinitionOrderEmailToSupplierJobCommand
+        backgroundJobClient.Enqueue<SendOrderEmailToSupplierJob>(
+            job => job.Execute(new SendOrderEmailToSupplierJobCommand
             {
                 SupplierId = notification.SupplierId,
                 OrderNumber = notification.OrderNumber,

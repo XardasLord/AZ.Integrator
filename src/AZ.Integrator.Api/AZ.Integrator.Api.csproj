@@ -7,6 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <UserSecretsId>3d42d552-3583-4c8a-aaef-fdc0cbcffccb</UserSecretsId>
         <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,6 +26,9 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Update="EmailTemplates\Procurement\PartDefinitionsOrder.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -34,6 +38,9 @@
 
     <ItemGroup>
       <None Update="https\certificate_192.168.0.185.pfx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="EmailTemplates\**\*.cshtml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

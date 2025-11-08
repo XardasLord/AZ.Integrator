@@ -1,6 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { MaterialModule } from '../../../../../shared/modules/material.module';
+import { Store } from '@ngxs/store';
+import { LoadOrders } from '../../states/orders.action';
+import { Navigate } from '@ngxs/router-plugin';
+import { FurnitureFormatsRoutePath } from '../../../../../core/modules/app-routing.module';
 
 @Component({
   selector: 'app-orders-fixed-buttons',
@@ -10,9 +13,13 @@ import { MaterialModule } from '../../../../../shared/modules/material.module';
   standalone: true,
 })
 export class OrdersFixedButtonsComponent {
-  private router = inject(Router);
+  private store = inject(Store);
 
   onCreateOrder(): void {
-    this.router.navigate(['/furniture-formats/orders/create']);
+    this.store.dispatch(new Navigate([`${FurnitureFormatsRoutePath.OrdersCreate}`]));
+  }
+
+  refreshList(): void {
+    this.store.dispatch(new LoadOrders());
   }
 }

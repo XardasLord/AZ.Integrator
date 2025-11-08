@@ -9,8 +9,9 @@ namespace AZ.Integrator.Shared.Infrastructure.UserInfo;
 public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUser
 {
     private static string System => "System";
+    private static Guid SystemGuid => Guid.Parse("00000000-0000-0000-0000-1234567890ab");
 
-    public Guid UserId => GetClaimValue(UserClaimType.UserId) is null ? Guid.Empty : Guid.Parse(GetClaimValue(UserClaimType.UserId));
+    public Guid UserId => GetClaimValue(UserClaimType.UserId) is null ? SystemGuid : Guid.Parse(GetClaimValue(UserClaimType.UserId));
     public string Name => GetClaimValue(UserClaimType.Name) ?? System;
     public string UserName => GetClaimValue(UserClaimType.UserName) ?? System;
     public string TenantName => GetClaimValue(UserClaimType.TenantName) ?? System;
