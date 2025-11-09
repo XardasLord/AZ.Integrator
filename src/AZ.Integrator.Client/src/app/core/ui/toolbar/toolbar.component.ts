@@ -1,9 +1,9 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { KeycloakService } from 'keycloak-angular';
 import { AuthState } from '../../../shared/states/auth.state';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { AsyncPipe } from '@angular/common';
+import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-toolbar',
@@ -14,7 +14,7 @@ import { AsyncPipe } from '@angular/common';
 })
 export class ToolbarComponent {
   private store = inject(Store);
-  private keycloak = inject(KeycloakService);
+  private keycloak = inject(Keycloak);
 
   @Output()
   toggleSideNav: EventEmitter<boolean> = new EventEmitter();

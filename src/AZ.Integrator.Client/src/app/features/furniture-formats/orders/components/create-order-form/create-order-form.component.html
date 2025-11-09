@@ -16,11 +16,15 @@
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Dostawca</mat-label>
               <mat-select formControlName="supplierId" required>
-                <mat-option *ngFor="let supplier of suppliers$ | async" [value]="supplier.id">
-                  {{ supplier.name }}
-                </mat-option>
+                @for (supplier of suppliers$ | async; track supplier) {
+                  <mat-option [value]="supplier.id">
+                    {{ supplier.name }}
+                  </mat-option>
+                }
               </mat-select>
-              <mat-error *ngIf="orderForm.get('supplierId')?.hasError('required')"> Dostawca jest wymagany </mat-error>
+              @if (orderForm.get('supplierId')?.hasError('required')) {
+                <mat-error> Dostawca jest wymagany </mat-error>
+              }
             </mat-form-field>
           </mat-card-content>
         </mat-card>
@@ -47,7 +51,7 @@
           <mat-card-content>
             <app-furniture-selector
               [furnitureDefinitions]="furnitureDefinitions$ | async"
-              (selectionChange)="onFurnitureSelectionChange($event)"></app-furniture-selector>
+            (selectionChange)="onFurnitureSelectionChange($event)"></app-furniture-selector>
           </mat-card-content>
         </mat-card>
         <div class="step-actions">
@@ -66,135 +70,147 @@
       <!-- Step 3: Furniture Lines Details -->
       <mat-step>
         <ng-template matStepLabel>Formatki mebli</ng-template>
-        <div *ngIf="furnitureLines.length > 0" class="furniture-lines-section">
-          <div
-            *ngFor="let furnitureLine of furnitureLines.controls; let i = index"
-            [formGroup]="furnitureLine"
-            class="furniture-line-card">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title> Mebel: {{ getFurnitureDefinitionDisplay(furnitureLine) }} </mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <!-- Quantity Ordered -->
-                <div class="quantity-section">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Ilość zamówionych mebli</mat-label>
-                    <input matInput type="number" formControlName="quantityOrdered" min="1" />
-                    <mat-error *ngIf="furnitureLine.get('quantityOrdered')?.hasError('required')">
-                      Ilość jest wymagana
-                    </mat-error>
-                    <mat-error *ngIf="furnitureLine.get('quantityOrdered')?.hasError('min')">
-                      Ilość musi być większa niż 0
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <!-- Part Lines -->
-                <div class="part-lines-section">
-                  <div class="part-lines-header">
-                    <h4>Formatki</h4>
-                    <button
-                      mat-raised-button
-                      color="primary"
-                      type="button"
-                      (click)="addPartLine(i)"
-                      class="add-part-button">
-                      <mat-icon>add</mat-icon>
-                      Dodaj formatkę
-                    </button>
-                  </div>
-
-                  <div formArrayName="partLines" class="part-lines-list">
-                    <mat-card
-                      [id]="'part-line-' + i + '-' + j"
-                      *ngFor="let partLine of getPartLines(i).controls; let j = index"
-                      [formGroup]="partLine"
-                      class="part-line-card">
-                      <mat-card-content>
-                        <div class="part-line-actions">
-                          <button
-                            mat-icon-button
-                            color="warn"
-                            type="button"
-                            (click)="removePartLine(i, j)"
-                            matTooltip="Usuń formatkę">
-                            <mat-icon>delete</mat-icon>
-                          </button>
-                        </div>
-
-                        <div class="part-line-fields">
-                          <mat-form-field appearance="outline">
-                            <mat-label>Nazwa formatki</mat-label>
-                            <input matInput formControlName="partName" />
-                            <mat-error *ngIf="partLine.get('partName')?.hasError('required')">
-                              Nazwa jest wymagana
-                            </mat-error>
-                          </mat-form-field>
-
-                          <mat-form-field appearance="outline">
-                            <mat-label>Długość (mm)</mat-label>
-                            <input matInput type="number" formControlName="lengthMm" min="1" />
-                            <mat-error *ngIf="partLine.get('lengthMm')?.hasError('required')">
-                              Długość jest wymagana
-                            </mat-error>
-                          </mat-form-field>
-
-                          <mat-form-field appearance="outline">
-                            <mat-label>Szerokość (mm)</mat-label>
-                            <input matInput type="number" formControlName="widthMm" min="1" />
-                            <mat-error *ngIf="partLine.get('widthMm')?.hasError('required')">
-                              Szerokość jest wymagana
-                            </mat-error>
-                          </mat-form-field>
-
-                          <mat-form-field appearance="outline">
-                            <mat-label>Grubość (mm)</mat-label>
-                            <input matInput type="number" formControlName="thicknessMm" min="1" />
-                            <mat-error *ngIf="partLine.get('thicknessMm')?.hasError('required')">
-                              Grubość jest wymagana
-                            </mat-error>
-                          </mat-form-field>
-
-                          <mat-form-field appearance="outline">
-                            <mat-label>Oklejka długość</mat-label>
-                            <mat-select formControlName="lengthEdgeBandingType">
-                              <mat-option *ngFor="let type of edgeBandingTypes" [value]="type">
-                                {{ getEdgeBandingTypeDisplay(type) }}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-
-                          <mat-form-field appearance="outline">
-                            <mat-label>Oklejka szerokość</mat-label>
-                            <mat-select formControlName="widthEdgeBandingType">
-                              <mat-option *ngFor="let type of edgeBandingTypes" [value]="type">
-                                {{ getEdgeBandingTypeDisplay(type) }}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-
-                          <mat-form-field appearance="outline">
-                            <mat-label>Ilość</mat-label>
-                            <input matInput type="number" formControlName="quantity" min="1" />
-                            <mat-error *ngIf="partLine.get('quantity')?.hasError('required')">
-                              Ilość jest wymagana
-                            </mat-error>
-                          </mat-form-field>
-
-                          <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Dodatkowe informacje</mat-label>
-                            <textarea matInput formControlName="additionalInfo" rows="2"></textarea>
-                          </mat-form-field>
-                        </div>
-                      </mat-card-content>
-                    </mat-card>
-                  </div>
-                </div>
-              </mat-card-content>
-            </mat-card>
+        @if (furnitureLines.length > 0) {
+          <div class="furniture-lines-section">
+            @for (furnitureLine of furnitureLines.controls; track furnitureLine; let i = $index) {
+              <div
+                [formGroup]="furnitureLine"
+                class="furniture-line-card">
+                <mat-card>
+                  <mat-card-header>
+                    <mat-card-title> Mebel: {{ getFurnitureDefinitionDisplay(furnitureLine) }} </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <!-- Quantity Ordered -->
+                    <div class="quantity-section">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Ilość zamówionych mebli</mat-label>
+                        <input matInput type="number" formControlName="quantityOrdered" min="1" />
+                        @if (furnitureLine.get('quantityOrdered')?.hasError('required')) {
+                          <mat-error>
+                            Ilość jest wymagana
+                          </mat-error>
+                        }
+                        @if (furnitureLine.get('quantityOrdered')?.hasError('min')) {
+                          <mat-error>
+                            Ilość musi być większa niż 0
+                          </mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                    <!-- Part Lines -->
+                    <div class="part-lines-section">
+                      <div class="part-lines-header">
+                        <h4>Formatki</h4>
+                        <button
+                          mat-raised-button
+                          color="primary"
+                          type="button"
+                          (click)="addPartLine(i)"
+                          class="add-part-button">
+                          <mat-icon>add</mat-icon>
+                          Dodaj formatkę
+                        </button>
+                      </div>
+                      <div formArrayName="partLines" class="part-lines-list">
+                        @for (partLine of getPartLines(i).controls; track partLine; let j = $index) {
+                          <mat-card
+                            [id]="'part-line-' + i + '-' + j"
+                            [formGroup]="partLine"
+                            class="part-line-card">
+                            <mat-card-content>
+                              <div class="part-line-actions">
+                                <button
+                                  mat-icon-button
+                                  color="warn"
+                                  type="button"
+                                  (click)="removePartLine(i, j)"
+                                  matTooltip="Usuń formatkę">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </div>
+                              <div class="part-line-fields">
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Nazwa formatki</mat-label>
+                                  <input matInput formControlName="partName" />
+                                  @if (partLine.get('partName')?.hasError('required')) {
+                                    <mat-error>
+                                      Nazwa jest wymagana
+                                    </mat-error>
+                                  }
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Długość (mm)</mat-label>
+                                  <input matInput type="number" formControlName="lengthMm" min="1" />
+                                  @if (partLine.get('lengthMm')?.hasError('required')) {
+                                    <mat-error>
+                                      Długość jest wymagana
+                                    </mat-error>
+                                  }
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Szerokość (mm)</mat-label>
+                                  <input matInput type="number" formControlName="widthMm" min="1" />
+                                  @if (partLine.get('widthMm')?.hasError('required')) {
+                                    <mat-error>
+                                      Szerokość jest wymagana
+                                    </mat-error>
+                                  }
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Grubość (mm)</mat-label>
+                                  <input matInput type="number" formControlName="thicknessMm" min="1" />
+                                  @if (partLine.get('thicknessMm')?.hasError('required')) {
+                                    <mat-error>
+                                      Grubość jest wymagana
+                                    </mat-error>
+                                  }
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Oklejka długość</mat-label>
+                                  <mat-select formControlName="lengthEdgeBandingType">
+                                    @for (type of edgeBandingTypes; track type) {
+                                      <mat-option [value]="type">
+                                        {{ getEdgeBandingTypeDisplay(type) }}
+                                      </mat-option>
+                                    }
+                                  </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Oklejka szerokość</mat-label>
+                                  <mat-select formControlName="widthEdgeBandingType">
+                                    @for (type of edgeBandingTypes; track type) {
+                                      <mat-option [value]="type">
+                                        {{ getEdgeBandingTypeDisplay(type) }}
+                                      </mat-option>
+                                    }
+                                  </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Ilość</mat-label>
+                                  <input matInput type="number" formControlName="quantity" min="1" />
+                                  @if (partLine.get('quantity')?.hasError('required')) {
+                                    <mat-error>
+                                      Ilość jest wymagana
+                                    </mat-error>
+                                  }
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" class="full-width">
+                                  <mat-label>Dodatkowe informacje</mat-label>
+                                  <textarea matInput formControlName="additionalInfo" rows="2"></textarea>
+                                </mat-form-field>
+                              </div>
+                            </mat-card-content>
+                          </mat-card>
+                        }
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            }
           </div>
-        </div>
+        }
         <div class="step-actions">
           <button mat-button type="button" matStepperPrevious>Wstecz</button>
           <button
@@ -223,7 +239,7 @@
                 matInput
                 formControlName="additionalNotes"
                 rows="8"
-                placeholder="Wpisz tutaj dodatkowe informacje lub uwagi do zamówienia..."></textarea>
+              placeholder="Wpisz tutaj dodatkowe informacje lub uwagi do zamówienia..."></textarea>
             </mat-form-field>
           </mat-card-content>
         </mat-card>

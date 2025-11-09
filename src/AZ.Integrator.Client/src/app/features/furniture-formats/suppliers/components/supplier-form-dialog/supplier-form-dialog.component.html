@@ -20,8 +20,12 @@
         </mat-label>
         <input type="text" matInput formControlName="name" />
         <mat-icon matPrefix class="text-gray-500">store</mat-icon>
-        <mat-error *ngIf="form.controls.name.hasError('required')"> Nazwa dostawcy jest wymagana </mat-error>
-        <mat-error *ngIf="form.controls.name.hasError('minlength')"> Nazwa musi mieć co najmniej 1 znak </mat-error>
+        @if (form.controls.name.hasError('required')) {
+          <mat-error> Nazwa dostawcy jest wymagana </mat-error>
+        }
+        @if (form.controls.name.hasError('minlength')) {
+          <mat-error> Nazwa musi mieć co najmniej 1 znak </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="w-full">
@@ -47,45 +51,51 @@
       </button>
     </div>
 
-    <div *ngIf="mailboxes.length === 0" class="empty-state">
-      <mat-icon>email</mat-icon>
-      <div class="empty-text">Brak adresów email. Dodaj co najmniej jeden adres email.</div>
-    </div>
+    @if (mailboxes.length === 0) {
+      <div class="empty-state">
+        <mat-icon>email</mat-icon>
+        <div class="empty-text">Brak adresów email. Dodaj co najmniej jeden adres email.</div>
+      </div>
+    }
 
     <div formArrayName="mailboxes" class="mailboxes-list">
-      <mat-card *ngFor="let _ of mailboxes.controls; let i = index" class="mailbox-card mb-3">
-        <mat-card-header class="mailbox-card-header">
-          <mat-card-title class="text-base">
-            <span class="mailbox-number-badge">{{ i + 1 }}</span>
-            Email {{ i + 1 }}
-          </mat-card-title>
-          <button
-            mat-icon-button
-            type="button"
-            (click)="removeMailbox(i)"
-            matTooltip="Usuń adres email"
-            class="delete-button"
-            [disabled]="mailboxes.length === 1">
-            <mat-icon class="!text-red-600">delete</mat-icon>
-          </button>
-        </mat-card-header>
-
-        <mat-card-content [formGroupName]="i">
-          <mat-form-field class="w-full">
-            <mat-label>Adres email</mat-label>
-            <input type="email" matInput formControlName="email" />
-            <mat-icon matPrefix class="text-gray-500">alternate_email</mat-icon>
-            <mat-error *ngIf="mailboxes.controls[i].get('email')?.hasError('required')">
-              Adres email jest wymagany
-            </mat-error>
-            <mat-error *ngIf="mailboxes.controls[i].get('email')?.hasError('email')">
-              Nieprawidłowy format adresu email
-            </mat-error>
-          </mat-form-field>
-
-          <input type="hidden" formControlName="id" />
-        </mat-card-content>
-      </mat-card>
+      @for (_ of mailboxes.controls; track _; let i = $index) {
+        <mat-card class="mailbox-card mb-3">
+          <mat-card-header class="mailbox-card-header">
+            <mat-card-title class="text-base">
+              <span class="mailbox-number-badge">{{ i + 1 }}</span>
+              Email {{ i + 1 }}
+            </mat-card-title>
+            <button
+              mat-icon-button
+              type="button"
+              (click)="removeMailbox(i)"
+              matTooltip="Usuń adres email"
+              class="delete-button"
+              [disabled]="mailboxes.length === 1">
+              <mat-icon class="!text-red-600">delete</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content [formGroupName]="i">
+            <mat-form-field class="w-full">
+              <mat-label>Adres email</mat-label>
+              <input type="email" matInput formControlName="email" />
+              <mat-icon matPrefix class="text-gray-500">alternate_email</mat-icon>
+              @if (mailboxes.controls[i].get('email')?.hasError('required')) {
+                <mat-error>
+                  Adres email jest wymagany
+                </mat-error>
+              }
+              @if (mailboxes.controls[i].get('email')?.hasError('email')) {
+                <mat-error>
+                  Nieprawidłowy format adresu email
+                </mat-error>
+              }
+            </mat-form-field>
+            <input type="hidden" formControlName="id" />
+          </mat-card-content>
+        </mat-card>
+      }
     </div>
   </form>
 </div>

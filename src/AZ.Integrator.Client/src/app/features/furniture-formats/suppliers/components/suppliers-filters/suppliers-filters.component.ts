@@ -4,13 +4,13 @@ import { Store } from '@ngxs/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MaterialModule } from '../../../../../shared/modules/material.module';
 import { ApplyFilter } from '../../states/suppliers.action';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'app-suppliers-filters',
   templateUrl: './suppliers-filters.component.html',
   styleUrls: ['./suppliers-filters.component.scss'],
-  imports: [MaterialModule, ReactiveFormsModule, NgIf],
+  imports: [MaterialModule, ReactiveFormsModule],
   standalone: true,
 })
 export class SuppliersFiltersComponent {

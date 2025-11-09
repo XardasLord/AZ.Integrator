@@ -1,7 +1,7 @@
 import { PageEvent } from '@angular/material/paginator';
 import { environment } from 'src/environments/environment';
 import { GraphQLQueryVo } from './graphql.query';
-import { WatchQueryOptionsAlone } from 'apollo-angular/types';
+import { WatchQueryOptions } from '@apollo/client';
 import { PageInfo } from './graphql-integrator.schema';
 
 export class GraphQLHelper {
@@ -15,11 +15,11 @@ export class GraphQLHelper {
     return output;
   }
 
-  public static defaultGraphQLWatchQueryOptions: WatchQueryOptionsAlone = {};
-  public static networkOnlyGraphQLWatchQueryOptions: WatchQueryOptionsAlone = {
+  public static defaultGraphQLWatchQueryOptions: Partial<WatchQueryOptions> = {};
+  public static networkOnlyGraphQLWatchQueryOptions: Partial<WatchQueryOptions> = {
     fetchPolicy: 'network-only',
   };
-  public static cacheFirstGraphQLWatchQueryOptions: WatchQueryOptionsAlone = {
+  public static cacheFirstGraphQLWatchQueryOptions: Partial<WatchQueryOptions> = {
     fetchPolicy: 'cache-first',
   };
 

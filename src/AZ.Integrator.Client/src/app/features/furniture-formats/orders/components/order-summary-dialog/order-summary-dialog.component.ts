@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../../../../shared/modules/material.module';
 import { EdgeBandingTypeViewModel, SupplierViewModel } from '../../../../../shared/graphql/graphql-integrator.schema';
@@ -39,7 +39,7 @@ export interface OrderSummaryData {
   templateUrl: './order-summary-dialog.component.html',
   styleUrls: ['./order-summary-dialog.component.scss'],
   standalone: true,
-  imports: [MaterialModule, CommonModule],
+  imports: [MaterialModule],
 })
 export class OrderSummaryDialogComponent {
   constructor(

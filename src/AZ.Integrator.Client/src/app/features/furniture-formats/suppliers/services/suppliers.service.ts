@@ -1,11 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { environment } from '../../../../../environments/environment';
 import { GraphQLResponse } from '../../../../shared/graphql/graphql.response';
 import { GetSuppliersGQL } from '../graphql-queries/get-suppliers.graphql.query';
-import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
 import { SaveSupplierCommand } from '../models/commands/save-supplier.command';
 import { SupplierViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
 
@@ -21,9 +20,10 @@ export class SuppliersService extends RemoteServiceBase {
   }
 
   loadSuppliers(filters: Record<string, unknown>): Observable<GraphQLResponse<SupplierViewModel[]>> {
-    return this.getSuppliersGql
-      .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-      .valueChanges.pipe(map(x => x.data));
+    return this.getSuppliersGql.watch({ variables: filters }).valueChanges.pipe(
+      filter(result => !result.loading && result.data !== undefined),
+      map(x => x.data as GraphQLResponse<SupplierViewModel[]>)
+    );
   }
 
   addSupplier(command: SaveSupplierCommand): Observable<void> {

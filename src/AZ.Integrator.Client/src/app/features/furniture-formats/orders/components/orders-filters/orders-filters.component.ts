@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NgIf } from '@angular/common';
+
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -11,7 +11,7 @@ import { ApplyFilter } from '../../states/orders.action';
   selector: 'app-orders-filters',
   templateUrl: './orders-filters.component.html',
   styleUrls: ['./orders-filters.component.scss'],
-  imports: [MaterialModule, ReactiveFormsModule, NgIf],
+  imports: [MaterialModule, ReactiveFormsModule],
   standalone: true,
 })
 export class OrdersFiltersComponent {

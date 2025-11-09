@@ -2,12 +2,13 @@
   <mat-label>Szukaj kodu mebla</mat-label>
   <input matInput [formControl]="searchControl" placeholder="Wpisz kod mebla..." />
   <mat-icon matPrefix>search</mat-icon>
-  <button
-    *ngIf="searchControl.value"
-    matSuffix
-    mat-icon-button
-    aria-label="Wyczyść"
-    (click)="searchControl.setValue('')">
-    <mat-icon>close</mat-icon>
-  </button>
+  @if (searchControl.value) {
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="Wyczyść"
+      (click)="searchControl.setValue('')">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
 </mat-form-field>

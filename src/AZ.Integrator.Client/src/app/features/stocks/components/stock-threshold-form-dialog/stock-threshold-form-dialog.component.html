@@ -20,8 +20,12 @@
   <mat-form-field appearance="fill" class="w-full mt-2">
     <mat-label>Limit</mat-label>
     <input matInput type="number" step="1" formControlName="threshold" class="focus:ring focus:ring-blue-300" />
-    <mat-error *ngIf="groupForm.get('threshold')!.hasError('required')"> Limit jest wymagany </mat-error>
-    <mat-error *ngIf="groupForm.get('threshold')!.hasError('min')"> Minimalna wartość limitu to 1 </mat-error>
+    @if (groupForm.get('threshold')!.hasError('required')) {
+      <mat-error> Limit jest wymagany </mat-error>
+    }
+    @if (groupForm.get('threshold')!.hasError('min')) {
+      <mat-error> Minimalna wartość limitu to 1 </mat-error>
+    }
   </mat-form-field>
 </form>
 

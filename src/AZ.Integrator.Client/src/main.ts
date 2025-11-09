@@ -1,14 +1,15 @@
 import { bootstrapApplication, BrowserModule, enableDebugTools } from '@angular/platform-browser';
-import { APP_INITIALIZER, ApplicationRef, importProvidersFrom, inject, isDevMode } from '@angular/core';
-
-import { initKeycloak } from './init.keycloak';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { ApplicationRef, importProvidersFrom, inject, isDevMode } from '@angular/core';
+import {
+  INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+  includeBearerTokenInterceptor,
+  provideKeycloak,
+} from 'keycloak-angular';
 import { AppRoutingModule } from './app/core/modules/app-routing.module';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { SharedModule } from './app/shared/shared.module';
 import { CoreModule } from './app/core/core.module';
 import { AppComponent } from './app/app.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { provideStates, provideStore, withNgxsDevelopmentOptions } from '@ngxs/store';
 import { AuthState } from './app/shared/states/auth.state';
 import { SourceSystemState } from './app/shared/states/source-system.state';
@@ -21,18 +22,37 @@ import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from './environments/environment';
 import { InMemoryCache } from '@apollo/client/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(BrowserModule, AppRoutingModule, SharedModule, CoreModule, KeycloakAngularModule),
+    importProvidersFrom(BrowserModule, AppRoutingModule, SharedModule, CoreModule),
+    provideHttpClient(withInterceptors([includeBearerTokenInterceptor]), withInterceptorsFromDi()),
+
     {
-      provide: APP_INITIALIZER,
-      useFactory: initKeycloak,
-      multi: true,
-      deps: [KeycloakService],
+      provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+      useValue: [
+        { urlPattern: new RegExp(`^${environment.apiEndpoint}`) },
+        { urlPattern: new RegExp(`^${environment.graphqlEndpoint}`) },
+      ],
     },
+
+    provideKeycloak({
+      config: {
+        url: environment.keycloakEndpoint,
+        realm: 'az-integrator',
+        clientId: 'az-integrator-client',
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+        checkLoginIframe: false,
+        pkceMethod: 'S256',
+      },
+      // features: [withAutoRefreshToken()],
+    }),
+
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi()),
     provideNgxsStore(),
     provideStates([DictionaryState]),
     provideGraphQL(),

@@ -2,8 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { Action, NgxsAfterBootstrap, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
 
-import { KeycloakService } from 'keycloak-angular';
-import { KeycloakProfile } from 'keycloak-js/lib/keycloak';
+import Keycloak from 'keycloak-js';
+import { KeycloakProfile } from '../../types/keycloak-js';
 
 import { AuthScopes } from '../auth/models/auth.scopes';
 import { Login, LoginCompleted, Logout, NotAuthorized, Relog } from './auth.action';
@@ -25,10 +25,10 @@ export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 })
 @Injectable()
 export class AuthState implements NgxsAfterBootstrap {
-  private keycloak = inject(KeycloakService);
+  private keycloak = inject(Keycloak);
 
   ngxsAfterBootstrap(ctx: StateContext<AuthStateModel>): void {
-    if (this.keycloak.isLoggedIn()) {
+    if (this.keycloak.authenticated) {
       ctx.dispatch(new LoginCompleted());
     } else {
       ctx.dispatch(new Logout());
@@ -84,9 +84,9 @@ export class AuthState implements NgxsAfterBootstrap {
     // TODO: Extend profile with the custom app_scopes
     this.keycloak.loadUserProfile().then(profile => {
       ctx.patchState({
-        isLoggedIn: this.keycloak.isLoggedIn(),
+        isLoggedIn: this.keycloak.authenticated,
         profile: profile,
-        authRoles: getAuthRolesFromToken(this.keycloak.getKeycloakInstance().idTokenParsed!),
+        authRoles: getAuthRolesFromToken(this.keycloak.idTokenParsed!),
       });
     });
 

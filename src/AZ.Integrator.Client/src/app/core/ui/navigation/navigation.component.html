@@ -10,7 +10,9 @@
             <div class="menu-item-wrapper">
               <mat-list-item (click)="toggleExpand(item)" class="cursor-pointer">
                 <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-                <span matListItemTitle *ngIf="sidenav.opened">{{ item.title }}</span>
+                @if (sidenav.opened) {
+                  <span matListItemTitle>{{ item.title }}</span>
+                }
               </mat-list-item>
               @if (sidenav.opened) {
                 <mat-icon class="expand-icon">
@@ -38,7 +40,9 @@
             <!-- Regular item without sub-items -->
             <mat-list-item [routerLink]="item.route" routerLinkActive="active-route">
               <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-              <span matListItemTitle *ngIf="sidenav.opened">{{ item.title }}</span>
+              @if (sidenav.opened) {
+                <span matListItemTitle>{{ item.title }}</span>
+              }
             </mat-list-item>
           }
         </div>

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
 import { SaveParcelTemplateCommand } from '../models/commands/save-parcel-template.command';
@@ -10,7 +10,6 @@ import {
 } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLResponse } from '../../../shared/graphql/graphql.response';
 import { GetTagParcelTemplatesGQL } from '../graphql-queries/get-tag-parcel-templates.graphql.query';
-import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 
 @Injectable()
 export class ParcelTemplatesService extends RemoteServiceBase {
@@ -27,9 +26,10 @@ export class ParcelTemplatesService extends RemoteServiceBase {
   loadTemplates(
     filters: IntegratorQueryTagParcelTemplatesArgs
   ): Observable<GraphQLResponse<TagParcelTemplateViewModel[]>> {
-    return this.getTagParcelTemplatesGql
-      .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-      .valueChanges.pipe(map(x => x.data));
+    return this.getTagParcelTemplatesGql.watch({ variables: filters }).valueChanges.pipe(
+      filter(result => !result.loading && result.data !== undefined),
+      map(x => x.data as GraphQLResponse<TagParcelTemplateViewModel[]>)
+    );
   }
 
   saveTemplate(command: SaveParcelTemplateCommand): Observable<void> {

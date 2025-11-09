@@ -7,7 +7,7 @@ import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.m
 import { OrdersState } from '../../states/orders-state.service';
 import { ChangePage, GenerateDpdLabel, GenerateInpostLabel, LoadSent, SetCurrentTab } from '../../states/orders.action';
 import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
-import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { InvoicesState } from '../../states/invoices.state';
 import { DownloadInvoice, GenerateInvoice } from '../../states/invoices.action';
@@ -24,7 +24,7 @@ import { ScrollTableComponent } from '../../../../shared/ui/wrappers/scroll-tabl
   selector: 'app-orders-list-sent',
   templateUrl: './orders-list-sent.component.html',
   styleUrls: ['./orders-list-sent.component.scss'],
-  imports: [MaterialModule, NgFor, NgIf, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
+  imports: [MaterialModule, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
   standalone: true,
 })
 export class OrdersListSentComponent implements OnInit {

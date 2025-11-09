@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { PageEvent } from '@angular/material/paginator';
 import { MaterialModule } from '../../../../../shared/modules/material.module';
 import { FurnitureModelViewModel } from '../../../../../shared/graphql/graphql-integrator.schema';
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-furniture-selector',
   templateUrl: './furniture-selector.component.html',
   styleUrls: ['./furniture-selector.component.scss'],
-  imports: [MaterialModule, CommonModule, FormsModule],
+  imports: [MaterialModule, FormsModule],
   standalone: true,
 })
 export class FurnitureSelectorComponent implements OnChanges {
