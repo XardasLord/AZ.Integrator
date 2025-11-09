@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { ParcelTemplatesState } from '../../states/parcel-templates.state';
@@ -16,13 +16,14 @@ import { ParcelTemplateDefinitionDataModel } from '../../components/package-temp
   selector: 'app-parcel-templates-list',
   templateUrl: './parcel-templates-list.component.html',
   styleUrls: ['./parcel-templates-list.component.scss'],
-  imports: [MaterialModule, AsyncPipe, ScrollTableComponent],
+  imports: [MaterialModule, AsyncPipe, ScrollTableComponent, DatePipe, NgIf],
+  standalone: true,
 })
 export class ParcelTemplatesListComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
 
-  displayedColumns: string[] = ['tags', 'actions'];
+  displayedColumns: string[] = ['tags', 'templatesCount', 'actions'];
   templates$ = this.store.select(ParcelTemplatesState.getTemplates);
   totalItems$ = this.store.select(ParcelTemplatesState.getTemplatesCount);
   currentPage$ = this.store.select(ParcelTemplatesState.getCurrentPage);

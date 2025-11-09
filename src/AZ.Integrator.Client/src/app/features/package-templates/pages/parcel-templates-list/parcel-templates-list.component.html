@@ -6,13 +6,29 @@
   <table mat-table [dataSource]="(templates$ | async)!">
     <ng-container matColumnDef="tags">
       <th mat-header-cell *matHeaderCellDef>Tag</th>
-      <td mat-cell *matCellDef="let template">{{ template?.tag }}</td>
+      <td mat-cell *matCellDef="let template">
+        <div class="flex flex-col gap-1">
+          <span class="font-semibold">{{ template?.tag }}</span>
+          <span class="text-xs text-gray-500" *ngIf="template?.modifiedAt">
+            Zmodyfikowano: {{ template.modifiedAt | date: 'dd.MM.yyyy HH:mm' }}
+          </span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="templatesCount">
+      <th mat-header-cell *matHeaderCellDef>Liczba paczek</th>
+      <td mat-cell *matCellDef="let template">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+          {{ template?.parcels?.length || 0 }}
+        </span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Akcje</th>
       <td mat-cell *matCellDef="let template">
-        <div>
+        <div class="flex gap-2">
           <button mat-icon-button matTooltip="Edytuj szablony paczek" (click)="editPackageTemplate(template)">
             <mat-icon class="!text-blue-600">edit</mat-icon>
           </button>

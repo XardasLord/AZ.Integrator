@@ -23,15 +23,16 @@ public class RefreshTenantAccessTokensRecurringJob(
         
         var allegroAccountDataViewContext = scope.ServiceProvider.GetService<AllegroAccountDataViewContext>();
 
-        var tenantAccounts = await allegroAccountDataViewContext.AllegroAccounts
+        var allegroAccounts = await allegroAccountDataViewContext.AllegroAccounts
             .Where(x => x.RefreshToken.Length > 0)
             .ToListAsync(cancellationToken);
         
-        tenantAccounts.ForEach(tenant =>
+        allegroAccounts.ForEach(account =>
             backgroundJobClient.Enqueue<RefreshTenantAccessTokenCommandJob>(
                 job => job.Execute(new RefreshTenantAccessTokenCommand
                 {
-                    TenantId = tenant.TenantId
+                    TenantId = account.TenantId,
+                    SourceSystemId = account.SourceSystemId
                 }, null)));
     }
 }
