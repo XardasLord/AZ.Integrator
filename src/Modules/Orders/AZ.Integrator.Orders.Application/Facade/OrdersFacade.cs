@@ -7,11 +7,12 @@ namespace AZ.Integrator.Orders.Application.Facade;
 
 public class OrdersFacade(IMediator mediator) : IOrdersFacade
 {
-    public async Task<OrderDetailsDto> GetOrderDetails(string orderId, string tenantId, CancellationToken cancellationToken)
+    public async Task<OrderDetailsDto> GetOrderDetails(string orderId, Guid tenantId, string sourceSystemId, CancellationToken cancellationToken)
     {
         var query = new GetDetailsQuery(orderId)
         {
-            TenantId = tenantId
+            TenantId = tenantId,
+            SourceSystemId = sourceSystemId
         };
         
         return await mediator.Send(query, cancellationToken);

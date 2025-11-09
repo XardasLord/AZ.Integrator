@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.ValueObjects;
@@ -10,12 +11,12 @@ public class InpostShipment : Entity, IAggregateRoot
 {
     private ShipmentNumber _number;
     private ExternalOrderNumber _externalOrderNumber;
-    private TenantCreationInformation _creationInformation;
+    private TenantWithSourceSystemCreationInformation _creationInformation;
     private List<Parcel> _parcels;
 
     public ShipmentNumber Number => _number;
     public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
-    public TenantCreationInformation CreationInformation => _creationInformation;
+    public TenantWithSourceSystemCreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<Parcel> Parcels => _parcels;
 
     private InpostShipment()
@@ -23,18 +24,30 @@ public class InpostShipment : Entity, IAggregateRoot
         _parcels = [];
     }
 
-    private InpostShipment(ShipmentNumber number, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    private InpostShipment(
+        ShipmentNumber number, ExternalOrderNumber externalOrderNumber, 
+        TenantId tenantId, SourceSystemId sourceSystemId, 
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
         _number = number;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new TenantWithSourceSystemCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId, sourceSystemId);
     }
 
-    public static InpostShipment Create(ShipmentNumber number, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static InpostShipment Create(
+        ShipmentNumber number, ExternalOrderNumber externalOrderNumber,
+        TenantId tenantId, SourceSystemId sourceSystemId,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var shipment = new InpostShipment(number, externalOrderNumber, tenantId, currentUser, currentDateTime);
-        
-        shipment.AddDomainEvent(new InpostShipmentRegistered(number, externalOrderNumber, shipment.CreationInformation.TenantId));
+        var shipment = new InpostShipment(number, externalOrderNumber, tenantId, sourceSystemId, currentUser, currentDateTime);
+            
+        shipment.AddDomainEvent(new InpostShipmentRegistered(
+            shipment.Number,
+            shipment.ExternalOrderNumber,
+            shipment.CreationInformation.SourceSystemId,
+            shipment.CreationInformation.TenantId,
+            shipment.CreationInformation.SourceSystemId.GetShopProviderType(),
+            CorrelationIdHelper.New()));
         
         return shipment;
     }
@@ -52,6 +65,7 @@ public class InpostShipment : Entity, IAggregateRoot
             Number,
             trackingNumbers.Select(x => x.Value).ToArray(), 
             ExternalOrderNumber,
-            CreationInformation.TenantId ?? tenantId));
+            CreationInformation.TenantId ?? tenantId,
+            CreationInformation.SourceSystemId));
     }
 }

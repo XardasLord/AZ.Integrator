@@ -11,6 +11,7 @@
       <PackageReference Include="dbup" Version="5.0.41" />
       <PackageReference Include="dbup-postgresql" Version="6.0.3" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
       <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.8" />
       <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.8" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
@@ -25,7 +26,7 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="Repeatable\v_allegro_accounts_view.sql">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Repeatable\v_invoices_view.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -60,10 +61,63 @@
       <None Update="Migrations\Public\V0102__move_invoices_to_billing.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations\Account\" />
+      <None Update="Migrations\Public\V0103__add_source_system_id_to_shipments.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Billing\V0101__add_source_system_id_to_invoices.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Public\V0104__create_monitoring_schema.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Monitoring\V0100__Init.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Account\V0100__Init.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Public\V0105__move_allegro_accounts_to_account_schema.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Public\V0106__assign_tenant_id.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Billing\V0102__assign_tenant_id.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Catalog\V0100__Init.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Public\V0107__create_catalog_and_procurement_schema.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Repeatable\v_furniture_models_view.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Repeatable\v_part_definition_view.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Procurement\V0100__Init.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Migrations\Procurement\V0101__add_part_definitions_order.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Repeatable\Procurement\v_suppliers_view.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Repeatable\Procurement\v_supplier_mailboxes_view.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Repeatable\Procurement\v_orders_view.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Repeatable\Procurement\v_order_furniture_lines_view.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Repeatable\Procurement\v_order_furniture_part_lines_view.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == '' Or '$(Configuration)' == 'Debug'">

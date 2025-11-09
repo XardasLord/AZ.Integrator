@@ -7,6 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <UserSecretsId>3d42d552-3583-4c8a-aaef-fdc0cbcffccb</UserSecretsId>
         <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,21 +26,21 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Update="EmailTemplates\Procurement\PartDefinitionsOrder.cshtml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\AZ.Integrator.Api.Infrastructure\AZ.Integrator.Api.Infrastructure.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Shared.Infrastructure\AZ.Integrator.Shared.Infrastructure.csproj" />
-      <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Application\AZ.Integrator.Invoices.Application.csproj" />
-      <ProjectReference Include="..\Modules\Operations\AZ.Integrator.Operations.Application\AZ.Integrator.Operations.Application.csproj" />
-      <ProjectReference Include="..\Modules\Orders\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
-      <ProjectReference Include="..\Modules\Shipments\AZ.Integrator.Shipments.Application\AZ.Integrator.Shipments.Application.csproj" />
-      <ProjectReference Include="..\Modules\TagParcelTemplates\AZ.Integrator.TagParcelTemplates.Application\AZ.Integrator.TagParcelTemplates.Application.csproj" />
-        <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Application\AZ.Integrator.Stocks.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <None Update="https\certificate_192.168.0.185.pfx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="EmailTemplates\**\*.cshtml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

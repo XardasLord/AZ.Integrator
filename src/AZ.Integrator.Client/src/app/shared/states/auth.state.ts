@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Action, NgxsAfterBootstrap, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
 
@@ -26,7 +26,6 @@ export const AUTH_STATE_TOKEN = new StateToken<AuthStateModel>('auth');
 @Injectable()
 export class AuthState implements NgxsAfterBootstrap {
   private keycloak = inject(KeycloakService);
-
 
   ngxsAfterBootstrap(ctx: StateContext<AuthStateModel>): void {
     if (this.keycloak.isLoggedIn()) {

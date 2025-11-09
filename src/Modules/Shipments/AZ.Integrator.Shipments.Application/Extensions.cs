@@ -12,7 +12,7 @@ public static class Extensions
 {
     private const string OptionsSectionName = "Application:Inpost";
     
-    public static IServiceCollection AddShipmentsModuleApplication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddModuleApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<InpostSenderOptions>(configuration.GetSection(OptionsSectionName));
         

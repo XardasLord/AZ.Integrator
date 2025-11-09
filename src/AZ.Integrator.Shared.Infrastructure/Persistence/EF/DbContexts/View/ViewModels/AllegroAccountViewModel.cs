@@ -3,6 +3,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Vie
 public class AllegroAccountViewModel
 {
     public string TenantId { get; set; }
+    public string SourceSystemId { get; set; }
     public string AccessToken { get; set; }
     public string RefreshToken { get; set; }
     public DateTime ExpiresAt { get; set; }

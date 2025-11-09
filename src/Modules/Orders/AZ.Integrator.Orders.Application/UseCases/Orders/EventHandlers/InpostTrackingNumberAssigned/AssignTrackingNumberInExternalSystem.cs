@@ -15,7 +15,7 @@ public class AssignTrackingNumberInExternalSystem(IBackgroundJobClient backgroun
 {
     public ValueTask Handle(InpostTrackingNumbersAssigned notification, CancellationToken cancellationToken)
     {
-        var shopProvider = TenantHelper.GetShopProviderType(notification.TenantId);
+        var shopProvider = ShopProviderHelper.GetShopProviderType(notification.SourceSystemId);
 
         if (shopProvider == ShopProviderType.Allegro)
         {
@@ -24,7 +24,8 @@ public class AssignTrackingNumberInExternalSystem(IBackgroundJobClient backgroun
                 {
                     OrderNumber = Guid.Parse(notification.ExternalOrderNumber),
                     TrackingNumbers = notification.TrackingNumbers,
-                    TenantId = notification.TenantId
+                    TenantId = notification.TenantId,
+                    SourceSystemId = notification.SourceSystemId
                 }, null));
         }
         else if (shopProvider == ShopProviderType.Erli)
@@ -36,7 +37,8 @@ public class AssignTrackingNumberInExternalSystem(IBackgroundJobClient backgroun
                     TrackingNumbers = notification.TrackingNumbers,
                     DeliveryTrackingStatus = ErliDeliveryTrackingStatusEnum.ReadyToSend.Name,
                     Vendor = ErliDeliveryTrackingVendorEnum.InPost.Name,
-                    TenantId = notification.TenantId
+                    TenantId = notification.TenantId,
+                    SourceSystemId = notification.SourceSystemId
                 }, null));
         }
         else if (shopProvider == ShopProviderType.Shopify)
@@ -47,7 +49,8 @@ public class AssignTrackingNumberInExternalSystem(IBackgroundJobClient backgroun
                     OrderNumber = notification.ExternalOrderNumber,
                     TrackingNumbers = notification.TrackingNumbers,
                     Vendor = ShopifyDeliveryTrackingVendorEnum.InPost.Name,
-                    TenantId = notification.TenantId
+                    TenantId = notification.TenantId,
+                    SourceSystemId = notification.SourceSystemId
                 }, null));
         }
 

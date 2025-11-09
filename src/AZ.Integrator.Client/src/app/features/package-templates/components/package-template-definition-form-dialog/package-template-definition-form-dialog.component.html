@@ -1,7 +1,10 @@
 <div mat-dialog-title>
   <div class="flex justify-between items-center text-xl">
-    <div>Szablon paczek</div>
-    <mat-icon class="cursor-pointer" mat-dialog-close>close</mat-icon>
+    <div class="flex items-center gap-3">
+      <mat-icon class="text-primary">{{ editMode ? 'edit' : 'add_box' }}</mat-icon>
+      <span>{{ editMode ? 'Edytuj szablon paczek' : 'Nowy szablon paczek' }}</span>
+    </div>
+    <mat-icon class="cursor-pointer hover:text-red-600 transition-colors" mat-dialog-close>close</mat-icon>
   </div>
 </div>
 
@@ -9,68 +12,115 @@
 
 <div mat-dialog-content>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
-    <div class="flex text-lg mt-4 items-center">
-      <div class="w-full">
-        <mat-form-field class="w-full">
-          <mat-label>Tag</mat-label>
-          <input type="text" matInput formControlName="tag" />
-          <mat-error *ngIf="form.controls.tag.hasError('required')">Tag jest wymagany</mat-error>
-        </mat-form-field>
-      </div>
+    <div class="form-section mt-4">
+      <mat-form-field class="w-full">
+        <mat-label>Tag szablonu</mat-label>
+        <input type="text" matInput formControlName="tag" />
+        <mat-icon matPrefix class="text-gray-500">label</mat-icon>
+        <mat-error *ngIf="form.controls.tag.hasError('required')">Tag jest wymagany</mat-error>
+      </mat-form-field>
     </div>
 
-    <div class="flex text-lg mt-4 items-center">
-      Paczki
-      <button mat-icon-button type="button" (click)="addNewParcel()" matTooltip="Dodaj nową paczkę">
+    <mat-divider class="my-4" />
+
+    <div class="section-header">
+      <mat-icon class="section-icon">inventory</mat-icon>
+      <div class="section-title">Paczki</div>
+      <button mat-raised-button color="primary" type="button" (click)="addNewParcel()" matTooltip="Dodaj nową paczkę">
         <mat-icon>add</mat-icon>
+        Dodaj paczkę
       </button>
     </div>
 
-    <mat-divider />
+    <div *ngIf="parcels.length === 0" class="empty-state">
+      <mat-icon>inventory_2</mat-icon>
+      <div class="empty-text">Brak paczek. Dodaj co najmniej jedną paczkę.</div>
+    </div>
 
-    <ng-container formArrayName="parcels">
-      <ng-container *ngFor="let parcel of parcels.controls; let i = index">
-        <div [formGroupName]="i" class="flex mt-4">
-          <mat-form-field class="w-full flex-auto ml-4">
-            <mat-label>Długość [mm]</mat-label>
-            <input type="number" matInput formControlName="length" />
-            <mat-error *ngIf="parcels.controls[i].get('length')?.hasError('min')">
-              Wartość musi być większa niż 0
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="w-full flex-auto ml-4">
-            <mat-label>Szerokość [mm]</mat-label>
-            <input type="number" matInput formControlName="width" />
-            <mat-error *ngIf="parcels.controls[i].get('width')?.hasError('min')">
-              Wartość musi być większa niż 0
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="w-full flex-auto ml-4">
-            <mat-label>Wysokość [mm]</mat-label>
-            <input type="number" matInput formControlName="height" />
-            <mat-error *ngIf="parcels.controls[i].get('height')?.hasError('min')">
-              Wartość musi być większa niż 0
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="w-full flex-auto ml-4">
-            <mat-label>Waga [kg]</mat-label>
-            <input type="number" matInput formControlName="weight" />
-            <mat-error *ngIf="parcels.controls[i].get('weight')?.hasError('min')">
-              Wartość musi być większa niż 0
-            </mat-error>
-          </mat-form-field>
-          <button mat-icon-button type="button" (click)="removeParcel(i)" matTooltip="Usuń paczkę">
-            <mat-icon>close</mat-icon>
+    <div formArrayName="parcels" class="parcels-list">
+      <mat-card *ngFor="let _ of parcels.controls; let i = index" [formGroupName]="i" class="parcel-card mb-3">
+        <mat-card-header class="parcel-card-header">
+          <mat-card-title class="text-base">
+            <span class="parcel-number-badge">{{ i + 1 }}</span>
+            Paczka {{ i + 1 }}
+          </mat-card-title>
+          <button
+            mat-icon-button
+            type="button"
+            (click)="removeParcel(i)"
+            matTooltip="Usuń paczkę"
+            class="delete-button">
+            <mat-icon class="!text-red-600">delete</mat-icon>
           </button>
-        </div>
-      </ng-container>
-    </ng-container>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="field-group dimensions">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+              <mat-form-field class="w-full">
+                <mat-label>Długość [mm]</mat-label>
+                <input type="number" matInput formControlName="length" />
+                <mat-icon matPrefix class="text-primary">straighten</mat-icon>
+                <mat-error *ngIf="parcels.controls[i].get('length')?.hasError('required')">
+                  Długość jest wymagana
+                </mat-error>
+                <mat-error *ngIf="parcels.controls[i].get('length')?.hasError('min')">
+                  Wartość musi być większa niż 0
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>Szerokość [mm]</mat-label>
+                <input type="number" matInput formControlName="width" />
+                <mat-icon matPrefix class="text-primary">height</mat-icon>
+                <mat-error *ngIf="parcels.controls[i].get('width')?.hasError('required')">
+                  Szerokość jest wymagana
+                </mat-error>
+                <mat-error *ngIf="parcels.controls[i].get('width')?.hasError('min')">
+                  Wartość musi być większa niż 0
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>Wysokość [mm]</mat-label>
+                <input type="number" matInput formControlName="height" />
+                <mat-icon matPrefix class="text-primary">layers</mat-icon>
+                <mat-error *ngIf="parcels.controls[i].get('height')?.hasError('required')">
+                  Wysokość jest wymagana
+                </mat-error>
+                <mat-error *ngIf="parcels.controls[i].get('height')?.hasError('min')">
+                  Wartość musi być większa niż 0
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>Waga [kg]</mat-label>
+                <input type="number" matInput formControlName="weight" />
+                <mat-icon matPrefix class="text-primary">fitness_center</mat-icon>
+                <mat-error *ngIf="parcels.controls[i].get('weight')?.hasError('required')">
+                  Waga jest wymagana
+                </mat-error>
+                <mat-error *ngIf="parcels.controls[i].get('weight')?.hasError('min')">
+                  Wartość musi być większa niż 0
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </form>
 </div>
 
 <mat-divider />
 
 <div mat-dialog-actions align="end">
-  <button mat-flat-button [disabled]="form.invalid" color="primary" (click)="onSubmit()">Zapisz szablon</button>
-  <button mat-stroked-button color="primary" mat-dialog-close (click)="onCancel()">Anuluj</button>
+  <button mat-flat-button [disabled]="form.invalid" color="primary" (click)="onSubmit()">
+    <mat-icon>save</mat-icon>
+    Zapisz szablon
+  </button>
+  <button mat-stroked-button color="primary" mat-dialog-close (click)="onCancel()">
+    <mat-icon>cancel</mat-icon>
+    Anuluj
+  </button>
 </div>

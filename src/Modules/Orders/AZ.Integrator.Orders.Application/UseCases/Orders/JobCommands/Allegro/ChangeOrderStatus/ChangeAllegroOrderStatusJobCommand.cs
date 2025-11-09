@@ -6,5 +6,6 @@ public class ChangeAllegroOrderStatusJobCommand : JobCommandBase
 {
     public Guid OrderNumber { get; set; }
     public int OrderStatus { get; set; }
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
+    public string SourceSystemId { get; set; }
 }

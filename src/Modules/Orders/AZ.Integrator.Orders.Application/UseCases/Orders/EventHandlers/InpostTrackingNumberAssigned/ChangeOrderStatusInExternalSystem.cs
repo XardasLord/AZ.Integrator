@@ -12,7 +12,7 @@ public class ChangeOrderStatusInExternalSystem(IBackgroundJobClient backgroundJo
 {
     public ValueTask Handle(InpostTrackingNumbersAssigned notification, CancellationToken cancellationToken)
     {
-        var shopProvider = TenantHelper.GetShopProviderType(notification.TenantId);
+        var shopProvider = ShopProviderHelper.GetShopProviderType(notification.SourceSystemId);
 
         if (shopProvider == ShopProviderType.Allegro)
         {
@@ -21,7 +21,8 @@ public class ChangeOrderStatusInExternalSystem(IBackgroundJobClient backgroundJo
                 {
                     OrderNumber = Guid.Parse(notification.ExternalOrderNumber),
                     OrderStatus = AllegroFulfillmentStatusEnum.ReadyForShipment.Value,
-                    TenantId = notification.TenantId
+                    TenantId = notification.TenantId,
+                    SourceSystemId = notification.SourceSystemId
                 }, null));
         }
         else if (shopProvider == ShopProviderType.Erli)

@@ -6,12 +6,14 @@ using AZ.Integrator.Invoices.Contracts.Dtos;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.Specifications;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
+using AZ.Integrator.Monitoring.Contracts;
 
 namespace AZ.Integrator.Invoices.Application.Facade;
 
 public class InvoicesFacade(
     IInvoiceService invoiceService,
     IAggregateRepository<Invoice> invoiceRepository,
+    IMonitoringFacade monitoringFacade,
     ICurrentUser currentUser,
     ICurrentDateTime currentDateTime) : IInvoicesFacade
 {
@@ -24,12 +26,32 @@ public class InvoicesFacade(
         if (response is null)
             throw new InvalidOperationException("Invoice generation failed");
         
-        var invoice = Invoice.Generate(response.Id, response.Number, request.ExternalOrderId,
-            InvoiceProvider.Fakturownia, request.TenantId, currentUser, currentDateTime);
+        var invoice = Invoice.Generate(
+            response.Id, response.Number, request.ExternalOrderId, InvoiceProvider.Fakturownia, 
+            request.TenantId, request.SourceSystemId,
+            currentUser, currentDateTime);
 
-        invoice.SetIdempotencyKey(request.IdempotencyKey);
+        invoice.SetIdempotencyKey(request.CorrelationKey);
+
+        var events = invoice.Events.ToList();
         
         await invoiceRepository.AddAsync(invoice, cancellationToken);
+        
+        foreach (var @event in events)
+        {
+            await monitoringFacade.LogDomainEvent(
+                @event, 
+                invoice.CreationInformation.TenantId,
+                invoice.CreationInformation.SourceSystemId,
+                invoice.CreationInformation.CreatedBy,
+                currentUser.UserName,
+                invoice.CreationInformation.CreatedAt.DateTime,
+                MonitoringSourceModuleEnum.Invoices.Name,
+                invoice.ExternalId.Value.ToString(),
+                invoice.Number.Value,
+                invoice.IdempotencyKey!,
+                cancellationToken);
+        }
 
         return new GenerateInvoiceResponse
         {
@@ -41,7 +63,7 @@ public class InvoicesFacade(
     public async Task<GetInvoiceResponse> GetInvoice(GetInvoiceRequest request, CancellationToken cancellationToken)
     {
         var spec = new InvoiceByNumberSpec(request.InvoiceId, request.ExternalOrderId, 
-            request.InvoiceProvider, request.TenantId);
+            request.InvoiceProvider, request.TenantId, request.SourceSystemId);
         
         var invoice = await invoiceRepository.SingleOrDefaultAsync(spec, cancellationToken);
         
@@ -50,7 +72,7 @@ public class InvoicesFacade(
         
         var response = await invoiceService.Download(long.Parse(request.InvoiceId));
 
-        return new GetInvoiceResponse()
+        return new GetInvoiceResponse
         {
             File = response,
             InvoiceNumber = invoice.Number

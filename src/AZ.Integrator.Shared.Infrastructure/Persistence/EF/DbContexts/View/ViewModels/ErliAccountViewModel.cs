@@ -3,5 +3,6 @@ namespace AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.Vie
 public class ErliAccountViewModel
 {
     public string TenantId { get; set; }
+    public string SourceSystemId { get; set; }
     public string ApiKey { get; set; }
 }

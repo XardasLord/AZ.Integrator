@@ -8,4 +8,5 @@ public record InvoiceGenerated(
     string InvoiceNumber,
     ExternalOrderNumber ExternalOrderNumber,
     int InvoiceProvider,
-    TenantId TenantId) : INotification;
+    Guid TenantId,
+    string SourceSystemId) : INotification;

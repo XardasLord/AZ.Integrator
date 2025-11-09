@@ -20,12 +20,12 @@
             <div
               class="px-3 py-1.5 text-[12px] font-semibold tracking-wide uppercase text-slate-900 flex items-center gap-2 select-none">
               <span>{{ group.groupName }}</span>
-              <span class="text-slate-800">({{ group.tenants.length }})</span>
+              <span class="text-slate-800">({{ group.sourceSystems.length }})</span>
             </div>
           </mat-option>
 
           <!-- Pozycje -->
-          @for (tenant of group.tenants; track tenant) {
+          @for (tenant of group.sourceSystems; track tenant) {
             <mat-option [value]="tenant" class="!py-0">
               <div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-50 aria-selected:bg-slate-50">
                 <!-- ikona / „avatar” platformy -->

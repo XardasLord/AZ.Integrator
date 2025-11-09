@@ -37,58 +37,61 @@ public static class Extensions
     
     public static IEndpointRouteBuilder MapStocksModuleEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapGet("/api/stocks/info", () => Results.Ok("Stocks module")).AllowAnonymous();
+        const string swaggerGroupName = "Stocks";
         
-        endpoints.MapPut("/api/stocks/{*packageCode}", async (string packageCode, ChangeQuantityCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        var stocks = endpoints.MapGroup("/api/stocks").WithTags(swaggerGroupName).RequireAuthorization();
+        
+        stocks.MapGet("/info", () => Results.Ok("Stocks module")).AllowAnonymous();
+        
+        stocks.MapPut("/{*packageCode}", async (string packageCode, ChangeQuantityCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            command = command with
             {
-                command = command with
-                {
-                    PackageCode = packageCode
-                };
-                
-                await mediator.Send(command, cancellationToken);
-                
-                return Results.NoContent();
-            })
-            .RequireAuthorization();
+                PackageCode = packageCode
+            };
+            
+            await mediator.Send(command, cancellationToken);
+            
+            return Results.NoContent();
+        });
         
-        endpoints.MapPut("/api/stocks/group/{*packageCode}", async (string packageCode, ChangeStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        stocks.MapPut("/group/{*packageCode}", async (string packageCode, ChangeStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        {
+            command = command with
             {
-                command = command with
-                {
-                    PackageCode = packageCode
-                };
-                
-                await mediator.Send(command, cancellationToken);
-                
-                return Results.NoContent();
-            })
-            .RequireAuthorization();
+                PackageCode = packageCode
+            };
+            
+            await mediator.Send(command, cancellationToken);
+            
+            return Results.NoContent();
+        });
         
-        endpoints.MapPut("/api/stocks/threshold/{*packageCode}", async (string packageCode, ChangeStockThresholdCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+        stocks.MapPut("/threshold/{*packageCode}", async (string packageCode, ChangeStockThresholdCommand command, IMediator mediator, CancellationToken cancellationToken) => 
+        {
+            command = command with
             {
-                command = command with
-                {
-                    PackageCode = packageCode
-                };
-                
-                await mediator.Send(command, cancellationToken);
-                
-                return Results.NoContent();
-            })
-            .RequireAuthorization();
-        
-        endpoints.MapDelete("/api/stock-logs/{scanLogId}", async (int scanLogId, [FromBody] RevertScanLogCommand command, IMediator mediator, CancellationToken cancellationToken) => 
+                PackageCode = packageCode
+            };
+            
+            await mediator.Send(command, cancellationToken);
+            
+            return Results.NoContent();
+        });
+
+        endpoints.MapDelete("/api/stock-logs/{scanLogId}", async (int scanLogId, [FromBody] RevertScanLogCommand command,
+            IMediator mediator, CancellationToken cancellationToken) => 
             {
                 command = command with
                 {
                     ScanLogId = scanLogId
                 };
-                
+
                 await mediator.Send(command, cancellationToken);
-            
+
                 return Results.NoContent();
             })
+            .WithTags(swaggerGroupName)
             .RequireAuthorization();
         
         endpoints.MapPost("/api/stock-groups", async (AddStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
@@ -97,6 +100,7 @@ public static class Extensions
 
                 return Results.Created($"/api/stock-groups/{stockGroupId}", new { Id = stockGroupId });
             })
+            .WithTags(swaggerGroupName)
             .RequireAuthorization();
         
         endpoints.MapPut("/api/stock-groups/{groupId}", async (int groupId, UpdateStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
@@ -107,9 +111,9 @@ public static class Extensions
                 };
                 
                 await mediator.Send(command, cancellationToken);
-
                 return Results.NoContent();
             })
+            .WithTags(swaggerGroupName)
             .RequireAuthorization();
         
         return endpoints;

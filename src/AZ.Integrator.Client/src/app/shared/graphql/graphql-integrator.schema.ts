@@ -17,6 +17,7 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
   /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: { input: any; output: any; }
+  UUID: { input: any; output: any; }
 };
 
 export enum ApplyPolicy {
@@ -24,6 +25,11 @@ export enum ApplyPolicy {
   BeforeResolver = 'BEFORE_RESOLVER',
   Validation = 'VALIDATION'
 }
+
+export type BooleanOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  neq?: InputMaybe<Scalars['Boolean']['input']>;
+};
 
 export type DateTimeOperationFilterInput = {
   eq?: InputMaybe<Scalars['DateTime']['input']>;
@@ -40,11 +46,30 @@ export type DateTimeOperationFilterInput = {
   nlte?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type DimensionsViewModel = {
+  __typename?: 'DimensionsViewModel';
+  lengthEdgeBandingType: EdgeBandingTypeViewModel;
+  lengthMm: Scalars['Int']['output'];
+  thicknessMm: Scalars['Int']['output'];
+  widthEdgeBandingType: EdgeBandingTypeViewModel;
+  widthMm: Scalars['Int']['output'];
+};
+
+export type DimensionsViewModelFilterInput = {
+  and?: InputMaybe<Array<DimensionsViewModelFilterInput>>;
+  lengthEdgeBandingType?: InputMaybe<EdgeBandingTypeViewModelOperationFilterInput>;
+  lengthMm?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<DimensionsViewModelFilterInput>>;
+  thicknessMm?: InputMaybe<IntOperationFilterInput>;
+  widthEdgeBandingType?: InputMaybe<EdgeBandingTypeViewModelOperationFilterInput>;
+  widthMm?: InputMaybe<IntOperationFilterInput>;
+};
+
 export type DpdShipmentViewModel = {
   __typename?: 'DpdShipmentViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
-  shipmentNumber?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
+  shipmentNumber: Scalars['String']['output'];
 };
 
 export type DpdShipmentViewModelFilterInput = {
@@ -53,6 +78,19 @@ export type DpdShipmentViewModelFilterInput = {
   externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
+};
+
+export enum EdgeBandingTypeViewModel {
+  None = 'NONE',
+  One = 'ONE',
+  Two = 'TWO'
+}
+
+export type EdgeBandingTypeViewModelOperationFilterInput = {
+  eq?: InputMaybe<EdgeBandingTypeViewModel>;
+  in?: InputMaybe<Array<EdgeBandingTypeViewModel>>;
+  neq?: InputMaybe<EdgeBandingTypeViewModel>;
+  nin?: InputMaybe<Array<EdgeBandingTypeViewModel>>;
 };
 
 export type FloatOperationFilterInput = {
@@ -70,11 +108,74 @@ export type FloatOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Float']['input']>;
 };
 
+export type FurnitureModelViewModel = {
+  __typename?: 'FurnitureModelViewModel';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['UUID']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  furnitureCode: Scalars['String']['output'];
+  isDeleted: Scalars['Boolean']['output'];
+  modifiedAt: Scalars['DateTime']['output'];
+  modifiedBy: Scalars['UUID']['output'];
+  partDefinitions: Array<PartDefinitionViewModel>;
+  tenantId: Scalars['UUID']['output'];
+  version: Scalars['Int']['output'];
+};
+
+export type FurnitureModelViewModelFilterInput = {
+  and?: InputMaybe<Array<FurnitureModelViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdBy?: InputMaybe<UuidOperationFilterInput>;
+  deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  furnitureCode?: InputMaybe<StringOperationFilterInput>;
+  isDeleted?: InputMaybe<BooleanOperationFilterInput>;
+  modifiedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  modifiedBy?: InputMaybe<UuidOperationFilterInput>;
+  or?: InputMaybe<Array<FurnitureModelViewModelFilterInput>>;
+  partDefinitions?: InputMaybe<ListFilterInputTypeOfPartDefinitionViewModelFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+  version?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type FurnitureModelViewModelSortInput = {
+  createdAt?: InputMaybe<SortEnumType>;
+  createdBy?: InputMaybe<SortEnumType>;
+  deletedAt?: InputMaybe<SortEnumType>;
+  furnitureCode?: InputMaybe<SortEnumType>;
+  isDeleted?: InputMaybe<SortEnumType>;
+  modifiedAt?: InputMaybe<SortEnumType>;
+  modifiedBy?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+  version?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type FurnitureModelsConnection = {
+  __typename?: 'FurnitureModelsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<FurnitureModelsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<FurnitureModelViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type FurnitureModelsEdge = {
+  __typename?: 'FurnitureModelsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: FurnitureModelViewModel;
+};
+
 export type InpostShipmentViewModel = {
   __typename?: 'InpostShipmentViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
-  shipmentNumber?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
+  shipmentNumber: Scalars['String']['output'];
 };
 
 export type InpostShipmentViewModelFilterInput = {
@@ -103,12 +204,15 @@ export type IntOperationFilterInput = {
 export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
   barcodeScannerLogs: Array<StockLogViewModel>;
-  dpdShipments?: Maybe<Array<Maybe<DpdShipmentViewModel>>>;
-  inpostShipments?: Maybe<Array<Maybe<InpostShipmentViewModel>>>;
-  invoices?: Maybe<Array<Maybe<InvoiceViewModel>>>;
-  shipments?: Maybe<Array<Maybe<ShipmentViewModel>>>;
+  dpdShipments: Array<DpdShipmentViewModel>;
+  furnitureModels?: Maybe<FurnitureModelsConnection>;
+  inpostShipments: Array<InpostShipmentViewModel>;
+  invoices: Array<InvoiceViewModel>;
+  partDefinitionOrders?: Maybe<PartDefinitionOrdersConnection>;
+  shipments: Array<ShipmentViewModel>;
   stockGroups: Array<StockGroupViewModel>;
   stocks: Array<StockViewModel>;
+  suppliers?: Maybe<SuppliersConnection>;
   tagParcelTemplates?: Maybe<TagParcelTemplatesConnection>;
 };
 
@@ -124,6 +228,16 @@ export type IntegratorQueryDpdShipmentsArgs = {
 };
 
 
+export type IntegratorQueryFurnitureModelsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<FurnitureModelViewModelSortInput>>;
+  where?: InputMaybe<FurnitureModelViewModelFilterInput>;
+};
+
+
 export type IntegratorQueryInpostShipmentsArgs = {
   where?: InputMaybe<InpostShipmentViewModelFilterInput>;
 };
@@ -132,6 +246,16 @@ export type IntegratorQueryInpostShipmentsArgs = {
 export type IntegratorQueryInvoicesArgs = {
   order?: InputMaybe<Array<InvoiceViewModelSortInput>>;
   where?: InputMaybe<InvoiceViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryPartDefinitionOrdersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<PartDefinitionsOrderViewModelSortInput>>;
+  where?: InputMaybe<PartDefinitionsOrderViewModelFilterInput>;
 };
 
 
@@ -152,6 +276,16 @@ export type IntegratorQueryStocksArgs = {
 };
 
 
+export type IntegratorQuerySuppliersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<SupplierViewModelSortInput>>;
+  where?: InputMaybe<SupplierViewModelFilterInput>;
+};
+
+
 export type IntegratorQueryTagParcelTemplatesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -164,9 +298,9 @@ export type IntegratorQueryTagParcelTemplatesArgs = {
 export type InvoiceViewModel = {
   __typename?: 'InvoiceViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
   invoiceId: Scalars['Long']['output'];
-  invoiceNumber?: Maybe<Scalars['String']['output']>;
+  invoiceNumber: Scalars['String']['output'];
 };
 
 export type InvoiceViewModelFilterInput = {
@@ -185,6 +319,27 @@ export type InvoiceViewModelSortInput = {
   invoiceNumber?: InputMaybe<SortEnumType>;
 };
 
+export type ListFilterInputTypeOfOrderFurnitureLineViewModelFilterInput = {
+  all?: InputMaybe<OrderFurnitureLineViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<OrderFurnitureLineViewModelFilterInput>;
+  some?: InputMaybe<OrderFurnitureLineViewModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfOrderFurniturePartLineViewModelFilterInput = {
+  all?: InputMaybe<OrderFurniturePartLineViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<OrderFurniturePartLineViewModelFilterInput>;
+  some?: InputMaybe<OrderFurniturePartLineViewModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfPartDefinitionViewModelFilterInput = {
+  all?: InputMaybe<PartDefinitionViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PartDefinitionViewModelFilterInput>;
+  some?: InputMaybe<PartDefinitionViewModelFilterInput>;
+};
+
 export type ListFilterInputTypeOfStockLogViewModelFilterInput = {
   all?: InputMaybe<StockLogViewModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
@@ -197,6 +352,13 @@ export type ListFilterInputTypeOfStockViewModelFilterInput = {
   any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<StockViewModelFilterInput>;
   some?: InputMaybe<StockViewModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfSupplierMailboxViewModelFilterInput = {
+  all?: InputMaybe<SupplierMailboxViewModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SupplierMailboxViewModelFilterInput>;
+  some?: InputMaybe<SupplierMailboxViewModelFilterInput>;
 };
 
 export type ListFilterInputTypeOfTagParcelViewModelFilterInput = {
@@ -221,6 +383,94 @@ export type LongOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Long']['input']>;
 };
 
+export type OrderFurnitureLineViewModel = {
+  __typename?: 'OrderFurnitureLineViewModel';
+  furnitureCode: Scalars['String']['output'];
+  furnitureVersion: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  orderId: Scalars['Int']['output'];
+  partLines: Array<OrderFurniturePartLineViewModel>;
+  quantityOrdered: Scalars['Int']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type OrderFurnitureLineViewModelFilterInput = {
+  and?: InputMaybe<Array<OrderFurnitureLineViewModelFilterInput>>;
+  furnitureCode?: InputMaybe<StringOperationFilterInput>;
+  furnitureVersion?: InputMaybe<IntOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<OrderFurnitureLineViewModelFilterInput>>;
+  orderId?: InputMaybe<IntOperationFilterInput>;
+  partLines?: InputMaybe<ListFilterInputTypeOfOrderFurniturePartLineViewModelFilterInput>;
+  quantityOrdered?: InputMaybe<IntOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export enum OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel {
+  None = 'NONE',
+  One = 'ONE',
+  Two = 'TWO'
+}
+
+export type OrderFurniturePartLineDimensionsEdgeBandingTypeViewModelOperationFilterInput = {
+  eq?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>;
+  in?: InputMaybe<Array<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>>;
+  neq?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>;
+  nin?: InputMaybe<Array<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel>>;
+};
+
+export type OrderFurniturePartLineDimensionsViewModel = {
+  __typename?: 'OrderFurniturePartLineDimensionsViewModel';
+  lengthEdgeBandingType: OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel;
+  lengthMm: Scalars['Int']['output'];
+  thicknessMm: Scalars['Int']['output'];
+  widthEdgeBandingType: OrderFurniturePartLineDimensionsEdgeBandingTypeViewModel;
+  widthMm: Scalars['Int']['output'];
+};
+
+export type OrderFurniturePartLineDimensionsViewModelFilterInput = {
+  and?: InputMaybe<Array<OrderFurniturePartLineDimensionsViewModelFilterInput>>;
+  lengthEdgeBandingType?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModelOperationFilterInput>;
+  lengthMm?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<OrderFurniturePartLineDimensionsViewModelFilterInput>>;
+  thicknessMm?: InputMaybe<IntOperationFilterInput>;
+  widthEdgeBandingType?: InputMaybe<OrderFurniturePartLineDimensionsEdgeBandingTypeViewModelOperationFilterInput>;
+  widthMm?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type OrderFurniturePartLineViewModel = {
+  __typename?: 'OrderFurniturePartLineViewModel';
+  additionalInfo?: Maybe<Scalars['String']['output']>;
+  dimensions: OrderFurniturePartLineDimensionsViewModel;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  orderFurnitureLineId: Scalars['Int']['output'];
+  quantity: Scalars['Int']['output'];
+};
+
+export type OrderFurniturePartLineViewModelFilterInput = {
+  additionalInfo?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<OrderFurniturePartLineViewModelFilterInput>>;
+  dimensions?: InputMaybe<OrderFurniturePartLineDimensionsViewModelFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<OrderFurniturePartLineViewModelFilterInput>>;
+  orderFurnitureLineId?: InputMaybe<IntOperationFilterInput>;
+  quantity?: InputMaybe<IntOperationFilterInput>;
+};
+
+export enum OrderStatusViewModel {
+  Registered = 'REGISTERED',
+  Sent = 'SENT'
+}
+
+export type OrderStatusViewModelOperationFilterInput = {
+  eq?: InputMaybe<OrderStatusViewModel>;
+  in?: InputMaybe<Array<OrderStatusViewModel>>;
+  neq?: InputMaybe<OrderStatusViewModel>;
+  nin?: InputMaybe<Array<OrderStatusViewModel>>;
+};
+
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -234,12 +484,101 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+/** A connection to a list of items. */
+export type PartDefinitionOrdersConnection = {
+  __typename?: 'PartDefinitionOrdersConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<PartDefinitionOrdersEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<PartDefinitionsOrderViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type PartDefinitionOrdersEdge = {
+  __typename?: 'PartDefinitionOrdersEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: PartDefinitionsOrderViewModel;
+};
+
+export type PartDefinitionViewModel = {
+  __typename?: 'PartDefinitionViewModel';
+  additionalInfo?: Maybe<Scalars['String']['output']>;
+  dimensions: DimensionsViewModel;
+  furnitureCode: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type PartDefinitionViewModelFilterInput = {
+  additionalInfo?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<PartDefinitionViewModelFilterInput>>;
+  dimensions?: InputMaybe<DimensionsViewModelFilterInput>;
+  furnitureCode?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PartDefinitionViewModelFilterInput>>;
+  quantity?: InputMaybe<IntOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type PartDefinitionsOrderViewModel = {
+  __typename?: 'PartDefinitionsOrderViewModel';
+  additionalNotes?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['UUID']['output'];
+  furnitureLines: Array<OrderFurnitureLineViewModel>;
+  id: Scalars['Int']['output'];
+  modifiedAt: Scalars['DateTime']['output'];
+  modifiedBy: Scalars['UUID']['output'];
+  number: Scalars['String']['output'];
+  status: OrderStatusViewModel;
+  supplierId: Scalars['Int']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type PartDefinitionsOrderViewModelFilterInput = {
+  additionalNotes?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<PartDefinitionsOrderViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdBy?: InputMaybe<UuidOperationFilterInput>;
+  furnitureLines?: InputMaybe<ListFilterInputTypeOfOrderFurnitureLineViewModelFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  modifiedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  modifiedBy?: InputMaybe<UuidOperationFilterInput>;
+  number?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PartDefinitionsOrderViewModelFilterInput>>;
+  status?: InputMaybe<OrderStatusViewModelOperationFilterInput>;
+  supplierId?: InputMaybe<IntOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type PartDefinitionsOrderViewModelSortInput = {
+  additionalNotes?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  createdBy?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  modifiedAt?: InputMaybe<SortEnumType>;
+  modifiedBy?: InputMaybe<SortEnumType>;
+  number?: InputMaybe<SortEnumType>;
+  status?: InputMaybe<SortEnumType>;
+  supplierId?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+};
+
 export type ShipmentViewModel = {
   __typename?: 'ShipmentViewModel';
   createdAt: Scalars['DateTime']['output'];
-  externalOrderNumber?: Maybe<Scalars['String']['output']>;
-  shipmentNumber?: Maybe<Scalars['String']['output']>;
-  shipmentProvider?: Maybe<Scalars['String']['output']>;
+  externalOrderNumber: Scalars['String']['output'];
+  shipmentNumber: Scalars['String']['output'];
+  shipmentProvider: Scalars['String']['output'];
 };
 
 export type ShipmentViewModelFilterInput = {
@@ -362,10 +701,85 @@ export type StringOperationFilterInput = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type SupplierMailboxViewModel = {
+  __typename?: 'SupplierMailboxViewModel';
+  email: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  supplierId: Scalars['Int']['output'];
+};
+
+export type SupplierMailboxViewModelFilterInput = {
+  and?: InputMaybe<Array<SupplierMailboxViewModelFilterInput>>;
+  email?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  or?: InputMaybe<Array<SupplierMailboxViewModelFilterInput>>;
+  supplierId?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type SupplierViewModel = {
+  __typename?: 'SupplierViewModel';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['UUID']['output'];
+  id: Scalars['Int']['output'];
+  mailboxes: Array<SupplierMailboxViewModel>;
+  modifiedAt: Scalars['DateTime']['output'];
+  modifiedBy: Scalars['UUID']['output'];
+  name: Scalars['String']['output'];
+  telephoneNumber: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+};
+
+export type SupplierViewModelFilterInput = {
+  and?: InputMaybe<Array<SupplierViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdBy?: InputMaybe<UuidOperationFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  mailboxes?: InputMaybe<ListFilterInputTypeOfSupplierMailboxViewModelFilterInput>;
+  modifiedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  modifiedBy?: InputMaybe<UuidOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SupplierViewModelFilterInput>>;
+  telephoneNumber?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type SupplierViewModelSortInput = {
+  createdAt?: InputMaybe<SortEnumType>;
+  createdBy?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  modifiedAt?: InputMaybe<SortEnumType>;
+  modifiedBy?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+  telephoneNumber?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type SuppliersConnection = {
+  __typename?: 'SuppliersConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<SuppliersEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<SupplierViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type SuppliersEdge = {
+  __typename?: 'SuppliersEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: SupplierViewModel;
+};
+
 export type TagParcelTemplateViewModel = {
   __typename?: 'TagParcelTemplateViewModel';
-  parcels?: Maybe<Array<Maybe<TagParcelViewModel>>>;
-  tag?: Maybe<Scalars['String']['output']>;
+  parcels: Array<TagParcelViewModel>;
+  tag: Scalars['String']['output'];
 };
 
 export type TagParcelTemplateViewModelFilterInput = {
@@ -385,7 +799,7 @@ export type TagParcelTemplatesConnection = {
   /** A list of edges. */
   edges?: Maybe<Array<TagParcelTemplatesEdge>>;
   /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Maybe<TagParcelTemplateViewModel>>>;
+  nodes?: Maybe<Array<TagParcelTemplateViewModel>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** Identifies the total count of items in the connection. */
@@ -398,7 +812,7 @@ export type TagParcelTemplatesEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
-  node?: Maybe<TagParcelTemplateViewModel>;
+  node: TagParcelTemplateViewModel;
 };
 
 export type TagParcelViewModel = {
@@ -406,7 +820,7 @@ export type TagParcelViewModel = {
   height: Scalars['Float']['output'];
   id: Scalars['Int']['output'];
   length: Scalars['Float']['output'];
-  tag?: Maybe<Scalars['String']['output']>;
+  tag: Scalars['String']['output'];
   weight: Scalars['Float']['output'];
   width: Scalars['Float']['output'];
 };
@@ -420,4 +834,19 @@ export type TagParcelViewModelFilterInput = {
   tag?: InputMaybe<StringOperationFilterInput>;
   weight?: InputMaybe<FloatOperationFilterInput>;
   width?: InputMaybe<FloatOperationFilterInput>;
+};
+
+export type UuidOperationFilterInput = {
+  eq?: InputMaybe<Scalars['UUID']['input']>;
+  gt?: InputMaybe<Scalars['UUID']['input']>;
+  gte?: InputMaybe<Scalars['UUID']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
+  lt?: InputMaybe<Scalars['UUID']['input']>;
+  lte?: InputMaybe<Scalars['UUID']['input']>;
+  neq?: InputMaybe<Scalars['UUID']['input']>;
+  ngt?: InputMaybe<Scalars['UUID']['input']>;
+  ngte?: InputMaybe<Scalars['UUID']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
+  nlt?: InputMaybe<Scalars['UUID']['input']>;
+  nlte?: InputMaybe<Scalars['UUID']['input']>;
 };

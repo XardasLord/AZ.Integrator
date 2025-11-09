@@ -5,14 +5,14 @@ import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
 import { NgxsReduxDevtoolsPluginModule, withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { withNgxsFormPlugin } from '@ngxs/form-plugin';
 import { AuthState } from '../../shared/states/auth.state';
-import { TenantState } from '../../shared/states/tenant.state';
+import { SourceSystemState } from '../../shared/states/source-system.state';
 
 @NgModule({
   imports: [],
   exports: [NgxsReduxDevtoolsPluginModule],
   providers: [
     provideStore(
-      [AuthState, TenantState],
+      [AuthState, SourceSystemState],
       withNgxsLoggerPlugin({
         collapsed: true,
         disabled: !isDevMode(),

@@ -33,8 +33,7 @@ public static class DependencyInjection
                             Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
                         }
-                    },
-                    new string[] {}
+                    }, []
                 }
             });
         });

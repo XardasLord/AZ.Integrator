@@ -15,7 +15,9 @@ public class SetTrackingNumber(IBackgroundJobClient backgroundJobClient)
             {
                 ShippingNumber = notification.ShipmentNumber,
                 ExternalOrderNumber = notification.ExternalOrderNumber,
-                TenantId = notification.TenantId
+                SourceSystemId = notification.SourceSystemId,
+                TenantId = notification.TenantId,
+                CorrelationId = notification.CorrelationId
             }, null));
         
         return new ValueTask();

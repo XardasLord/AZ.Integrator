@@ -12,34 +12,23 @@ var connectionString = GetConnectionString(config);
 Console.WriteLine($"Environment: {environment}");
 
 // Common journal table for all schemas
-const string JournalTable   = "__schema_history";
+const string journalTable   = "__schema_history";
+const string repeatablesDir = "Repeatable";
 
-// Public schema
-const string MigrationsPublicDir  = "Migrations/Public";
-const string JournalPublicSchema  = "public";
-
-// Account schema
-const string MigrationsAccountDir  = "Migrations/Account";
-const string JournalAccountSchema  = "account";
-
-// Billing schema
-const string MigrationsBillingDir  = "Migrations/Billing";
-const string JournalBillingSchema  = "billing";
-
-const string RepeatablesDir = "Repeatable";
-
-ValidateDirectories(MigrationsPublicDir);
-ValidateDirectories(MigrationsBillingDir);
-// ValidateDirectories(MigrationsAccountDir); // No migrations yet
 ValidateConnectionString(connectionString);
 
 EnsureDatabase.For.PostgresqlDatabase(connectionString);
 
-RunMigrations(connectionString, MigrationsPublicDir, JournalPublicSchema, JournalTable);
-RunMigrations(connectionString, MigrationsBillingDir, JournalBillingSchema, JournalTable);
-// RunMigrations(connectionString, MigrationsAccountDir, JournalAccountSchema, JournalTable); // No migrations yet
+var areas = config.GetSection("DbUp:Areas").Get<List<MigrationArea>>() 
+            ?? throw new InvalidOperationException("Missing DbUp:Areas configuration.");
 
-RunRepeatables(connectionString, RepeatablesDir);
+foreach (var area in areas)
+{
+    ValidateDirectories(area.Dir);
+    RunMigrations(connectionString, area.Dir, area.Schema, journalTable);
+}
+
+RunRepeatables(connectionString, repeatablesDir);
 
 Environment.Exit(0);
 return;

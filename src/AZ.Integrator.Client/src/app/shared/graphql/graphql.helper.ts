@@ -80,10 +80,8 @@ export class GraphQLHelper {
       };
     }[];
   } {
-    const commonSearchFilter = {
-      or: fields.map(field => ({ [field]: { contains: searchPhrase } })),
+    return {
+      or: fields.map(field => ({ [field]: { contains: searchPhrase.toUpperCase() } })),
     };
-
-    return commonSearchFilter;
   }
 }

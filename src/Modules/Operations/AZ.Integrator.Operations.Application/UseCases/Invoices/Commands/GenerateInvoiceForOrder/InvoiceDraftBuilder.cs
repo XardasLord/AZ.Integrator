@@ -7,9 +7,14 @@ namespace AZ.Integrator.Operations.Application.UseCases.Invoices.Commands.Genera
 
 public sealed class InvoiceDraftBuilder(IOrdersFacade ordersFacade) : IInvoiceDraftBuilder
 {
-    public async Task<GenerateInvoiceRequest> BuildAsync(string externalOrderNumber, string tenantId, CancellationToken cancellationToken)
+    public async Task<GenerateInvoiceRequest> BuildAsync(
+        string externalOrderNumber,
+        Guid tenantId,
+        string sourceSystemId,
+        string correlationKey,
+        CancellationToken cancellationToken)
     {
-        var orderDetails = await ordersFacade.GetOrderDetails(externalOrderNumber, tenantId, cancellationToken);
+        var orderDetails = await ordersFacade.GetOrderDetails(externalOrderNumber, tenantId, sourceSystemId, cancellationToken);
         
         var buyerDetails = new BuyerDto(
             orderDetails.Buyer.Email,
@@ -51,8 +56,9 @@ public sealed class InvoiceDraftBuilder(IOrdersFacade ordersFacade) : IInvoiceDr
             InvoiceLines: invoiceItems,
             PaymentTermsDto: paymentDetails,
             DeliveryDto: deliveryDetails,
-            IdempotencyKey: $"{tenantId}:order:{externalOrderNumber}",
+            CorrelationKey: correlationKey,
             externalOrderNumber,
-            tenantId);
+            tenantId,
+            sourceSystemId);
     }
 }

@@ -1,0 +1,1 @@
+public record MigrationArea(string Name, string Dir, string Schema);

@@ -1,0 +1,153 @@
+
+.table-header {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+.table-row {
+  cursor: pointer;
+  &:hover {
+    background-color: #f9fafb;
+  }
+}
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.status-registered {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+.status-sent {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.detail-row {
+  height: 0;
+  &.expanded {
+    height: auto;
+  }
+}
+.order-detail {
+  overflow: hidden;
+}
+.detail-content {
+  padding: 1.5rem;
+  background-color: #f9fafb;
+}
+.detail-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.additional-notes-section {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #8b5cf6;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  .notes-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+
+    mat-icon {
+      color: #8b5cf6;
+      font-size: 1.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0;
+    }
+  }
+
+  .notes-content {
+    color: #374151;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+}
+
+.furniture-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.furniture-line-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.furniture-line-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+  }
+}
+.quantity-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+.part-lines-table {
+  overflow-x: auto;
+}
+.parts-table {
+  width: 100%;
+  font-size: 0.875rem;
+  thead {
+    background-color: #f3f4f6;
+    th {
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      font-weight: 500;
+      color: #374151;
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px solid #e5e7eb;
+      &:hover {
+        background-color: #f9fafb;
+      }
+    }
+    td {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+}
+.no-parts,
+.no-furniture {
+  padding: 1rem;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}

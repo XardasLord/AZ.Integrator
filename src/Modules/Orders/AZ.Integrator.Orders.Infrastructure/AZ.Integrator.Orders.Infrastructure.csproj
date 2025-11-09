@@ -20,4 +20,8 @@
         <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="ExternalServices\" />
+    </ItemGroup>
+
 </Project>

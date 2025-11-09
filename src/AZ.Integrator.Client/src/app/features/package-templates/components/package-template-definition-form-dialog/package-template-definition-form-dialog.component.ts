@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   FormArray,
@@ -21,7 +21,8 @@ import { PackageTemplateDefinitionFormDialogResponseModel } from './package-temp
   selector: 'app-package-template-definition-form-dialog',
   templateUrl: './package-template-definition-form-dialog.component.html',
   styleUrls: ['./package-template-definition-form-dialog.component.scss'],
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, NgFor, NgIf],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule, CommonModule],
+  standalone: true,
 })
 export class PackageTemplateDefinitionFormDialogComponent implements OnInit {
   private data: ParcelTemplateDefinitionDataModel = inject(MAT_DIALOG_DATA);

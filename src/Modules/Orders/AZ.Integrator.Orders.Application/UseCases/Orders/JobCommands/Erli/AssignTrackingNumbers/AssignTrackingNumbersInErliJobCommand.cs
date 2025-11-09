@@ -9,5 +9,6 @@ public class AssignTrackingNumbersInErliJobCommand : JobCommandBase
     public string[] TrackingNumbers { get; set; }
     public string Vendor { get; set; }
     public string DeliveryTrackingStatus { get; set; }
-    public string TenantId { get; set; }
+    public Guid TenantId { get; set; }
+    public string SourceSystemId { get; set; }
 }

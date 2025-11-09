@@ -6,4 +6,5 @@ public record InpostTrackingNumbersAssigned(
     string ShipmentNumber,
     string[] TrackingNumbers,
     string ExternalOrderNumber,
-    string TenantId) : INotification;
+    Guid TenantId,
+    string SourceSystemId) : INotification;

@@ -1,4 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.ValueObjects;
@@ -10,12 +11,12 @@ public class DpdShipment : Entity, IAggregateRoot
 {
     private SessionNumber _sessionNumber;
     private ExternalOrderNumber _externalOrderNumber;
-    private TenantCreationInformation _creationInformation;
+    private TenantWithSourceSystemCreationInformation _creationInformation;
     private List<DpdPackage> _packages;
 
     public SessionNumber SessionNumber => _sessionNumber;
     public ExternalOrderNumber ExternalOrderNumber => _externalOrderNumber;
-    public TenantCreationInformation CreationInformation => _creationInformation;
+    public TenantWithSourceSystemCreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<DpdPackage> Packages => _packages;
 
     private DpdShipment()
@@ -23,20 +24,34 @@ public class DpdShipment : Entity, IAggregateRoot
         _packages = [];
     }
 
-    private DpdShipment(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, ExternalOrderNumber externalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
+    private DpdShipment(
+        SessionNumber sessionNumber, IEnumerable<DpdPackage> packages,
+        ExternalOrderNumber externalOrderNumber,
+        TenantId tenantId, SourceSystemId sourceSystemId,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime) 
         : this()
     {
         _sessionNumber = sessionNumber;
         _externalOrderNumber = externalOrderNumber;
-        _creationInformation = new TenantCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId);
+        _creationInformation = new TenantWithSourceSystemCreationInformation(currentDateTime.CurrentDate(), currentUser.UserId, tenantId, sourceSystemId);
         _packages.AddRange(packages);
     }
 
-    public static DpdShipment Create(SessionNumber sessionNumber, IEnumerable<DpdPackage> packages, ExternalOrderNumber externalExternalOrderNumber, TenantId tenantId, ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    public static DpdShipment Create(
+        SessionNumber sessionNumber, IEnumerable<DpdPackage> packages,
+        ExternalOrderNumber externalExternalOrderNumber,
+        TenantId tenantId, SourceSystemId sourceSystemId,
+        ICurrentUser currentUser, ICurrentDateTime currentDateTime)
     {
-        var shipment = new DpdShipment(sessionNumber, packages, externalExternalOrderNumber, tenantId, currentUser, currentDateTime);
+        var shipment = new DpdShipment(sessionNumber, packages, externalExternalOrderNumber, tenantId, sourceSystemId, currentUser, currentDateTime);
         
-        shipment.AddDomainEvent(new DpdShipmentRegistered(sessionNumber, externalExternalOrderNumber));
+        shipment.AddDomainEvent(new DpdShipmentRegistered(
+            shipment.SessionNumber, 
+            shipment.ExternalOrderNumber,
+            shipment.CreationInformation.SourceSystemId,
+            shipment.CreationInformation.TenantId,
+            shipment.CreationInformation.SourceSystemId.GetShopProviderType(),
+            CorrelationIdHelper.New()));
         
         return shipment;
     }
