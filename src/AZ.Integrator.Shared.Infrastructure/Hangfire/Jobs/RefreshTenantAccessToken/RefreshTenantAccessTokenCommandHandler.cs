@@ -11,33 +11,23 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AZ.Integrator.Shared.Infrastructure.Hangfire.Jobs.RefreshTenantAccessToken;
 
-public class RefreshTenantAccessTokenCommandHandler : JobCommandHandlerBase<RefreshTenantAccessTokenCommand>
+public class RefreshTenantAccessTokenCommandHandler(
+    AllegroAccountDbContext allegroAccountDbContext,
+    IHttpClientFactory httpClientFactory,
+    AllegroOptions allegroOptions)
+    : JobCommandHandlerBase<RefreshTenantAccessTokenCommand>
 {
-    private readonly AllegroAccountDbContext _allegroAccountDbContext;
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly AllegroOptions _allegroOptions;
-
-    public RefreshTenantAccessTokenCommandHandler(
-        AllegroAccountDbContext allegroAccountDbContext,
-        IHttpClientFactory httpClientFactory,
-        AllegroOptions allegroOptions)
-    {
-        _allegroAccountDbContext = allegroAccountDbContext;
-        _httpClientFactory = httpClientFactory;
-        _allegroOptions = allegroOptions;
-    }
-
     public override async ValueTask<Unit> Handle(RefreshTenantAccessTokenCommand command, CancellationToken cancellationToken)
     {
         await base.Handle(command, cancellationToken);
         
-        var tenantAccount = await _allegroAccountDbContext.AllegroAccounts
+        var tenantAccount = await allegroAccountDbContext.AllegroAccounts
             .SingleAsync(x => x.TenantId == command.TenantId, cancellationToken);
 
         var queryParams = PrepareQueryFilters(tenantAccount);
         var httpClient = PrepareHttpClient(tenantAccount.ClientId, tenantAccount.ClientSecret);
         
-        using var response = await httpClient.PostAsync($"{_allegroOptions.TokenEndpoint}?{queryParams}", null, cancellationToken);
+        using var response = await httpClient.PostAsync($"{allegroOptions.TokenEndpoint}?{queryParams}", null, cancellationToken);
         
         response.EnsureSuccessStatusCode();
 
@@ -47,7 +37,7 @@ public class RefreshTenantAccessTokenCommandHandler : JobCommandHandlerBase<Refr
         tenantAccount.RefreshToken = refreshAccessTokenResponse.refresh_token;
         tenantAccount.ExpiresAt = GetExpiryTimestamp(refreshAccessTokenResponse.access_token);
 
-        await _allegroAccountDbContext.SaveChangesAsync(cancellationToken);
+        await allegroAccountDbContext.SaveChangesAsync(cancellationToken);
         
         return Unit.Value;
     }
@@ -66,7 +56,7 @@ public class RefreshTenantAccessTokenCommandHandler : JobCommandHandlerBase<Refr
     
     private HttpClient PrepareHttpClient(string clientId, string secretKey)
     {
-        var httpClient = _httpClientFactory.CreateClient();
+        var httpClient = httpClientFactory.CreateClient();
         
         var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{clientId}:{secretKey}"));
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Basic {credentials}");
