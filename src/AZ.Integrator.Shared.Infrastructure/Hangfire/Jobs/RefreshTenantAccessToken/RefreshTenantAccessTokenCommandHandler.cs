@@ -21,11 +21,13 @@ public class RefreshTenantAccessTokenCommandHandler(
     {
         await base.Handle(command, cancellationToken);
         
-        var tenantAccount = await allegroAccountDbContext.AllegroAccounts
-            .SingleAsync(x => x.TenantId == command.TenantId, cancellationToken);
+        var allegroAccount = await allegroAccountDbContext.AllegroAccounts
+            .Where(x => x.TenantId == command.TenantId)
+            .Where(x => x.SourceSystemId == command.SourceSystemId)
+            .SingleAsync(cancellationToken);
 
-        var queryParams = PrepareQueryFilters(tenantAccount);
-        var httpClient = PrepareHttpClient(tenantAccount.ClientId, tenantAccount.ClientSecret);
+        var queryParams = PrepareQueryFilters(allegroAccount);
+        var httpClient = PrepareHttpClient(allegroAccount.ClientId, allegroAccount.ClientSecret);
         
         using var response = await httpClient.PostAsync($"{allegroOptions.TokenEndpoint}?{queryParams}", null, cancellationToken);
         
@@ -33,9 +35,9 @@ public class RefreshTenantAccessTokenCommandHandler(
 
         var refreshAccessTokenResponse = await response.Content.ReadFromJsonAsync<RefreshAccessTokenResponse>(cancellationToken: cancellationToken);
 
-        tenantAccount.AccessToken = refreshAccessTokenResponse.access_token;
-        tenantAccount.RefreshToken = refreshAccessTokenResponse.refresh_token;
-        tenantAccount.ExpiresAt = GetExpiryTimestamp(refreshAccessTokenResponse.access_token);
+        allegroAccount.AccessToken = refreshAccessTokenResponse.access_token;
+        allegroAccount.RefreshToken = refreshAccessTokenResponse.refresh_token;
+        allegroAccount.ExpiresAt = GetExpiryTimestamp(refreshAccessTokenResponse.access_token);
 
         await allegroAccountDbContext.SaveChangesAsync(cancellationToken);
         

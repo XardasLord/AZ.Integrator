@@ -17,12 +17,14 @@ import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.m
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { SourceSystemState } from '../../../../shared/states/source-system.state';
+import { ScrollTableComponent } from '../../../../shared/ui/wrappers/scroll-table/scroll-table.component';
 
 @Component({
   selector: 'app-orders-list-new',
   templateUrl: './orders-list-new.component.html',
   styleUrls: ['./orders-list-new.component.scss'],
-  imports: [MaterialModule, NgIf, MatIcon, NgFor, AsyncPipe, DecimalPipe, DatePipe],
+  imports: [MaterialModule, NgIf, MatIcon, NgFor, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
+  standalone: true,
 })
 export class OrdersListNewComponent implements OnInit {
   private store = inject(Store);

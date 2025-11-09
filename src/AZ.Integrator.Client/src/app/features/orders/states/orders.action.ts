@@ -4,6 +4,10 @@ import { OrderDetailsModel } from '../models/order-details.model';
 
 const prefix = '[Orders]';
 
+export class LoadOrders {
+  static readonly type = `${prefix} ${LoadOrders.name}`;
+}
+
 export class LoadNew {
   static readonly type = `${prefix} ${LoadNew.name}`;
 }

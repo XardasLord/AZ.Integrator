@@ -3,4 +3,5 @@
 public class RefreshTenantAccessTokenCommand : JobCommandBase
 {
     public string TenantId { get; set; }
+    public string SourceSystemId { get; set; }
 }

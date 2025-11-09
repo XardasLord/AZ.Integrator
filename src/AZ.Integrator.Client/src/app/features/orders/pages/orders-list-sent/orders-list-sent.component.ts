@@ -18,12 +18,14 @@ import {
 } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SourceSystemState } from '../../../../shared/states/source-system.state';
+import { ScrollTableComponent } from '../../../../shared/ui/wrappers/scroll-table/scroll-table.component';
 
 @Component({
   selector: 'app-orders-list-sent',
   templateUrl: './orders-list-sent.component.html',
   styleUrls: ['./orders-list-sent.component.scss'],
-  imports: [MaterialModule, NgFor, NgIf, AsyncPipe, DecimalPipe, DatePipe],
+  imports: [MaterialModule, NgFor, NgIf, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
+  standalone: true,
 })
 export class OrdersListSentComponent implements OnInit {
   private store = inject(Store);
