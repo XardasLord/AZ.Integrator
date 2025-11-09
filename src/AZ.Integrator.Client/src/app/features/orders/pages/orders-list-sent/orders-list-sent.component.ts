@@ -17,6 +17,7 @@ import {
   ConfirmationDialogModel,
 } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SourceSystemState } from '../../../../shared/states/source-system.state';
 
 @Component({
   selector: 'app-orders-list-sent',
@@ -46,10 +47,14 @@ export class OrdersListSentComponent implements OnInit {
   totalItems$ = this.store.select(OrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(OrdersState.getCurrentPage);
   pageSize$ = this.store.select(OrdersState.getPageSize);
+  selectedStore$ = this.store.select(SourceSystemState.getSourceSystem);
 
   ngOnInit(): void {
     this.store.dispatch(new SetCurrentTab('Sent'));
-    this.store.dispatch(new LoadSent());
+    const selectedStore = this.store.selectSnapshot(SourceSystemState.getSourceSystem);
+    if (selectedStore) {
+      this.store.dispatch(new LoadSent());
+    }
   }
 
   pageChanged(event: PageEvent): void {

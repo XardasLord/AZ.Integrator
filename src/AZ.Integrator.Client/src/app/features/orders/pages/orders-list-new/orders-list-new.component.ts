@@ -16,6 +16,7 @@ import {
 import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
 import { MaterialModule } from '../../../../shared/modules/material.module';
+import { SourceSystemState } from '../../../../shared/states/source-system.state';
 
 @Component({
   selector: 'app-orders-list-new',
@@ -44,10 +45,14 @@ export class OrdersListNewComponent implements OnInit {
   totalItems$ = this.store.select(OrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(OrdersState.getCurrentPage);
   pageSize$ = this.store.select(OrdersState.getPageSize);
+  selectedStore$ = this.store.select(SourceSystemState.getSourceSystem);
 
   ngOnInit(): void {
     this.store.dispatch(new SetCurrentTab('New'));
-    this.store.dispatch(new LoadNew());
+    const selectedStore = this.store.selectSnapshot(SourceSystemState.getSourceSystem);
+    if (selectedStore) {
+      this.store.dispatch(new LoadNew());
+    }
   }
 
   pageChanged(event: PageEvent): void {
