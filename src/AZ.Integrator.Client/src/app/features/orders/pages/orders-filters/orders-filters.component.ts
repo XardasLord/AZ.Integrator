@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ApplyFilter, LoadOrders } from '../../states/orders.action';
 import { OrdersState } from '../../states/orders-state.service';
 import { DebounceDirective } from '../../../../shared/directives/debounce.directive';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { environment } from '../../../../../environments/environment';
 import {
@@ -21,7 +21,7 @@ import { AuthRoleAllowDirective } from '../../../../shared/auth/directives/auth-
   selector: 'app-orders-filters',
   templateUrl: './orders-filters.component.html',
   styleUrls: ['./orders-filters.component.scss'],
-  imports: [MaterialModule, DebounceDirective, AsyncPipe, NgIf, AuthRoleAllowDirective],
+  imports: [MaterialModule, DebounceDirective, AsyncPipe, AuthRoleAllowDirective],
 })
 export class OrdersFiltersComponent {
   private store = inject(Store);

@@ -2,12 +2,13 @@
   <div class="overflow-auto mat-elevation-z3">
     <ng-content />
   </div>
-  <mat-paginator
-    *ngIf="totalItems"
-    class="sticky bottom-0 rounded-b-lg z-10 mat-elevation-z3"
-    [length]="totalItems"
-    [pageIndex]="currentPage"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="[5, 10, 25, 50, 100]"
-    (page)="pageChanged($event)" />
+  @if (totalItems) {
+    <mat-paginator
+      class="sticky bottom-0 rounded-b-lg z-10 mat-elevation-z3"
+      [length]="totalItems"
+      [pageIndex]="currentPage"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50, 100]"
+      (page)="pageChanged($event)" />
+  }
 </div>

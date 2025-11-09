@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
 import { MatIcon } from '@angular/material/icon';
 import { Store } from '@ngxs/store';
@@ -23,7 +23,7 @@ import { ScrollTableComponent } from '../../../../shared/ui/wrappers/scroll-tabl
   selector: 'app-orders-list-new',
   templateUrl: './orders-list-new.component.html',
   styleUrls: ['./orders-list-new.component.scss'],
-  imports: [MaterialModule, NgIf, MatIcon, NgFor, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
+  imports: [MaterialModule, MatIcon, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
   standalone: true,
 })
 export class OrdersListNewComponent implements OnInit {

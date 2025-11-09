@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { NgForOf, NgIf } from '@angular/common';
+
 import {
   FormArray,
   FormBuilder,
@@ -22,7 +22,7 @@ import { SupplierViewModel } from '../../../../../shared/graphql/graphql-integra
   selector: 'app-supplier-form-dialog',
   templateUrl: './supplier-form-dialog.component.html',
   styleUrls: ['./supplier-form-dialog.component.scss'],
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, NgIf, NgForOf],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule],
   standalone: true,
 })
 export class SupplierFormDialogComponent implements OnInit {

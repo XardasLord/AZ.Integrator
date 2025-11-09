@@ -1,5 +1,5 @@
 <ul class="w-full mt-2 space-y-2 max-h-128 overflow-auto px-1">
-  <ng-container *ngFor="let log of barcodeScannerLogs$ | async; let i = index">
+  @for (log of barcodeScannerLogs$ | async; track log; let i = $index) {
     <li
       class="relative h-14 w-full flex items-center justify-between p-2 rounded-lg shadow border transition"
       [ngClass]="{
@@ -19,8 +19,7 @@
         </div>
         <span class="text-xs text-gray-500 mt-0.5">{{ log.createdAt | date: 'dd.MM.yyyy, HH:mm:ss' }}</span>
       </div>
-
-      <ng-container *ngIf="log.status === StockLogStatus.Active">
+      @if (log.status === StockLogStatus.Active) {
         <button
           mat-icon-button
           class="ml-1 flex-shrink-0 w-8 h-8 rounded-full bg-white/80 border border-gray-300 shadow flex items-center justify-center text-gray-700 hover:bg-gray-100 active:bg-gray-200"
@@ -28,7 +27,7 @@
           aria-label="Cofnij zmianę">
           <mat-icon class="text-lg">undo</mat-icon>
         </button>
-      </ng-container>
+      }
     </li>
-  </ng-container>
+  }
 </ul>

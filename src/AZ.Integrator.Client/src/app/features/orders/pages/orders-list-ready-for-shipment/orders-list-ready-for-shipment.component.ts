@@ -18,7 +18,7 @@ import { ShipmentProviderEnum } from '../../models/shipment-provider.enum';
 import { DownloadInvoice, GenerateInvoice } from '../../states/invoices.action';
 import { InvoicesState } from '../../states/invoices.state';
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
-import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import {
@@ -34,7 +34,7 @@ import { ScrollTableComponent } from '../../../../shared/ui/wrappers/scroll-tabl
   selector: 'app-orders-list-ready-for-shipment',
   templateUrl: './orders-list-ready-for-shipment.component.html',
   styleUrls: ['./orders-list-ready-for-shipment.component.scss'],
-  imports: [MaterialModule, NgIf, MatIcon, NgFor, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
+  imports: [MaterialModule, MatIcon, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
   standalone: true,
 })
 export class OrdersListReadyForShipmentComponent implements OnInit {

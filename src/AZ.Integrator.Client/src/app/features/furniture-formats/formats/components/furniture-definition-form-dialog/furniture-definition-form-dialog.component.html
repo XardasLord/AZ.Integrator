@@ -21,10 +21,14 @@
           </mat-label>
           <input type="text" matInput formControlName="furnitureCode" />
           <mat-icon matPrefix class="text-gray-500">qr_code_2</mat-icon>
-          <mat-error *ngIf="form.controls.furnitureCode.hasError('required')"> Kod mebla jest wymagany </mat-error>
-          <mat-error *ngIf="form.controls.furnitureCode.hasError('minlength')">
-            Kod mebla musi mieć co najmniej 1 znak
-          </mat-error>
+          @if (form.controls.furnitureCode.hasError('required')) {
+            <mat-error> Kod mebla jest wymagany </mat-error>
+          }
+          @if (form.controls.furnitureCode.hasError('minlength')) {
+            <mat-error>
+              Kod mebla musi mieć co najmniej 1 znak
+            </mat-error>
+          }
         </mat-form-field>
 
         @if (!editMode) {
@@ -62,129 +66,150 @@
       </button>
     </div>
 
-    <div *ngIf="partDefinitions.length === 0" class="empty-state">
-      <mat-icon>inventory_2</mat-icon>
-      <div class="empty-text">Brak formatek. Dodaj co najmniej jedną formatkę.</div>
-    </div>
+    @if (partDefinitions.length === 0) {
+      <div class="empty-state">
+        <mat-icon>inventory_2</mat-icon>
+        <div class="empty-text">Brak formatek. Dodaj co najmniej jedną formatkę.</div>
+      </div>
+    }
 
     <div formArrayName="partDefinitions" class="parts-list">
-      <mat-card *ngFor="let _ of partDefinitions.controls; let i = index" class="part-card mb-3">
-        <mat-card-header class="part-card-header">
-          <mat-card-title class="text-base">
-            <span class="part-number-badge">{{ i + 1 }}</span>
-            Formatka {{ i + 1 }}
-          </mat-card-title>
-          <button
-            mat-icon-button
-            type="button"
-            (click)="removePartDefinition(i)"
-            matTooltip="Usuń formatkę"
-            class="delete-button">
-            <mat-icon class="!text-red-600">delete</mat-icon>
-          </button>
-        </mat-card-header>
-
-        <mat-card-content [formGroupName]="i">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2 mt-3">
-            <mat-form-field class="w-full">
-              <mat-label>Nazwa</mat-label>
-              <input type="text" matInput formControlName="name" />
-              <mat-icon matPrefix class="text-gray-500">text_fields</mat-icon>
-              <mat-error *ngIf="partDefinitions.controls[i].get('name')?.hasError('required')">
-                Nazwa jest wymagana
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="w-full">
-              <mat-label>Ilość</mat-label>
-              <input type="number" matInput formControlName="quantity" />
-              <mat-icon matPrefix class="text-gray-500">pin</mat-icon>
-              <mat-error *ngIf="partDefinitions.controls[i].get('quantity')?.hasError('required')">
-                Ilość jest wymagana
-              </mat-error>
-              <mat-error *ngIf="partDefinitions.controls[i].get('quantity')?.hasError('min')">
-                Wartość musi być większa niż 0
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="field-group dimensions">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+      @for (_ of partDefinitions.controls; track _; let i = $index) {
+        <mat-card class="part-card mb-3">
+          <mat-card-header class="part-card-header">
+            <mat-card-title class="text-base">
+              <span class="part-number-badge">{{ i + 1 }}</span>
+              Formatka {{ i + 1 }}
+            </mat-card-title>
+            <button
+              mat-icon-button
+              type="button"
+              (click)="removePartDefinition(i)"
+              matTooltip="Usuń formatkę"
+              class="delete-button">
+              <mat-icon class="!text-red-600">delete</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content [formGroupName]="i">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2 mt-3">
               <mat-form-field class="w-full">
-                <mat-label>Długość [mm]</mat-label>
-                <input type="number" matInput formControlName="lengthMm" />
-                <mat-icon matPrefix class="text-primary">straighten</mat-icon>
-                <mat-error *ngIf="partDefinitions.controls[i].get('lengthMm')?.hasError('required')">
-                  Długość jest wymagana
-                </mat-error>
-                <mat-error *ngIf="partDefinitions.controls[i].get('lengthMm')?.hasError('min')">
-                  Wartość musi być większa niż 0
-                </mat-error>
+                <mat-label>Nazwa</mat-label>
+                <input type="text" matInput formControlName="name" />
+                <mat-icon matPrefix class="text-gray-500">text_fields</mat-icon>
+                @if (partDefinitions.controls[i].get('name')?.hasError('required')) {
+                  <mat-error>
+                    Nazwa jest wymagana
+                  </mat-error>
+                }
               </mat-form-field>
-
               <mat-form-field class="w-full">
-                <mat-label>Szerokość [mm]</mat-label>
-                <input type="number" matInput formControlName="widthMm" />
-                <mat-icon matPrefix class="text-primary">height</mat-icon>
-                <mat-error *ngIf="partDefinitions.controls[i].get('widthMm')?.hasError('required')">
-                  Szerokość jest wymagana
-                </mat-error>
-                <mat-error *ngIf="partDefinitions.controls[i].get('widthMm')?.hasError('min')">
-                  Wartość musi być większa niż 0
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="w-full">
-                <mat-label>Grubość [mm]</mat-label>
-                <input type="number" matInput formControlName="thicknessMm" />
-                <mat-icon matPrefix class="text-primary">layers</mat-icon>
-                <mat-error *ngIf="partDefinitions.controls[i].get('thicknessMm')?.hasError('required')">
-                  Grubość jest wymagana
-                </mat-error>
-                <mat-error *ngIf="partDefinitions.controls[i].get('thicknessMm')?.hasError('min')">
-                  Wartość musi być większa niż 0
-                </mat-error>
+                <mat-label>Ilość</mat-label>
+                <input type="number" matInput formControlName="quantity" />
+                <mat-icon matPrefix class="text-gray-500">pin</mat-icon>
+                @if (partDefinitions.controls[i].get('quantity')?.hasError('required')) {
+                  <mat-error>
+                    Ilość jest wymagana
+                  </mat-error>
+                }
+                @if (partDefinitions.controls[i].get('quantity')?.hasError('min')) {
+                  <mat-error>
+                    Wartość musi być większa niż 0
+                  </mat-error>
+                }
               </mat-form-field>
             </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
+            <div class="field-group dimensions">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+                <mat-form-field class="w-full">
+                  <mat-label>Długość [mm]</mat-label>
+                  <input type="number" matInput formControlName="lengthMm" />
+                  <mat-icon matPrefix class="text-primary">straighten</mat-icon>
+                  @if (partDefinitions.controls[i].get('lengthMm')?.hasError('required')) {
+                    <mat-error>
+                      Długość jest wymagana
+                    </mat-error>
+                  }
+                  @if (partDefinitions.controls[i].get('lengthMm')?.hasError('min')) {
+                    <mat-error>
+                      Wartość musi być większa niż 0
+                    </mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                  <mat-label>Szerokość [mm]</mat-label>
+                  <input type="number" matInput formControlName="widthMm" />
+                  <mat-icon matPrefix class="text-primary">height</mat-icon>
+                  @if (partDefinitions.controls[i].get('widthMm')?.hasError('required')) {
+                    <mat-error>
+                      Szerokość jest wymagana
+                    </mat-error>
+                  }
+                  @if (partDefinitions.controls[i].get('widthMm')?.hasError('min')) {
+                    <mat-error>
+                      Wartość musi być większa niż 0
+                    </mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                  <mat-label>Grubość [mm]</mat-label>
+                  <input type="number" matInput formControlName="thicknessMm" />
+                  <mat-icon matPrefix class="text-primary">layers</mat-icon>
+                  @if (partDefinitions.controls[i].get('thicknessMm')?.hasError('required')) {
+                    <mat-error>
+                      Grubość jest wymagana
+                    </mat-error>
+                  }
+                  @if (partDefinitions.controls[i].get('thicknessMm')?.hasError('min')) {
+                    <mat-error>
+                      Wartość musi być większa niż 0
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
+              <mat-form-field class="w-full">
+                <mat-label>Oklejenie długości krawędzi</mat-label>
+                <mat-select formControlName="lengthEdgeBandingType">
+                  @for (option of edgeBandingOptions; track option) {
+                    <mat-option [value]="option.value">
+                      {{ option.label }}
+                    </mat-option>
+                  }
+                </mat-select>
+                <mat-icon matPrefix class="text-gray-500">border_horizontal</mat-icon>
+                @if (partDefinitions.controls[i].get('lengthEdgeBandingType')?.hasError('required')) {
+                  <mat-error>
+                    Wartość jest wymagana
+                  </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field class="w-full">
+                <mat-label>Oklejenie szerokości krawędzi</mat-label>
+                <mat-select formControlName="widthEdgeBandingType">
+                  @for (option of edgeBandingOptions; track option) {
+                    <mat-option [value]="option.value">
+                      {{ option.label }}
+                    </mat-option>
+                  }
+                </mat-select>
+                <mat-icon matPrefix class="text-gray-500">border_vertical</mat-icon>
+                @if (partDefinitions.controls[i].get('widthEdgeBandingType')?.hasError('required')) {
+                  <mat-error>
+                    Wartość jest wymagana
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
             <mat-form-field class="w-full">
-              <mat-label>Oklejenie długości krawędzi</mat-label>
-              <mat-select formControlName="lengthEdgeBandingType">
-                <mat-option *ngFor="let option of edgeBandingOptions" [value]="option.value">
-                  {{ option.label }}
-                </mat-option>
-              </mat-select>
-              <mat-icon matPrefix class="text-gray-500">border_horizontal</mat-icon>
-              <mat-error *ngIf="partDefinitions.controls[i].get('lengthEdgeBandingType')?.hasError('required')">
-                Wartość jest wymagana
-              </mat-error>
+              <mat-label>Dodatkowe informacje</mat-label>
+              <textarea matInput formControlName="additionalInfo" rows="2"></textarea>
+              <mat-icon matPrefix class="text-gray-500">description</mat-icon>
             </mat-form-field>
-
-            <mat-form-field class="w-full">
-              <mat-label>Oklejenie szerokości krawędzi</mat-label>
-              <mat-select formControlName="widthEdgeBandingType">
-                <mat-option *ngFor="let option of edgeBandingOptions" [value]="option.value">
-                  {{ option.label }}
-                </mat-option>
-              </mat-select>
-              <mat-icon matPrefix class="text-gray-500">border_vertical</mat-icon>
-              <mat-error *ngIf="partDefinitions.controls[i].get('widthEdgeBandingType')?.hasError('required')">
-                Wartość jest wymagana
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <mat-form-field class="w-full">
-            <mat-label>Dodatkowe informacje</mat-label>
-            <textarea matInput formControlName="additionalInfo" rows="2"></textarea>
-            <mat-icon matPrefix class="text-gray-500">description</mat-icon>
-          </mat-form-field>
-
-          <input type="hidden" formControlName="id" />
-        </mat-card-content>
-      </mat-card>
+            <input type="hidden" formControlName="id" />
+          </mat-card-content>
+        </mat-card>
+      }
     </div>
   </form>
 </div>

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'app-scroll-table',
-  imports: [MatPaginator, NgIf],
+  imports: [MatPaginator],
   templateUrl: './scroll-table.component.html',
   styleUrls: ['./scroll-table.component.scss'],
   standalone: true,

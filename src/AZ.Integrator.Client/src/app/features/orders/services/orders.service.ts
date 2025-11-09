@@ -1,13 +1,12 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { RemoteServiceBase } from '../../../shared/services/remote-service.base';
 import { environment } from '../../../../environments/environment';
 import { GetOrdersResponseModel } from '../models/get-orders-response.model';
 import { OrderDetailsModel } from '../models/order-details.model';
 import { CreateShipmentCommand } from '../models/commands/create-shipment.command';
-import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import { IntegratorQueryShipmentsArgs, ShipmentViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
 import { OrderFulfillmentStatusEnum } from '../models/order-fulfillment-status.enum';
@@ -60,9 +59,10 @@ export class OrdersService extends RemoteServiceBase {
   getShipments(
     filters: IntegratorQueryShipmentsArgs
   ): Observable<GraphQLResponseWithoutPaginationVo<ShipmentViewModel[]>> {
-    return this.shipmentsGqlQuery
-      .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-      .valueChanges.pipe(map(x => x.data));
+    return this.shipmentsGqlQuery.watch({ variables: filters }).valueChanges.pipe(
+      filter(result => !result.loading && result.data !== undefined),
+      map(x => x.data as GraphQLResponseWithoutPaginationVo<ShipmentViewModel[]>)
+    );
   }
 
   // TODO: Move it to a new dedicated invoice service

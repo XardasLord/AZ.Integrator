@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { NgForOf, NgIf } from '@angular/common';
+
 import {
   FormArray,
   FormBuilder,
@@ -42,7 +42,7 @@ interface PartFormValue {
   selector: 'app-furniture-definition-form-dialog',
   templateUrl: './furniture-definition-form-dialog.component.html',
   styleUrls: ['./furniture-definition-form-dialog.component.scss'],
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, NgIf, NgForOf],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule],
   standalone: true,
 })
 export class FurnitureDefinitionFormDialogComponent implements OnInit {

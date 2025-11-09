@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
 import { ParcelTemplatesState } from '../../states/parcel-templates.state';
@@ -16,7 +16,7 @@ import { ParcelTemplateDefinitionDataModel } from '../../components/package-temp
   selector: 'app-parcel-templates-list',
   templateUrl: './parcel-templates-list.component.html',
   styleUrls: ['./parcel-templates-list.component.scss'],
-  imports: [MaterialModule, AsyncPipe, ScrollTableComponent, DatePipe, NgIf],
+  imports: [MaterialModule, AsyncPipe, ScrollTableComponent, DatePipe],
   standalone: true,
 })
 export class ParcelTemplatesListComponent implements OnInit {

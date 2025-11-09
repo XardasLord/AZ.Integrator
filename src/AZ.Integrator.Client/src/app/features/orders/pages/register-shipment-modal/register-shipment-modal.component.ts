@@ -11,20 +11,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { map } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
 import { RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/orders.action';
 import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
-import {
-  IntegratorQueryTagParcelTemplatesArgs,
-  TagParcelTemplateViewModel,
-} from '../../../../shared/graphql/graphql-integrator.schema';
-import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
+import { IntegratorQueryTagParcelTemplatesArgs } from '../../../../shared/graphql/graphql-integrator.schema';
 import { OrderDetailsModel } from '../../models/order-details.model';
 import { MatError } from '@angular/material/form-field';
-import { NgFor, NgIf } from '@angular/common';
+
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { GetTagParcelTemplatesGQL } from '../../../package-templates/graphql-queries/get-tag-parcel-templates.graphql.query';
 
@@ -32,7 +28,7 @@ import { GetTagParcelTemplatesGQL } from '../../../package-templates/graphql-que
   selector: 'app-register-shipment-modal',
   templateUrl: './register-shipment-modal.component.html',
   styleUrls: ['./register-shipment-modal.component.scss'],
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, NgIf, MatError, NgFor],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule, MatError],
 })
 export class RegisterShipmentModalComponent {
   dialogRef = inject<MatDialogRef<RegisterShipmentModalComponent>>(MatDialogRef);
@@ -151,25 +147,31 @@ export class RegisterShipmentModalComponent {
     };
 
     this.tagParcelTemplatesGql
-      .watch(query, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-      .valueChanges.pipe(map(x => x.data.result))
+      .watch({ variables: query })
+      .valueChanges.pipe(
+        filter(result => !result.loading && result.data !== undefined),
+        map(x => x.data?.result)
+      )
       .subscribe(results => {
-        if (results.nodes.length < 1 && !results.nodes[0]) return;
+        if (!results?.nodes || results.nodes.length < 1 || !results.nodes[0]) return;
 
         this.removeAllParcels();
 
-        results.nodes.forEach((tagParcelTemplate: TagParcelTemplateViewModel) => {
+        results.nodes.forEach(tagParcelTemplate => {
+          if (!tagParcelTemplate) return;
+
           const totalQuantityOfBoughtProduct = orderDetails.lineItems
-            .filter(x => x.offer.external?.id === tagParcelTemplate?.tag)
+            .filter(x => x.offer.external?.id === tagParcelTemplate.tag)
             .reduce((ty, u) => ty + u.quantity, 0);
 
           for (let i = 0; i < totalQuantityOfBoughtProduct; i++) {
-            tagParcelTemplate?.parcels?.forEach(parcelTemplate => {
+            tagParcelTemplate.parcels?.forEach(parcelTemplate => {
+              if (!parcelTemplate) return;
               this.addNewParcel(
-                parcelTemplate?.length,
-                parcelTemplate?.width,
-                parcelTemplate?.height,
-                parcelTemplate?.weight
+                parcelTemplate.length,
+                parcelTemplate.width,
+                parcelTemplate.height,
+                parcelTemplate.weight
               );
             });
           }

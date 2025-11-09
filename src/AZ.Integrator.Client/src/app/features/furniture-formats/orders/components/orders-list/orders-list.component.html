@@ -62,59 +62,72 @@
             <h3 class="detail-title">Szczegóły zamówienia</h3>
 
             <!-- Additional Notes Section -->
-            <div class="additional-notes-section" *ngIf="order.additionalNotes">
-              <div class="notes-header">
-                <mat-icon>note</mat-icon>
-                <h4>Dodatkowe uwagi</h4>
+            @if (order.additionalNotes) {
+              <div class="additional-notes-section">
+                <div class="notes-header">
+                  <mat-icon>note</mat-icon>
+                  <h4>Dodatkowe uwagi</h4>
+                </div>
+                <div class="notes-content">
+                  {{ order.additionalNotes }}
+                </div>
               </div>
-              <div class="notes-content">
-                {{ order.additionalNotes }}
-              </div>
-            </div>
+            }
 
-            <div class="furniture-lines" *ngIf="order.furnitureLines && order.furnitureLines.length > 0">
-              <div *ngFor="let furnitureLine of order.furnitureLines" class="furniture-line-card">
-                <div class="furniture-line-header">
-                  <h4>Mebel: {{ furnitureLine.furnitureCode }} (v{{ furnitureLine.furnitureVersion }})</h4>
-                  <span class="quantity-badge">Ilość: {{ furnitureLine.quantityOrdered }}</span>
-                </div>
-
-                <div class="part-lines-table" *ngIf="furnitureLine.partLines && furnitureLine.partLines.length > 0">
-                  <table class="parts-table">
-                    <thead>
-                      <tr>
-                        <th>Nazwa formatki</th>
-                        <th>Długość (mm)</th>
-                        <th>Szerokość (mm)</th>
-                        <th>Grubość (mm)</th>
-                        <th>Oklejka długość</th>
-                        <th>Oklejka szerokość</th>
-                        <th>Ilość</th>
-                        <th>Dodatkowe info</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let part of furnitureLine.partLines">
-                        <td>{{ part.name }}</td>
-                        <td>{{ part.dimensions.lengthMm }}</td>
-                        <td>{{ part.dimensions.widthMm }}</td>
-                        <td>{{ part.dimensions.thicknessMm }}</td>
-                        <td>{{ getEdgeBandingTypeDisplay(part.dimensions.lengthEdgeBandingType) }}</td>
-                        <td>{{ getEdgeBandingTypeDisplay(part.dimensions.widthEdgeBandingType) }}</td>
-                        <td>{{ part.quantity }}</td>
-                        <td>{{ part.additionalInfo || '-' }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div *ngIf="!furnitureLine.partLines || furnitureLine.partLines.length === 0" class="no-parts">
-                  <p>Brak formatek w tej linii</p>
-                </div>
+            @if (order.furnitureLines && order.furnitureLines.length > 0) {
+              <div class="furniture-lines">
+                @for (furnitureLine of order.furnitureLines; track furnitureLine) {
+                  <div class="furniture-line-card">
+                    <div class="furniture-line-header">
+                      <h4>Mebel: {{ furnitureLine.furnitureCode }} (v{{ furnitureLine.furnitureVersion }})</h4>
+                      <span class="quantity-badge">Ilość: {{ furnitureLine.quantityOrdered }}</span>
+                    </div>
+                    @if (furnitureLine.partLines && furnitureLine.partLines.length > 0) {
+                      <div class="part-lines-table">
+                        <table class="parts-table">
+                          <thead>
+                            <tr>
+                              <th>Nazwa formatki</th>
+                              <th>Długość (mm)</th>
+                              <th>Szerokość (mm)</th>
+                              <th>Grubość (mm)</th>
+                              <th>Oklejka długość</th>
+                              <th>Oklejka szerokość</th>
+                              <th>Ilość</th>
+                              <th>Dodatkowe info</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @for (part of furnitureLine.partLines; track part) {
+                              <tr>
+                                <td>{{ part.name }}</td>
+                                <td>{{ part.dimensions.lengthMm }}</td>
+                                <td>{{ part.dimensions.widthMm }}</td>
+                                <td>{{ part.dimensions.thicknessMm }}</td>
+                                <td>{{ getEdgeBandingTypeDisplay(part.dimensions.lengthEdgeBandingType) }}</td>
+                                <td>{{ getEdgeBandingTypeDisplay(part.dimensions.widthEdgeBandingType) }}</td>
+                                <td>{{ part.quantity }}</td>
+                                <td>{{ part.additionalInfo || '-' }}</td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    }
+                    @if (!furnitureLine.partLines || furnitureLine.partLines.length === 0) {
+                      <div class="no-parts">
+                        <p>Brak formatek w tej linii</p>
+                      </div>
+                    }
+                  </div>
+                }
               </div>
-            </div>
-            <div *ngIf="!order.furnitureLines || order.furnitureLines.length === 0" class="no-furniture">
-              <p>Brak linii mebli w tym zamówieniu</p>
-            </div>
+            }
+            @if (!order.furnitureLines || order.furnitureLines.length === 0) {
+              <div class="no-furniture">
+                <p>Brak linii mebli w tym zamówieniu</p>
+              </div>
+            }
           </div>
         </div>
       </td>

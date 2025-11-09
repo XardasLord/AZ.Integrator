@@ -1,8 +1,8 @@
 <div class="p-6 bg-gray-50 rounded-xl shadow-lg">
   <mat-accordion>
-    <ng-container *ngIf="groups$ | async as groups">
-      <ng-container *ngIf="connectedDropLists$ | async as connectedDropLists">
-        <ng-container *ngFor="let group of groups; trackBy: trackByGroupId">
+    @if (groups$ | async; as groups) {
+      @if (connectedDropLists$ | async; as connectedDropLists) {
+        @for (group of groups; track trackByGroupId($index, group)) {
           <div
             cdkDropList
             [id]="'group-' + group.id"
@@ -24,16 +24,16 @@
                         class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                         {{ group.stocks.length }}
                       </span>
-                      <mat-icon
-                        *ngIf="hasAnyWarning(group)"
-                        class="!text-orange-500 text-base animate-pulse"
-                        matTooltip="W grupie są kody poniżej progu">
-                        warning
-                      </mat-icon>
+                      @if (hasAnyWarning(group)) {
+                        <mat-icon
+                          class="!text-orange-500 text-base animate-pulse"
+                          matTooltip="W grupie są kody poniżej progu">
+                          warning
+                        </mat-icon>
+                      }
                     </div>
                     <span class="text-sm text-gray-400">{{ group.description }}</span>
                   </div>
-
                   @if (group.id) {
                     <button mat-icon-button (click)="editGroup(group)" [matTooltip]="'Edytuj grupę'" class="shrink-0">
                       <mat-icon>edit</mat-icon>
@@ -41,11 +41,10 @@
                   }
                 </div>
               </mat-expansion-panel-header>
-
               <div
                 class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-4 bg-gray-50 rounded-lg">
-                <ng-container *ngIf="group.stocks && group.stocks.length > 0; else noStocks">
-                  <ng-container *ngFor="let stock of group.stocks; trackBy: trackByStockCode">
+                @if (group.stocks && group.stocks.length > 0) {
+                  @for (stock of group.stocks; track trackByStockCode($index, stock)) {
                     <div
                       cdkDrag
                       [ngClass]="getStockQuantityCardColor(stock)"
@@ -54,19 +53,17 @@
                         <span class="font-medium text-gray-700 text-base">
                           {{ stock.packageCode }}
                         </span>
-
                         <div class="flex items-center gap-1">
-                          <mat-icon
-                            *ngIf="isBelowThreshold(stock)"
-                            class="!text-orange-500 animate-pulse"
-                            matTooltip="Ilość towaru poniżej ustalonego limitu">
-                            warning
-                          </mat-icon>
-
+                          @if (isBelowThreshold(stock)) {
+                            <mat-icon
+                              class="!text-orange-500 animate-pulse"
+                              matTooltip="Ilość towaru poniżej ustalonego limitu">
+                              warning
+                            </mat-icon>
+                          }
                           <button mat-icon-button [matMenuTriggerFor]="stockMenu" class="shrink-0">
                             <mat-icon>more_vert</mat-icon>
                           </button>
-
                           <mat-menu #stockMenu="matMenu">
                             <button mat-menu-item (click)="editThreshold(stock)">
                               <mat-icon>edit</mat-icon>
@@ -87,36 +84,31 @@
                         [value]="Math.min(100, (stock.quantity / stock.threshold) * 100)"
                         [color]="isBelowThreshold(stock) ? 'warn' : 'primary'">
                       </mat-progress-bar>
-
                       <div class="text-xs text-center mt-1">
                         {{ stock.quantity }} / {{ stock.threshold }}
-
-                        <ng-container *ngIf="getDifferenceBetweenThreshold(stock) !== 0">
+                        @if (getDifferenceBetweenThreshold(stock) !== 0) {
                           <mat-icon class="align-middle text-sm" [ngClass]="getDifferenceClass(stock)">
                             {{ getDifferenceIcon(stock) }}
                           </mat-icon>
-
                           <span [ngClass]="getDifferenceClass(stock)">
                             ({{ getDifferenceBetweenThreshold(stock) > 0 ? '+' : ''
                             }}{{ getDifferenceBetweenThreshold(stock) }})
                           </span>
-                        </ng-container>
+                        }
                       </div>
                     </div>
-                  </ng-container>
-                </ng-container>
+                  }
+                } @else {
+                  <div class="flex flex-col items-center justify-center text-gray-400 py-8">
+                    <mat-icon class="mb-2 text-4xl">inventory_2</mat-icon>
+                    <span class="text-base">Brak kodów w tej grupie.</span>
+                  </div>
+                }
               </div>
-
-              <ng-template #noStocks>
-                <div class="flex flex-col items-center justify-center text-gray-400 py-8">
-                  <mat-icon class="mb-2 text-4xl">inventory_2</mat-icon>
-                  <span class="text-base">Brak kodów w tej grupie.</span>
-                </div>
-              </ng-template>
             </mat-expansion-panel>
           </div>
-        </ng-container>
-      </ng-container>
-    </ng-container>
+        }
+      }
+    }
   </mat-accordion>
 </div>

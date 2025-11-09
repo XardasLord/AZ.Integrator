@@ -1,4 +1,4 @@
-import { KeycloakProfile } from 'keycloak-js/lib/keycloak';
+import { KeycloakProfile } from '../../types/keycloak-js';
 import { AuthScopes } from '../auth/models/auth.scopes';
 import { AuthRoles } from '../auth/models/auth.roles';
 

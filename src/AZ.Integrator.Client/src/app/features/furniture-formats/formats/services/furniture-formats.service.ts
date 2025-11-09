@@ -1,11 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { environment } from '../../../../../environments/environment';
 import { GraphQLResponse } from '../../../../shared/graphql/graphql.response';
 import { GetFurnitureDefinitionsGQL } from '../graphql-queries/get-furniture-definitions.graphql.query';
-import { GraphQLHelper } from '../../../../shared/graphql/graphql.helper';
 import { SaveFurnitureDefinitionCommand } from '../models/commands/save-furniture-definition.command';
 import { FurnitureModelViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
 
@@ -21,9 +20,10 @@ export class FurnitureFormatsService extends RemoteServiceBase {
   }
 
   loadFurnitureDefinitions(filters: Record<string, unknown>): Observable<GraphQLResponse<FurnitureModelViewModel[]>> {
-    return this.getFurnitureDefinitionsGql
-      .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-      .valueChanges.pipe(map(x => x.data));
+    return this.getFurnitureDefinitionsGql.watch({ variables: filters }).valueChanges.pipe(
+      filter(result => !result.loading && result.data !== undefined),
+      map(x => x.data as GraphQLResponse<FurnitureModelViewModel[]>)
+    );
   }
 
   addFurnitureDefinition(command: SaveFurnitureDefinitionCommand): Observable<void> {

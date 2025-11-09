@@ -1,11 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { IntegratorQueryStockGroupsArgs, StockGroupViewModel } from '../../../shared/graphql/graphql-integrator.schema';
 import { GraphQLResponseWithoutPaginationVo } from '../../../shared/graphql/graphql.response';
-import { GraphQLHelper } from '../../../shared/graphql/graphql.helper';
 import { GetStockGroupsGQL } from '../graphql-queries/get-stock-groups.graphql.query';
 import { UpdateStockGroupCommand } from '../models/update-stock-group.command';
 import { AddStockGroupCommand } from '../models/add-stock-group.command';
@@ -25,9 +24,10 @@ export class StockGroupsService extends RemoteServiceBase {
   getStockGroups(
     filters: IntegratorQueryStockGroupsArgs
   ): Observable<GraphQLResponseWithoutPaginationVo<StockGroupViewModel[]>> {
-    return this.getStockGroupsGql
-      .watch(filters, GraphQLHelper.defaultGraphQLWatchQueryOptions)
-      .valueChanges.pipe(map(x => x.data));
+    return this.getStockGroupsGql.watch({ variables: filters }).valueChanges.pipe(
+      filter(result => !result.loading && result.data !== undefined),
+      map(x => x.data as GraphQLResponseWithoutPaginationVo<StockGroupViewModel[]>)
+    );
   }
 
   add(name: string, description: string): Observable<AddStockGroupResponse> {
