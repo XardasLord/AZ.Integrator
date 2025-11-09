@@ -1,49 +1,89 @@
-<div class="min-h-screen flex flex-col w-full bg-gradient-to-b from-blue-50 to-gray-100">
+<div class="min-h-screen flex flex-col w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
   <!-- Hero Section -->
-  <section class="flex flex-col flex-1 justify-center items-center text-center py-16 px-4 w-full bg-gradient-to-br from-blue-50 to-blue-200 shadow-md">
-    <div class="max-w-2xl mx-auto">
-      <div class="flex flex-col items-center mb-6">
-        <mat-icon class="text-blue-600 text-6xl mb-2">hub</mat-icon>
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 leading-tight mb-2 drop-shadow">Witamy w systemie AZ Integrator</h1>
-        <p class="text-lg sm:text-xl text-gray-700 mt-2 mb-4 max-w-xl">
-          Kompleksowe rozwiązanie do integracji danych i procesów w Twojej organizacji.<br />
+  <section
+    class="flex flex-col flex-1 justify-center items-center text-center py-20 px-4 w-full relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-100/40 via-transparent to-indigo-100/40"></div>
+    <div class="absolute top-10 right-10 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 left-10 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl"></div>
+
+    <div class="max-w-3xl mx-auto relative z-10">
+      <div class="flex flex-col items-center mb-8">
+        <div class="mb-6 p-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl">
+          <mat-icon class="text-blue-600">hub</mat-icon>
+        </div>
+        <h1 class="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight mb-4 tracking-tight">
+          Witamy w systemie<br />
+          <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">AZ Integrator</span>
+        </h1>
+        <p class="text-xl sm:text-2xl text-gray-700 mt-4 mb-6 max-w-2xl font-light leading-relaxed">
+          Kompleksowe rozwiązanie do integracji danych i procesów w Twojej organizacji.
+        </p>
+        <p class="text-base sm:text-lg text-gray-600 mb-8 max-w-xl">
           Przyspiesz działanie, oszczędzaj czas i zarządzaj efektywniej.
         </p>
       </div>
-      <button mat-raised-button color="accent" (click)="startWorkRedirection()" class="mt-4 px-8 py-3 text-lg font-bold rounded-lg shadow-lg bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition">
-        Rozpocznij teraz
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="startWorkRedirection()"
+        class="!mt-6 !px-10 !py-4 !text-lg font-semibold !rounded-full !shadow-xl !bg-gradient-to-r !from-blue-600 !to-indigo-600 text-white hover:!shadow-2xl hover:scale-105 !transition-all !duration-300">
+        <span class="flex items-center gap-2">
+          Rozpocznij teraz
+          <mat-icon class="!text-xl">arrow_forward</mat-icon>
+        </span>
       </button>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section class="w-full py-12 bg-white shadow-inner">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 text-center mb-10">Kluczowe funkcje AZ Integrator</h2>
+  <section class="w-full py-16 bg-white/60 backdrop-blur-sm">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 text-center mb-4">Kluczowe funkcje</h2>
+      <p class="text-center text-gray-600 mb-12 text-lg">Poznaj możliwości AZ Integrator</p>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="p-6 bg-blue-50 rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
-          <mat-icon class="!text-blue-600 text-5xl mb-3">sync</mat-icon>
-          <h4 class="text-lg font-bold text-gray-700 mb-2">Automatyczna synchronizacja</h4>
-          <p class="text-gray-600">Połącz swoje systemy w jeden sprawny ekosystem.</p>
+        <div
+          class="group p-8 bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col items-center border border-gray-100 hover:border-blue-200 hover:-translate-y-2">
+          <div
+            class="mb-4 p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl group-hover:scale-110 transition-transform duration-300">
+            <mat-icon class="!text-blue-600">sync</mat-icon>
+          </div>
+          <h4 class="text-xl font-bold text-gray-800 mb-3">Automatyczna synchronizacja</h4>
+          <p class="text-gray-600 text-center leading-relaxed">Połącz swoje systemy w jeden sprawny ekosystem.</p>
         </div>
-        <div class="p-6 bg-blue-50 rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
-          <mat-icon class="!text-blue-600 text-5xl mb-3">speed</mat-icon>
-          <h4 class="text-lg font-bold text-gray-700 mb-2">Szybkość i wydajność</h4>
-          <p class="text-gray-600">Analizuj i przetwarzaj dane w czasie rzeczywistym.</p>
+
+        <div
+          class="group p-8 bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col items-center border border-gray-100 hover:border-indigo-200 hover:-translate-y-2">
+          <div
+            class="mb-4 p-4 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl group-hover:scale-110 transition-transform duration-300">
+            <mat-icon class="!text-indigo-600">speed</mat-icon>
+          </div>
+          <h4 class="text-xl font-bold text-gray-800 mb-3">Szybkość i wydajność</h4>
+          <p class="text-gray-600 text-center leading-relaxed">Analizuj i przetwarzaj dane w czasie rzeczywistym.</p>
         </div>
-        <div class="p-6 bg-blue-50 rounded-xl shadow flex flex-col items-center hover:shadow-lg transition">
-          <mat-icon class="!text-blue-600 text-5xl mb-3">security</mat-icon>
-          <h4 class="text-lg font-bold text-gray-700 mb-2">Bezpieczeństwo danych</h4>
-          <p class="text-gray-600">Twoje dane są zawsze bezpieczne dzięki zaawansowanym zabezpieczeniom.</p>
+
+        <div
+          class="group p-8 bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col items-center border border-gray-100 hover:border-purple-200 hover:-translate-y-2">
+          <div
+            class="mb-4 p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl group-hover:scale-110 transition-transform duration-300">
+            <mat-icon class="!text-purple-600">security</mat-icon>
+          </div>
+          <h4 class="text-xl font-bold text-gray-800 mb-3">Bezpieczeństwo danych</h4>
+          <p class="text-gray-600 text-center leading-relaxed">
+            Twoje dane są zawsze bezpieczne dzięki zaawansowanym zabezpieczeniom.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="w-full bg-gray-800 text-white py-6 mt-auto shadow-inner">
+  <footer class="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-8 mt-auto">
     <div class="container mx-auto text-center">
-      <p class="text-sm">&copy; 2023-{{ today | date: 'yyyy' }} AZ Integrator. Wszystkie prawa zastrzeżone.</p>
+      <p class="text-sm text-gray-300">
+        &copy; 2023-{{ today | date: 'yyyy' }} AZ Integrator. Wszystkie prawa zastrzeżone.
+      </p>
     </div>
   </footer>
 </div>
