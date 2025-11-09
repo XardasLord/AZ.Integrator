@@ -27,6 +27,7 @@ import {
 } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
+import { SourceSystemState } from '../../../../shared/states/source-system.state';
 
 @Component({
   selector: 'app-orders-list-ready-for-shipment',
@@ -59,12 +60,16 @@ export class OrdersListReadyForShipmentComponent implements OnInit {
   totalItems$ = this.store.select(OrdersState.getAllNewOrdersCount);
   currentPage$ = this.store.select(OrdersState.getCurrentPage);
   pageSize$ = this.store.select(OrdersState.getPageSize);
+  selectedStore$ = this.store.select(SourceSystemState.getSourceSystem);
 
   selection = new SelectionModel<OrderDetailsModel>(true, []);
 
   ngOnInit(): void {
     this.store.dispatch(new SetCurrentTab('ReadyForShipment'));
-    this.store.dispatch(new LoadReadyForShipment());
+    const selectedStore = this.store.selectSnapshot(SourceSystemState.getSourceSystem);
+    if (selectedStore) {
+      this.store.dispatch(new LoadReadyForShipment());
+    }
   }
 
   pageChanged(event: PageEvent): void {

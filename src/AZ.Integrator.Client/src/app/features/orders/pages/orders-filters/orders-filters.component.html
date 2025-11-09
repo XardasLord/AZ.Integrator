@@ -1,4 +1,50 @@
-<mat-form-field class="search-field" appearance="outline">
-  <mat-label>Login/Email</mat-label>
-  <input matInput (valueChanged)="searchTextChanged($event)" [value]="searchText$ | async" appDebounce />
-</mat-form-field>
+<div class="filters-container">
+  <mat-form-field class="store-selector" appearance="outline" *appRoleAllow="[AuthRoles.Admin]">
+    <mat-label>Wybierz sklep</mat-label>
+    <mat-select
+      (selectionChange)="onStoreSelected($event.value)"
+      [value]="selectedStore$ | async"
+      [compareWith]="compareStores">
+      @for (group of sourceSystemGroups; let first = $first; track group) {
+        <!-- Nagłówek grupy jako nieklikalny wiersz -->
+        <mat-option disabled class="!cursor-default !opacity-100 !py-0 !min-h-0">
+          <ng-container *ngIf="!first">
+            <div class="mt-3"></div>
+          </ng-container>
+          <div
+            class="px-3 py-1.5 text-[12px] font-semibold tracking-wide uppercase text-slate-900 flex items-center gap-2 select-none">
+            <span>{{ group.groupName }}</span>
+            <span class="text-slate-800">({{ group.sourceSystems.length }})</span>
+          </div>
+        </mat-option>
+
+        <!-- Pozycje -->
+        @for (tenant of group.sourceSystems; track tenant) {
+          <mat-option [value]="tenant" class="!py-0">
+            <div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-slate-50 aria-selected:bg-slate-50">
+              <!-- ikona / „avatar" platformy -->
+              <div class="h-6 w-6 grid place-items-center rounded-md bg-slate-100 text-slate-600 shrink-0">
+                <mat-icon [fontIcon]="iconFor(tenant.authorizationProvider)" class="text-[18px] leading-none" />
+              </div>
+
+              <!-- nazwa + (opcjonalnie) podtytuł/login -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="truncate">{{ tenant.displayName }}</span>
+                </div>
+                <div *ngIf="tenant.subtitle" class="text-xs text-slate-400 truncate">
+                  {{ tenant.subtitle }}
+                </div>
+              </div>
+            </div>
+          </mat-option>
+        }
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-label>Login/Email</mat-label>
+    <input matInput (valueChanged)="searchTextChanged($event)" [value]="searchText$ | async" appDebounce />
+  </mat-form-field>
+</div>

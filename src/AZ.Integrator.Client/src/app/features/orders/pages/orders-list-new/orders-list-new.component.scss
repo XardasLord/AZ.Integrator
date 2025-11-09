@@ -1,0 +1,13 @@
+.no-store-selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 2rem;
+
+  .info-card {
+    max-width: 600px;
+    width: 100%;
+  }
+}
+

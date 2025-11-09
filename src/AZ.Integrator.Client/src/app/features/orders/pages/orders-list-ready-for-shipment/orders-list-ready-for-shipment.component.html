@@ -1,4 +1,18 @@
-<table mat-table [dataSource]="(orders$ | async)!" class="mat-elevation-z3">
+<div *ngIf="!(selectedStore$ | async)" class="no-store-selected">
+  <mat-card class="info-card">
+    <mat-card-content>
+      <div class="flex flex-col items-center gap-4 py-8">
+        <mat-icon class="!text-6xl !h-16 !w-16 text-slate-400">store</mat-icon>
+        <h2 class="text-xl font-semibold text-slate-700">Wybierz sklep</h2>
+        <p class="text-slate-600 text-center max-w-md">
+          Aby wyświetlić zamówienia, wybierz sklep z listy rozwijanej w filtrach powyżej.
+        </p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<table *ngIf="selectedStore$ | async" mat-table [dataSource]="(orders$ | async)!" class="mat-elevation-z3">
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
       <mat-checkbox
@@ -135,6 +149,7 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-200"></tr>
 </table>
 <mat-paginator
+  *ngIf="selectedStore$ | async"
   class="mat-elevation-z3"
   [length]="(totalItems$ | async)!"
   [pageIndex]="(currentPage$ | async)!"
@@ -143,7 +158,7 @@
   (page)="pageChanged($event)">
 </mat-paginator>
 
-<div class="fixed bottom-4 right-20 z-50">
+<div *ngIf="selectedStore$ | async" class="fixed bottom-4 right-20 z-50">
   <button
     mat-fab
     color="primary"
