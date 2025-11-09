@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { ApplyFilter, LoadNew } from '../../states/orders.action';
+import { ApplyFilter, LoadOrders } from '../../states/orders.action';
 import { OrdersState } from '../../states/orders-state.service';
 import { DebounceDirective } from '../../../../shared/directives/debounce.directive';
 import { AsyncPipe, NgIf } from '@angular/common';
@@ -77,7 +77,7 @@ export class OrdersFiltersComponent {
 
   onStoreSelected(sourceSystem: SourceSystem) {
     this.store.dispatch(new ChangeSourceSystem(sourceSystem));
-    this.store.dispatch(new LoadNew());
+    this.store.dispatch(new LoadOrders());
   }
 
   iconFor(platform: AuthorizationProvider) {

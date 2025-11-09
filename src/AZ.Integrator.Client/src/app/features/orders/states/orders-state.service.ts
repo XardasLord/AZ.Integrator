@@ -15,6 +15,7 @@ import {
   GenerateInpostLabel,
   GenerateInpostLabels,
   LoadNew,
+  LoadOrders,
   LoadReadyForShipment,
   LoadSent,
   LoadShipments,
@@ -101,6 +102,11 @@ export class OrdersState {
   @Selector([ORDERS_STATE_TOKEN])
   static getDpdShipments(state: OrdersStateModel): ShipmentViewModel[] {
     return state.shipments.filter(x => x.shipmentProvider === ShipmentProviderEnum.Dpd);
+  }
+
+  @Action(LoadOrders)
+  loadOrders(ctx: StateContext<OrdersStateModel>) {
+    return this.loadData(ctx);
   }
 
   @Action(LoadNew)
