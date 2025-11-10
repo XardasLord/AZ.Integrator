@@ -7,13 +7,10 @@
 
         <TreatWarningsAsErrors Condition="'$(CI)'=='true'">true</TreatWarningsAsErrors>
         <WarningsNotAsErrors>NU1603;NU1605</WarningsNotAsErrors>
+
+        <NoWarn>$(NoWarn);CA2007</NoWarn>
         
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
-        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <AnalysisLevel>latest</AnalysisLevel>
     </PropertyGroup>
-
-    <!-- Przykład wspólnej wersji C# Analyzers (też spiąć w centralnych pakietach) -->
-    <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" />
-    </ItemGroup>
 </Project>

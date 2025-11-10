@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -106,13 +107,11 @@ public static class Extensions
         });
         
         app.UseIntegratorHangfire();
-        app.UseIntegratorGraphQl(configuration, env);
-
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapHealthChecks("api/healthz");
-        });
+        
+        var endpointRouteBuilder = (IEndpointRouteBuilder)app;
+        endpointRouteBuilder.MapIntegratorGraphQl(configuration, env);
+        endpointRouteBuilder.MapControllers();
+        endpointRouteBuilder.MapHealthChecks("api/healthz");
 
         app.StartIntegratorRecurringJobs();
         

@@ -14,6 +14,6 @@ public class CatalogViewResolver
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<FurnitureModelViewModel> GetFurnitureModels([Service] CatalogDataViewContext dataViewContext) 
+    public IQueryable<FurnitureModelViewModel> GetFurnitureModels(CatalogDataViewContext dataViewContext) 
         => dataViewContext.FurnitureModels.AsQueryable();
 }

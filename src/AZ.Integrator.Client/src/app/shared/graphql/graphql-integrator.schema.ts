@@ -20,9 +20,13 @@ export type Scalars = {
   UUID: { input: any; output: any; }
 };
 
+/** Defines when a policy shall be executed. */
 export enum ApplyPolicy {
+  /** After the resolver was executed. */
   AfterResolver = 'AFTER_RESOLVER',
+  /** Before the resolver was executed. */
   BeforeResolver = 'BEFORE_RESOLVER',
+  /** The policy is applied in the validation step before the execution. */
   Validation = 'VALIDATION'
 }
 

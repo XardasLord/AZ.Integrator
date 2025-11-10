@@ -10,26 +10,17 @@ using Microsoft.Extensions.Logging;
 
 namespace AZ.Integrator.Shared.Infrastructure.ErrorHandling;
 
-public class ErrorHandlerMiddleware
+public class ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ErrorHandlerMiddleware> _logger;
-    
-    public ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
-    
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Application error");
+            logger.LogError(ex, "Application error");
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -52,7 +43,14 @@ public class ErrorHandlerMiddleware
             _ => new ExceptionResponse("unexpected_error", ex.Message, HttpStatusCode.InternalServerError, ex.InnerException?.Message)
         };
 
+        if (context.Response.HasStarted)
+        {
+            Console.WriteLine("Response already started, skipping custom error handling.");
+            return Task.CompletedTask;
+        }
+
         var result = JsonSerializer.Serialize(response);
+        context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)response.HttpStatusCode;
 

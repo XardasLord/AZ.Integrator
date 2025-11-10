@@ -5,6 +5,7 @@ using HotChocolate.Execution.Configuration;
 using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +31,10 @@ public static class Extensions
             .AddProjections()
             .AddFiltering()
             .AddSorting()
+            .ModifyCostOptions(opt =>
+            {
+                opt.EnforceCostLimits = false;
+            })
             .ModifyPagingOptions(x =>
             {
                 x.IncludeTotalCount = true;
@@ -39,11 +44,12 @@ public static class Extensions
             .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
     }
     
-    public static IApplicationBuilder UseIntegratorGraphQl(this IApplicationBuilder app, IConfiguration configuration, IWebHostEnvironment env)
+    public static IEndpointConventionBuilder MapIntegratorGraphQl(this IEndpointRouteBuilder endpoints, IConfiguration configuration, IWebHostEnvironment env)
     {
         var graphQlOptions = configuration.GetOptions<GraphQlOptions>(OptionsSectionName);
         
-        return app.UseEndpoints(x => x.MapGraphQL(graphQlOptions.Endpoint)
+        return endpoints
+            .MapGraphQL(graphQlOptions.Endpoint)
             .WithOptions(new GraphQLServerOptions
             {
                 Tool =
@@ -51,6 +57,6 @@ public static class Extensions
                     Enable = env.IsDevelopment(),
                     Title = "AZ Integrator Portal GraphQL"
                 }
-            }));
+            });
     }
 }

@@ -13,18 +13,18 @@ public class StocksViewResolver()
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<StockViewModel> GetStocks([Service] StockDataViewContext dataViewContext) 
+    public IQueryable<StockViewModel> GetStocks(StockDataViewContext dataViewContext) 
         => dataViewContext.Stocks.AsQueryable();
 
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<StockLogViewModel> GetBarcodeScannerLogs([Service] StockDataViewContext dataViewContext) 
+    public IQueryable<StockLogViewModel> GetBarcodeScannerLogs(StockDataViewContext dataViewContext) 
         => dataViewContext.StockLogs.AsQueryable();
 
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<StockGroupViewModel> GetStockGroups([Service] StockDataViewContext dataViewContext) 
+    public IQueryable<StockGroupViewModel> GetStockGroups(StockDataViewContext dataViewContext) 
         => dataViewContext.StockGroups.AsQueryable();
 }

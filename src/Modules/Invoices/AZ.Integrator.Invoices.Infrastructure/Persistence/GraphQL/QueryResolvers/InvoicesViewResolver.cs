@@ -13,6 +13,6 @@ public class InvoicesViewResolver
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<InvoiceViewModel> GetInvoices([Service] InvoiceDataViewContext dataViewContext) 
+    public IQueryable<InvoiceViewModel> GetInvoices(InvoiceDataViewContext dataViewContext) 
         => dataViewContext.Invoices.AsQueryable();
 }

@@ -14,6 +14,6 @@ public class TagParcelTemplatesViewResolver()
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<TagParcelTemplateViewModel> GetTagParcelTemplates([Service] TagParcelTemplateDataViewContext dataViewContext) 
+    public IQueryable<TagParcelTemplateViewModel> GetTagParcelTemplates(TagParcelTemplateDataViewContext dataViewContext) 
         => dataViewContext.TagParcelTemplates.AsQueryable();
 }

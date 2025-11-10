@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AZ.Integrator.Shared.Infrastructure.Authentication;
@@ -69,7 +70,7 @@ public static class Extensions
                     
                     SignatureValidator = delegate (string token, TokenValidationParameters parameters)
                     {
-                        var jwt = new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token);
+                        var jwt = new JsonWebToken(token);
 
                         return jwt;
                     },

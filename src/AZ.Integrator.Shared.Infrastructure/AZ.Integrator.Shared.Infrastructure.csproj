@@ -23,6 +23,7 @@
     <PackageReference Include="HotChocolate.Types.Scalars" />
     <PackageReference Include="Mediator.Abstractions" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" />
