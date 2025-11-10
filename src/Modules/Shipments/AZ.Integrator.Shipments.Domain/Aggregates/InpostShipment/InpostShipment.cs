@@ -28,6 +28,7 @@ public class InpostShipment : Entity, IAggregateRoot
         ShipmentNumber number, ExternalOrderNumber externalOrderNumber, 
         TenantId tenantId, SourceSystemId sourceSystemId, 
         ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+        : this()
     {
         _number = number;
         _externalOrderNumber = externalOrderNumber;
