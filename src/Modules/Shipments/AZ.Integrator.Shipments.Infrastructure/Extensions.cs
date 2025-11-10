@@ -94,7 +94,7 @@ public static class Extensions
     public static IRequestExecutorBuilder AddShipmentsModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
         return builder
-            .RegisterDbContext<ShipmentDataViewContext>()
+            .RegisterDbContextFactory<ShipmentDataViewContext>()
             .AddType<ShipmentsViewResolver>();
     }
     

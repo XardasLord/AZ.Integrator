@@ -1,0 +1,19 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <TreatWarningsAsErrors Condition="'$(CI)'=='true'">true</TreatWarningsAsErrors>
+        <WarningsNotAsErrors>NU1603;NU1605</WarningsNotAsErrors>
+        
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    </PropertyGroup>
+
+    <!-- Przykład wspólnej wersji C# Analyzers (też spiąć w centralnych pakietach) -->
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" />
+    </ItemGroup>
+</Project>

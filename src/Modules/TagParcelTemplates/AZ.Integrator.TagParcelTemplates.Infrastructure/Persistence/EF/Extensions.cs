@@ -25,7 +25,7 @@ internal static class Extensions
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
         
-        services.AddDbContext<TagParcelTemplateDataViewContext>(options =>
+        services.AddPooledDbContextFactory<TagParcelTemplateDataViewContext>(options =>
         {
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)

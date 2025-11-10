@@ -66,7 +66,7 @@ public static class Extensions
     public static IRequestExecutorBuilder AddInvoicesModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
         return builder
-            .RegisterDbContext<InvoiceDataViewContext>()
+            .RegisterDbContextFactory<InvoiceDataViewContext>()
             .AddType<InvoicesViewResolver>();
     }
     

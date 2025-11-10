@@ -69,7 +69,7 @@ public static class Extensions
     public static IRequestExecutorBuilder AddCatalogModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
         return builder
-            .RegisterDbContext<CatalogDataViewContext>()
+            .RegisterDbContextFactory<CatalogDataViewContext>()
             .AddType<CatalogViewResolver>();
     }
     

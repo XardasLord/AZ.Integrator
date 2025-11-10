@@ -24,7 +24,7 @@ internal static class Extensions
             options.UseNpgsql(postgresOptions.ConnectionStringApplication);
         });
         
-        services.AddDbContext<StockDataViewContext>(options =>
+        services.AddPooledDbContextFactory<StockDataViewContext>(options =>
         {
             options.EnableDetailedErrors();
             options.UseNpgsql(postgresOptions.ConnectionStringApplication)

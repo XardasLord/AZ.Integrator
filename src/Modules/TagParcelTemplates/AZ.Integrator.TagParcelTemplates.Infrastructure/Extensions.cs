@@ -61,7 +61,7 @@ public static class Extensions
     public static IRequestExecutorBuilder AddTagParcelTemplatesModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
         return builder
-            .RegisterDbContext<TagParcelTemplateDataViewContext>()
+            .RegisterDbContextFactory<TagParcelTemplateDataViewContext>()
             .AddType<TagParcelTemplatesViewResolver>();
     }
     

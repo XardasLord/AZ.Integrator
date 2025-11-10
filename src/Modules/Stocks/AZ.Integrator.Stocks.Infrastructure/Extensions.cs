@@ -122,7 +122,7 @@ public static class Extensions
     public static IRequestExecutorBuilder AddStocksModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
         return builder
-            .RegisterDbContext<StockDataViewContext>()
+            .RegisterDbContextFactory<StockDataViewContext>()
             .AddType<StocksViewResolver>();
     }
     

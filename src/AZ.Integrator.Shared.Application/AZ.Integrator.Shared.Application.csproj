@@ -1,16 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
-        <PackageReference Include="Hangfire.Console" Version="1.4.3" />
-        <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+        <PackageReference Include="Ardalis.SmartEnum" />
+        <PackageReference Include="Hangfire.Console" />
+        <PackageReference Include="Mediator.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     </ItemGroup>
 
     <ItemGroup>

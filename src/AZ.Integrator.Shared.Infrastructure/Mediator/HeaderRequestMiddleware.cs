@@ -6,16 +6,23 @@ using Microsoft.AspNetCore.Http;
 
 namespace AZ.Integrator.Shared.Infrastructure.Mediator;
 
-public class HeaderRequestMiddleware<TRequest, TResponse>(IHttpContextAccessor httpContextAccessor, ICurrentUser currentUser)
-    : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull, IMessage
+public class HeaderRequestMiddleware<TRequest, TResponse>(
+    IHttpContextAccessor httpContextAccessor,
+    ICurrentUser currentUser)
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull, IMessage
 {
-    public async ValueTask<TResponse> Handle(TRequest request, CancellationToken cancellationToken, MessageHandlerDelegate<TRequest, TResponse> next)
+    public async ValueTask<TResponse> Handle(
+        TRequest request,
+        MessageHandlerDelegate<TRequest, TResponse> next,
+        CancellationToken cancellationToken)
     {
         var context = httpContextAccessor.HttpContext;
 
         if (request is not HeaderRequest headerRequest || context is null)
             return await next(request, cancellationToken);
         
+        // TODO: Can be removed after introduction of SourceSystemId
         var shopProviderHeader = context.Request.Headers["Az-Integrator-Shop-Provider"].ToString();
         if (Enum.TryParse<ShopProviderType>(shopProviderHeader, true, out var shopProvider))
         {

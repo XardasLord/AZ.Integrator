@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <RootNamespace>AZ.Integrator.Domain</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ardalis.GuardClauses" Version="5.0.0" />
-      <PackageReference Include="Ardalis.Specification" Version="8.0.0" />
-      <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
+      <PackageReference Include="Ardalis.GuardClauses" />
+      <PackageReference Include="Ardalis.Specification" />
+      <PackageReference Include="Mediator.Abstractions" />
     </ItemGroup>
 </Project>

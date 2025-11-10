@@ -96,7 +96,7 @@ public static class Extensions
     public static IRequestExecutorBuilder AddProcurementModuleGraphQlObjects(this IRequestExecutorBuilder builder)
     {
         return builder
-            .RegisterDbContext<ProcurementDataViewContext>()
+            .RegisterDbContextFactory<ProcurementDataViewContext>()
             .AddType<ProcurementViewResolver>();
     }
     

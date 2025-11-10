@@ -30,11 +30,11 @@ public static class Extensions
             .AddProjections()
             .AddFiltering()
             .AddSorting()
-            .SetPagingOptions(new PagingOptions
+            .ModifyPagingOptions(x =>
             {
-                IncludeTotalCount = true,
-                MaxPageSize = graphQlOptions.MaxPageSize,
-                DefaultPageSize = graphQlOptions.DefaultPageSize
+                x.IncludeTotalCount = true;
+                x.MaxPageSize = graphQlOptions.MaxPageSize;
+                x.DefaultPageSize = graphQlOptions.DefaultPageSize;
             })
             .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
     }
