@@ -2,8 +2,8 @@
 using AZ.Integrator.Domain.Extensions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.Events;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.ValueObjects;
-using AZ.Integrator.Shipments.Domain.Events.DomainEvents.DpdShipment;
 
 namespace AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
 

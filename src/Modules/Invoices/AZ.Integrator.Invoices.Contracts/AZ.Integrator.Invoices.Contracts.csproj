@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="DomainEvents\" />
+        <PackageReference Include="Mediator.Abstractions" />
     </ItemGroup>
 
 </Project>

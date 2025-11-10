@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Shipments.Application.UseCases.Shipments.JobCommands.GenerateInvoice;
 using Hangfire;
 using Mediator;
-using InpostShipmentRegisteredEvent = AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment.InpostShipmentRegistered;
+using InpostShipmentRegisteredEvent = AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.Events.InpostShipmentRegistered;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.EventHandlers.InpostShipmentRegistered;
 

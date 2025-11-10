@@ -2,7 +2,7 @@
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using Mediator;
 
-namespace AZ.Integrator.Shipments.Domain.Events.DomainEvents.DpdShipment;
+namespace AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.Events;
 
 public record DpdShipmentRegistered(
     long SessionNumber,

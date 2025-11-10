@@ -1,8 +1,8 @@
 ﻿using Mediator;
 
-namespace AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
+namespace AZ.Integrator.Shipments.Contracts.IntegrationEvents;
 
-public record InpostTrackingNumbersAssigned(
+public record InpostTrackingNumbersAssignedV1(
     string ShipmentNumber,
     string[] TrackingNumbers,
     string ExternalOrderNumber,

@@ -1,12 +1,11 @@
-﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
-using Mediator;
+﻿using Mediator;
 
-namespace AZ.Integrator.Invoices.Domain.Events;
+namespace AZ.Integrator.Invoices.Domain.Aggregates.Invoice.Events;
 
 public record InvoiceGenerated(
     string InvoiceExternalId,
     string InvoiceNumber,
-    ExternalOrderNumber ExternalOrderNumber,
+    string ExternalOrderNumber,
     int InvoiceProvider,
     Guid TenantId,
     string SourceSystemId) : INotification;

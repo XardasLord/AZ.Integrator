@@ -1,6 +1,6 @@
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
+using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.Events;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.ValueObjects;
-using AZ.Integrator.Shipments.Domain.Events.DomainEvents.DpdShipment;
 using DpdShipmentAggregate = AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.DpdShipment;
 
 namespace AZ.Integrator.Shipments.Domain.Tests.Aggregates.DpdShipment;

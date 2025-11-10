@@ -1,8 +1,8 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.Events;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
-using AZ.Integrator.Invoices.Domain.Events;
 
 namespace AZ.Integrator.Invoices.Domain.Aggregates.Invoice;
 

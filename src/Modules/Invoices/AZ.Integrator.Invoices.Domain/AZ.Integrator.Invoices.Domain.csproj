@@ -7,7 +7,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Domain\AZ.Integrator.Shared.Domain.csproj" />
-        <ProjectReference Include="..\AZ.Integrator.Invoices.Domain.Events\AZ.Integrator.Invoices.Domain.Events.csproj" />
     </ItemGroup>
 
     <ItemGroup>

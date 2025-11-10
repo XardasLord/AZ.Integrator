@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Domain.SharedKernel;
 
-namespace AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
+namespace AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.Events;
 
 public record InpostShipmentRegistered(
     string ShipmentNumber,

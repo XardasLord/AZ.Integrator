@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AZ.Integrator.Shipments.Domain\AZ.Integrator.Shipments.Domain.csproj" />
-      <ProjectReference Include="..\AZ.Integrator.Shipments.Domain.Events\AZ.Integrator.Shipments.Domain.Events.csproj" />
     </ItemGroup>
 
 </Project>

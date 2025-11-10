@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Domain.SharedKernel;
-using AZ.Integrator.Invoices.Domain.Events;
+using AZ.Integrator.Invoices.Contracts.IntegrationEvents;
 using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Allegro.AssignInvoice;
 using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Shopify.AssignInvoice;
 using Hangfire;
@@ -8,9 +8,9 @@ using Mediator;
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.EventHandlers.InvoiceCreated;
 
 public class AssignInvoiceToOrderInExternalSystem(IBackgroundJobClient backgroundJobClient) 
-    : INotificationHandler<InvoiceGenerated>
+    : INotificationHandler<InvoiceGeneratedV1>
 {
-    public ValueTask Handle(InvoiceGenerated notification, CancellationToken cancellationToken)
+    public ValueTask Handle(InvoiceGeneratedV1 notification, CancellationToken cancellationToken)
     {
         var shopProvider = ShopProviderHelper.GetShopProviderType(notification.SourceSystemId);
         

@@ -4,16 +4,16 @@ using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Erli.AssignTr
 using AZ.Integrator.Orders.Application.UseCases.Orders.JobCommands.Shopify.AssignTrackingNumbers;
 using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
-using AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
+using AZ.Integrator.Shipments.Contracts.IntegrationEvents;
 using Hangfire;
 using Mediator;
 
 namespace AZ.Integrator.Orders.Application.UseCases.Orders.EventHandlers.InpostTrackingNumberAssigned;
 
 public class AssignTrackingNumberInExternalSystem(IBackgroundJobClient backgroundJobClient)
-    : INotificationHandler<InpostTrackingNumbersAssigned>
+    : INotificationHandler<InpostTrackingNumbersAssignedV1>
 {
-    public ValueTask Handle(InpostTrackingNumbersAssigned notification, CancellationToken cancellationToken)
+    public ValueTask Handle(InpostTrackingNumbersAssignedV1 notification, CancellationToken cancellationToken)
     {
         var shopProvider = ShopProviderHelper.GetShopProviderType(notification.SourceSystemId);
 

@@ -1,6 +1,6 @@
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
+using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.Events;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.ValueObjects;
-using AZ.Integrator.Shipments.Domain.Events.DomainEvents.InpostShipment;
 using InpostShipmentAggregate = AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.InpostShipment;
 
 namespace AZ.Integrator.Shipments.Domain.Tests.Aggregates.InpostShipment;
