@@ -1,4 +1,5 @@
 ﻿using Ardalis.Specification;
+using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
 
 namespace AZ.Integrator.Invoices.Domain.Aggregates.Invoice.Specifications;
@@ -11,7 +12,7 @@ public sealed class InvoiceByNumberSpec : Specification<Invoice>, ISingleResultS
             .Where(x => x.ExternalId == int.Parse(invoiceId))
             .Where(x => x.ExternalOrderNumber == externalOrderNumber)
             .Where(x => x.InvoiceProvider == (InvoiceProvider)invoiceProvider)
-            .Where(x => x.CreationInformation.SourceSystemId.Value == sourceSystemId)
-            .Where(x => x.CreationInformation.TenantId.Value == tenantId);
+            .Where(x => x.CreationInformation.SourceSystemId == sourceSystemId)
+            .Where(x => x.CreationInformation.TenantId == new TenantId(tenantId));
     }
 }
