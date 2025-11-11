@@ -15,6 +15,7 @@ import { TenantHeadersInterceptor } from './interceptor/tenant-headers.intercept
 import { NotAuthorizedComponent } from './ui/not-authorized/not-authorized.component';
 import { HomeComponent } from './ui/home/home.component';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { FeatureFlagsService } from '../shared/feature-flags/services/feature-flags.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -41,6 +42,7 @@ export const MY_DATE_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
     AuthGuard,
+    FeatureFlagsService,
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandler,

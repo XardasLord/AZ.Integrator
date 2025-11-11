@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { Load } from './shared/feature-flags/store/feature-flags.action';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +10,10 @@ import { RouterOutlet } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet],
 })
-export class AppComponent {}
+export class AppComponent {
+  private store = inject(Store);
+
+  constructor() {
+    this.store.dispatch(new Load());
+  }
+}

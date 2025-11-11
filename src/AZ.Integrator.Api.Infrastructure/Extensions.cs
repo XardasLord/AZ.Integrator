@@ -17,6 +17,7 @@ using AZ.Integrator.Shared.Infrastructure.Time;
 using AZ.Integrator.Shipments.Infrastructure;
 using AZ.Integrator.Stocks.Infrastructure;
 using AZ.Integrator.Monitoring.Infrastructure;
+using AZ.Integrator.Platform.FeatureFlags.Infrastructure;
 using AZ.Integrator.Procurement.Infrastructure;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,8 @@ public static class Extensions
         services.AddIntegratorAuthentication(configuration);
         services.AddIntegratorAuthorization(configuration);
         services.AddIntegratorIdentity(configuration);
+
+        services.AddFeatureFlags(configuration);
         
         services.AddMediator(opt =>
         {

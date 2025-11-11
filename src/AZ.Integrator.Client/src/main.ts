@@ -23,6 +23,7 @@ import { HttpLink } from 'apollo-angular/http';
 import { environment } from './environments/environment';
 import { InMemoryCache } from '@apollo/client/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { FeatureFlagsState } from './app/shared/feature-flags/store/feature-flags.state.ts';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -54,7 +55,7 @@ bootstrapApplication(AppComponent, {
 
     provideAnimations(),
     provideNgxsStore(),
-    provideStates([DictionaryState]),
+    provideStates([DictionaryState, FeatureFlagsState]),
     provideGraphQL(),
   ],
 })

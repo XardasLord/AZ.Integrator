@@ -15,6 +15,7 @@
     </ItemGroup>
     
     <ItemGroup>
+        <ProjectReference Include="..\FeatureFlags\AZ.Integrator.Platform.FeatureFlags.Infrastructure\AZ.Integrator.Platform.FeatureFlags.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Invoices\AZ.Integrator.Invoices.Infrastructure\AZ.Integrator.Invoices.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Shipments\AZ.Integrator.Shipments.Infrastructure\AZ.Integrator.Shipments.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Stocks\AZ.Integrator.Stocks.Infrastructure\AZ.Integrator.Stocks.Infrastructure.csproj" />

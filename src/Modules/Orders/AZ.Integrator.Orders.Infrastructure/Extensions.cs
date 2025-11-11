@@ -7,6 +7,7 @@ using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
+using AZ.Integrator.Shared.Infrastructure.Filters;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -34,9 +35,12 @@ public static class Extensions
     {
         const string swaggerGroupName = "Orders";
         
-        var ordersGroup = endpoints.MapGroup("/api/orders").WithTags(swaggerGroupName).RequireAuthorization();
+        var ordersGroup = endpoints.MapGroup("/api/orders")
+            .WithTags(swaggerGroupName)
+            .RequireAuthorization();
         
-        ordersGroup.MapGet("/info", () => Results.Ok("Orders module")).AllowAnonymous();
+        ordersGroup.MapGet("/info", () => Results.Ok("Orders module"))
+            .AllowAnonymous();
         
         ordersGroup.MapGet("/", async ([AsParameters] GetAllQueryFilters filters, IMediator mediator, CancellationToken cancellationToken) =>
         {
