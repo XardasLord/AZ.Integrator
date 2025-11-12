@@ -18,6 +18,7 @@ using HotChocolate.Execution.Configuration;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,9 +61,9 @@ public static class Extensions
             return Results.File(result.ContentStream, result.ContentType, result.FileName);
         });
         
-        inpostShipmentGroup.MapGet("/label", async ([AsParameters] GetInpostLabelsRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+        inpostShipmentGroup.MapGet("/label", async ([FromQuery] string[] shipmentNumber, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            var result = await mediator.Send(new GetInpostLabelsQuery(request.ShipmentNumber), cancellationToken);
+            var result = await mediator.Send(new GetInpostLabelsQuery(shipmentNumber), cancellationToken);
             
             return Results.File(result.ContentStream, result.ContentType, result.FileName);
         });
