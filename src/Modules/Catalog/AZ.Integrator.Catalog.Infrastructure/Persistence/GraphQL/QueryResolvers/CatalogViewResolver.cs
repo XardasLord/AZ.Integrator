@@ -1,5 +1,7 @@
 ﻿using AZ.Integrator.Catalog.Contracts.FurnitureModels;
 using AZ.Integrator.Catalog.Infrastructure.Persistence.EF.View;
+using AZ.Integrator.Platform.FeatureFlags.Abstractions;
+using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using HotChocolate;
 using HotChocolate.Data;
@@ -10,6 +12,7 @@ namespace AZ.Integrator.Catalog.Infrastructure.Persistence.GraphQL.QueryResolver
 [ExtendObjectType(Name = nameof(IntegratorQuery))]
 public class CatalogViewResolver
 {
+    [RequireFeatureFlag(FeatureFlagCodes.ProcurementModule)]
     [UsePaging]
     [UseProjection]
     [UseFiltering]

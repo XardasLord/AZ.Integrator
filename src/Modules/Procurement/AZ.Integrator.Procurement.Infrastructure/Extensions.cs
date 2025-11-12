@@ -1,4 +1,5 @@
 using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Platform.FeatureFlags.Abstractions;
 using AZ.Integrator.Procurement.Application;
 using AZ.Integrator.Procurement.Application.Common.Email;
 using AZ.Integrator.Procurement.Application.UseCases.PartDefinitionsOrders;
@@ -13,6 +14,7 @@ using AZ.Integrator.Procurement.Infrastructure.Persistence.EF;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF.Domain;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.EF.View;
 using AZ.Integrator.Procurement.Infrastructure.Persistence.GraphQL.QueryResolvers;
+using AZ.Integrator.Shared.Infrastructure.Filters;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using HotChocolate.Execution.Configuration;
 using Mediator;
@@ -61,7 +63,8 @@ public static class Extensions
                 var response = await mediator.Send(command, cancellationToken);
             
                 return Results.Ok(response);
-            });
+            })
+            .RequireFeatureFlag(FeatureFlagCodes.ProcurementModule);
         
         suppliersGroup.MapPut("/{supplierId}", 
             async (int supplierId, UpdateSupplierRequest request, IMediator mediator, CancellationToken cancellationToken) =>
@@ -72,7 +75,8 @@ public static class Extensions
                 var response = await mediator.Send(command, cancellationToken);
             
                 return Results.Ok(response);
-            });
+            })
+            .RequireFeatureFlag(FeatureFlagCodes.ProcurementModule);
     }
     
     private static void MapOrderEndpoints(IEndpointRouteBuilder endpoints, string swaggerGroupName)
@@ -90,7 +94,8 @@ public static class Extensions
                 var response = await mediator.Send(command, cancellationToken);
             
                 return Results.Ok(response);
-            });
+            })
+            .RequireFeatureFlag(FeatureFlagCodes.ProcurementModule);
     }
 
     public static IRequestExecutorBuilder AddProcurementModuleGraphQlObjects(this IRequestExecutorBuilder builder)

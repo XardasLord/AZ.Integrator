@@ -1,1 +1,4 @@
-export type FeatureFlagsMapModel = Record<string, boolean>;
+export interface FeatureFlagsMapModel {
+  code: string;
+  enabled: boolean;
+}

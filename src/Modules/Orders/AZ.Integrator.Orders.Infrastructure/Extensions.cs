@@ -6,6 +6,7 @@ using AZ.Integrator.Orders.Contracts;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Shopify;
+using AZ.Integrator.Platform.FeatureFlags.Abstractions;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.Filters;
 using Mediator;
@@ -47,14 +48,16 @@ public static class Extensions
             var orders = await mediator.Send(new GetAllQuery(filters), cancellationToken);
                 
             return Results.Ok(orders);
-        });
+        })
+        .RequireFeatureFlag(FeatureFlagCodes.OrdersModule);
         
         ordersGroup.MapPut("/{orderId}", async (string orderId, IMediator mediator, CancellationToken cancellationToken) =>
         {
             var order = await mediator.Send(new GetDetailsQuery(orderId), cancellationToken);
                 
             return Results.Ok(order);
-        });
+        })
+        .RequireFeatureFlag(FeatureFlagCodes.OrdersModule);
         
         return endpoints;
     }

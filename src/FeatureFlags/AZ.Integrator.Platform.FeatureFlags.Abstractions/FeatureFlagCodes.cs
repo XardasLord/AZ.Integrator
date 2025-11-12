@@ -7,8 +7,8 @@ public static class FeatureFlagCodes
     public const string StocksModule = "stocks-module";
     public const string ProcurementModule = "procurement-module";
     
-    public const string StocksStatisticsEnabled = "stocks.statistics-enabled";
-    public const string StocksScanningBarcodes = "stocks.scanning-barcodes";
+    public const string StocksStatisticsModule = "stocks.statistics-module";
+    public const string StocksScanningBarcodesModule = "stocks.scanning-barcodes-module";
     
     public const string InvoicesAutoGeneration = "invoices.auto-generation";
     public const string InvoicesAllegroSync = "invoices.allegro-sync";

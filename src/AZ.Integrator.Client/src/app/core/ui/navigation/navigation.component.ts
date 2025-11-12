@@ -10,10 +10,11 @@ import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-rol
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { FeatureFlagDirective } from '../../../shared/feature-flags/directives/feature-flag.directive';
 import {
+  FeatureFlagCode_OrdersModule,
   FeatureFlagCode_ParcelTemplatesModule,
   FeatureFlagCode_ProcurementModule,
-  FeatureFlagCode_Stocks_ScanningBarcodes,
-  FeatureFlagCode_Stocks_Statistics,
+  FeatureFlagCode_Stocks_ScanningBarcodesModule,
+  FeatureFlagCode_Stocks_StatisticsModule,
   FeatureFlagCode_StocksModule,
 } from '../../../shared/feature-flags/models/feature-flags-codes.model';
 
@@ -60,7 +61,7 @@ export class NavigationComponent implements OnInit {
       icon: 'shopping_cart',
       route: RoutePaths.Orders,
       roles: [AuthRoles.Admin],
-      featureFlag: 'orders.list-enabled',
+      featureFlag: FeatureFlagCode_OrdersModule,
     },
     {
       title: 'Szablony paczek',
@@ -110,14 +111,14 @@ export class NavigationComponent implements OnInit {
       icon: 'bar_chart',
       route: RoutePaths.StocksStatistics,
       roles: [],
-      featureFlag: FeatureFlagCode_Stocks_Statistics,
+      featureFlag: FeatureFlagCode_Stocks_StatisticsModule,
     },
     {
       title: 'Skanowanie kodów',
       icon: 'qr_code_scanner',
       route: RoutePaths.BarcodeScanner,
       roles: [AuthRoles.ScannerIn, AuthRoles.ScannerOut],
-      featureFlag: FeatureFlagCode_Stocks_ScanningBarcodes,
+      featureFlag: FeatureFlagCode_Stocks_ScanningBarcodesModule,
     },
   ];
 

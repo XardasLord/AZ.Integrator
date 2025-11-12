@@ -2,7 +2,6 @@
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using HotChocolate.AspNetCore;
 using HotChocolate.Execution.Configuration;
-using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;

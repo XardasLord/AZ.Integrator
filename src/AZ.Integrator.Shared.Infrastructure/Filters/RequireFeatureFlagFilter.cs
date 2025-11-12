@@ -7,7 +7,7 @@ namespace AZ.Integrator.Shared.Infrastructure.Filters;
 
 public sealed class RequireFeatureFlagFilter(string flagCode) : IEndpointFilter
 {
-    public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
+    public async ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
         var sp = context.HttpContext.RequestServices;
         var flags = sp.GetRequiredService<IFeatureFlags>();

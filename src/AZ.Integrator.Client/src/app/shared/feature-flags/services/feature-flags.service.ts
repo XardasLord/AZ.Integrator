@@ -25,8 +25,6 @@ export class FeatureFlagsService extends RemoteServiceBase {
   public isEnabled(featureFlag: string): boolean {
     const featureFlags = this.store.selectSnapshot(FeatureFlagsState.getFeatureFlags);
 
-    console.log(featureFlag, featureFlags);
-
-    return featureFlags.some(flagsMap => flagsMap[featureFlag]);
+    return featureFlags.some(ff => ff.code === featureFlag && ff.enabled);
   }
 }

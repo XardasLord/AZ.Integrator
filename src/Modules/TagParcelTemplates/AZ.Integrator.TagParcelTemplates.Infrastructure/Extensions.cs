@@ -1,11 +1,7 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Platform.FeatureFlags.Abstractions;
+using AZ.Integrator.Shared.Infrastructure.Filters;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
-using AZ.Integrator.Stocks.Application.UseCases.AddStockGroup;
-using AZ.Integrator.Stocks.Application.UseCases.ChangeQuantity;
-using AZ.Integrator.Stocks.Application.UseCases.ChangeStockGroup;
-using AZ.Integrator.Stocks.Application.UseCases.ChangeStockThreshold;
-using AZ.Integrator.Stocks.Application.UseCases.RevertScanLog;
-using AZ.Integrator.Stocks.Application.UseCases.UpdateStockGroup;
 using AZ.Integrator.TagParcelTemplates.Application;
 using AZ.Integrator.TagParcelTemplates.Application.UseCases.Commands.SaveParcelTemplate;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
@@ -17,7 +13,6 @@ using HotChocolate.Execution.Configuration;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +34,9 @@ public static class Extensions
     {
         const string swaggerGroupName = "Parcel templates";
         
-        var parcelTemplates = endpoints.MapGroup("/api/parcelTemplates").WithTags(swaggerGroupName).RequireAuthorization();
+        var parcelTemplates = endpoints.MapGroup("/api/parcelTemplates")
+            .WithTags(swaggerGroupName)
+            .RequireAuthorization();
         
         parcelTemplates.MapGet("/info", () => Results.Ok("Parcel Templates module")).AllowAnonymous();
         
@@ -53,7 +50,8 @@ public static class Extensions
             await mediator.Send(command, cancellationToken);
             
             return Results.NoContent();
-        });
+        })
+        .RequireFeatureFlag(FeatureFlagCodes.ParcelTemplatesModule);
         
         return endpoints;
     }

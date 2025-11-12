@@ -1,4 +1,6 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Platform.FeatureFlags.Abstractions;
+using AZ.Integrator.Shared.Infrastructure.Filters;
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using AZ.Integrator.Stocks.Application;
 using AZ.Integrator.Stocks.Application.UseCases.AddStockGroup;
@@ -53,7 +55,8 @@ public static class Extensions
             await mediator.Send(command, cancellationToken);
             
             return Results.NoContent();
-        });
+        })
+        .RequireFeatureFlag(FeatureFlagCodes.StocksScanningBarcodesModule);
         
         stocks.MapPut("/group/{*packageCode}", async (string packageCode, ChangeStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) =>
         {
@@ -65,7 +68,8 @@ public static class Extensions
             await mediator.Send(command, cancellationToken);
             
             return Results.NoContent();
-        });
+        })
+        .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
         
         stocks.MapPut("/threshold/{*packageCode}", async (string packageCode, ChangeStockThresholdCommand command, IMediator mediator, CancellationToken cancellationToken) => 
         {
@@ -77,7 +81,8 @@ public static class Extensions
             await mediator.Send(command, cancellationToken);
             
             return Results.NoContent();
-        });
+        })
+        .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
 
         endpoints.MapDelete("/api/stock-logs/{scanLogId}", async (int scanLogId, [FromBody] RevertScanLogCommand command,
             IMediator mediator, CancellationToken cancellationToken) => 
@@ -92,7 +97,8 @@ public static class Extensions
                 return Results.NoContent();
             })
             .WithTags(swaggerGroupName)
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .RequireFeatureFlag(FeatureFlagCodes.StocksScanningBarcodesModule);
         
         endpoints.MapPost("/api/stock-groups", async (AddStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
             {
@@ -101,7 +107,8 @@ public static class Extensions
                 return Results.Created($"/api/stock-groups/{stockGroupId}", new { Id = stockGroupId });
             })
             .WithTags(swaggerGroupName)
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
         
         endpoints.MapPut("/api/stock-groups/{groupId}", async (int groupId, UpdateStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
             {
@@ -114,7 +121,8 @@ public static class Extensions
                 return Results.NoContent();
             })
             .WithTags(swaggerGroupName)
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
         
         return endpoints;
     }

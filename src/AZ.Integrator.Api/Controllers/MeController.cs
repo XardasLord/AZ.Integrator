@@ -12,18 +12,16 @@ namespace AZ.Integrator.Api.Controllers;
 public class MeController(FeatureFlagsDbContext dbContext, ICurrentUser currentUser) : ControllerBase
 {
     [HttpGet("feature-flags")]
-    public async Task<IActionResult> Get(CancellationToken ct)
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
         var data = await dbContext.TenantFeatureFlags
             .Where(x => x.TenantId == currentUser.TenantId)
             .Select(x => new
             {
                 x.Code,
-                x.Enabled,
-                x.ModifiedAt,
-                x.ModifiedBy
+                x.Enabled
             })
-            .ToListAsync(ct);
+            .ToListAsync(cancellationToken);
         
         return Ok(data);
     }
