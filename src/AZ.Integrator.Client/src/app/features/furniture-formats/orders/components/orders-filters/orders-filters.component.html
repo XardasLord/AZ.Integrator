@@ -1,13 +1,9 @@
 <mat-form-field class="search-field" appearance="outline">
-  <mat-label>Szukaj kodu mebla</mat-label>
+  <mat-label>Szukaj zamówienia</mat-label>
   <input matInput [formControl]="searchControl" placeholder="Wpisz numer zamówienia..." />
   <mat-icon matPrefix>search</mat-icon>
   @if (searchControl.value) {
-    <button
-      matSuffix
-      mat-icon-button
-      aria-label="Wyczyść"
-      (click)="searchControl.setValue('')">
+    <button matSuffix mat-icon-button aria-label="Wyczyść" (click)="searchControl.setValue('')">
       <mat-icon>close</mat-icon>
     </button>
   }
