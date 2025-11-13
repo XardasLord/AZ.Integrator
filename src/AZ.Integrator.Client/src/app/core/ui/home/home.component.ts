@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { Store } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
 import { AuthState } from '../../../shared/states/auth.state';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
-import { RoutePaths } from '../../modules/app-routing.module';
-import { MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { DatePipe } from '@angular/common';
+import { MarketplaceRoutePath, StocksRoutePath } from '../../modules/app-routing.module';
 
 @Component({
   selector: 'app-home',
@@ -23,13 +23,13 @@ export class HomeComponent {
     const roles = this.store.selectSnapshot(AuthState.getUserRoles);
 
     if (roles.includes(AuthRoles.MasterAdmin)) {
-      this.store.dispatch(new Navigate([RoutePaths.Orders]));
+      this.store.dispatch(new Navigate([MarketplaceRoutePath.Orders]));
     } else if (roles.includes(AuthRoles.Admin)) {
-      this.store.dispatch(new Navigate([RoutePaths.Orders]));
+      this.store.dispatch(new Navigate([MarketplaceRoutePath.Orders]));
     } else if (roles.includes(AuthRoles.ScannerIn)) {
-      this.store.dispatch(new Navigate([RoutePaths.BarcodeScanner]));
+      this.store.dispatch(new Navigate([StocksRoutePath.BarcodeScanner]));
     } else if (roles.includes(AuthRoles.ScannerOut)) {
-      this.store.dispatch(new Navigate([RoutePaths.BarcodeScanner]));
+      this.store.dispatch(new Navigate([StocksRoutePath.BarcodeScanner]));
     }
   }
 }

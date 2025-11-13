@@ -45,19 +45,6 @@ public static class Extensions
         
         stocks.MapGet("/info", () => Results.Ok("Stocks module")).AllowAnonymous();
         
-        stocks.MapPut("/{*packageCode}", async (string packageCode, ChangeQuantityCommand command, IMediator mediator, CancellationToken cancellationToken) =>
-        {
-            command = command with
-            {
-                PackageCode = packageCode
-            };
-            
-            await mediator.Send(command, cancellationToken);
-            
-            return Results.NoContent();
-        })
-        .RequireFeatureFlag(FeatureFlagCodes.StocksScanningBarcodesModule);
-        
         stocks.MapPut("/group/{*packageCode}", async (string packageCode, ChangeStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) =>
         {
             command = command with
@@ -69,7 +56,7 @@ public static class Extensions
             
             return Results.NoContent();
         })
-        .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
+        .RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule);
         
         stocks.MapPut("/threshold/{*packageCode}", async (string packageCode, ChangeStockThresholdCommand command, IMediator mediator, CancellationToken cancellationToken) => 
         {
@@ -82,7 +69,34 @@ public static class Extensions
             
             return Results.NoContent();
         })
-        .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
+        .RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule);
+        
+        endpoints.MapPut("/api/stock-groups/{groupId}", async (int groupId, UpdateStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
+            {
+                command = command with
+                {
+                    GroupId = groupId
+                };
+                
+                await mediator.Send(command, cancellationToken);
+                return Results.NoContent();
+            })
+            .WithTags(swaggerGroupName)
+            .RequireAuthorization()
+            .RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule);
+        
+        stocks.MapPut("/{*packageCode}", async (string packageCode, ChangeQuantityCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                command = command with
+                {
+                    PackageCode = packageCode
+                };
+            
+                await mediator.Send(command, cancellationToken);
+            
+                return Results.NoContent();
+            })
+            .RequireFeatureFlag(FeatureFlagCodes.WarehouseScanningBarcodesModule);
 
         endpoints.MapDelete("/api/stock-logs/{scanLogId}", async (int scanLogId, [FromBody] RevertScanLogCommand command,
             IMediator mediator, CancellationToken cancellationToken) => 
@@ -98,7 +112,7 @@ public static class Extensions
             })
             .WithTags(swaggerGroupName)
             .RequireAuthorization()
-            .RequireFeatureFlag(FeatureFlagCodes.StocksScanningBarcodesModule);
+            .RequireFeatureFlag(FeatureFlagCodes.WarehouseScanningBarcodesModule);
         
         endpoints.MapPost("/api/stock-groups", async (AddStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
             {
@@ -108,21 +122,7 @@ public static class Extensions
             })
             .WithTags(swaggerGroupName)
             .RequireAuthorization()
-            .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
-        
-        endpoints.MapPut("/api/stock-groups/{groupId}", async (int groupId, UpdateStockGroupCommand command, IMediator mediator, CancellationToken cancellationToken) => 
-            {
-                command = command with
-                {
-                    GroupId = groupId
-                };
-                
-                await mediator.Send(command, cancellationToken);
-                return Results.NoContent();
-            })
-            .WithTags(swaggerGroupName)
-            .RequireAuthorization()
-            .RequireFeatureFlag(FeatureFlagCodes.StocksModule);
+            .RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule);
         
         return endpoints;
     }

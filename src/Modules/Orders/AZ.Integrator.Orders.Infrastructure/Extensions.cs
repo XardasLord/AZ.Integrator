@@ -49,7 +49,7 @@ public static class Extensions
                 
             return Results.Ok(orders);
         })
-        .RequireFeatureFlag(FeatureFlagCodes.OrdersModule);
+        .RequireFeatureFlag(FeatureFlagCodes.MarketplaceOrdersModule);
         
         ordersGroup.MapPut("/{orderId}", async (string orderId, IMediator mediator, CancellationToken cancellationToken) =>
         {
@@ -57,7 +57,7 @@ public static class Extensions
                 
             return Results.Ok(order);
         })
-        .RequireFeatureFlag(FeatureFlagCodes.OrdersModule);
+        .RequireFeatureFlag(FeatureFlagCodes.MarketplaceOrdersModule);
         
         return endpoints;
     }

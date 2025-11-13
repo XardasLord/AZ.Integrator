@@ -26,7 +26,7 @@
               @if (isExpanded(item) && sidenav.opened) {
                 <div class="sub-items">
                   @for (subItem of item.subItems; track subItem) {
-                    <ng-container *appFf="item.featureFlag">
+                    <ng-container *appFf="subItem.featureFlag">
                       <mat-list-item
                         [routerLink]="subItem.route"
                         routerLinkActive="active-route"

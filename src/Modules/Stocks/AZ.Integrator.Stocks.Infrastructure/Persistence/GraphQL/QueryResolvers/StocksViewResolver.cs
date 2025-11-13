@@ -11,21 +11,21 @@ namespace AZ.Integrator.Stocks.Infrastructure.Persistence.GraphQL.QueryResolvers
 [ExtendObjectType(Name = nameof(IntegratorQuery))]
 public class StocksViewResolver()
 {
-    [RequireFeatureFlag(FeatureFlagCodes.StocksModule)]
+    [RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule)]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<StockViewModel> GetStocks(StockDataViewContext dataViewContext) 
         => dataViewContext.Stocks.AsQueryable();
 
-    [RequireFeatureFlag(FeatureFlagCodes.StocksModule)]
+    [RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule)]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<StockGroupViewModel> GetStockGroups(StockDataViewContext dataViewContext) 
         => dataViewContext.StockGroups.AsQueryable();
 
-    [RequireFeatureFlag(FeatureFlagCodes.StocksScanningBarcodesModule)]
+    [RequireFeatureFlag(FeatureFlagCodes.WarehouseScanningBarcodesModule)]
     [UseProjection]
     [UseFiltering]
     [UseSorting]

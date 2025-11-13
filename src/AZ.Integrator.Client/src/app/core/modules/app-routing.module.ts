@@ -26,11 +26,17 @@ export const RoutePaths = {
   Login: 'login',
   LoginCompleted: 'login-completed',
   Home: 'home',
-  Orders: 'orders',
-  ParcelTemplates: 'parcel-templates',
-  Stocks: 'stocks',
-  StocksStatistics: 'stocks-statistics',
-  BarcodeScanner: 'barcode-scanner',
+};
+
+export const MarketplaceRoutePath = {
+  Orders: 'marketplace/orders',
+  ParcelTemplates: 'marketplace/parcel-templates',
+};
+
+export const StocksRoutePath = {
+  Stocks: 'warehouse/stocks',
+  Statistics: 'warehouse/stocks-statistics',
+  BarcodeScanner: 'warehouse/barcode-scanner',
 };
 
 export const FurnitureFormatsRoutePath = {
@@ -63,7 +69,7 @@ const routes: Routes = [
         component: NotAuthorizedComponent,
       },
       {
-        path: RoutePaths.Orders,
+        path: MarketplaceRoutePath.Orders,
         loadChildren: () => import('../../features/orders/orders.module').then(m => m.OrdersModule),
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
@@ -71,7 +77,7 @@ const routes: Routes = [
         }),
       },
       {
-        path: RoutePaths.ParcelTemplates,
+        path: MarketplaceRoutePath.ParcelTemplates,
         loadChildren: () =>
           import('../../features/package-templates/parcel-templates.module').then(m => m.ParcelTemplatesModule),
         canActivate: mapToCanActivate([AuthGuard]),
@@ -79,8 +85,9 @@ const routes: Routes = [
           allowRoles: [AuthRoles.Admin],
         }),
       },
+
       {
-        path: RoutePaths.Stocks,
+        path: StocksRoutePath.Stocks,
         loadComponent: () => import('../../features/stocks/pages/stocks/stocks.component').then(c => c.StocksComponent),
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
@@ -89,7 +96,7 @@ const routes: Routes = [
         providers: [provideStates([StocksState]), StocksService, StockGroupsService],
       },
       {
-        path: RoutePaths.StocksStatistics,
+        path: StocksRoutePath.Statistics,
         loadComponent: () =>
           import('../../features/stocks/pages/stocks-statistics/stocks-statistics.component').then(
             c => c.StocksStatisticsComponent
@@ -100,6 +107,19 @@ const routes: Routes = [
         }),
         providers: [provideStates([StockLogsState]), StocksService],
       },
+      {
+        path: StocksRoutePath.BarcodeScanner,
+        loadComponent: () =>
+          import('../../features/stocks/pages/barcode-scanner-page/barcode-scanner-page.component').then(
+            c => c.BarcodeScannerPageComponent
+          ),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.ScannerIn, AuthRoles.ScannerOut],
+        }),
+        providers: [provideStates([BarcodeScannerState]), StocksService],
+      },
+
       {
         path: FurnitureFormatsRoutePath.Formats,
         loadComponent: () =>
@@ -155,18 +175,6 @@ const routes: Routes = [
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],
         }),
-      },
-      {
-        path: RoutePaths.BarcodeScanner,
-        loadComponent: () =>
-          import('../../features/stocks/pages/barcode-scanner-page/barcode-scanner-page.component').then(
-            c => c.BarcodeScannerPageComponent
-          ),
-        canActivate: mapToCanActivate([AuthGuard]),
-        data: new RouteAuthVo({
-          allowRoles: [AuthRoles.ScannerIn, AuthRoles.ScannerOut],
-        }),
-        providers: [provideStates([BarcodeScannerState]), StocksService],
       },
     ],
   },

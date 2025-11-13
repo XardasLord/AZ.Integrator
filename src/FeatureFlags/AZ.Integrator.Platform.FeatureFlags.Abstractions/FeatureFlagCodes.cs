@@ -2,13 +2,16 @@
 
 public static class FeatureFlagCodes
 {
-    public const string OrdersModule = "orders-module";
-    public const string ParcelTemplatesModule = "parcel-templates-module";
-    public const string StocksModule = "stocks-module";
-    public const string ProcurementModule = "procurement-module";
+    public const string MarketplaceModule = "marketplace-module";
+    public const string MarketplaceOrdersModule = "marketplace.orders-module";
+    public const string MarketplaceParcelTemplatesModule = "marketplace.parcel-templates-module";
     
-    public const string StocksStatisticsModule = "stocks.statistics-module";
-    public const string StocksScanningBarcodesModule = "stocks.scanning-barcodes-module";
+    public const string WarehouseModule = "warehouse-module";
+    public const string WarehouseStocksModule = "warehouse.stocks-module";
+    public const string WarehouseStatisticsModule = "warehouse.statistics-module";
+    public const string WarehouseScanningBarcodesModule = "warehouse.scanning-barcodes-module";
+    
+    public const string ProcurementModule = "procurement-module";
     
     public const string InvoicesAutoGeneration = "invoices.auto-generation";
     public const string InvoicesAllegroSync = "invoices.allegro-sync";

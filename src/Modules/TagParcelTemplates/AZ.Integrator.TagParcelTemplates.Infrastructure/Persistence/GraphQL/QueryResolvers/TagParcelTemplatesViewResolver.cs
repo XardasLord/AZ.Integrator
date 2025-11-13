@@ -11,7 +11,7 @@ namespace AZ.Integrator.TagParcelTemplates.Infrastructure.Persistence.GraphQL.Qu
 [ExtendObjectType(Name = nameof(IntegratorQuery))]
 public class TagParcelTemplatesViewResolver
 {
-    [RequireFeatureFlag(FeatureFlagCodes.ParcelTemplatesModule)]
+    [RequireFeatureFlag(FeatureFlagCodes.MarketplaceParcelTemplatesModule)]
     [UsePaging]
     [UseProjection]
     [UseFiltering]

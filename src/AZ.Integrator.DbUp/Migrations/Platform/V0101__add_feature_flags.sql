@@ -1,14 +1,18 @@
 START TRANSACTION;
 
 INSERT INTO platform.feature_flags (code, description) VALUES
-                                                           
-    ('orders-module', 'Enable the orders module'),
-    ('parcel-templates-module', 'Enable the parcel templates module'),
-    ('stocks-module', 'Enable the stocks module'),
-    ('procurement-module', 'Enable the procurements module'),
+
+
+    ('marketplace-module', 'Enable the marketplace module'),
+    ('marketplace.orders-module', 'Enable the orders module'),
+    ('marketplace.parcel-templates-module', 'Enable the parcel templates module'),
+
+    ('warehouse-module', 'Enable the warehouse module'),
+    ('warehouse.stocks-module', 'Enable the warehouse stocks module'),
+    ('warehouse.statistics-module', 'Enable the warehouse statistics module'),
+    ('warehouse.scanning-barcodes-module', 'Enable the warehouse barcodes scanning module'),
     
-    ('stocks.statistics-module', 'Enable stocks statistics module'),
-    ('stocks.scanning-barcodes-module', 'Enable stocks statistics module'),
+    ('procurement-module', 'Enable the procurements module'),
     
     ('invoices.auto-generation', 'Enable automatic generation of invoices'),
     ('invoices.allegro-sync', 'Enable invoice synchronization with Allegro'),

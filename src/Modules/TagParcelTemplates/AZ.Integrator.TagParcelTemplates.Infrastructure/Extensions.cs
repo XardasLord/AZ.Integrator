@@ -51,7 +51,7 @@ public static class Extensions
             
             return Results.NoContent();
         })
-        .RequireFeatureFlag(FeatureFlagCodes.ParcelTemplatesModule);
+        .RequireFeatureFlag(FeatureFlagCodes.MarketplaceParcelTemplatesModule);
         
         return endpoints;
     }

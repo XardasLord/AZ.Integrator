@@ -2,7 +2,12 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { FurnitureFormatsRoutePath, RoutePaths } from '../../modules/app-routing.module';
+import {
+  FurnitureFormatsRoutePath,
+  MarketplaceRoutePath,
+  RoutePaths,
+  StocksRoutePath,
+} from '../../modules/app-routing.module';
 import { environment } from '../../../../environments/environment';
 import { AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
@@ -10,12 +15,14 @@ import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-rol
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { FeatureFlagDirective } from '../../../shared/feature-flags/directives/feature-flag.directive';
 import {
-  FeatureFlagCode_OrdersModule,
-  FeatureFlagCode_ParcelTemplatesModule,
+  FeatureFlagCode_Marketplace_OrdersModule,
+  FeatureFlagCode_Marketplace_ParcelTemplatesModule,
+  FeatureFlagCode_MarketplaceModule,
   FeatureFlagCode_ProcurementModule,
-  FeatureFlagCode_Stocks_ScanningBarcodesModule,
-  FeatureFlagCode_Stocks_StatisticsModule,
-  FeatureFlagCode_StocksModule,
+  FeatureFlagCode_Warehouse_ScanningBarcodesModule,
+  FeatureFlagCode_Warehouse_StatisticsModule,
+  FeatureFlagCode_Warehouse_StocksModule,
+  FeatureFlagCode_WarehouseModule,
 } from '../../../shared/feature-flags/models/feature-flags-codes.model';
 
 export type NavigationItem = {
@@ -56,26 +63,58 @@ export class NavigationComponent implements OnInit {
       route: RoutePaths.Home,
       roles: [],
     },
+
     {
-      title: 'Zamówienia',
-      icon: 'shopping_cart',
-      route: RoutePaths.Orders,
+      title: 'Sklep i wysyłka',
+      icon: 'storefront',
       roles: [AuthRoles.Admin],
-      featureFlag: FeatureFlagCode_OrdersModule,
+      featureFlag: FeatureFlagCode_MarketplaceModule,
+      subItems: [
+        {
+          title: 'Zamówienia',
+          icon: 'shopping_cart',
+          route: MarketplaceRoutePath.Orders,
+          roles: [AuthRoles.Admin],
+          featureFlag: FeatureFlagCode_Marketplace_OrdersModule,
+        },
+        {
+          title: 'Szablony paczek',
+          icon: 'inventory',
+          route: MarketplaceRoutePath.ParcelTemplates,
+          roles: [AuthRoles.Admin],
+          featureFlag: FeatureFlagCode_Marketplace_ParcelTemplatesModule,
+        },
+      ],
     },
+
     {
-      title: 'Szablony paczek',
-      icon: 'inventory',
-      route: RoutePaths.ParcelTemplates,
-      roles: [AuthRoles.Admin],
-      featureFlag: FeatureFlagCode_ParcelTemplatesModule,
-    },
-    {
-      title: 'Stany magazynowe',
+      title: 'Magazyn',
       icon: 'warehouse',
-      route: RoutePaths.Stocks,
       roles: [AuthRoles.Admin],
-      featureFlag: FeatureFlagCode_StocksModule,
+      featureFlag: FeatureFlagCode_WarehouseModule,
+      subItems: [
+        {
+          title: 'Stany magazynowe',
+          icon: 'inventory',
+          route: StocksRoutePath.Stocks,
+          roles: [AuthRoles.Admin],
+          featureFlag: FeatureFlagCode_Warehouse_StocksModule,
+        },
+        {
+          title: 'Skanowanie kodów',
+          icon: 'qr_code_scanner',
+          route: StocksRoutePath.BarcodeScanner,
+          roles: [AuthRoles.ScannerIn, AuthRoles.ScannerOut],
+          featureFlag: FeatureFlagCode_Warehouse_ScanningBarcodesModule,
+        },
+        {
+          title: 'Statystyki',
+          icon: 'bar_chart',
+          route: StocksRoutePath.Statistics,
+          roles: [],
+          featureFlag: FeatureFlagCode_Warehouse_StatisticsModule,
+        },
+      ],
     },
     {
       title: 'Zarządzanie formatkami',
@@ -105,20 +144,6 @@ export class NavigationComponent implements OnInit {
           featureFlag: FeatureFlagCode_ProcurementModule,
         },
       ],
-    },
-    {
-      title: 'Statystyki',
-      icon: 'bar_chart',
-      route: RoutePaths.StocksStatistics,
-      roles: [],
-      featureFlag: FeatureFlagCode_Stocks_StatisticsModule,
-    },
-    {
-      title: 'Skanowanie kodów',
-      icon: 'qr_code_scanner',
-      route: RoutePaths.BarcodeScanner,
-      roles: [AuthRoles.ScannerIn, AuthRoles.ScannerOut],
-      featureFlag: FeatureFlagCode_Stocks_ScanningBarcodesModule,
     },
   ];
 
