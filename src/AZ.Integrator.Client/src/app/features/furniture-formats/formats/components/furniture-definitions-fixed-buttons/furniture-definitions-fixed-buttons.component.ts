@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Store } from '@ngxs/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FurnitureDefinitionFormDialogComponent } from '../furniture-definition-form-dialog/furniture-definition-form-dialog.component';
 import { LoadFurnitureDefinitions } from '../../states/formats.action';
@@ -19,6 +20,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class FurnitureDefinitionsFixedButtonsComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   openAddDialog(): void {
     const dialogRef = this.dialog.open(FurnitureDefinitionFormDialogComponent, {
@@ -27,11 +29,14 @@ export class FurnitureDefinitionsFixedButtonsComponent {
       data: null,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Refresh handled by state
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          // Refresh handled by state
+        }
+      });
   }
 
   refreshList() {

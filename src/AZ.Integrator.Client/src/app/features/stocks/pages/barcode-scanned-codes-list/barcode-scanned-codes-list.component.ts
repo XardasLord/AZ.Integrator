@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -8,6 +8,7 @@ import { StockLogStatus, StockLogViewModel } from '../../../../shared/graphql/gr
 import { BarcodeScannerState } from '../../states/barcode-scanner.state';
 import { BarcodeScannerType } from '../barcode-scanner/barcode-scanner.component';
 import { ConfirmScanRevertDialogComponent } from '../../components/convert-scan-revert-dialog/confirm-scan-revert-dialog.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-barcode-scanned-codes-list',
@@ -19,6 +20,7 @@ import { ConfirmScanRevertDialogComponent } from '../../components/convert-scan-
 export class BarcodeScannedCodesListComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   @Input() type!: BarcodeScannerType;
 
@@ -33,11 +35,14 @@ export class BarcodeScannedCodesListComponent implements OnInit {
       data: { packageCode: log.packageCode },
     });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.revertScanLog(log);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.revertScanLog(log);
+        }
+      });
   }
 
   revertScanLog(log: StockLogViewModel): void {

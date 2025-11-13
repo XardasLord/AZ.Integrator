@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDrag, CdkDragDrop, CdkDropList, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Store } from '@ngxs/store';
 import { map, Observable } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SharedModule } from '../../../../shared/shared.module';
 import {
   ChangeGroup,
@@ -30,6 +31,7 @@ import { StockThresholdFormDialogResponseModel } from '../../components/stock-th
 export class StocksListComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   groups$: Observable<StockGroupViewModel[]> = this.store.select(StocksState.groupedStocks);
   connectedDropLists$: Observable<string[]> = this.groups$.pipe(map(groups => groups.map(g => `group-${g.id}`)));
@@ -49,13 +51,16 @@ export class StocksListComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: StockGroupFormDialogResponseModel) => {
-      if (!result) {
-        return;
-      }
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: StockGroupFormDialogResponseModel) => {
+        if (!result) {
+          return;
+        }
 
-      this.store.dispatch(new UpdateStockGroup(group.id, result.name, result.description));
-    });
+        this.store.dispatch(new UpdateStockGroup(group.id, result.name, result.description));
+      });
   }
 
   editThreshold(stock: StockViewModel) {
@@ -67,13 +72,16 @@ export class StocksListComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: StockThresholdFormDialogResponseModel) => {
-      if (!result) {
-        return;
-      }
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: StockThresholdFormDialogResponseModel) => {
+        if (!result) {
+          return;
+        }
 
-      this.store.dispatch(new ChangeThreshold(stock.packageCode, result.threshold));
-    });
+        this.store.dispatch(new ChangeThreshold(stock.packageCode, result.threshold));
+      });
   }
 
   onDropPackageCodeToGroup(event: CdkDragDrop<StockViewModel[]>, targetGroupId: number) {

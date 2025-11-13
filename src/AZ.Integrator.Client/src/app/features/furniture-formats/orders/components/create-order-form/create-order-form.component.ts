@@ -1,9 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialModule } from '../../../../../shared/modules/material.module';
 import { FurnitureSelectorComponent } from '../furniture-selector/furniture-selector.component';
 import { OrderFormGroup } from '../../models/order-form-group.model';
@@ -41,6 +42,7 @@ export class CreateOrderFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   orderForm!: FormGroup<OrderFormGroup>;
   suppliers$: Observable<SupplierViewModel[]> = this.store.select(SuppliersState.getSuppliers);
@@ -204,11 +206,14 @@ export class CreateOrderFormComponent implements OnInit {
         },
       });
 
-      dialogRef.afterClosed().subscribe(confirmed => {
-        if (confirmed) {
-          this.submitOrder(formValue);
-        }
-      });
+      dialogRef
+        .afterClosed()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(confirmed => {
+          if (confirmed) {
+            this.submitOrder(formValue);
+          }
+        });
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
@@ -9,6 +9,7 @@ import { ChangePage, DeleteSupplier, LoadSuppliers } from '../../states/supplier
 import { SupplierFormDialogComponent } from '../supplier-form-dialog/supplier-form-dialog.component';
 import { ScrollTableComponent } from '../../../../../shared/ui/wrappers/scroll-table/scroll-table.component';
 import { SupplierViewModel } from '../../../../../shared/graphql/graphql-integrator.schema';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-suppliers-list',
@@ -20,6 +21,7 @@ import { SupplierViewModel } from '../../../../../shared/graphql/graphql-integra
 export class SuppliersListComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   displayedColumns: string[] = ['name', 'telephoneNumber', 'mailboxesCount', 'actions'];
   suppliers$ = this.store.select(SuppliersState.getSuppliers);
@@ -42,11 +44,14 @@ export class SuppliersListComponent implements OnInit {
       data: supplier,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Refresh handled by state
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          // Refresh handled by state
+        }
+      });
   }
 
   deleteSupplier(supplierId: number): void {

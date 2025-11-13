@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   FormArray,
@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { filter, map } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CreateShipmentCommand, Parcel } from '../../models/commands/create-shipment.command';
 import { RegisterParcelFormGroupModel } from '../../models/register-parcel-form-group.model';
 import { RegisterDpdShipment, RegisterInpostShipment } from '../../states/orders.action';
@@ -30,12 +31,19 @@ import { GetTagParcelTemplatesGQL } from '../../../package-templates/graphql-que
   styleUrls: ['./register-shipment-modal.component.scss'],
   imports: [MaterialModule, FormsModule, ReactiveFormsModule, MatError],
 })
-export class RegisterShipmentModalComponent {
+export class RegisterShipmentModalComponent implements OnDestroy {
   dialogRef = inject<MatDialogRef<RegisterShipmentModalComponent>>(MatDialogRef);
   data = inject<RegisterShipmentDataModel>(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
   private store = inject(Store);
   private tagParcelTemplatesGql = inject(GetTagParcelTemplatesGQL);
+  private destroyRef = inject(DestroyRef);
+
+  ngOnDestroy() {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
+  }
 
   form: FormGroup<RegisterParcelFormGroupModel>;
   minOrderValueValidator: ValidatorFn = Validators.min(this.data.order.summary.totalToPay.amount);
@@ -98,7 +106,7 @@ export class RegisterShipmentModalComponent {
 
     this.form.markAllAsTouched();
 
-    this.form.controls.insuranceActive.valueChanges.subscribe(value => {
+    this.form.controls.insuranceActive.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       if (value) {
         this.form.controls.insuranceAmount.setValidators(Validators.required);
         this.form.controls.insuranceAmount.enable();
@@ -112,7 +120,7 @@ export class RegisterShipmentModalComponent {
       }
     });
 
-    this.form.controls.codActive.valueChanges.subscribe(value => {
+    this.form.controls.codActive.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       if (value) {
         this.form.controls.insuranceActive.setValue(true);
         this.form.controls.insuranceAmount.setValidators([Validators.required, this.minOrderValueValidator]);
@@ -150,7 +158,8 @@ export class RegisterShipmentModalComponent {
       .watch({ variables: query })
       .valueChanges.pipe(
         filter(result => !result.loading && result.data !== undefined),
-        map(x => x.data?.result)
+        map(x => x.data?.result),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(results => {
         if (!results?.nodes || results.nodes.length < 1 || !results.nodes[0]) return;

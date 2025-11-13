@@ -44,12 +44,6 @@ export class SetCurrentTab {
   constructor(public currentTab: 'New' | 'ReadyForShipment' | 'Sent') {}
 }
 
-export class OpenRegisterInPostShipmentModal {
-  static readonly type = `${prefix} ${OpenRegisterInPostShipmentModal.name}`;
-
-  constructor(public order: OrderDetailsModel) {}
-}
-
 export class OpenRegisterDpdShipmentModal {
   static readonly type = `${prefix} ${OpenRegisterDpdShipmentModal.name}`;
 

@@ -20,7 +20,6 @@ import {
   LoadSent,
   LoadShipments,
   OpenRegisterDpdShipmentModal,
-  OpenRegisterInPostShipmentModal,
   RegisterDpdShipment,
   RegisterInpostShipment,
   SetCurrentTab,
@@ -200,27 +199,8 @@ export class OrdersState {
     );
   }
 
-  @Action(OpenRegisterInPostShipmentModal)
-  openRegisterInPostShipmentModal(ctx: StateContext<OrdersStateModel>, action: OpenRegisterInPostShipmentModal) {
-    this.zone.run(() => {
-      const data: RegisterShipmentDataModel = {
-        order: action.order,
-        deliveryMethodType: 'INPOST',
-      };
-
-      this.dialogRef = this.dialog.open<RegisterShipmentModalComponent, RegisterShipmentDataModel>(
-        RegisterShipmentModalComponent,
-        {
-          data: <RegisterShipmentDataModel>data,
-          width: '60%',
-          height: '82%',
-        }
-      );
-    });
-  }
-
   @Action(OpenRegisterDpdShipmentModal)
-  openRegisterDpdShipmentModal(ctx: StateContext<OrdersStateModel>, action: OpenRegisterInPostShipmentModal) {
+  openRegisterDpdShipmentModal(ctx: StateContext<OrdersStateModel>, action: OpenRegisterDpdShipmentModal) {
     this.zone.run(() => {
       const data: RegisterShipmentDataModel = {
         order: action.order,

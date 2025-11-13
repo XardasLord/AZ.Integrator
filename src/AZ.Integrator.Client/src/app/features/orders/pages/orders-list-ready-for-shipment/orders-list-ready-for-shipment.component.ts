@@ -171,12 +171,12 @@ export class OrdersListReadyForShipmentComponent implements OnInit {
 
   masterToggle() {
     this.isAllSelected()
-      .pipe(take(1))
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
       .subscribe(allSelected => {
         if (allSelected) {
           this.selection.clear();
         } else {
-          this.orders$.pipe(take(1)).subscribe(orders => {
+          this.orders$.pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe(orders => {
             orders.forEach(row => this.selection.select(row));
           });
         }

@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngxs/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ParcelTemplatesState } from '../../states/parcel-templates.state';
 import { ChangePage, LoadTemplates, SavePackageTemplate } from '../../states/parcel-templates.action';
 import { MaterialModule } from '../../../../shared/modules/material.module';
@@ -22,6 +23,7 @@ import { ParcelTemplateDefinitionDataModel } from '../../components/package-temp
 export class ParcelTemplatesListComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   displayedColumns: string[] = ['tags', 'templatesCount', 'actions'];
   templates$ = this.store.select(ParcelTemplatesState.getTemplates);
@@ -47,17 +49,20 @@ export class ParcelTemplatesListComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: PackageTemplateDefinitionFormDialogResponseModel) => {
-      if (!result) {
-        return;
-      }
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: PackageTemplateDefinitionFormDialogResponseModel) => {
+        if (!result) {
+          return;
+        }
 
-      this.store.dispatch(
-        new SavePackageTemplate({
-          tag: result.tag,
-          parcelTemplates: result.parcels,
-        })
-      );
-    });
+        this.store.dispatch(
+          new SavePackageTemplate({
+            tag: result.tag,
+            parcelTemplates: result.parcels,
+          })
+        );
+      });
   }
 }

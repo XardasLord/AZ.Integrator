@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Store } from '@ngxs/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { SharedModule } from '../../../../shared/shared.module';
 import { PackageTemplateDefinitionFormDialogComponent } from '../package-template-definition-form-dialog/package-template-definition-form-dialog.component';
@@ -18,6 +19,7 @@ import { PackageTemplateDefinitionFormDialogResponseModel } from '../package-tem
 export class PackageTemplatesFixedButtonsComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   addTemplate() {
     const dialogRef = this.dialog.open(PackageTemplateDefinitionFormDialogComponent, {
@@ -26,18 +28,21 @@ export class PackageTemplatesFixedButtonsComponent {
       data: null,
     });
 
-    dialogRef.afterClosed().subscribe((result: PackageTemplateDefinitionFormDialogResponseModel) => {
-      if (!result) {
-        return;
-      }
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: PackageTemplateDefinitionFormDialogResponseModel) => {
+        if (!result) {
+          return;
+        }
 
-      this.store.dispatch(
-        new SavePackageTemplate({
-          tag: result.tag,
-          parcelTemplates: result.parcels,
-        })
-      );
-    });
+        this.store.dispatch(
+          new SavePackageTemplate({
+            tag: result.tag,
+            parcelTemplates: result.parcels,
+          })
+        );
+      });
   }
 
   refreshTemplates() {

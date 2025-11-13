@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngxs/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SupplierFormDialogComponent } from '../supplier-form-dialog/supplier-form-dialog.component';
 import { LoadSuppliers } from '../../states/suppliers.action';
 import { MatIcon } from '@angular/material/icon';
@@ -17,6 +18,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class SuppliersFixedButtonsComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   openAddDialog(): void {
     const dialogRef = this.dialog.open(SupplierFormDialogComponent, {
@@ -25,11 +27,14 @@ export class SuppliersFixedButtonsComponent {
       data: null,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Refresh handled by state
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          // Refresh handled by state
+        }
+      });
   }
 
   refreshList() {
