@@ -5,7 +5,7 @@ using AZ.Integrator.Platform.FeatureFlags.Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AZ.Integrator.Api.Controllers;
+namespace AZ.Integrator.Api.Controllers.Admin;
 
 [ApiController]
 [Route("admin/tenants/{tenantId:guid}/feature-flags")]
@@ -36,6 +36,9 @@ public class FeatureFlagsController(
     [HttpPut("{code}")]
     public async Task<IActionResult> Upsert(Guid tenantId, string code, [FromBody] UpsertFlagDto dto, CancellationToken cancellationToken)
     {
+        if (!currentUser.IsMasterAdmin())
+            return Forbid();
+        
         var flagExists = await dbContext.FeatureFlags.AnyAsync(f => f.Code == code, cancellationToken);
         if (!flagExists)
         {

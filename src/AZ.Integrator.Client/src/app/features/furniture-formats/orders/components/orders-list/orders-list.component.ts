@@ -65,7 +65,7 @@ export class OrdersListComponent implements OnInit {
   getStatusDisplay(status: OrderStatusViewModel): string {
     const statusMap: Record<OrderStatusViewModel, string> = {
       [OrderStatusViewModel.Registered]: 'Zarejestrowane',
-      [OrderStatusViewModel.Sent]: 'Wysłane',
+      [OrderStatusViewModel.Sent]: 'Wysłane do dostawcy',
     };
     return statusMap[status] || status;
   }

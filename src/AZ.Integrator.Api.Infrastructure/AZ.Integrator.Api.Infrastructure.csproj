@@ -24,6 +24,7 @@
         <ProjectReference Include="..\Modules\Monitoring\AZ.Integrator.Monitoring.Infrastructure\AZ.Integrator.Monitoring.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Catalog\AZ.Integrator.Catalog.Infrastructure\AZ.Integrator.Catalog.Infrastructure.csproj" />
         <ProjectReference Include="..\Modules\Procurement\AZ.Integrator.Procurement.Infrastructure\AZ.Integrator.Procurement.Infrastructure.csproj" />
+        <ProjectReference Include="..\Platform\Tenants\AZ.Integrator.Platform.Tenants.Infrastructure\AZ.Integrator.Platform.Tenants.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

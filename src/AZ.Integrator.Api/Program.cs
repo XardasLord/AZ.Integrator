@@ -3,6 +3,7 @@ using AZ.Integrator.Catalog.Infrastructure;
 using AZ.Integrator.Invoices.Infrastructure;
 using AZ.Integrator.Monitoring.Infrastructure;
 using AZ.Integrator.Orders.Infrastructure;
+using AZ.Integrator.Platform.Tenants.Infrastructure;
 using AZ.Integrator.Procurement.Infrastructure;
 using AZ.Integrator.Shipments.Infrastructure;
 using AZ.Integrator.Stocks.Infrastructure;
@@ -23,6 +24,7 @@ app.MapStocksModuleEndpoints();
 app.MapMonitoringModuleEndpoints();
 app.MapCatalogModuleEndpoints();
 app.MapProcurementModuleEndpoints();
+app.MapTenantsManagementEndpoints();
 
 app.MapGet("/", () => "Hello from HTTPS!");
 app.MapGet("/cert", () => Results.File(Path.Combine(Directory.GetCurrentDirectory(), "https", "cert.pfx"), "application/x-pkcs12"));

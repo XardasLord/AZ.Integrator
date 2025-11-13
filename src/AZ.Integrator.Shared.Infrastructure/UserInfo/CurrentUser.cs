@@ -30,5 +30,7 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUse
         .Distinct()
         .ToList();
 
+    public bool IsMasterAdmin() => Roles.Any(x => x == "MASTER_ADMIN");
+
     private string GetClaimValue(string claimType) => httpContextAccessor.HttpContext?.User.FindFirstValue(claimType);
 }

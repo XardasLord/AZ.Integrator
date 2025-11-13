@@ -9,4 +9,6 @@ public interface ICurrentUser
     Guid TenantId { get; }
     IReadOnlyCollection<string> Roles { get; }
     IReadOnlyCollection<string> AppScopes { get; }
+
+    bool IsMasterAdmin();
 }

@@ -11,5 +11,6 @@ internal sealed class FakeCurrentUser : ICurrentUser
     public Guid TenantId { get; set; } = Guid.NewGuid();
     public IReadOnlyCollection<string> Roles { get; set; } = new List<string>();
     public IReadOnlyCollection<string> AppScopes { get; set; } = new List<string>();
+    public bool IsMasterAdmin() => false;
 }
 

@@ -18,6 +18,7 @@ using AZ.Integrator.Shipments.Infrastructure;
 using AZ.Integrator.Stocks.Infrastructure;
 using AZ.Integrator.Monitoring.Infrastructure;
 using AZ.Integrator.Platform.FeatureFlags.Infrastructure;
+using AZ.Integrator.Platform.Tenants.Infrastructure;
 using AZ.Integrator.Procurement.Infrastructure;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +49,7 @@ public static class Extensions
         services.AddIntegratorIdentity(configuration);
 
         services.AddFeatureFlags(configuration);
+        services.AddTenantsManagement(configuration);
         
         services.AddMediator(opt =>
         {
