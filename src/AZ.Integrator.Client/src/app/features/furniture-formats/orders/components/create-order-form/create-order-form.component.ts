@@ -96,6 +96,12 @@ export class CreateOrderFormComponent implements OnInit {
       }
     }
 
+    // Order part definitions by id
+    this.selectedFurnitureDefinitions = this.selectedFurnitureDefinitions.map(definition => ({
+      ...definition,
+      partDefinitions: [...definition.partDefinitions].sort((a, b) => a.id - b.id),
+    }));
+
     // Add new lines for newly selected definitions
     this.selectedFurnitureDefinitions.forEach(definition => {
       const exists = currentLines.controls.some(
