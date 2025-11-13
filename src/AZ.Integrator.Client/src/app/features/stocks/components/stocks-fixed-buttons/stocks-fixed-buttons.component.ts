@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Store } from '@ngxs/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { SharedModule } from '../../../../shared/shared.module';
 import { StockGroupFormDialogComponent } from '../stock-group-form-dialog/stock-group-form-dialog.component';
@@ -18,6 +19,7 @@ import { AddStockGroup, LoadStockGroups, LoadStocks } from '../../states/stocks.
 export class StocksFixedButtonsComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   addStockGroup() {
     const dialogRef = this.dialog.open(StockGroupFormDialogComponent, {
@@ -25,13 +27,16 @@ export class StocksFixedButtonsComponent {
       data: null,
     });
 
-    dialogRef.afterClosed().subscribe((result: StockGroupFormDialogResponseModel) => {
-      if (!result) {
-        return;
-      }
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result: StockGroupFormDialogResponseModel) => {
+        if (!result) {
+          return;
+        }
 
-      this.store.dispatch(new AddStockGroup(result.name, result.description));
-    });
+        this.store.dispatch(new AddStockGroup(result.name, result.description));
+      });
   }
 
   refreshStocks() {

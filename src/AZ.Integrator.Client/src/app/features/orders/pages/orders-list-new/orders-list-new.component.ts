@@ -1,23 +1,20 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatIcon } from '@angular/material/icon';
 import { Store } from '@ngxs/store';
 import { map, Observable, of } from 'rxjs';
 import { nameof } from '../../../../shared/helpers/name-of.helper';
 import { OrdersState } from '../../states/orders-state.service';
-import {
-  ChangePage,
-  LoadNew,
-  OpenRegisterDpdShipmentModal,
-  OpenRegisterInPostShipmentModal,
-  SetCurrentTab,
-} from '../../states/orders.action';
+import { ChangePage, LoadNew, OpenRegisterDpdShipmentModal, SetCurrentTab } from '../../states/orders.action';
 import { LineItemDetails, OrderDetailsModel } from '../../models/order-details.model';
 import { getPaymentTypeForOrder } from '../../helpers/payment-type.helper';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { SourceSystemState } from '../../../../shared/states/source-system.state';
 import { ScrollTableComponent } from '../../../../shared/ui/wrappers/scroll-table/scroll-table.component';
+import { RegisterShipmentDataModel } from '../../models/register-shipment-data.model';
+import { RegisterShipmentModalComponent } from '../register-shipment-modal/register-shipment-modal.component';
 
 @Component({
   selector: 'app-orders-list-new',
@@ -26,8 +23,10 @@ import { ScrollTableComponent } from '../../../../shared/ui/wrappers/scroll-tabl
   imports: [MaterialModule, MatIcon, AsyncPipe, DecimalPipe, DatePipe, ScrollTableComponent],
   standalone: true,
 })
-export class OrdersListNewComponent implements OnInit {
+export class OrdersListNewComponent implements OnInit, OnDestroy {
   private store = inject(Store);
+  private dialog = inject(MatDialog);
+  private dialogRef!: MatDialogRef<RegisterShipmentModalComponent, RegisterShipmentDataModel>;
 
   displayedColumns: string[] = [
     nameof<LineItemDetails>('boughtAt'),
@@ -57,12 +56,29 @@ export class OrdersListNewComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    console.log('OrdersListNewComponent destroyed');
+    this.dialog.closeAll();
+  }
+
   pageChanged(event: PageEvent): void {
     this.store.dispatch(new ChangePage(event));
   }
 
   registerInPostShipment(order: OrderDetailsModel) {
-    this.store.dispatch(new OpenRegisterInPostShipmentModal(order));
+    const data: RegisterShipmentDataModel = {
+      order: order,
+      deliveryMethodType: 'INPOST',
+    };
+
+    this.dialogRef = this.dialog.open<RegisterShipmentModalComponent, RegisterShipmentDataModel>(
+      RegisterShipmentModalComponent,
+      {
+        data: <RegisterShipmentDataModel>data,
+        width: '60%',
+        height: '82%',
+      }
+    );
   }
 
   registerDpdShipment(order: OrderDetailsModel) {

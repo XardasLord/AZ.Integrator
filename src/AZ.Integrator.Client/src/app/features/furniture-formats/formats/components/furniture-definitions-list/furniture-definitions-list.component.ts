@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { Store } from '@ngxs/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialModule } from '../../../../../shared/modules/material.module';
 import { FormatsState } from '../../states/formats.state';
 import { ChangePage, DeleteFurnitureDefinition, LoadFurnitureDefinitions } from '../../states/formats.action';
@@ -20,6 +21,7 @@ import { FurnitureModelViewModel } from '../../../../../shared/graphql/graphql-i
 export class FurnitureDefinitionsListComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   displayedColumns: string[] = ['furnitureCode', 'partsCount', 'status', 'actions'];
   furnitureDefinitions$ = this.store.select(FormatsState.getFurnitureDefinitions);
@@ -42,11 +44,14 @@ export class FurnitureDefinitionsListComponent implements OnInit {
       data: definition,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Refresh handled by state
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(result => {
+        if (result) {
+          // Refresh handled by state
+        }
+      });
   }
 
   deleteFurnitureDefinition(furnitureCode: string): void {

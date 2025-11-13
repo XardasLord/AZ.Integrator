@@ -1,7 +1,7 @@
 import { inject, Injectable, NgZone } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, filter, Observable, switchMap, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { SuppliersStateModel } from './suppliers.state.model';
 import { SuppliersService } from '../services/suppliers.service';
@@ -157,20 +157,15 @@ export class SuppliersState {
     });
 
     return dialogRef.afterClosed().pipe(
-      tap(result => {
-        if (!result) {
-          return;
-        }
-
-        this.suppliersService.deleteSupplier(action.supplierId).subscribe({
-          next: () => {
-            this.zone.run(() => this.toastService.success('Dostawca został usunięty', 'Dostawca'));
-            ctx.dispatch(new LoadSuppliers());
-          },
-          error: () => {
-            this.zone.run(() => this.toastService.error('Błąd podczas usuwania dostawcy', 'Dostawca'));
-          },
-        });
+      filter(result => result === true),
+      switchMap(() => this.suppliersService.deleteSupplier(action.supplierId)),
+      tap(() => {
+        this.zone.run(() => this.toastService.success('Dostawca został usunięty', 'Dostawca'));
+        ctx.dispatch(new LoadSuppliers());
+      }),
+      catchError(error => {
+        this.zone.run(() => this.toastService.error('Błąd podczas usuwania dostawcy', 'Dostawca'));
+        return throwError(() => error);
       })
     );
   }
