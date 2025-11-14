@@ -57,7 +57,6 @@ export class OrdersListNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('OrdersListNewComponent destroyed');
     this.dialog.closeAll();
   }
 

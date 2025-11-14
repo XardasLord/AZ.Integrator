@@ -223,7 +223,6 @@ export class OrdersState {
     return this.orderService.registerInpostShipment(action.command).pipe(
       tap(() => {
         this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w InPost', 'Przesyłka InPost'));
-        this.dialogRef?.close();
 
         ctx.dispatch(new LoadShipments());
       }),
