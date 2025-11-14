@@ -20,7 +20,6 @@ import { RegisterShipmentDataModel } from '../../models/register-shipment-data.m
 import { ParcelFromGroupModel } from '../../../../shared/models/parcel-form-group.model';
 import { IntegratorQueryTagParcelTemplatesArgs } from '../../../../shared/graphql/graphql-integrator.schema';
 import { OrderDetailsModel } from '../../models/order-details.model';
-import { MatError } from '@angular/material/form-field';
 
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { GetTagParcelTemplatesGQL } from '../../../package-templates/graphql-queries/get-tag-parcel-templates.graphql.query';
@@ -29,10 +28,10 @@ import { GetTagParcelTemplatesGQL } from '../../../package-templates/graphql-que
   selector: 'app-register-shipment-modal',
   templateUrl: './register-shipment-modal.component.html',
   styleUrls: ['./register-shipment-modal.component.scss'],
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, MatError],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule],
 })
 export class RegisterShipmentModalComponent implements OnDestroy {
-  dialogRef = inject<MatDialogRef<RegisterShipmentModalComponent>>(MatDialogRef);
+  private dialogRef = inject(MatDialogRef<RegisterShipmentModalComponent>);
   data = inject<RegisterShipmentDataModel>(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
   private store = inject(Store);
@@ -283,7 +282,14 @@ export class RegisterShipmentModalComponent implements OnDestroy {
       externalOrderId: this.data.order.id!,
     };
 
-    this.store.dispatch(new RegisterInpostShipment(command));
+    this.store.dispatch(new RegisterInpostShipment(command)).subscribe({
+      next: () => {
+        this.dialogRef.close(true);
+      },
+      error: () => {
+        // Error handled by state
+      },
+    });
   }
 
   private registerDpdShipment() {
