@@ -5,6 +5,7 @@ AS
 SELECT
     id,
     tag,
+    tenant_id,
     length,
     width,
     height,

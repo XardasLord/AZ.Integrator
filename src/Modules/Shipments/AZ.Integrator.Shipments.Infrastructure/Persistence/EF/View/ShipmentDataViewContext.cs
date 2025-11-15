@@ -4,16 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View;
 
-public class ShipmentDataViewContext : DbContext
+public class ShipmentDataViewContext(DbContextOptions<ShipmentDataViewContext> options) : DbContext(options)
 {
     public virtual DbSet<ShipmentViewModel> Shipments { get; set; }
     public virtual DbSet<InpostShipmentViewModel> InpostShipments { get; set; }
     public virtual DbSet<DpdShipmentViewModel> DpdShipments { get; set; }
-    
-    public ShipmentDataViewContext(DbContextOptions<ShipmentDataViewContext> options) : base(options)
-    {
-    }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new ShipmentViewModelConfiguration());

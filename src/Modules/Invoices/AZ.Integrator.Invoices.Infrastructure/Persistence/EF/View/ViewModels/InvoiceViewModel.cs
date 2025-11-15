@@ -2,6 +2,7 @@
 
 public class InvoiceViewModel
 {
+    public Guid TenantId { get; set; }
     public long InvoiceId { get; set; }
     public string InvoiceNumber { get; set; }
     public string ExternalOrderNumber { get; set; }

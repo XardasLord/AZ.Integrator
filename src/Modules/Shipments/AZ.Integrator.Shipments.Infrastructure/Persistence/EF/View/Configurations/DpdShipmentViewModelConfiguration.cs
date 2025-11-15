@@ -11,13 +11,9 @@ public class DpdShipmentViewModelConfiguration : IEntityTypeConfiguration<DpdShi
         builder.ToView("dpd_shipments_view");
         builder.HasNoKey();
 
-        builder.Property(x => x.ShipmentNumber)
-            .HasColumnName("session_id");
-        
-        builder.Property(x => x.ExternalOrderNumber)
-            .HasColumnName("external_order_number");
-        
-        builder.Property(x => x.CreatedAt)
-            .HasColumnName("created_at");
+        builder.Property(x => x.TenantId).HasColumnName("tenant_id");
+        builder.Property(x => x.ShipmentNumber).HasColumnName("session_id");
+        builder.Property(x => x.ExternalOrderNumber).HasColumnName("external_order_number");
+        builder.Property(x => x.CreatedAt).HasColumnName("created_at");
     }
 }

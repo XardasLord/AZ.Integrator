@@ -8,10 +8,12 @@ namespace AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 public class TagParcelTemplate : Entity, IAggregateRoot
 {
     private Tag _tag;
+    private TenantId _tenantId;
     private CreationInformation _creationInformation;
     private List<TagParcel> _parcels;
 
     public Tag Tag => _tag;
+    public TenantId TenantId => _tenantId;
     public CreationInformation CreationInformation => _creationInformation;
     public IReadOnlyCollection<TagParcel> Parcels => _parcels;
 
@@ -24,6 +26,7 @@ public class TagParcelTemplate : Entity, IAggregateRoot
         : this()
     {
         _tag = tag;
+        _tenantId = currentUser.TenantId;
         _creationInformation = new CreationInformation(currentDateTime.CurrentDate(), currentUser.UserId);
         _parcels = parcels.ToList();
     }

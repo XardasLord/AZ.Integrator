@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
+﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tag = AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate.ValueObjects.Tag;
@@ -12,11 +13,16 @@ public class TagParcelTemplateConfiguration : IEntityTypeConfiguration<TagParcel
         builder.ToTable("tag_parcel_templates");
 
         builder.Ignore(e => e.Events);
-        builder.HasKey(e => e.Tag);
+        builder.HasKey(e => new { e.Tag, e.TenantId });
 
         builder.Property(e => e.Tag)
             .HasColumnName("tag")
             .HasConversion(tag => tag.Value, tag => new Tag(tag))
+            .IsRequired();
+        
+        builder.Property(e => e.TenantId)
+            .HasColumnName("tenant_id")
+            .HasConversion(tenantId => tenantId.Value, value => new TenantId(value))
             .IsRequired();
         
         builder.OwnsOne(e => e.CreationInformation, ci =>
@@ -29,6 +35,6 @@ public class TagParcelTemplateConfiguration : IEntityTypeConfiguration<TagParcel
 
         builder.HasMany(e => e.Parcels)
             .WithOne()
-            .HasForeignKey(x => x.Tag);
+            .HasForeignKey(x => new { x.Tag, x.TenantId });
     }
 }

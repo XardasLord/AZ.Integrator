@@ -2,6 +2,7 @@
 
 public class ShipmentViewModel
 {
+    public Guid TenantId { get; set; }
     public string ShipmentNumber { get; set; }
     public string ExternalOrderNumber { get; set; }
     public string ShipmentProvider { get; set; }

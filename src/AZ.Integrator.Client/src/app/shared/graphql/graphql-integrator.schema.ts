@@ -74,6 +74,7 @@ export type DpdShipmentViewModel = {
   createdAt: Scalars['DateTime']['output'];
   externalOrderNumber: Scalars['String']['output'];
   shipmentNumber: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
 };
 
 export type DpdShipmentViewModelFilterInput = {
@@ -82,6 +83,7 @@ export type DpdShipmentViewModelFilterInput = {
   externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<DpdShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export enum EdgeBandingTypeViewModel {
@@ -180,6 +182,7 @@ export type InpostShipmentViewModel = {
   createdAt: Scalars['DateTime']['output'];
   externalOrderNumber: Scalars['String']['output'];
   shipmentNumber: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
 };
 
 export type InpostShipmentViewModelFilterInput = {
@@ -188,6 +191,7 @@ export type InpostShipmentViewModelFilterInput = {
   externalOrderNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InpostShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type IntOperationFilterInput = {
@@ -305,6 +309,7 @@ export type InvoiceViewModel = {
   externalOrderNumber: Scalars['String']['output'];
   invoiceId: Scalars['Long']['output'];
   invoiceNumber: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
 };
 
 export type InvoiceViewModelFilterInput = {
@@ -314,6 +319,7 @@ export type InvoiceViewModelFilterInput = {
   invoiceId?: InputMaybe<LongOperationFilterInput>;
   invoiceNumber?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<InvoiceViewModelFilterInput>>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type InvoiceViewModelSortInput = {
@@ -321,6 +327,7 @@ export type InvoiceViewModelSortInput = {
   externalOrderNumber?: InputMaybe<SortEnumType>;
   invoiceId?: InputMaybe<SortEnumType>;
   invoiceNumber?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
 };
 
 export type ListFilterInputTypeOfOrderFurnitureLineViewModelFilterInput = {
@@ -583,6 +590,7 @@ export type ShipmentViewModel = {
   externalOrderNumber: Scalars['String']['output'];
   shipmentNumber: Scalars['String']['output'];
   shipmentProvider: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
 };
 
 export type ShipmentViewModelFilterInput = {
@@ -592,6 +600,7 @@ export type ShipmentViewModelFilterInput = {
   or?: InputMaybe<Array<ShipmentViewModelFilterInput>>;
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
   shipmentProvider?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export enum SortEnumType {
@@ -796,6 +805,7 @@ export type TagParcelTemplateViewModel = {
   __typename?: 'TagParcelTemplateViewModel';
   parcels: Array<TagParcelViewModel>;
   tag: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
 };
 
 export type TagParcelTemplateViewModelFilterInput = {
@@ -803,10 +813,12 @@ export type TagParcelTemplateViewModelFilterInput = {
   or?: InputMaybe<Array<TagParcelTemplateViewModelFilterInput>>;
   parcels?: InputMaybe<ListFilterInputTypeOfTagParcelViewModelFilterInput>;
   tag?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type TagParcelTemplateViewModelSortInput = {
   tag?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
 };
 
 /** A connection to a list of items. */
@@ -837,6 +849,7 @@ export type TagParcelViewModel = {
   id: Scalars['Int']['output'];
   length: Scalars['Float']['output'];
   tag: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
   weight: Scalars['Float']['output'];
   width: Scalars['Float']['output'];
 };
@@ -848,6 +861,7 @@ export type TagParcelViewModelFilterInput = {
   length?: InputMaybe<FloatOperationFilterInput>;
   or?: InputMaybe<Array<TagParcelViewModelFilterInput>>;
   tag?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
   weight?: InputMaybe<FloatOperationFilterInput>;
   width?: InputMaybe<FloatOperationFilterInput>;
 };

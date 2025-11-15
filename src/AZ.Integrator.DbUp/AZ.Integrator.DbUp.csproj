@@ -132,6 +132,9 @@
       <None Update="Migrations\Public\V0109__add_scan_id_to_stock_logs.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Migrations\Public\V0110__add_tenant_id_to_tag_parcel_templates.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == '' Or '$(Configuration)' == 'Debug'">

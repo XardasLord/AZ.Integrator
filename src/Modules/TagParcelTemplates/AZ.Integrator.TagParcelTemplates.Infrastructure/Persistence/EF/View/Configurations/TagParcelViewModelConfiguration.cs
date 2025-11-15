@@ -13,6 +13,7 @@ public class TagParcelViewModelConfiguration : IEntityTypeConfiguration<TagParce
 
         builder.Property(x => x.Id).HasColumnName("id");
         builder.Property(x => x.Tag).HasColumnName("tag");
+        builder.Property(x => x.TenantId).HasColumnName("tenant_id");
         builder.Property(x => x.Length).HasColumnName("length");
         builder.Property(x => x.Width).HasColumnName("width");
         builder.Property(x => x.Height).HasColumnName("height");

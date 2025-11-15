@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
+﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate;
 using AZ.Integrator.TagParcelTemplates.Domain.Aggregates.TagParcelTemplate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -25,6 +26,11 @@ public class TagParcelConfiguration : IEntityTypeConfiguration<TagParcel>
             .HasColumnName("tag")
             .IsRequired();
 
+        builder.Property(e => e.TenantId)
+            .HasColumnName("tenant_id")
+            .HasConversion(tenantId => tenantId.Value, value => new TenantId(value))
+            .IsRequired();
+        
         builder.Property(e => e.Weight).HasColumnName("weight").IsRequired();
         
         builder.OwnsOne(e => e.Dimension, d =>

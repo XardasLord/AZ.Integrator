@@ -12,16 +12,10 @@ public class InvoiceViewModelConfiguration : IEntityTypeConfiguration<InvoiceVie
         builder.ToView("invoices_view", SchemaDefinition.Billing);
         builder.HasNoKey();
 
-        builder.Property(x => x.InvoiceId)
-            .HasColumnName("external_id");
-
-        builder.Property(x => x.InvoiceNumber)
-            .HasColumnName("number");
-        
-        builder.Property(x => x.ExternalOrderNumber)
-            .HasColumnName("external_order_number");
-        
-        builder.Property(x => x.CreatedAt)
-            .HasColumnName("created_at");
+        builder.Property(x => x.TenantId).HasColumnName("tenant_id");
+        builder.Property(x => x.InvoiceId).HasColumnName("external_id");
+        builder.Property(x => x.InvoiceNumber).HasColumnName("number");
+        builder.Property(x => x.ExternalOrderNumber).HasColumnName("external_order_number");
+        builder.Property(x => x.CreatedAt).HasColumnName("created_at");
     }
 }

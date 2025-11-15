@@ -14,12 +14,15 @@ public class SaveParcelTemplateCommandHandler(
 {
     public async ValueTask<Unit> Handle(SaveParcelTemplateCommand command, CancellationToken cancellationToken)
     {
-        var spec = new TagParcelTemplateByTagSpec(command.Tag);
+        var spec = new TagParcelTemplateByTagSpec(command.Tag, currentUser.TenantId);
         
         var tagParcelTemplate = await repository.SingleOrDefaultAsync(spec, cancellationToken);
 
         var tagParcels = command.ParcelTemplates
-            .Select(x => new TagParcel(new Dimension(x.Dimensions.Length, x.Dimensions.Width, x.Dimensions.Height), x.Weight));
+            .Select(x => new TagParcel(
+                new Dimension(x.Dimensions.Length, x.Dimensions.Width, x.Dimensions.Height), 
+                x.Weight, 
+                currentUser.TenantId));
         
         if (tagParcelTemplate is null)
         {
