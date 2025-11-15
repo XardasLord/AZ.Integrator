@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { RemoteServiceBase } from 'src/app/shared/services/remote-service.base';
 import { filter, map, Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -16,6 +16,7 @@ import { GetBarcodeScannerLogsGQL } from '../graphql-queries/get-barcode-scanner
 import { RevertScanLogCommand } from '../models/revert-scan-log.command';
 import { ChangeStockGroupCommand } from '../models/change-stock-group.command';
 import { ChangeStockThresholdCommand } from '../models/change-stock-threshold.command';
+import { SKIP_LOADING } from '../../../core/interceptor/loading-context.token';
 
 @Injectable()
 export class StocksService extends RemoteServiceBase {
@@ -53,7 +54,9 @@ export class StocksService extends RemoteServiceBase {
       scanId: scanId,
     };
 
-    return this.httpClient.put<void>(`${this.apiUrl}/stocks/${barcode}`, command);
+    return this.httpClient.put<void>(`${this.apiUrl}/stocks/${barcode}`, command, {
+      context: new HttpContext().set(SKIP_LOADING, true),
+    });
   }
 
   revertScan(barcode: string, scanLogId: number): Observable<void> {
