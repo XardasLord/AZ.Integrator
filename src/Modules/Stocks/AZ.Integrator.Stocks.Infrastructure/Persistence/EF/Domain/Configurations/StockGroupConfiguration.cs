@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup;
+﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup;
 using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -18,6 +19,11 @@ public class StockGroupConfiguration : IEntityTypeConfiguration<StockGroup>
             .HasColumnName("id")
             .HasConversion(id => id.Value, id => new StockGroupId(id))
             .UseIdentityColumn();
+        
+        builder.Property(e => e.TenantId)
+            .HasConversion(value => value.Value, value => new TenantId(value))
+            .HasColumnName("tenant_id")
+            .IsRequired();
 
         builder.Property(e => e.Name)
             .HasColumnName("name")

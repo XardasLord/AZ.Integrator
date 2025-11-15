@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
+﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
 using AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
 using AZ.Integrator.Stocks.Domain.Aggregates.StockGroup.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,11 @@ public class StockConfiguration : IEntityTypeConfiguration<Stock>
         builder.Property(e => e.PackageCode)
             .HasColumnName("package_code")
             .HasConversion(code => code.Value, code => new PackageCode(code))
+            .IsRequired();
+        
+        builder.Property(e => e.TenantId)
+            .HasConversion(value => value.Value, value => new TenantId(value))
+            .HasColumnName("tenant_id")
             .IsRequired();
 
         builder.Property(e => e.Quantity)

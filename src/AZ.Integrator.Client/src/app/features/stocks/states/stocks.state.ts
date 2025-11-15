@@ -63,6 +63,7 @@ export class StocksState {
         name: 'Bez grupy',
         description: '',
         stocks: ungroupedStocks.map(s => s),
+        tenantId: ungroupedStocks.map(s => s.tenantId),
       });
     }
 

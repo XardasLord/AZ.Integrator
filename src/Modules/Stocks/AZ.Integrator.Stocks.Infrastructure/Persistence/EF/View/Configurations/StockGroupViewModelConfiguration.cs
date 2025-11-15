@@ -14,6 +14,7 @@ public class StockGroupViewModelConfiguration : IEntityTypeConfiguration<StockGr
         builder.HasIndex(x => x.Name).IsUnique();
 
         builder.Property(x => x.Id).HasColumnName("id");
+        builder.Property(x => x.TenantId).HasColumnName("tenant_id");
         builder.Property(x => x.Name).HasColumnName("name");
         builder.Property(x => x.Description).HasColumnName("description");
         

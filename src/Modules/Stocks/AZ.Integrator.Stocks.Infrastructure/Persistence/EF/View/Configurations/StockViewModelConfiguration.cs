@@ -11,6 +11,7 @@ public class StockViewModelConfiguration : IEntityTypeConfiguration<StockViewMod
         builder.ToView("stocks_view");
         builder.HasKey(x => x.PackageCode);
 
+        builder.Property(x => x.TenantId).HasColumnName("tenant_id");
         builder.Property(x => x.GroupId).HasColumnName("group_id");
         builder.Property(x => x.PackageCode).HasColumnName("package_code");
         builder.Property(x => x.Quantity).HasColumnName("quantity");

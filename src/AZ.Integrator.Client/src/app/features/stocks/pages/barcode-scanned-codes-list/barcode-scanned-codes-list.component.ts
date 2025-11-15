@@ -1,14 +1,15 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { SharedModule } from '../../../../shared/shared.module';
-import { LoadLogs, RevertScan } from '../../states/barcode-scanner.action';
-import { StockLogStatus, StockLogViewModel } from '../../../../shared/graphql/graphql-integrator.schema';
-import { BarcodeScannerState } from '../../states/barcode-scanner.state';
-import { BarcodeScannerType } from '../barcode-scanner/barcode-scanner.component';
-import { ConfirmScanRevertDialogComponent } from '../../components/convert-scan-revert-dialog/confirm-scan-revert-dialog.component';
+import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SharedModule } from '../../../../shared/shared.module';
+import { BarcodeScannerType } from '../barcode-scanner/barcode-scanner.component';
+import { PendingScan, ScanStatus, ScanType } from '../../models/pending-scan.model';
+import { ConfirmScanRevertDialogComponent } from '../../components/convert-scan-revert-dialog/confirm-scan-revert-dialog.component';
+import { BarcodeScannerState } from '../../states/barcode-scanner.state';
+import { ClearSynced, RemoveScan, RetryFailed, RevertScan } from '../../states/barcode-scanner.action';
 
 @Component({
   selector: 'app-barcode-scanned-codes-list',
@@ -17,22 +18,34 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './barcode-scanned-codes-list.component.scss',
   standalone: true,
 })
-export class BarcodeScannedCodesListComponent implements OnInit {
+export class BarcodeScannedCodesListComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
 
   @Input() type!: BarcodeScannerType;
 
-  barcodeScannerLogs$: Observable<StockLogViewModel[]> = this.store.select(BarcodeScannerState.logs);
+  scans$: Observable<PendingScan[]> = this.store
+    .select(BarcodeScannerState.pendingScans)
+    .pipe(map(scans => scans.filter(s => (this.type === 'in' ? s.type === ScanType.IN : s.type === ScanType.OUT))));
 
-  ngOnInit(): void {
-    this.store.dispatch(new LoadLogs());
+  protected readonly ScanStatus = ScanStatus;
+
+  removeScan(scan: PendingScan): void {
+    this.store.dispatch(new RemoveScan(scan.id));
   }
 
-  confirmRevert(log: StockLogViewModel): void {
+  retryFailed(): void {
+    this.store.dispatch(new RetryFailed());
+  }
+
+  clearSynced(): void {
+    this.store.dispatch(new ClearSynced());
+  }
+
+  confirmRevert(scan: PendingScan): void {
     const dialogRef = this.dialog.open(ConfirmScanRevertDialogComponent, {
-      data: { packageCode: log.packageCode },
+      data: { packageCode: scan.barcode },
     });
 
     dialogRef
@@ -40,14 +53,12 @@ export class BarcodeScannedCodesListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed: boolean) => {
         if (confirmed) {
-          this.revertScanLog(log);
+          this.revertScan(scan);
         }
       });
   }
 
-  revertScanLog(log: StockLogViewModel): void {
-    this.store.dispatch(new RevertScan(log.packageCode!, -log.changeQuantity, log.id));
+  revertScan(scan: PendingScan): void {
+    this.store.dispatch(new RevertScan(scan.id));
   }
-
-  protected readonly StockLogStatus = StockLogStatus;
 }

@@ -4,6 +4,7 @@ CREATE OR REPLACE VIEW stock_groups_view
 AS
 SELECT
     id,
+    tenant_id,
     name,
     description,
     created_at,

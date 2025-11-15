@@ -1,33 +1,103 @@
-<ul class="w-full mt-2 space-y-2 max-h-128 overflow-auto px-1">
-  @for (log of barcodeScannerLogs$ | async; track log; let i = $index) {
-    <li
-      class="relative h-14 w-full flex items-center justify-between p-2 rounded-lg shadow border transition"
-      [ngClass]="{
-        'bg-green-100 border-green-500': log.changeQuantity > 0,
-        'bg-red-100 border-red-500': log.changeQuantity < 0,
-        'ring-2 ring-blue-400': i === 0,
-        'horizontal-strike': log.status === StockLogStatus.Reverted,
-      }">
-      <div class="flex flex-col flex-1 min-w-0">
-        <div class="flex items-center justify-between w-full">
-          <span class="font-bold text-sm text-blue-800 text-base break-all">{{ log?.packageCode }}</span>
-          <span
-            class="ml-1 text-base font-bold"
-            [ngClass]="{ 'text-green-600': log.changeQuantity > 0, 'text-red-600': log.changeQuantity < 0 }">
-            {{ log.changeQuantity > 0 ? '+' : '' }}{{ log.changeQuantity }}
-          </span>
+<div class="w-full mt-3">
+  <!-- Akcje masowe -->
+  <div class="flex gap-2 mb-2 px-1">
+    <button
+      (click)="clearSynced()"
+      class="text-xs px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
+      Wyczyść zsynchronizowane
+    </button>
+    <button
+      (click)="retryFailed()"
+      class="text-xs px-3 py-1 bg-orange-500 text-white rounded hover:bg-orange-600 transition">
+      Ponów nieudane
+    </button>
+  </div>
+
+  <!-- Lista skanów -->
+  <ul class="w-full space-y-2 max-h-128 overflow-auto px-1">
+    @for (scan of scans$ | async; track scan.id; let i = $index) {
+      <li
+        class="relative min-h-14 w-full flex items-center justify-between p-2 rounded-lg shadow border transition"
+        [ngClass]="{
+          'bg-green-50 border-green-400': scan.changeQuantity > 0,
+          'bg-red-50 border-red-400': scan.changeQuantity < 0,
+          'ring-2 ring-blue-400': i === 0,
+          'opacity-60': scan.status === ScanStatus.SYNCING,
+          'border-l-4 border-l-orange-500': scan.status === ScanStatus.FAILED,
+        }">
+        <div class="flex flex-col flex-1 min-w-0">
+          <div class="flex items-center justify-between w-full">
+            <span class="font-bold text-sm text-blue-800 break-all">{{ scan.barcode }}</span>
+            <span
+              class="ml-1 text-base font-bold"
+              [ngClass]="{ 'text-green-600': scan.changeQuantity > 0, 'text-red-600': scan.changeQuantity < 0 }">
+              {{ scan.changeQuantity > 0 ? '+' : '' }}{{ scan.changeQuantity }}
+            </span>
+          </div>
+          <div class="flex items-center gap-2 mt-0.5">
+            <span class="text-xs text-gray-500">{{ scan.timestamp | date: 'dd.MM.yyyy, HH:mm:ss' }}</span>
+
+            <!-- Status badge -->
+            @if (scan.status === ScanStatus.PENDING) {
+              <span
+                class="text-xs px-1.5 py-0.5 bg-yellow-200 text-yellow-800 rounded font-medium flex items-center gap-1">
+                <mat-icon class="text-xs">schedule</mat-icon>
+                Oczekuje
+              </span>
+            }
+            @if (scan.status === ScanStatus.SYNCING) {
+              <span class="text-xs px-1.5 py-0.5 bg-blue-200 text-blue-800 rounded font-medium flex items-center gap-1">
+                <mat-icon class="text-xs animate-spin">sync</mat-icon>
+                Synchronizacja...
+              </span>
+            }
+            @if (scan.status === ScanStatus.SYNCED) {
+              <span
+                class="text-xs px-1.5 py-0.5 bg-green-200 text-green-800 rounded font-medium flex items-center gap-1">
+                <mat-icon class="text-xs">check_circle</mat-icon>
+                Zsynchronizowano
+              </span>
+            }
+            @if (scan.status === ScanStatus.FAILED) {
+              <span class="text-xs px-1.5 py-0.5 bg-red-200 text-red-800 rounded font-medium flex items-center gap-1">
+                <mat-icon class="text-xs">error</mat-icon>
+                Błąd ({{ scan.retryCount }}/5)
+              </span>
+            }
+          </div>
+
+          <!-- Komunikat błędu -->
+          @if (scan.status === ScanStatus.FAILED && scan.lastError) {
+            <span class="text-xs text-red-600 mt-1 italic">Scan ID: {{ scan.id }}</span>
+            <span class="text-xs text-red-600 mt-1 italic">{{ scan.lastError }}</span>
+          }
         </div>
-        <span class="text-xs text-gray-500 mt-0.5">{{ log.createdAt | date: 'dd.MM.yyyy, HH:mm:ss' }}</span>
-      </div>
-      @if (log.status === StockLogStatus.Active) {
-        <button
-          mat-icon-button
-          class="ml-1 flex-shrink-0 w-8 h-8 rounded-full bg-white/80 border border-gray-300 shadow flex items-center justify-center text-gray-700 hover:bg-gray-100 active:bg-gray-200"
-          (click)="confirmRevert(log)"
-          aria-label="Cofnij zmianę">
-          <mat-icon class="text-lg">undo</mat-icon>
-        </button>
-      }
-    </li>
-  }
-</ul>
+
+        <!-- Przycisk cofnięcia (tylko dla zsynchronizowanych) -->
+        @if (scan.status === ScanStatus.SYNCED) {
+          <button
+            mat-icon-button
+            class="ml-1 flex-shrink-0 w-8 h-8 rounded-full bg-white/80 border border-gray-300 shadow flex items-center justify-center text-gray-700 hover:bg-gray-100 active:bg-gray-200"
+            (click)="confirmRevert(scan)"
+            aria-label="Cofnij skan">
+            <mat-icon class="text-lg">undo</mat-icon>
+          </button>
+        }
+
+        <!-- Przycisk usuwania (dla pozostałych statusów) -->
+        @if (scan.status !== ScanStatus.SYNCED) {
+          <button
+            mat-icon-button
+            class="ml-1 flex-shrink-0 w-8 h-8 rounded-full bg-white/80 border border-gray-300 shadow flex items-center justify-center text-gray-700 hover:bg-gray-100 active:bg-gray-200"
+            (click)="removeScan(scan)"
+            [disabled]="scan.status === ScanStatus.SYNCING"
+            aria-label="Usuń skan">
+            <mat-icon class="text-lg">delete</mat-icon>
+          </button>
+        }
+      </li>
+    } @empty {
+      <li class="text-center text-gray-500 text-sm py-4">Brak skanów</li>
+    }
+  </ul>
+</div>

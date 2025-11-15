@@ -24,12 +24,12 @@ public class ChangeQuantityCommandHandler(
                 throw new StockNotFoundException(command.PackageCode);
             }
 
-            stock = Stock.Register(command.PackageCode, command.ChangeQuantity, currentUser, currentDateTime);
+            stock = Stock.Register(command.PackageCode, command.ChangeQuantity, command.ScanId, currentUser, currentDateTime);
             await repository.AddAsync(stock, cancellationToken);
         }
         else
         {
-            stock.UpdateQuantity(command.ChangeQuantity, currentUser, currentDateTime);
+            stock.UpdateQuantity(command.ChangeQuantity, command.ScanId, currentUser, currentDateTime);
             await repository.SaveChangesAsync(cancellationToken);
         }
 

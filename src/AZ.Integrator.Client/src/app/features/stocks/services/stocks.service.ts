@@ -46,10 +46,11 @@ export class StocksService extends RemoteServiceBase {
     );
   }
 
-  updateStockQuantity(barcode: string, changeQuantity: number): Observable<void> {
+  updateStockQuantity(barcode: string, changeQuantity: number, scanId: string): Observable<void> {
     const command: ChangeStockQuantityCommand = {
       packageCode: barcode,
       changeQuantity: changeQuantity,
+      scanId: scanId,
     };
 
     return this.httpClient.put<void>(`${this.apiUrl}/stocks/${barcode}`, command);

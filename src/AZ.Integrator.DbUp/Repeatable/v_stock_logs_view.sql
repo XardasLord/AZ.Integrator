@@ -4,6 +4,8 @@ CREATE OR REPLACE VIEW stock_logs_view
 AS
 SELECT
     id,
+    scan_id,
+    tenant_id,
     change_quantity,
     created_at,
     created_by,

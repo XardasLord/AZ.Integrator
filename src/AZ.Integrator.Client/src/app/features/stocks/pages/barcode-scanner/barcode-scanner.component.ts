@@ -1,24 +1,31 @@
-import { AfterViewInit, Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { SharedModule } from '../../../../shared/shared.module';
-import { DecreaseStock, IncreaseStock } from '../../states/barcode-scanner.action';
 import { BarcodeScannedCodesListComponent } from '../barcode-scanned-codes-list/barcode-scanned-codes-list.component';
+import { ScanStatusIndicatorComponent } from '../../components/scan-status-indicator/scan-status-indicator.component';
+import { ScanType } from '../../models/pending-scan.model';
+import { AddScan, LoadPendingScans } from '../../states/barcode-scanner.action';
 
 export type BarcodeScannerType = 'in' | 'out';
 
 @Component({
   selector: 'app-barcode-scanner',
-  imports: [SharedModule, BarcodeScannedCodesListComponent],
+  imports: [SharedModule, BarcodeScannedCodesListComponent, ScanStatusIndicatorComponent],
   templateUrl: './barcode-scanner.component.html',
   styleUrl: './barcode-scanner.component.scss',
   standalone: true,
 })
-export class BarcodeScannerComponent implements AfterViewInit {
+export class BarcodeScannerComponent implements OnInit, AfterViewInit {
   private store = inject(Store);
+
   @Input() type!: BarcodeScannerType;
   @ViewChild('barcodeInput') barcodeInput!: ElementRef;
 
   barcode: string = '';
+
+  ngOnInit(): void {
+    this.store.dispatch(new LoadPendingScans());
+  }
 
   ngAfterViewInit(): void {
     this.focusInput();
@@ -29,11 +36,9 @@ export class BarcodeScannerComponent implements AfterViewInit {
       return;
     }
 
-    if (this.type === 'in') {
-      this.increaseStock();
-    } else {
-      this.decreaseStock();
-    }
+    // Dodaj skan do kolejki przez NGXS action
+    const scanType = this.type === 'in' ? ScanType.IN : ScanType.OUT;
+    this.store.dispatch(new AddScan(this.barcode.trim(), scanType));
 
     this.barcode = '';
     this.focusInput();
@@ -41,13 +46,5 @@ export class BarcodeScannerComponent implements AfterViewInit {
 
   private focusInput() {
     setTimeout(() => this.barcodeInput.nativeElement.focus(), 200);
-  }
-
-  private increaseStock() {
-    this.store.dispatch(new IncreaseStock(this.barcode.trim(), 1));
-  }
-
-  private decreaseStock() {
-    this.store.dispatch(new DecreaseStock(this.barcode.trim(), -1));
   }
 }

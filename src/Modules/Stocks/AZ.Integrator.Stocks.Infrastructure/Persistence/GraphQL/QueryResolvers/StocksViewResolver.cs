@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Platform.FeatureFlags.Abstractions;
+﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Platform.FeatureFlags.Abstractions;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
 using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View;
@@ -9,26 +10,32 @@ using HotChocolate.Types;
 namespace AZ.Integrator.Stocks.Infrastructure.Persistence.GraphQL.QueryResolvers;
 
 [ExtendObjectType(Name = nameof(IntegratorQuery))]
-public class StocksViewResolver()
+public class StocksViewResolver(ICurrentUser currentUser)
 {
     [RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule)]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
     public IQueryable<StockViewModel> GetStocks(StockDataViewContext dataViewContext) 
-        => dataViewContext.Stocks.AsQueryable();
+        => dataViewContext.Stocks
+            .Where(x => x.TenantId == currentUser.TenantId)
+            .AsQueryable();
 
     [RequireFeatureFlag(FeatureFlagCodes.WarehouseStocksModule)]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<StockGroupViewModel> GetStockGroups(StockDataViewContext dataViewContext) 
-        => dataViewContext.StockGroups.AsQueryable();
+    public IQueryable<StockGroupViewModel> GetStockGroups(StockDataViewContext dataViewContext)
+        => dataViewContext.StockGroups
+            .Where(x => x.TenantId == currentUser.TenantId)
+            .AsQueryable();
 
     [RequireFeatureFlag(FeatureFlagCodes.WarehouseScanningBarcodesModule)]
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<StockLogViewModel> GetBarcodeScannerLogs(StockDataViewContext dataViewContext) 
-        => dataViewContext.StockLogs.AsQueryable();
+    public IQueryable<StockLogViewModel> GetBarcodeScannerLogs(StockDataViewContext dataViewContext)
+        => dataViewContext.StockLogs
+            .Where(x => x.TenantId == currentUser.TenantId)
+            .AsQueryable();
 }

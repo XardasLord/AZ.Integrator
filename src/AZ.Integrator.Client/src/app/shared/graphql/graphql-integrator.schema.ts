@@ -605,6 +605,7 @@ export type StockGroupViewModel = {
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   stocks: Array<StockViewModel>;
+  tenantId: Scalars['UUID']['output'];
 };
 
 export type StockGroupViewModelFilterInput = {
@@ -614,12 +615,14 @@ export type StockGroupViewModelFilterInput = {
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<StockGroupViewModelFilterInput>>;
   stocks?: InputMaybe<ListFilterInputTypeOfStockViewModelFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type StockGroupViewModelSortInput = {
   description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
 };
 
 export enum StockLogStatus {
@@ -641,7 +644,9 @@ export type StockLogViewModel = {
   createdBy: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   packageCode: Scalars['String']['output'];
+  scanId: Scalars['String']['output'];
   status: StockLogStatus;
+  tenantId: Scalars['UUID']['output'];
 };
 
 export type StockLogViewModelFilterInput = {
@@ -652,7 +657,9 @@ export type StockLogViewModelFilterInput = {
   id?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<StockLogViewModelFilterInput>>;
   packageCode?: InputMaybe<StringOperationFilterInput>;
+  scanId?: InputMaybe<StringOperationFilterInput>;
   status?: InputMaybe<StockLogStatusOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
 };
 
 export type StockLogViewModelSortInput = {
@@ -661,7 +668,9 @@ export type StockLogViewModelSortInput = {
   createdBy?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   packageCode?: InputMaybe<SortEnumType>;
+  scanId?: InputMaybe<SortEnumType>;
   status?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
 };
 
 export type StockViewModel = {
@@ -670,6 +679,7 @@ export type StockViewModel = {
   logs: Array<StockLogViewModel>;
   packageCode: Scalars['String']['output'];
   quantity: Scalars['Int']['output'];
+  tenantId: Scalars['UUID']['output'];
   threshold: Scalars['Int']['output'];
 };
 
@@ -680,6 +690,7 @@ export type StockViewModelFilterInput = {
   or?: InputMaybe<Array<StockViewModelFilterInput>>;
   packageCode?: InputMaybe<StringOperationFilterInput>;
   quantity?: InputMaybe<IntOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
   threshold?: InputMaybe<IntOperationFilterInput>;
 };
 
@@ -687,6 +698,7 @@ export type StockViewModelSortInput = {
   groupId?: InputMaybe<SortEnumType>;
   packageCode?: InputMaybe<SortEnumType>;
   quantity?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
   threshold?: InputMaybe<SortEnumType>;
 };
 

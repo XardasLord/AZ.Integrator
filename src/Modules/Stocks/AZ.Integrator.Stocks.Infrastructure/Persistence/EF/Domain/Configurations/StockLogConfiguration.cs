@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
+﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Stocks.Domain.Aggregates.Stock;
 using AZ.Integrator.Stocks.Domain.Aggregates.Stock.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -25,6 +26,11 @@ public class StockLogConfiguration : IEntityTypeConfiguration<StockLog>
             .HasColumnName("package_code")
             .IsRequired();
         
+        builder.Property(e => e.TenantId)
+            .HasConversion(value => value.Value, value => new TenantId(value))
+            .HasColumnName("tenant_id")
+            .IsRequired();
+        
         builder.Property(e => e.ChangeQuantity)
             .HasConversion(value => value.Value, value => new ChangeQuantity(value))
             .HasColumnName("change_quantity")
@@ -33,6 +39,10 @@ public class StockLogConfiguration : IEntityTypeConfiguration<StockLog>
         builder.Property(e => e.Status)
             .HasConversion(new EnumToNumberConverter<StockLogStatus, int>())
             .HasColumnName("status")
+            .IsRequired();
+        
+        builder.Property(e => e.ScanId)
+            .HasColumnName("scan_id")
             .IsRequired();
         
         builder.OwnsOne(e => e.CreationInformation, ci =>

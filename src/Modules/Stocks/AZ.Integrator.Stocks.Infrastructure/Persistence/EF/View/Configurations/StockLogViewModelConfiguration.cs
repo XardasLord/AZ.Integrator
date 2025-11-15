@@ -13,6 +13,8 @@ public class StockLogViewModelConfiguration : IEntityTypeConfiguration<StockLogV
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).HasColumnName("id");
+        builder.Property(x => x.ScanId).HasColumnName("scan_id");
+        builder.Property(x => x.TenantId).HasColumnName("tenant_id");
         builder.Property(x => x.PackageCode).HasColumnName("package_code");
         builder.Property(x => x.ChangeQuantity).HasColumnName("change_quantity");
         builder.Property(x => x.Status).HasColumnName("status");
