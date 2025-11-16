@@ -48,3 +48,7 @@ export class RevertScan {
 
   constructor(public scanId: string) {}
 }
+
+export class ResetCounters {
+  static readonly type = `${prefix} ${ResetCounters.name}`;
+}

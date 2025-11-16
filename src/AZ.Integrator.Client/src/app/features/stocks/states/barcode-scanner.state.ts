@@ -19,6 +19,7 @@ import {
   ProcessQueue,
   ProcessSingleScan,
   RemoveScan,
+  ResetCounters,
   RetryFailed,
   RevertScan,
 } from './barcode-scanner.action';
@@ -26,8 +27,11 @@ import { AuthState } from '../../../shared/states/auth.state';
 import { PendingScan, ScanStatus, ScanType } from '../models/pending-scan.model';
 
 const BARCODE_SCANNER_STATE_TOKEN = new StateToken<BarcodeScannerStateModel>('barcodeScanner');
-const STORAGE_KEY = 'pending_scans';
+const PENDING_SCANS_STORAGE_KEY = 'pending_scans';
+const SYNCED_SCANS_STORAGE_KEY = 'synced_scans';
+const TOTAL_SYNCED_COUNT_STORAGE_KEY = 'total_synced_count';
 const MAX_RETRIES = 5;
+const MAX_SYNCED_HISTORY = 50; // Maksymalna liczba przechowywanych zsynchronizowanych skanów
 
 @State<BarcodeScannerStateModel>({
   name: BARCODE_SCANNER_STATE_TOKEN,
@@ -35,6 +39,8 @@ const MAX_RETRIES = 5;
     graphqlQueryResponse: new GraphQLResponseWithoutPaginationVo<StockLogViewModel[]>(),
     logs: [],
     pendingScans: [],
+    syncedScans: [],
+    totalSyncedCount: 0,
   },
 })
 @Injectable()
@@ -46,12 +52,22 @@ export class BarcodeScannerState {
 
   @Selector([BARCODE_SCANNER_STATE_TOKEN])
   static logs(state: BarcodeScannerStateModel): StockLogViewModel[] {
-    return state.logs;
+    return state?.logs || [];
   }
 
   @Selector([BARCODE_SCANNER_STATE_TOKEN])
   static pendingScans(state: BarcodeScannerStateModel): PendingScan[] {
-    return state.pendingScans;
+    return state?.pendingScans || [];
+  }
+
+  @Selector([BARCODE_SCANNER_STATE_TOKEN])
+  static syncedScans(state: BarcodeScannerStateModel): PendingScan[] {
+    return state?.syncedScans || [];
+  }
+
+  @Selector([BARCODE_SCANNER_STATE_TOKEN])
+  static totalSyncedCount(state: BarcodeScannerStateModel): number {
+    return state?.totalSyncedCount || 0;
   }
 
   @Action(LoadLogs)
@@ -79,8 +95,15 @@ export class BarcodeScannerState {
 
   @Action(LoadPendingScans)
   loadPendingScans(ctx: StateContext<BarcodeScannerStateModel>) {
-    const scans = this.loadFromStorage();
-    ctx.patchState({ pendingScans: scans });
+    const pendingScans = this.loadPendingFromStorage();
+    const syncedScans = this.loadSyncedFromStorage();
+    const totalSyncedCount = this.loadTotalSyncedCountFromStorage();
+
+    ctx.patchState({
+      pendingScans,
+      syncedScans,
+      totalSyncedCount,
+    });
 
     // Uruchom auto-processor po załadowaniu
     this.startAutoProcessor(ctx);
@@ -102,7 +125,7 @@ export class BarcodeScannerState {
     const updatedScans = [scan, ...currentScans];
 
     ctx.patchState({ pendingScans: updatedScans });
-    this.saveToStorage(updatedScans);
+    this.savePendingToStorage(updatedScans);
 
     // Natychmiast próbuj przetworzyć
     return ctx.dispatch(new ProcessSingleScan(scan.id));
@@ -110,11 +133,17 @@ export class BarcodeScannerState {
 
   @Action(RemoveScan)
   removeScan(ctx: StateContext<BarcodeScannerStateModel>, action: RemoveScan) {
-    const currentScans = ctx.getState().pendingScans;
-    const updatedScans = currentScans.filter(s => s.id !== action.scanId);
+    const state = ctx.getState();
+    const updatedPendingScans = state.pendingScans.filter(s => s.id !== action.scanId);
+    const updatedSyncedScans = state.syncedScans.filter(s => s.id !== action.scanId);
 
-    ctx.patchState({ pendingScans: updatedScans });
-    this.saveToStorage(updatedScans);
+    ctx.patchState({
+      pendingScans: updatedPendingScans,
+      syncedScans: updatedSyncedScans,
+    });
+
+    this.savePendingToStorage(updatedPendingScans);
+    this.saveSyncedToStorage(updatedSyncedScans);
   }
 
   @Action(ProcessSingleScan)
@@ -126,12 +155,13 @@ export class BarcodeScannerState {
     }
 
     // Oznacz jako SYNCING
-    this.updateScan(ctx, action.scanId, { status: ScanStatus.SYNCING });
+    this.updatePendingScan(ctx, action.scanId, { status: ScanStatus.SYNCING });
 
     return this.stocksService.updateStockQuantity(scan.barcode, scan.changeQuantity, scan.id).pipe(
       tap(() => {
-        // Sukces
-        this.updateScan(ctx, action.scanId, { status: ScanStatus.SYNCED });
+        // Sukces - przenieś do syncedScans
+        const syncedScan: PendingScan = { ...scan, status: ScanStatus.SYNCED };
+        this.moveScanToSynced(ctx, syncedScan);
         this.toastService.success(`Kod ${scan.barcode} zsynchronizowany`, 'Sukces', { timeOut: 2000 });
       }),
       catchError((error: HttpErrorResponse) => {
@@ -139,7 +169,7 @@ export class BarcodeScannerState {
         const newRetryCount = scan.retryCount + 1;
         const newStatus = newRetryCount >= MAX_RETRIES ? ScanStatus.FAILED : ScanStatus.PENDING;
 
-        this.updateScan(ctx, action.scanId, {
+        this.updatePendingScan(ctx, action.scanId, {
           status: newStatus,
           retryCount: newRetryCount,
           lastError: error?.error?.Message || error.message,
@@ -182,26 +212,31 @@ export class BarcodeScannerState {
     );
 
     ctx.patchState({ pendingScans: updatedScans });
-    this.saveToStorage(updatedScans);
+    this.savePendingToStorage(updatedScans);
 
     return ctx.dispatch(new ProcessQueue());
   }
 
   @Action(ClearSynced)
   clearSynced(ctx: StateContext<BarcodeScannerStateModel>) {
-    const currentScans = ctx.getState().pendingScans;
-    const updatedScans = currentScans.filter(s => s.status !== ScanStatus.SYNCED);
+    // Wyczyść całą historię zsynchronizowanych skanów
+    ctx.patchState({ syncedScans: [] });
+    this.saveSyncedToStorage([]);
+  }
 
-    ctx.patchState({ pendingScans: updatedScans });
-    this.saveToStorage(updatedScans);
+  @Action(ResetCounters)
+  resetCounters(ctx: StateContext<BarcodeScannerStateModel>) {
+    // Resetuj licznik zsynchronizowanych skanów
+    ctx.patchState({ totalSyncedCount: 0 });
+    this.saveTotalSyncedCountToStorage(0);
   }
 
   @Action(RevertScan)
   revertScan(ctx: StateContext<BarcodeScannerStateModel>, action: RevertScan) {
-    const scan = ctx.getState().pendingScans.find(s => s.id === action.scanId);
+    const scan = ctx.getState().syncedScans.find(s => s.id === action.scanId);
 
-    if (!scan || scan.status !== ScanStatus.SYNCED) {
-      this.toastService.error('Można cofnąć tylko zsynchronizowane skany', 'Błąd');
+    if (!scan) {
+      this.toastService.error('Nie znaleziono zsynchronizowanego skanu', 'Błąd');
       return of(null);
     }
 
@@ -250,29 +285,97 @@ export class BarcodeScannerState {
 
   // === Helper Methods ===
 
-  private updateScan(ctx: StateContext<BarcodeScannerStateModel>, scanId: string, updates: Partial<PendingScan>) {
+  private updatePendingScan(
+    ctx: StateContext<BarcodeScannerStateModel>,
+    scanId: string,
+    updates: Partial<PendingScan>
+  ) {
     const currentScans = ctx.getState().pendingScans;
     const updatedScans = currentScans.map(s => (s.id === scanId ? { ...s, ...updates } : s));
 
     ctx.patchState({ pendingScans: updatedScans });
-    this.saveToStorage(updatedScans);
+    this.savePendingToStorage(updatedScans);
   }
 
-  private saveToStorage(scans: PendingScan[]) {
+  private moveScanToSynced(ctx: StateContext<BarcodeScannerStateModel>, syncedScan: PendingScan) {
+    const state = ctx.getState();
+
+    // Usuń z pendingScans
+    const updatedPendingScans = state.pendingScans.filter(s => s.id !== syncedScan.id);
+
+    // Dodaj do syncedScans na początku i ogranicz do MAX_SYNCED_HISTORY
+    const updatedSyncedScans = [syncedScan, ...state.syncedScans].slice(0, MAX_SYNCED_HISTORY);
+
+    // Zwiększ licznik zsynchronizowanych
+    const newTotalSyncedCount = state.totalSyncedCount + 1;
+
+    ctx.patchState({
+      pendingScans: updatedPendingScans,
+      syncedScans: updatedSyncedScans,
+      totalSyncedCount: newTotalSyncedCount,
+    });
+
+    this.savePendingToStorage(updatedPendingScans);
+    this.saveSyncedToStorage(updatedSyncedScans);
+    this.saveTotalSyncedCountToStorage(newTotalSyncedCount);
+  }
+
+  private savePendingToStorage(scans: PendingScan[]) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(scans));
+      localStorage.setItem(PENDING_SCANS_STORAGE_KEY, JSON.stringify(scans));
     } catch (error) {
-      console.error('Failed to save scans to localStorage', error);
+      console.error('Failed to save pending scans to localStorage', error);
     }
   }
 
-  private loadFromStorage(): PendingScan[] {
+  private saveSyncedToStorage(scans: PendingScan[]) {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      // Automatycznie przytnij do MAX_SYNCED_HISTORY przed zapisem
+      const limitedScans = scans.slice(0, MAX_SYNCED_HISTORY);
+      localStorage.setItem(SYNCED_SCANS_STORAGE_KEY, JSON.stringify(limitedScans));
+    } catch (error) {
+      console.error('Failed to save synced scans to localStorage', error);
+    }
+  }
+
+  private loadPendingFromStorage(): PendingScan[] {
+    try {
+      const stored = localStorage.getItem(PENDING_SCANS_STORAGE_KEY);
+
       return stored ? (JSON.parse(stored) as PendingScan[]) : [];
     } catch (error) {
-      console.error('Failed to load scans from localStorage', error);
+      console.error('Failed to load pending scans from localStorage', error);
       return [];
+    }
+  }
+
+  private loadSyncedFromStorage(): PendingScan[] {
+    try {
+      const stored = localStorage.getItem(SYNCED_SCANS_STORAGE_KEY);
+      const scans = stored ? (JSON.parse(stored) as PendingScan[]) : [];
+
+      return scans.slice(0, MAX_SYNCED_HISTORY);
+    } catch (error) {
+      console.error('Failed to load synced scans from localStorage', error);
+      return [];
+    }
+  }
+
+  private saveTotalSyncedCountToStorage(count: number) {
+    try {
+      localStorage.setItem(TOTAL_SYNCED_COUNT_STORAGE_KEY, count.toString());
+    } catch (error) {
+      console.error('Failed to save total synced count to localStorage', error);
+    }
+  }
+
+  private loadTotalSyncedCountFromStorage(): number {
+    try {
+      const stored = localStorage.getItem(TOTAL_SYNCED_COUNT_STORAGE_KEY);
+      return stored ? parseInt(stored, 10) : 0;
+    } catch (error) {
+      console.error('Failed to load total synced count from localStorage', error);
+      return 0;
     }
   }
 

@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -9,7 +9,7 @@ import { BarcodeScannerType } from '../barcode-scanner/barcode-scanner.component
 import { PendingScan, ScanStatus, ScanType } from '../../models/pending-scan.model';
 import { ConfirmScanRevertDialogComponent } from '../../components/convert-scan-revert-dialog/confirm-scan-revert-dialog.component';
 import { BarcodeScannerState } from '../../states/barcode-scanner.state';
-import { ClearSynced, RemoveScan, RetryFailed, RevertScan } from '../../states/barcode-scanner.action';
+import { ClearSynced, RemoveScan, ResetCounters, RetryFailed, RevertScan } from '../../states/barcode-scanner.action';
 
 @Component({
   selector: 'app-barcode-scanned-codes-list',
@@ -25,9 +25,15 @@ export class BarcodeScannedCodesListComponent {
 
   @Input() type!: BarcodeScannerType;
 
-  scans$: Observable<PendingScan[]> = this.store
-    .select(BarcodeScannerState.pendingScans)
-    .pipe(map(scans => scans.filter(s => (this.type === 'in' ? s.type === ScanType.IN : s.type === ScanType.OUT))));
+  scans$: Observable<PendingScan[]> = combineLatest([
+    this.store.select(BarcodeScannerState.pendingScans),
+    this.store.select(BarcodeScannerState.syncedScans),
+  ]).pipe(
+    map(([pending, synced]) => {
+      const allScans = [...(pending || []), ...(synced || [])];
+      return allScans.filter(s => (this.type === 'in' ? s.type === ScanType.IN : s.type === ScanType.OUT));
+    })
+  );
 
   protected readonly ScanStatus = ScanStatus;
 
@@ -41,6 +47,10 @@ export class BarcodeScannedCodesListComponent {
 
   clearSynced(): void {
     this.store.dispatch(new ClearSynced());
+  }
+
+  resetCounters(): void {
+    this.store.dispatch(new ResetCounters());
   }
 
   confirmRevert(scan: PendingScan): void {

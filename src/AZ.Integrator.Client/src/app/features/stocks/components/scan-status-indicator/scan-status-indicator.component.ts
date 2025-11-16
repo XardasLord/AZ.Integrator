@@ -64,9 +64,7 @@ export class ScanStatusIndicatorComponent {
     .select(BarcodeScannerState.pendingScans)
     .pipe(map(scans => scans.filter(s => s.status === ScanStatus.SYNCING).length));
 
-  syncedCount$: Observable<number> = this.store
-    .select(BarcodeScannerState.pendingScans)
-    .pipe(map(scans => scans.filter(s => s.status === ScanStatus.SYNCED).length));
+  syncedCount$: Observable<number> = this.store.select(BarcodeScannerState.totalSyncedCount);
 
   failedCount$: Observable<number> = this.store
     .select(BarcodeScannerState.pendingScans)

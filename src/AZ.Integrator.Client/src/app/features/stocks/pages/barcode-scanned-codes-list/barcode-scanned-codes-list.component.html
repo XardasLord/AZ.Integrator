@@ -7,6 +7,11 @@
       Wyczyść zsynchronizowane
     </button>
     <button
+      (click)="resetCounters()"
+      class="text-xs px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+      Resetuj licznik
+    </button>
+    <button
       (click)="retryFailed()"
       class="text-xs px-3 py-1 bg-orange-500 text-white rounded hover:bg-orange-600 transition">
       Ponów nieudane
@@ -15,7 +20,7 @@
 
   <!-- Lista skanów -->
   <ul class="w-full space-y-2 max-h-128 overflow-auto px-1">
-    @for (scan of scans$ | async; track scan.id; let i = $index) {
+    @for (scan of scans$ | async | slice: 0 : 20; track scan.id; let i = $index) {
       <li
         class="relative min-h-14 w-full flex items-center justify-between p-2 rounded-lg shadow border transition"
         [ngClass]="{
