@@ -224,7 +224,8 @@ export class OrdersState {
       tap(() => {
         this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w InPost', 'Przesyłka InPost'));
 
-        ctx.dispatch(new LoadShipments());
+        const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
+        ctx.dispatch(new LoadShipments(orderIds));
       }),
       catchError(error => {
         this.zone.run(() => this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost'));
@@ -240,7 +241,8 @@ export class OrdersState {
         this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w DPD', 'Przesyłka DPD'));
         this.dialogRef?.close();
 
-        ctx.dispatch(new LoadShipments());
+        const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
+        ctx.dispatch(new LoadShipments(orderIds));
       }),
       catchError((error: HttpErrorResponse) => {
         const errorDetails: IntegratorError = error.error;
@@ -330,7 +332,8 @@ export class OrdersState {
   }
 
   private handleOrdersResponse(ctx: StateContext<OrdersStateModel>, response: GetOrdersResponseModel) {
-    ctx.dispatch(new LoadShipments(response.orders.map(x => x.id)));
+    const orderIds = response.orders.map(x => x.id);
+    ctx.dispatch(new LoadShipments(orderIds));
 
     const customResponse = new RestQueryResponse<OrderDetailsModel[]>();
     customResponse.result = response.orders;
