@@ -69,11 +69,6 @@ export class OrdersState {
   }
 
   @Selector([ORDERS_STATE_TOKEN])
-  static getNotFinishedOrdersWithRegisteredShipmentCount(state: OrdersStateModel): number {
-    return state.restQueryResponse.totalCount;
-  }
-
-  @Selector([ORDERS_STATE_TOKEN])
   static getCurrentPage(state: OrdersStateModel): number {
     return state.restQuery.currentPage.pageIndex;
   }

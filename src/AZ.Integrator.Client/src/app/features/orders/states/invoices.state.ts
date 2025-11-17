@@ -1,5 +1,5 @@
 import { inject, Injectable, NgZone } from '@angular/core';
-import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
+import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
 import { catchError, of, switchMap, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -14,6 +14,7 @@ import { DownloadInvoice, GenerateInvoice, LoadInvoices } from './invoices.actio
 import { InvoicesService } from '../services/invoices.service';
 import { OrdersStateModel } from './orders-state.model';
 import { DownloadService } from '../../../shared/services/download.service';
+import { OrdersState } from './orders-state.service';
 
 const INVOICES_STATE_TOKEN = new StateToken<InvoicesStateModel>('invoices');
 
@@ -29,6 +30,7 @@ export class InvoicesState {
   private downloadService = inject(DownloadService);
   private zone = inject(NgZone);
   private toastService = inject(ToastrService);
+  private store = inject(Store);
 
   @Selector([INVOICES_STATE_TOKEN])
   static getInvoices(state: InvoicesStateModel): InvoiceViewModel[] {
@@ -68,7 +70,9 @@ export class InvoicesState {
       tap(() => {
         this.zone.run(() => this.toastService.success(`Faktura VAT została wygenerowana`, 'Faktura VAT'));
 
-        ctx.dispatch(new LoadInvoices());
+        const orders = this.store.selectSnapshot(OrdersState.getAllNewOrders);
+
+        ctx.dispatch(new LoadInvoices(orders.map(x => x.id)));
       }),
       catchError(error => {
         const applicationError: IntegratorError = error.error;
