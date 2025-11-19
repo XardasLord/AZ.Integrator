@@ -1,4 +1,4 @@
-﻿namespace AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View.ViewModels;
+﻿namespace AZ.Integrator.Shipments.Contracts.ViewModels;
 
 public class DpdShipmentViewModel
 {

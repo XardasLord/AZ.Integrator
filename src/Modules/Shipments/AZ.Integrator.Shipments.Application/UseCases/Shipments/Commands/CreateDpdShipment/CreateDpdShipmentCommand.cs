@@ -1,6 +1,6 @@
 ﻿using AZ.Integrator.Shared.Application;
-using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd.Models;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
+using AZ.Integrator.Shipments.Contracts.ViewModels;
 using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateDpdShipment;
@@ -14,4 +14,4 @@ public record CreateDpdShipmentCommand(
     string Reference,
     string Comments,
     string ExternalCustomerId,
-    string AllegroOrderId) : HeaderRequest, IRequest<CreateDpdShipmentResponse>;
+    string AllegroOrderId) : HeaderRequest, IRequest<ShipmentViewModel>;

@@ -1,5 +1,5 @@
-﻿using AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View.Configurations;
-using AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View.ViewModels;
+﻿using AZ.Integrator.Shipments.Contracts.ViewModels;
+using AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View;

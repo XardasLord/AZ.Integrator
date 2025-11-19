@@ -1,4 +1,4 @@
-﻿namespace AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View.ViewModels;
+﻿namespace AZ.Integrator.Shipments.Contracts.ViewModels;
 
 public class ShipmentViewModel
 {
@@ -7,4 +7,10 @@ public class ShipmentViewModel
     public string ExternalOrderNumber { get; set; }
     public string ShipmentProvider { get; set; }
     public DateTime CreatedAt { get; set; }
+}
+
+public static class ShipmentProviders 
+{
+    public const string Inpost = "INPOST";
+    public const string Dpd = "DPD";
 }

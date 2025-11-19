@@ -1,7 +1,7 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL.Queries;
+using AZ.Integrator.Shipments.Contracts.ViewModels;
 using AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View;
-using AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View.ViewModels;
 using HotChocolate.Data;
 using HotChocolate.Types;
 

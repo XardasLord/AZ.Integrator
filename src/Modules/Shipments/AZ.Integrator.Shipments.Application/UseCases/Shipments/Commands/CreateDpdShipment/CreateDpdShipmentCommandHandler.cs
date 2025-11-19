@@ -1,6 +1,6 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd;
-using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd.Models;
+using AZ.Integrator.Shipments.Contracts.ViewModels;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
 using Mediator;
 
@@ -11,9 +11,9 @@ public class CreateDpdShipmentCommandHandler(
     IDpdService dpdService,
     ICurrentUser currentUser,
     ICurrentDateTime currentDateTime)
-    : IRequestHandler<CreateDpdShipmentCommand, CreateDpdShipmentResponse>
+    : IRequestHandler<CreateDpdShipmentCommand, ShipmentViewModel>
 {
-    public async ValueTask<CreateDpdShipmentResponse> Handle(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
+    public async ValueTask<ShipmentViewModel> Handle(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
     {
         var response = await dpdService.CreateShipment(command);
 
@@ -21,7 +21,8 @@ public class CreateDpdShipmentCommandHandler(
         
         foreach (var packageResponse in response.Packages)
         {
-            var parcels = packageResponse.Parcels.Select(parcelResponse => DpdParcel.Register(parcelResponse.ParcelId, parcelResponse.Waybill)).ToList();
+            var parcels = packageResponse.Parcels
+                .Select(parcelResponse => DpdParcel.Register(parcelResponse.ParcelId, parcelResponse.Waybill)).ToList();
 
             packages.Add(DpdPackage.Register(packageResponse.PackageId, parcels));
         }
@@ -33,6 +34,13 @@ public class CreateDpdShipmentCommandHandler(
         
         await shipmentRepository.AddAsync(dpdShipment, cancellationToken);
 
-        return response;
+        return new ShipmentViewModel
+        {
+            TenantId = dpdShipment.CreationInformation.TenantId,
+            CreatedAt = dpdShipment.CreationInformation.CreatedAt.DateTime,
+            ExternalOrderNumber = dpdShipment.ExternalOrderNumber,
+            ShipmentNumber = dpdShipment.SessionNumber.Value.ToString(),
+            ShipmentProvider = ShipmentProviders.Dpd
+        };
     }
 }

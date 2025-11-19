@@ -216,11 +216,21 @@ export class OrdersState {
   @Action(RegisterInpostShipment)
   registerInpostShipment(ctx: StateContext<OrdersStateModel>, action: RegisterInpostShipment) {
     return this.orderService.registerInpostShipment(action.command).pipe(
-      tap(() => {
-        this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w InPost', 'Przesyłka InPost'));
+      tap((responseShipment: ShipmentViewModel) => {
+        this.zone.run(() =>
+          this.toastService.success(
+            `Przesyłka została zarejestrowana w InPost pod numerem ${responseShipment.shipmentNumber}`,
+            'Przesyłka InPost'
+          )
+        );
 
-        const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
-        ctx.dispatch(new LoadShipments(orderIds));
+        const currentShipments = ctx.getState().shipments;
+        ctx.patchState({
+          shipments: [...currentShipments, responseShipment],
+        });
+
+        // const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
+        // ctx.dispatch(new LoadShipments(orderIds));
       }),
       catchError(error => {
         this.zone.run(() => this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost'));
@@ -232,12 +242,22 @@ export class OrdersState {
   @Action(RegisterDpdShipment)
   registerDpdShipment(ctx: StateContext<OrdersStateModel>, action: RegisterDpdShipment) {
     return this.orderService.registerDpdShipment(action.command).pipe(
-      tap(() => {
-        this.zone.run(() => this.toastService.success('Przesyłka została zarejestrowana w DPD', 'Przesyłka DPD'));
+      tap((responseShipment: ShipmentViewModel) => {
+        this.zone.run(() =>
+          this.toastService.success(
+            `Przesyłka została zarejestrowana w DPD pod numerem ${responseShipment.shipmentNumber}`,
+            'Przesyłka DPD'
+          )
+        );
         this.dialogRef?.close();
 
-        const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
-        ctx.dispatch(new LoadShipments(orderIds));
+        const currentShipments = ctx.getState().shipments;
+        ctx.patchState({
+          shipments: [...currentShipments, responseShipment],
+        });
+
+        // const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
+        // ctx.dispatch(new LoadShipments(orderIds));
       }),
       catchError((error: HttpErrorResponse) => {
         const errorDetails: IntegratorError = error.error;

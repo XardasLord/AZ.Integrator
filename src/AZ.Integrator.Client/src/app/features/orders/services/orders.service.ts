@@ -48,12 +48,12 @@ export class OrdersService extends RemoteServiceBase {
   }
 
   // TODO: Move it to a new dedicated shipment service
-  registerInpostShipment(shipment: CreateShipmentCommand): Observable<void> {
-    return this.httpClient.post<void>(`${this.apiUrl}/inpostShipments/`, shipment);
+  registerInpostShipment(shipment: CreateShipmentCommand): Observable<ShipmentViewModel> {
+    return this.httpClient.post<ShipmentViewModel>(`${this.apiUrl}/inpostShipments/`, shipment);
   }
 
-  registerDpdShipment(shipment: CreateShipmentCommand): Observable<void> {
-    return this.httpClient.post<void>(`${this.apiUrl}/dpdShipments/`, shipment);
+  registerDpdShipment(shipment: CreateShipmentCommand): Observable<ShipmentViewModel> {
+    return this.httpClient.post<ShipmentViewModel>(`${this.apiUrl}/dpdShipments/`, shipment);
   }
 
   getShipments(

@@ -1,4 +1,4 @@
-﻿using AZ.Integrator.Shipments.Infrastructure.Persistence.EF.View.ViewModels;
+﻿using AZ.Integrator.Shipments.Contracts.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

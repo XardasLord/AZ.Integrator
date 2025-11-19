@@ -4,6 +4,7 @@ using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Monitoring.Contracts;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
+using AZ.Integrator.Shipments.Contracts.ViewModels;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
 using Mediator;
 
@@ -16,9 +17,9 @@ public class CreateInpostShipmentCommandHandler(
     IMonitoringFacade monitoringFacade,
     ICurrentUser currentUser,
     ICurrentDateTime currentDateTime)
-    : IRequestHandler<CreateInpostShipmentCommand, ShipmentResponse>
+    : IRequestHandler<CreateInpostShipmentCommand, ShipmentViewModel>
 {
-    public async ValueTask<ShipmentResponse> Handle(CreateInpostShipmentCommand command, CancellationToken cancellationToken)
+    public async ValueTask<ShipmentViewModel> Handle(CreateInpostShipmentCommand command, CancellationToken cancellationToken)
     {
         var shipment = mapper.Map<Shipment>(command);
 
@@ -49,6 +50,13 @@ public class CreateInpostShipmentCommandHandler(
                 cancellationToken);
         }
 
-        return response;
+        return new ShipmentViewModel
+        {
+            TenantId = inpostShipment.CreationInformation.TenantId,
+            CreatedAt = inpostShipment.CreationInformation.CreatedAt.DateTime,
+            ExternalOrderNumber = inpostShipment.ExternalOrderNumber,
+            ShipmentNumber = inpostShipment.Number,
+            ShipmentProvider = ShipmentProviders.Inpost
+        };
     }
 }

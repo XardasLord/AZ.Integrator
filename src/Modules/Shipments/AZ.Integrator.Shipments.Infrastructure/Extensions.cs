@@ -49,9 +49,9 @@ public static class Extensions
         
         inpostShipmentGroup.MapPost("/", async (CreateInpostShipmentCommand command, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            await mediator.Send(command, cancellationToken);
+            var shipment = await mediator.Send(command, cancellationToken);
             
-            return Results.Ok();
+            return Results.Ok(shipment);
         });
         
         inpostShipmentGroup.MapGet("/{shipmentId}/label", async (string shipmentId, IMediator mediator, CancellationToken cancellationToken) =>
@@ -77,9 +77,9 @@ public static class Extensions
 
         dpdShipmentGroup.MapPost("/", async (CreateDpdShipmentCommand command, IMediator mediator, CancellationToken cancellationToken) =>
         {
-            await mediator.Send(command, cancellationToken);
+            var shipment = await mediator.Send(command, cancellationToken);
             
-            return Results.Ok();
+            return Results.Ok(shipment);
         });
         
         dpdShipmentGroup.MapGet("/{sessionId}/label", async (long sessionId, IMediator mediator, CancellationToken cancellationToken) =>
