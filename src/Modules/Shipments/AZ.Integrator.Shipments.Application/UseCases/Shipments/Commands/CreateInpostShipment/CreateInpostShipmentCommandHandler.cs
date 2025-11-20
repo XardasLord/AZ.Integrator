@@ -2,10 +2,12 @@
 using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SeedWork;
 using AZ.Integrator.Monitoring.Contracts;
+using AZ.Integrator.Shipments.Application.Common.Exceptions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
 using AZ.Integrator.Shipments.Contracts.ViewModels;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment;
+using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.Specifications;
 using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateInpostShipment;
@@ -21,6 +23,8 @@ public class CreateInpostShipmentCommandHandler(
 {
     public async ValueTask<ShipmentViewModel> Handle(CreateInpostShipmentCommand command, CancellationToken cancellationToken)
     {
+        await EnsureShipmentForOrderNotExists(command, cancellationToken);
+
         var shipment = mapper.Map<Shipment>(command);
 
         var response = await shipXService.CreateShipment(shipment);
@@ -58,5 +62,14 @@ public class CreateInpostShipmentCommandHandler(
             ShipmentNumber = inpostShipment.Number,
             ShipmentProvider = ShipmentProviders.Inpost
         };
+    }
+
+    private async ValueTask EnsureShipmentForOrderNotExists(CreateInpostShipmentCommand command, CancellationToken cancellationToken)
+    {
+        var spec = new InpostShipmentByExternalOrderNumberSpec(command.ExternalOrderId, currentUser.TenantId);
+        var exists = await shipmentRepository.AnyAsync(spec, cancellationToken);
+        
+        if (exists)
+            throw new InpostShipmentAlreadyExistsException(command.ExternalOrderId);
     }
 }

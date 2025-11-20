@@ -5,8 +5,10 @@ namespace AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.Specification
 
 public sealed class InpostShipmentByExternalOrderNumberSpec : Specification<InpostShipment>, ISingleResultSpecification<InpostShipment>
 {
-    public InpostShipmentByExternalOrderNumberSpec(ExternalOrderNumber externalOrderNumber)
+    public InpostShipmentByExternalOrderNumberSpec(ExternalOrderNumber externalOrderNumber, TenantId tenantId)
     {
-        Query.Where(x => x.ExternalOrderNumber == externalOrderNumber.Value);
+        Query
+            .Where(x => x.ExternalOrderNumber == externalOrderNumber.Value)
+            .Where(x => x.CreationInformation.TenantId == tenantId);
     }
 }

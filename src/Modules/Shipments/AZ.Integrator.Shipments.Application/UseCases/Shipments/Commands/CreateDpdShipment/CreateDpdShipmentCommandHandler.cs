@@ -1,7 +1,9 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Shipments.Application.Common.Exceptions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.Dpd;
 using AZ.Integrator.Shipments.Contracts.ViewModels;
 using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment;
+using AZ.Integrator.Shipments.Domain.Aggregates.DpdShipment.Specifications;
 using Mediator;
 
 namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.CreateDpdShipment;
@@ -15,6 +17,8 @@ public class CreateDpdShipmentCommandHandler(
 {
     public async ValueTask<ShipmentViewModel> Handle(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
     {
+        await EnsureShipmentForOrderNotExists(command, cancellationToken);
+
         var response = await dpdService.CreateShipment(command);
 
         var packages = new List<DpdPackage>();
@@ -42,5 +46,14 @@ public class CreateDpdShipmentCommandHandler(
             ShipmentNumber = dpdShipment.SessionNumber.Value.ToString(),
             ShipmentProvider = ShipmentProviders.Dpd
         };
+    }
+
+    private async ValueTask EnsureShipmentForOrderNotExists(CreateDpdShipmentCommand command, CancellationToken cancellationToken)
+    {
+        var spec = new DpdShipmentByExternalOrderNumberSpec(command.AllegroOrderId, currentUser.TenantId);
+        var exists = await shipmentRepository.AnyAsync(spec, cancellationToken);
+        
+        if (exists)
+            throw new DpdShipmentAlreadyExistsException(command.AllegroOrderId);
     }
 }

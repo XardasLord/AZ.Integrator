@@ -108,9 +108,4 @@ public static class Extensions
             .AddScoped(typeof(IAggregateReadRepository<InpostShipment>), typeof(AggregateReadRepository<InpostShipment, ShipmentDbContext>))
             .AddScoped(typeof(IAggregateReadRepository<DpdShipment>), typeof(AggregateReadRepository<DpdShipment, ShipmentDbContext>));
     }
-    
-    private class GetInpostLabelsRequest
-    {
-        public IEnumerable<string> ShipmentNumber { get; set; } = [];
-    }
 }
