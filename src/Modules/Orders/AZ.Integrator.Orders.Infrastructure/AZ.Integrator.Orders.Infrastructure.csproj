@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\AZ.Integrator.Shared.Infrastructure\AZ.Integrator.Shared.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Integrations\AZ.Integrator.Integrations.Contracts\AZ.Integrator.Integrations.Contracts.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Orders.Application\AZ.Integrator.Orders.Application.csproj" />
       <ProjectReference Include="..\AZ.Integrator.Orders.Domain\AZ.Integrator.Orders.Domain.csproj" />
     </ItemGroup>

@@ -1,7 +1,7 @@
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel;
 using AZ.Integrator.Catalog.Domain.Aggregates.FurnitureModel.ValueObjects;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;

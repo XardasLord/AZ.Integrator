@@ -3,21 +3,20 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Web;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Integrations.Contracts;
 using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.RequestModels;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.ResponseModels;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro;
 
 public class AllegroApiService(
     IHttpClientFactory httpClientFactory,
-    AllegroAccountDataViewContext dataViewContext)
+    IIntegrationsReadFacade integrationsReadFacade)
     : IAllegroService
 {
     private const string AllegroMediaType = "application/vnd.allegro.public.v1+json";
@@ -176,10 +175,9 @@ public class AllegroApiService(
 
     private async Task<string> GetAccessToken(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var tenantAccount = await dataViewContext.AllegroAccounts
-            .Where(x => x.SourceSystemId == sourceSystemId.Value)
-            .SingleAsync(x => x.TenantId == tenantId.Value.ToString());
-
-        return tenantAccount.AccessToken;
+        var details = await integrationsReadFacade.GetAllegroIntegrationDetails(tenantId, sourceSystemId)
+                      ?? throw new ApplicationException($"Erli integration for tenant '{tenantId.Value}' and SourceSystemID '{sourceSystemId}' does not exist");
+        
+        return details.AccessToken;
     }
 }

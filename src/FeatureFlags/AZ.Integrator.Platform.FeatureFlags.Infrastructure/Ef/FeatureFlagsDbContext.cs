@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Platform.FeatureFlags.Infrastructure.Entities;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using Microsoft.EntityFrameworkCore;
 
 namespace AZ.Integrator.Platform.FeatureFlags.Infrastructure.Ef;

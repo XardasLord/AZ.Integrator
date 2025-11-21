@@ -9,7 +9,7 @@ import {
   StocksRoutePath,
 } from '../../modules/app-routing.module';
 import { environment } from '../../../../environments/environment';
-import { AuthRoles } from '../../../shared/auth/models/auth.roles';
+import { AllRoles, AuthRoles } from '../../../shared/auth/models/auth.roles';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-role-allow.directive';
 import { MaterialModule } from '../../../shared/modules/material.module';
@@ -61,7 +61,7 @@ export class NavigationComponent implements OnInit {
       title: 'Strona główna',
       icon: 'home',
       route: RoutePaths.Home,
-      roles: [],
+      roles: AllRoles,
     },
 
     {
@@ -111,7 +111,7 @@ export class NavigationComponent implements OnInit {
           title: 'Statystyki',
           icon: 'bar_chart',
           route: StocksRoutePath.Statistics,
-          roles: [],
+          roles: [AuthRoles.Admin],
           featureFlag: FeatureFlagCode_Warehouse_StatisticsModule,
         },
       ],

@@ -1,5 +1,4 @@
-﻿using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
-using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.ViewModels;
+﻿using AZ.Integrator.Stocks.Infrastructure.Persistence.EF.View.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

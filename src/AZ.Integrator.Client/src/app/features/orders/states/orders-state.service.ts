@@ -228,9 +228,6 @@ export class OrdersState {
         ctx.patchState({
           shipments: [...currentShipments, responseShipment],
         });
-
-        // const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
-        // ctx.dispatch(new LoadShipments(orderIds));
       }),
       catchError(error => {
         this.zone.run(() => this.toastService.error('Błąd podczas rejestrowania przesyłki Inpost', 'Przesyłka Inpost'));
@@ -255,9 +252,6 @@ export class OrdersState {
         ctx.patchState({
           shipments: [...currentShipments, responseShipment],
         });
-
-        // const orderIds = ctx.getState().restQueryResponse.result.map(x => x.id);
-        // ctx.dispatch(new LoadShipments(orderIds));
       }),
       catchError((error: HttpErrorResponse) => {
         const errorDetails: IntegratorError = error.error;

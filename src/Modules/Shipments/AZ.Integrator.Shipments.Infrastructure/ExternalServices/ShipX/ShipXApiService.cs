@@ -1,25 +1,35 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
+using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Integrations.Contracts;
+using AZ.Integrator.Integrations.Contracts.ViewModels;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
+using AZ.Integrator.Shipments.Application.Common.Exceptions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX.Models;
 using AZ.Integrator.Shipments.Domain.Aggregates.InpostShipment.ValueObjects;
-using Microsoft.Extensions.Options;
 
 namespace AZ.Integrator.Shipments.Infrastructure.ExternalServices.ShipX;
 
-public class ShipXApiService(IOptions<ShipXOptions> shipXOptions, IHttpClientFactory httpClientFactory)
+public class ShipXApiService(
+    IHttpClientFactory httpClientFactory,
+    IIntegrationsReadFacade integrationsReadFacade,
+    ICurrentUser currentUser)
     : IShipXService
 {
-    private readonly HttpClient _httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.ShipXHttpClientName);
-
     public async Task<ShipmentResponse> CreateShipment(Shipment shipment)
     {
         var shipmentJson = System.Text.Json.JsonSerializer.Serialize(shipment);
         var shipmentContent = new StringContent(shipmentJson, Encoding.UTF8, "application/json");
         
-        using var response = await _httpClient.PostAsync($"v1/organizations/{shipXOptions.Value.OrganizationId}/shipments", shipmentContent);
+        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId) 
+                                 ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
+        
+        var httpClient = PrepareHttpClient(integrationDetails);
+        
+        using var response = await httpClient.PostAsync($"v1/organizations/{integrationDetails.OrganizationId}/shipments", shipmentContent);
         
         if (!response.IsSuccessStatusCode)
         {
@@ -45,7 +55,11 @@ public class ShipXApiService(IOptions<ShipXOptions> shipXOptions, IHttpClientFac
             { "type", "A6" }
         }.ToHttpQueryString();
         
-        using var response = await _httpClient.GetAsync($"v1/shipments/{number.Value}/label?{queryParams}");
+        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId)
+                                 ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
+        var httpClient = PrepareHttpClient(integrationDetails);
+        
+        using var response = await httpClient.GetAsync($"v1/shipments/{number.Value}/label?{queryParams}");
         
         if (!response.IsSuccessStatusCode)
         {
@@ -77,7 +91,11 @@ public class ShipXApiService(IOptions<ShipXOptions> shipXOptions, IHttpClientFac
 
         var httpParams = queryParams.ToHttpQueryString();
         
-        using var response = await _httpClient.GetAsync($"v1/organizations/{shipXOptions.Value.OrganizationId}/shipments/labels?{httpParams}");
+        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId)
+                                 ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
+        var httpClient = PrepareHttpClient(integrationDetails);
+        
+        using var response = await httpClient.GetAsync($"v1/organizations/{integrationDetails.OrganizationId}/shipments/labels?{httpParams}");
         
         if (!response.IsSuccessStatusCode)
         {
@@ -99,7 +117,11 @@ public class ShipXApiService(IOptions<ShipXOptions> shipXOptions, IHttpClientFac
 
     public async Task<ShipmentResponse> GetDetails(ShipmentNumber number)
     {
-        using var response = await _httpClient.GetAsync($"v1/shipments/{number.Value}");
+        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId)
+                                 ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
+        var httpClient = PrepareHttpClient(integrationDetails);
+        
+        using var response = await httpClient.GetAsync($"v1/shipments/{number.Value}");
         
         if (!response.IsSuccessStatusCode)
         {
@@ -117,5 +139,15 @@ public class ShipXApiService(IOptions<ShipXOptions> shipXOptions, IHttpClientFac
         var shipmentResponse = await response.Content.ReadFromJsonAsync<ShipmentResponse>();
 
         return shipmentResponse;
+    }
+
+    private HttpClient PrepareHttpClient(InpostIntegrationViewModel integrationDetails)
+    {
+        var httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.ShipXHttpClientName);
+        
+        httpClient.DefaultRequestHeaders.Clear();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", integrationDetails.AccessToken);
+
+        return httpClient;
     }
 }

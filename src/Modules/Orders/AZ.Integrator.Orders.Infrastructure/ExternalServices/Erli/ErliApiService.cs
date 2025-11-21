@@ -3,24 +3,21 @@ using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
-using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Integrations.Contracts;
 using AZ.Integrator.Orders.Application.Common.ExternalServices.Erli;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli.RequestModels;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Erli;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Infrastructure.ExternalServices;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ErliAccount;
-using Microsoft.EntityFrameworkCore;
 using Order = AZ.Integrator.Shared.Application.ExternalServices.Erli.Order;
 
 namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Erli;
 
 public class ErliApiService(
     IHttpClientFactory httpClientFactory,
-    ErliAccountDbContext dataViewContext, // TODO: Create DataViewContext for ErliAccounts
-    ICurrentUser currentUser) : IErliService
+    IIntegrationsReadFacade integrationsReadFacade) : IErliService
 {
     private static readonly JsonSerializerOptions JsonSerializerDefaultOptions = new()
     {
@@ -148,13 +145,9 @@ public class ErliApiService(
 
     private async Task<string> GetApiKey(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var tenantAccount = await dataViewContext.ErliAccounts
-            .Where(x => x.SourceSystemId == sourceSystemId.Value)
-            .SingleOrDefaultAsync(x => x.TenantId == tenantId.Value.ToString());
-
-        if (tenantAccount is null)
-            throw new ApplicationException($"Tenant {tenantId.Value} does not exist");
+        var details = await integrationsReadFacade.GetErliIntegrationDetails(tenantId, sourceSystemId)
+            ?? throw new ApplicationException($"Erli integration for tenant '{tenantId.Value}' and SourceSystemID '{sourceSystemId}' does not exist");
         
-        return tenantAccount.ApiKey;
+        return details.ApiKey;
     }
 }

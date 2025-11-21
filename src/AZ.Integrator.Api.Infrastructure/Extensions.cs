@@ -7,11 +7,8 @@ using AZ.Integrator.Shared.Infrastructure.Authentication;
 using AZ.Integrator.Shared.Infrastructure.Authorization;
 using AZ.Integrator.Shared.Infrastructure.ErrorHandling;
 using AZ.Integrator.Shared.Infrastructure.Hangfire;
-using AZ.Integrator.Shared.Infrastructure.Hangfire.RecurringJobs;
-using AZ.Integrator.Shared.Infrastructure.Identity;
 using AZ.Integrator.Shared.Infrastructure.Mediator;
 using AZ.Integrator.Shared.Infrastructure.OpenApi;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.Persistence.GraphQL;
 using AZ.Integrator.Shared.Infrastructure.Time;
 using AZ.Integrator.Shipments.Infrastructure;
@@ -20,6 +17,8 @@ using AZ.Integrator.Monitoring.Infrastructure;
 using AZ.Integrator.Platform.FeatureFlags.Infrastructure;
 using AZ.Integrator.Platform.Tenants.Infrastructure;
 using AZ.Integrator.Procurement.Infrastructure;
+using AZ.Integrator.Integrations.Infrastructure;
+using AZ.Integrator.Integrations.Infrastructure.Hangfire.RecurringJobs;
 using Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,7 +45,6 @@ public static class Extensions
         
         services.AddIntegratorAuthentication(configuration);
         services.AddIntegratorAuthorization(configuration);
-        services.AddIntegratorIdentity(configuration);
 
         services.AddFeatureFlags(configuration);
         services.AddTenantsManagement(configuration);
@@ -57,7 +55,6 @@ public static class Extensions
         });
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(HeaderRequestMiddleware<,>));
         
-        services.AddPostgres(configuration);
         services.AddIntegratorGraphQl(configuration)
             .AddStocksModuleGraphQlObjects()
             .AddTagParcelTemplatesModuleGraphQlObjects()
@@ -65,12 +62,13 @@ public static class Extensions
             .AddShipmentsModuleGraphQlObjects()
             .AddMonitoringModuleGraphQlObjects()
             .AddCatalogModuleGraphQlObjects()
-            .AddProcurementModuleGraphQlObjects();
+            .AddProcurementModuleGraphQlObjects()
+            .AddIntegrationsModuleGraphQlObjects();
         
         services.AddIntegratorOpenApi(configuration);
         
         services.AddIntegratorJobManager(configuration)
-            .AddRecurringJob<RefreshTenantAccessTokensRecurringJob>();
+            .AddRecurringJob<RefreshAllegroTenantAccessTokensRecurringJob>();
         
         // Infrastructure dedicated modules
         services.RegisterStocksModule(configuration);
@@ -81,6 +79,7 @@ public static class Extensions
         services.RegisterMonitoringModule(configuration);
         services.RegisterCatalogModule(configuration);
         services.RegisterProcurementModule(configuration);
+        services.RegisterIntegrationsModule(configuration);
 
         return services;
     }

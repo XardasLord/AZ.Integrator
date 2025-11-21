@@ -9,3 +9,10 @@ export enum AuthRoles {
   'default-roles-az-integrator' = 'default-roles-az-integrator',
   'uma_authorization' = 'uma_authorization',
 }
+
+export const AllRoles: AuthRoles[] = [
+  AuthRoles.MasterAdmin,
+  AuthRoles.Admin,
+  AuthRoles.ScannerIn,
+  AuthRoles.ScannerOut,
+];

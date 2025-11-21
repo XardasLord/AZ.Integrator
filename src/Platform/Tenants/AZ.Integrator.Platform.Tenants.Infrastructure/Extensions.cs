@@ -1,4 +1,6 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
+using AZ.Integrator.Platform.FeatureFlags.Abstractions;
+using AZ.Integrator.Platform.FeatureFlags.Infrastructure.Entities;
 using AZ.Integrator.Platform.Tenants.Infrastructure.Ef;
 using AZ.Integrator.Platform.Tenants.Infrastructure.Entities;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
@@ -55,6 +57,7 @@ public static class Extensions
             AddTenantRequest request,
             [FromServices] TenantsDbContext dbContext,
             [FromServices] ICurrentUser currentUser,
+            [FromServices] ICurrentDateTime currentDateTime,
             CancellationToken cancellationToken) => 
             {
                 if (!currentUser.IsMasterAdmin())
@@ -65,11 +68,24 @@ public static class Extensions
                     TenantId = request.TenantId,
                     Name = request.Name,
                     IsActive = request.IsActive,
-                    CreatedAt = DateTimeOffset.UtcNow
+                    CreatedAt = currentDateTime.CurrentDate()
                 };
+
+                foreach (var featureFlag in FeatureFlagCodes.AllCodes)
+                {
+                    tenant.FeatureFlags.Add(new TenantFeatureFlag
+                    {
+                        Code = featureFlag,
+                        Enabled = true,
+                        ModifiedAt = currentDateTime.CurrentDate(),
+                        ModifiedBy =  currentUser.UserId
+                    });
+                }
                 
                 dbContext.Tenants.Add(tenant);
                 await dbContext.SaveChangesAsync(cancellationToken);
+                
+                // TODO: Create admin user for the tenant in Keycloak Identity Provider via API + attach user attributes as tenant_id and tenant_name
             
                 return Results.Ok(); 
             });

@@ -23,7 +23,7 @@ export class HomeComponent {
     const roles = this.store.selectSnapshot(AuthState.getUserRoles);
 
     if (roles.includes(AuthRoles.MasterAdmin)) {
-      this.store.dispatch(new Navigate([MarketplaceRoutePath.Orders]));
+      // TODO: Change to MasterAdmin specific route when available
     } else if (roles.includes(AuthRoles.Admin)) {
       this.store.dispatch(new Navigate([MarketplaceRoutePath.Orders]));
     } else if (roles.includes(AuthRoles.ScannerIn)) {

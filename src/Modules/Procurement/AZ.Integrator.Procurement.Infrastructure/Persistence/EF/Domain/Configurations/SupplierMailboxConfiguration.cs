@@ -1,6 +1,6 @@
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier;
 using AZ.Integrator.Procurement.Domain.Aggregates.Supplier.ValueObjects;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using EmailValueObject = AZ.Integrator.Domain.SharedKernel.ValueObjects.Email;

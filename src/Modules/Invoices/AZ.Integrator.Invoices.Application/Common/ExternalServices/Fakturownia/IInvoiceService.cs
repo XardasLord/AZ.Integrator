@@ -1,4 +1,5 @@
-﻿using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.Models;
+﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia.Models;
 using AZ.Integrator.Invoices.Contracts.Dtos;
 
 namespace AZ.Integrator.Invoices.Application.Common.ExternalServices.Fakturownia;
@@ -9,7 +10,8 @@ public interface IInvoiceService
         BuyerDto buyerDto,
         IReadOnlyList<InvoiceLineDto> invoiceItems,
         PaymentTermsDto paymentTermsDto,
-        DeliveryDto deliveryDto);
+        DeliveryDto deliveryDto,
+        TenantId tenantId);
     
-    Task<byte[]> Download(long invoiceId);
+    Task<byte[]> Download(long invoiceId, TenantId tenantId);
 }

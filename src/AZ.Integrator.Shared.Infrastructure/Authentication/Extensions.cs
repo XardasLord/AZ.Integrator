@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.AllegroAccount;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -40,6 +39,7 @@ public static class Extensions
         const string allegroMebleplTenantOAuthAuthenticationScheme = "allegro-meblepl";
         const string allegroMyTestTenantOAuthAuthenticationScheme = "allegro-my-test";
         
+        // TODO: To be adjusted after introducment of Keycloak as Identity Provider
         services
             .AddAuthentication(sharedOptions =>
             {
@@ -141,22 +141,22 @@ public static class Extensions
         options.Events.OnRedirectToAuthorizationEndpoint = ctx =>
         {
             var serviceProvider = services.BuildServiceProvider();
-            var dbViewContext = serviceProvider.GetRequiredService<AllegroAccountDataViewContext>();
+            // var dbViewContext = serviceProvider.GetRequiredService<AllegroAccountDataViewContext>();
 
             var tenantId = $"allegro-{ctx.Request.Query["tenantId"].ToString()}";
 
-            var allegroAccount = dbViewContext.AllegroAccounts.SingleOrDefault(x => x.TenantId == tenantId);
-            if (allegroAccount is null)
-            {
-                // Account does not exist in the system
-                ctx.RedirectUri = $"{ctx.RedirectUri}&prompt=confirm";
-
-                ctx.HttpContext.Response.Redirect(ctx.RedirectUri);
-            
-                return Task.FromResult(0);
-            }
-            else
-            {
+            // var allegroAccount = dbViewContext.AllegroAccounts.SingleOrDefault(x => x.TenantId == tenantId);
+            // if (allegroAccount is null)
+            // {
+            //     // Account does not exist in the system
+            //     ctx.RedirectUri = $"{ctx.RedirectUri}&prompt=confirm";
+            //
+            //     ctx.HttpContext.Response.Redirect(ctx.RedirectUri);
+            //
+            //     return Task.FromResult(0);
+            // }
+            // else
+            // {
                 // TODO: This can be removed after introducment of the new authentication flow using Keycloak
                 
                 // Account exists, so we don't need to force login
@@ -174,7 +174,7 @@ public static class Extensions
                 ctx.HttpContext.Response.Redirect($"{clientUrlAppRedirect}?access_token={jwtToken}");
                 
                 return Task.CompletedTask;
-            }
+            // }
         };
 
         options.Events.OnCreatingTicket = ctx =>

@@ -2,6 +2,22 @@
 
 public static class FeatureFlagCodes
 {
+    public static string[] AllCodes =
+    [
+        MarketplaceModule,
+        MarketplaceOrdersModule,
+        MarketplaceParcelTemplatesModule,
+        WarehouseModule,
+        WarehouseStocksModule,
+        WarehouseStatisticsModule,
+        WarehouseScanningBarcodesModule,
+        ProcurementModule,
+        IntegrationsModule,
+        InvoicesAutoGeneration,
+        InvoicesAllegroSync,
+        InvoicesShopifySync
+    ];
+    
     public const string MarketplaceModule = "marketplace-module";
     public const string MarketplaceOrdersModule = "marketplace.orders-module";
     public const string MarketplaceParcelTemplatesModule = "marketplace.parcel-templates-module";
@@ -12,6 +28,8 @@ public static class FeatureFlagCodes
     public const string WarehouseScanningBarcodesModule = "warehouse.scanning-barcodes-module";
     
     public const string ProcurementModule = "procurement-module";
+    
+    public const string IntegrationsModule = "integrations-module";
     
     public const string InvoicesAutoGeneration = "invoices.auto-generation";
     public const string InvoicesAllegroSync = "invoices.allegro-sync";

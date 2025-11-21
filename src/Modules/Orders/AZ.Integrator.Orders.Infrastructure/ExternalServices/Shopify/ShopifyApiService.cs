@@ -1,21 +1,20 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
+using AZ.Integrator.Integrations.Contracts;
+using AZ.Integrator.Integrations.Contracts.ViewModels;
 using AZ.Integrator.Orders.Application.Common.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify;
 using AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.Infrastructure.ShopifyAccount;
-using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts.View.ViewModels;
 using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.SystemTextJson;
-using Microsoft.EntityFrameworkCore;
 using GetOrdersModelResponse = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GetOrdersModelResponse;
 using Order = AZ.Integrator.Shared.Application.ExternalServices.Shopify.GraphqlResponses.Order;
 
 namespace AZ.Integrator.Orders.Infrastructure.ExternalServices.Shopify;
 
-public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) : IShopifyService
+public class ShopifyApiService(IIntegrationsReadFacade integrationsReadFacade) : IShopifyService
 {
     public async Task<GetOrdersModelResponse> GetOrders(GetAllQueryFilters filters, TenantId tenantId, SourceSystemId sourceSystemId)
     {
@@ -78,16 +77,12 @@ public class ShopifyApiService(ShopifyAccountDbContext shopifyAccountDbContext) 
         return graphqlClient;
     }
 
-    private async Task<ShopifyAccountViewModel> GetAccount(TenantId tenantId, SourceSystemId sourceSystemId)
+    private async Task<ShopifyIntegrationViewModel> GetAccount(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var tenantAccount = await shopifyAccountDbContext.ShopifyAccounts
-            .Where(x => x.SourceSystemId == sourceSystemId.Value)
-            .SingleOrDefaultAsync(x => x.TenantId == tenantId.Value.ToString());
-
-        if (tenantAccount is null)
-            throw new ApplicationException($"Tenant '{tenantId.Value}' does not exist");
+        var details = await integrationsReadFacade.GetShopifyIntegrationDetails(tenantId, sourceSystemId)
+            ?? throw new ApplicationException($"Shopify integration for tenant '{tenantId.Value}' and SourceSystemID '{sourceSystemId}' does not exist");
         
-        return tenantAccount;
+        return details;
     }
     
     private static async Task<GraphQLResponse<GetOrdersResponse>> FetchOrders(GraphQLHttpClient client, GetAllQueryFilters filters)

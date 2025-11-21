@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using AZ.Integrator.Shared.Infrastructure.ExternalServices;
+﻿using AZ.Integrator.Shared.Infrastructure.ExternalServices;
 using AZ.Integrator.Shared.Infrastructure.UtilityExtensions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
 using Microsoft.Extensions.Configuration;
@@ -23,8 +22,6 @@ public static class Extensions
         {
             config.BaseAddress = new Uri(shipXOptions.ApiUrl);
             config.Timeout = new TimeSpan(0, 0, 20);
-            config.DefaultRequestHeaders.Clear();
-            config.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", shipXOptions.AccessToken);
         });
         
         return services;

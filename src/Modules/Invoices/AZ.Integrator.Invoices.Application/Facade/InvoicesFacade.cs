@@ -21,7 +21,12 @@ public class InvoicesFacade(
     {
         // We could check if invoice already exists for given TenantId, ExternalOrderId and optionally IdempotencyKey
         
-        var response = await invoiceService.GenerateInvoice(request.BuyerDto, request.InvoiceLines, request.PaymentTermsDto, request.DeliveryDto);
+        var response = await invoiceService.GenerateInvoice(
+            request.BuyerDto,
+            request.InvoiceLines,
+            request.PaymentTermsDto,
+            request.DeliveryDto,
+            request.TenantId);
         
         if (response is null)
             throw new InvalidOperationException("Invoice generation failed");
@@ -70,7 +75,7 @@ public class InvoicesFacade(
         if (invoice is null)
             throw new InvoiceNotFoundException($"Invoice for order '{request.ExternalOrderId}' was not found in database");
         
-        var response = await invoiceService.Download(long.Parse(request.InvoiceId));
+        var response = await invoiceService.Download(long.Parse(request.InvoiceId), request.TenantId);
 
         return new GetInvoiceResponse
         {

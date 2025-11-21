@@ -1,5 +1,6 @@
 ﻿using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Invoices.Domain.Aggregates.Invoice.ValueObjects;
+using AZ.Integrator.Shared.Infrastructure.Persistence.EF;
 using AZ.Integrator.Shared.Infrastructure.Persistence.EF.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
