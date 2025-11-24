@@ -2,7 +2,7 @@
 
 public static class FeatureFlagCodes
 {
-    public static string[] AllCodes =
+    public static readonly string[] AllCodes =
     [
         MarketplaceModule,
         MarketplaceOrdersModule,
