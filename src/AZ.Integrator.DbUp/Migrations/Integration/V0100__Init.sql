@@ -23,6 +23,17 @@ CREATE TABLE integration.inpost (
     is_enabled boolean NOT NULL DEFAULT true,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
+    sender_name text NOT NULL,
+    sender_company_name text NOT NULL,
+    sender_first_name text NOT NULL,
+    sender_last_name text NOT NULL,
+    sender_email text NOT NULL,
+    sender_phone text NOT NULL,
+    sender_address_street text NOT NULL,
+    sender_address_building_number text NOT NULL,
+    sender_address_city text NOT NULL,
+    sender_address_post_code text NOT NULL,
+    sender_address_country_code text NOT NULL,
     PRIMARY KEY (tenant_id, organization_id)
 );
 

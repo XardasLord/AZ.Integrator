@@ -1,6 +1,7 @@
-﻿using AutoMapper;
-using AZ.Integrator.Domain.Abstractions;
+﻿using AZ.Integrator.Domain.Abstractions;
 using AZ.Integrator.Domain.SeedWork;
+using AZ.Integrator.Integrations.Contracts;
+using AZ.Integrator.Integrations.Contracts.ViewModels;
 using AZ.Integrator.Monitoring.Contracts;
 using AZ.Integrator.Shipments.Application.Common.Exceptions;
 using AZ.Integrator.Shipments.Application.Common.ExternalServices.ShipX;
@@ -15,8 +16,8 @@ namespace AZ.Integrator.Shipments.Application.UseCases.Shipments.Commands.Create
 public class CreateInpostShipmentCommandHandler(
     IAggregateRepository<InpostShipment> shipmentRepository,
     IShipXService shipXService,
-    IMapper mapper,
     IMonitoringFacade monitoringFacade,
+    IIntegrationsReadFacade integrationsReadFacade,
     ICurrentUser currentUser,
     ICurrentDateTime currentDateTime)
     : IRequestHandler<CreateInpostShipmentCommand, ShipmentViewModel>
@@ -25,7 +26,10 @@ public class CreateInpostShipmentCommandHandler(
     {
         await EnsureShipmentForOrderNotExists(command, cancellationToken);
 
-        var shipment = mapper.Map<Shipment>(command);
+        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId, cancellationToken)
+                                 ?? throw new InpostShipmentCreationException($"Inpost integration details not found for tenant '{currentUser.TenantId}'.");
+
+        var shipment = MapToShipment(command, integrationDetails);
 
         var response = await shipXService.CreateShipment(shipment);
         
@@ -71,5 +75,48 @@ public class CreateInpostShipmentCommandHandler(
         
         if (exists)
             throw new InpostShipmentAlreadyExistsException(command.ExternalOrderId);
+    }
+    
+    private Shipment MapToShipment(CreateInpostShipmentCommand command, InpostIntegrationViewModel integrationDetails)
+    {
+        return new Shipment
+        {
+            Sender = new Sender
+            {
+                Name = integrationDetails.SenderName,
+                CompanyName = integrationDetails.SenderCompanyName,
+                FirstName = integrationDetails.SenderFirstName,
+                LastName = integrationDetails.SenderLastName,
+                Email = integrationDetails.SenderEmail,
+                Phone = integrationDetails.SenderPhone,
+                Address = new Address
+                {
+                    Street = integrationDetails.SenderAddressStreet,
+                    BuildingNumber = integrationDetails.SenderAddressBuildingNumber,
+                    City = integrationDetails.SenderAddressCity,
+                    PostCode = integrationDetails.SenderAddressPostCode,
+                    CountryCode = integrationDetails.SenderAddressCountryCode
+                }
+            },
+            Receiver = new Receiver
+            {
+                Name = command.Receiver.Name?.ToUpper(),
+                CompanyName = command.Receiver.CompanyName?.ToUpper(),
+                FirstName = command.Receiver.FirstName?.ToUpper(),
+                LastName = command.Receiver.LastName?.ToUpper(),
+                Email = command.Receiver.Email?.ToUpper(),
+                Phone = command.Receiver.Phone?.ToUpper(),
+                Address = new Address
+                {
+                    Street = command.Receiver.Address.Street?.ToUpper(),
+                    BuildingNumber = command.Receiver.Address.BuildingNumber?.ToUpper(),
+                    City = command.Receiver.Address.City?.ToUpper(),
+                    PostCode = command.Receiver.Address.PostCode?.ToUpper(),
+                    CountryCode = command.Receiver.Address.CountryCode?.ToUpper()
+                }
+            },
+            Service = "inpost_courier_standard",
+            AdditionalServices = ["sms"]
+        };
     }
 }

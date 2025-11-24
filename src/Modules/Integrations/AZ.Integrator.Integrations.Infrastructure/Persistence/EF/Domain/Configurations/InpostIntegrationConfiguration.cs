@@ -42,5 +42,29 @@ public class InpostIntegrationConfiguration : IEntityTypeConfiguration<InpostInt
         builder.Property(e => e.UpdatedAt)
             .HasColumnName("updated_at")
             .IsRequired();
+
+        builder.ComplexProperty(e => e.SenderData, sd =>
+        {
+            sd.Property(x => x.Name).HasColumnName("sender_name").IsRequired();
+            sd.Property(x => x.CompanyName).HasColumnName("sender_company_name").IsRequired();
+            sd.Property(x => x.FirstName).HasColumnName("sender_first_name").IsRequired();
+            sd.Property(x => x.LastName).HasColumnName("sender_last_name").IsRequired();
+            sd.Property(x => x.Email).HasColumnName("sender_email").IsRequired();
+            sd.Property(x => x.Phone).HasColumnName("sender_phone").IsRequired();
+
+            sd.ComplexProperty(x => x.Address, ad =>
+            {
+                ad.Property(x => x.Street).HasColumnName("sender_address_street").IsRequired();
+                ad.Property(x => x.BuildingNumber).HasColumnName("sender_address_building_number").IsRequired();
+                ad.Property(x => x.City).HasColumnName("sender_address_city").IsRequired();
+                ad.Property(x => x.PostCode).HasColumnName("sender_address_post_code").IsRequired();
+                ad.Property(x => x.CountryCode).HasColumnName("sender_address_country_code").IsRequired();
+                
+
+                ad.IsRequired();
+            });
+
+            sd.IsRequired();
+        });
     }
 }
