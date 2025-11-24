@@ -1,0 +1,21 @@
+<div class="integrations-filters">
+  <mat-button-toggle-group [value]="selectedCategory" (change)="selectCategory($event.value)" class="category-filters">
+    @for (cat of categories; track cat.value) {
+      <mat-button-toggle [value]="cat.value">
+        <mat-icon>{{ cat.icon }}</mat-icon>
+        <span>{{ cat.label }}</span>
+      </mat-button-toggle>
+    }
+  </mat-button-toggle-group>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Szukaj integracji</mat-label>
+    <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChange($event)" placeholder="Wpisz nazwę..." />
+    <mat-icon matPrefix>search</mat-icon>
+    @if (searchText) {
+      <button matSuffix mat-icon-button (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+  </mat-form-field>
+</div>

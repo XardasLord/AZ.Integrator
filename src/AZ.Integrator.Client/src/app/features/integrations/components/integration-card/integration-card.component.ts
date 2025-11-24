@@ -4,9 +4,11 @@ import { Store } from '@ngxs/store';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { IntegrationWithType } from '../../models/integration.model';
-import { IntegrationType } from '../../models/integration-type.enum';
-import { DeleteIntegration, ToggleIntegrationStatus } from '../../states/integrations.action';
+import { IntegrationType, IntegrationTypeLogos } from '../../models/integration-type.enum';
+import { DeleteIntegration, LoadIntegrations, ToggleIntegrationStatus } from '../../states/integrations.action';
 import { ConfirmationDialogComponent } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { IntegrationsService } from '../../services/integrations.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-integration-card',
@@ -18,8 +20,11 @@ import { ConfirmationDialogComponent } from '../../../../shared/components/confi
 export class IntegrationCardComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private integrationsService = inject(IntegrationsService);
+  private toastr = inject(ToastrService);
 
   @Input() integrationWithType!: IntegrationWithType;
+  testingConnection = false;
 
   get displayName(): string {
     return (this.integrationWithType.integration as any).displayName || 'Bez nazwy';
@@ -39,22 +44,7 @@ export class IntegrationCardComponent {
   }
 
   get logoUrl(): string {
-    switch (this.integrationWithType.type) {
-      case IntegrationType.Allegro:
-        return '../../../../../assets/logo/allegro.svg';
-      case IntegrationType.Erli:
-        return '../../../../../assets/logo/erli.svg';
-      case IntegrationType.Shopify:
-        return '../../../../../assets/logo/shopify.svg';
-      case IntegrationType.Fakturownia:
-        return '../../../../../assets/logo/fakturownia.svg';
-      case IntegrationType.Inpost:
-        return '../../../../../assets/logo/inpost.svg';
-      case IntegrationType.Dpd:
-        return '../../../../../assets/logo/dpd.svg';
-      default:
-        return '';
-    }
+    return IntegrationTypeLogos[this.integrationWithType.type];
   }
 
   get statusColor(): string {
@@ -123,5 +113,41 @@ export class IntegrationCardComponent {
     }
 
     return details;
+  }
+
+  testConnection(): void {
+    this.testingConnection = true;
+    this.integrationsService.testConnection(this.integrationWithType.type, this.sourceSystemId).subscribe({
+      next: response => {
+        this.testingConnection = false;
+        if (response.isValid) {
+          this.toastr.success('Połączenie działa poprawnie!', 'Test połączenia');
+        } else {
+          this.toastr.warning(response.message || 'Połączenie nie działa poprawnie', 'Test połączenia');
+        }
+      },
+      error: () => {
+        this.testingConnection = false;
+        this.toastr.error('Nie udało się przetestować połączenia', 'Test połączenia');
+      },
+    });
+  }
+
+  editIntegration(): void {
+    // TODO: Implement EditIntegrationDialogComponent
+    this.toastr.info('Funkcja edycji będzie dostępna wkrótce', 'W przygotowaniu');
+    /*
+    const dialogRef = this.dialog.open(EditIntegrationDialogComponent, {
+      width: '600px',
+      maxHeight: '90vh',
+      data: this.integrationWithType,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.store.dispatch(new LoadIntegrations());
+      }
+    });
+    */
   }
 }

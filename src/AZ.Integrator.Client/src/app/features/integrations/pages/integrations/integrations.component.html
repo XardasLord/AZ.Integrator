@@ -4,12 +4,16 @@
     <p class="text-gray-600 mb-8">Zarządzaj integracjami z platformami sprzedażowymi, kurierskimi i księgowymi.</p>
   </div>
 
+  <app-integrations-filters
+    (categoryChange)="onCategoryChange($event)"
+    (searchChange)="onSearchChange($event)"></app-integrations-filters>
+
   @if (loading$ | async) {
     <div class="flex justify-center items-center py-12">
       <mat-spinner diameter="50"></mat-spinner>
     </div>
   } @else {
-    <app-integrations-list [integrations]="integrations$ | async"></app-integrations-list>
+    <app-integrations-list [integrations]="filteredIntegrations$ | async"></app-integrations-list>
   }
 
   <app-add-integration-button></app-add-integration-button>

@@ -137,6 +137,33 @@ export class IntegrationsService extends RemoteServiceBase {
     return this.httpClient.delete<void>(`${this.apiUrl}/integrations/${endpoint}/${sourceSystemId}`);
   }
 
+  testConnection(type: IntegrationType, sourceSystemId: string): Observable<{ isValid: boolean; message?: string }> {
+    const endpoint = this.getEndpointForType(type);
+    return this.httpClient.get<{ isValid: boolean; message?: string }>(
+      `${this.apiUrl}/integrations/${endpoint}/${sourceSystemId}/test`
+    );
+  }
+
+  updateErliIntegration(sourceSystemId: string, command: AddErliIntegrationCommand): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/integrations/erli/${sourceSystemId}`, command);
+  }
+
+  updateShopifyIntegration(sourceSystemId: string, command: AddShopifyIntegrationCommand): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/integrations/shopify/${sourceSystemId}`, command);
+  }
+
+  updateFakturowniaIntegration(sourceSystemId: string, command: AddFakturowniaIntegrationCommand): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/integrations/fakturownia/${sourceSystemId}`, command);
+  }
+
+  updateInpostIntegration(organizationId: number, command: AddInpostIntegrationCommand): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/integrations/inpost/${organizationId}`, command);
+  }
+
+  updateDpdIntegration(login: number, command: AddDpdIntegrationCommand): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/integrations/dpd/${login}`, command);
+  }
+
   private getEndpointForType(type: IntegrationType): string {
     switch (type) {
       case IntegrationType.Allegro:

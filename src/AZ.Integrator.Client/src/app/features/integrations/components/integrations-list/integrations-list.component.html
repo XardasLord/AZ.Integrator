@@ -2,33 +2,14 @@
   @if (!integrations || integrations.length === 0) {
     <div class="empty-state">
       <mat-icon class="empty-icon">settings_input_component</mat-icon>
-      <h3>Brak skonfigurowanych integracji</h3>
-      <p>Rozpocznij od dodania pierwszej integracji z systemem zewnętrznym</p>
+      <h3>Brak integracji spełniających kryteria</h3>
+      <p>Spróbuj zmienić filtry lub dodać nową integrację</p>
     </div>
   } @else {
-    @for (type of getIntegrationTypesArray(); track type) {
-      @if (groupedIntegrations.get(type)?.length || type) {
-        <div class="integration-group mb-8">
-          <div class="flex items-center mb-4">
-            <h2 class="text-xl font-semibold">{{ getIntegrationTypeLabel(type) }}</h2>
-            <span class="ml-3 px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full">
-              {{ groupedIntegrations.get(type)?.length || 0 }}
-            </span>
-          </div>
-
-          @if (groupedIntegrations.get(type)?.length) {
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              @for (integration of groupedIntegrations.get(type); track integration.integration) {
-                <app-integration-card [integrationWithType]="integration" />
-              }
-            </div>
-          } @else {
-            <div class="no-integrations-message">
-              <p class="text-gray-500 text-sm">Brak integracji {{ getIntegrationTypeLabel(type) }}</p>
-            </div>
-          }
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (integration of integrations; track integration.integration) {
+        <app-integration-card [integrationWithType]="integration" />
       }
-    }
+    </div>
   }
 </div>

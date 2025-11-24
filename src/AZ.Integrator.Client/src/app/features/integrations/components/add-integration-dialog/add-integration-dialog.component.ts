@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngxs/store';
 import { MaterialModule } from '../../../../shared/modules/material.module';
-import { IntegrationType, IntegrationTypeLabels } from '../../models/integration-type.enum';
+import { IntegrationType, IntegrationTypeLabels, IntegrationTypeLogos } from '../../models/integration-type.enum';
 import { IntegrationsService } from '../../services/integrations.service';
 import { LoadIntegrations } from '../../states/integrations.action';
 import { ToastrService } from 'ngx-toastr';
@@ -36,6 +36,10 @@ export class AddIntegrationDialogComponent {
 
   getIntegrationTypeLabel(type: IntegrationType): string {
     return IntegrationTypeLabels[type];
+  }
+
+  getIntegrationLogo(type: IntegrationType): string {
+    return IntegrationTypeLogos[type];
   }
 
   selectType(type: IntegrationType): void {

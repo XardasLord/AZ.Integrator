@@ -11,24 +11,28 @@
       <p class="mb-4 text-gray-600">Wybierz typ integracji, którą chcesz dodać:</p>
       <div class="grid grid-cols-2 gap-3">
         @for (type of integrationTypes; track type) {
-          <button
-            mat-stroked-button
-            class="integration-type-button"
-            (click)="selectType(type)"
-          >
-            <mat-icon>integration_instructions</mat-icon>
+          <button mat-stroked-button class="integration-type-button" (click)="selectType(type)">
+            <img [src]="getIntegrationLogo(type)" [alt]="getIntegrationTypeLabel(type)" class="integration-logo-img" />
             <span>{{ getIntegrationTypeLabel(type) }}</span>
           </button>
         }
       </div>
     </div>
   } @else {
+    <div class="integration-form-header">
+      <img [src]="getIntegrationLogo(selectedType)" [alt]="getIntegrationTypeLabel(selectedType)" class="form-logo" />
+      <div class="form-header-text">
+        <h3>{{ getIntegrationTypeLabel(selectedType) }}</h3>
+        <p>Uzupełnij dane konfiguracyjne</p>
+      </div>
+    </div>
+
     @if (selectedType === IntegrationType.Allegro) {
       <div class="allegro-oauth-info">
         <mat-icon color="primary" class="info-icon">info</mat-icon>
         <p>
-          Kliknij przycisk poniżej, aby połączyć konto Allegro przez OAuth.
-          Zostaniesz przekierowany do strony Allegro w celu autoryzacji.
+          Kliknij przycisk poniżej, aby połączyć konto Allegro przez OAuth. Zostaniesz przekierowany do strony Allegro w
+          celu autoryzacji.
         </p>
       </div>
     } @else {
@@ -258,12 +262,7 @@
   }
   <button mat-button (click)="cancel()" [disabled]="loading">Anuluj</button>
   @if (selectedType) {
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="submit()"
-      [disabled]="loading"
-    >
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading">
       @if (loading) {
         <mat-spinner diameter="20" class="inline-block mr-2"></mat-spinner>
       }

@@ -1,24 +1,68 @@
 ﻿.integration-type-selector {
   .integration-type-button {
-    height: 80px;
+    height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
+    padding: 16px;
     transition: all 0.2s;
+
     &:hover {
       background-color: rgba(63, 81, 181, 0.08);
       border-color: #3f51b5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    mat-icon {
-      font-size: 32px;
-      width: 32px;
-      height: 32px;
+
+    .integration-logo-img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
     }
+
     span {
       font-size: 14px;
       font-weight: 500;
+      text-align: center;
+    }
+  }
+}
+
+.integration-form-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 8px;
+
+  .form-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    background: white;
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-header-text {
+    flex: 1;
+
+    h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    p {
+      margin: 4px 0 0 0;
+      font-size: 14px;
+      color: #666;
     }
   }
 }
