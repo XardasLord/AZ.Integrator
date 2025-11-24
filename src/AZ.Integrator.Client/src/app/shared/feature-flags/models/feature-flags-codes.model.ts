@@ -8,3 +8,5 @@ export const FeatureFlagCode_Warehouse_StatisticsModule = 'warehouse.statistics-
 export const FeatureFlagCode_Warehouse_ScanningBarcodesModule = 'warehouse.scanning-barcodes-module';
 
 export const FeatureFlagCode_ProcurementModule = 'procurement-module';
+
+export const FeatureFlagCode_IntegrationsModule = 'integrations-module';

@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import {
   FurnitureFormatsRoutePath,
+  IntegrationsRoutePath,
   MarketplaceRoutePath,
   RoutePaths,
   StocksRoutePath,
@@ -15,6 +16,7 @@ import { AuthRoleAllowDirective } from '../../../shared/auth/directives/auth-rol
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { FeatureFlagDirective } from '../../../shared/feature-flags/directives/feature-flag.directive';
 import {
+  FeatureFlagCode_IntegrationsModule,
   FeatureFlagCode_Marketplace_OrdersModule,
   FeatureFlagCode_Marketplace_ParcelTemplatesModule,
   FeatureFlagCode_MarketplaceModule,
@@ -144,6 +146,13 @@ export class NavigationComponent implements OnInit {
           featureFlag: FeatureFlagCode_ProcurementModule,
         },
       ],
+    },
+    {
+      title: 'Integracje',
+      icon: 'settings_input_component',
+      route: IntegrationsRoutePath.Integrations,
+      roles: [AuthRoles.Admin],
+      featureFlag: FeatureFlagCode_IntegrationsModule,
     },
   ];
 

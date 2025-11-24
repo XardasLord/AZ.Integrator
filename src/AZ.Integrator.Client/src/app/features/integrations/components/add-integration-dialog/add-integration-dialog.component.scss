@@ -1,0 +1,63 @@
+﻿.integration-type-selector {
+  .integration-type-button {
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    &:hover {
+      background-color: rgba(63, 81, 181, 0.08);
+      border-color: #3f51b5;
+    }
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}
+.allegro-oauth-info {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: #e3f2fd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  .info-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+  p {
+    margin: 0;
+    color: #1565c0;
+    line-height: 1.5;
+  }
+}
+.integration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+  h4 {
+    color: #666;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+  mat-form-field {
+    margin-bottom: 8px;
+  }
+}
+mat-dialog-content {
+  min-height: 300px;
+  max-height: 70vh;
+  overflow-y: auto;
+}

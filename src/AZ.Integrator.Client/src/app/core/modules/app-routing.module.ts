@@ -19,6 +19,7 @@ import { SuppliersState } from '../../features/furniture-formats/suppliers/state
 import { SuppliersService } from '../../features/furniture-formats/suppliers/services/suppliers.service';
 import { OrdersState } from '../../features/furniture-formats/orders/states/orders.state';
 import { OrdersService } from '../../features/furniture-formats/orders/services/orders.service';
+import { IntegrationsState } from '../../features/integrations/states/integrations.state';
 
 export const RoutePaths = {
   Auth: 'auth',
@@ -44,6 +45,10 @@ export const FurnitureFormatsRoutePath = {
   Suppliers: 'furniture-formats/suppliers',
   Orders: 'furniture-formats/orders',
   OrdersCreate: 'furniture-formats/orders/create',
+};
+
+export const IntegrationsRoutePath = {
+  Integrations: 'integrations',
 };
 
 const routes: Routes = [
@@ -175,6 +180,18 @@ const routes: Routes = [
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],
         }),
+      },
+      {
+        path: IntegrationsRoutePath.Integrations,
+        loadComponent: () =>
+          import('../../features/integrations/pages/integrations/integrations.component').then(
+            c => c.IntegrationsComponent
+          ),
+        canActivate: mapToCanActivate([AuthGuard]),
+        data: new RouteAuthVo({
+          allowRoles: [AuthRoles.Admin],
+        }),
+        providers: [provideStates([IntegrationsState])],
       },
     ],
   },

@@ -1,0 +1,35 @@
+.integrations-list {
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+
+    .empty-icon {
+      font-size: 4rem;
+      width: 4rem;
+      height: 4rem;
+      color: #ccc;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+  }
+
+  .integration-group {
+    .no-integrations-message {
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 0.5rem;
+      border: 1px dashed #e5e7eb;
+    }
+  }
+}
+

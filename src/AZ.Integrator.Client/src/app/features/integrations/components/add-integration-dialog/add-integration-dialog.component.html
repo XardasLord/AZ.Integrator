@@ -1,0 +1,273 @@
+﻿<h2 mat-dialog-title>
+  @if (!selectedType) {
+    Dodaj nową integrację
+  } @else {
+    Konfiguracja integracji {{ getIntegrationTypeLabel(selectedType) }}
+  }
+</h2>
+<mat-dialog-content>
+  @if (!selectedType) {
+    <div class="integration-type-selector">
+      <p class="mb-4 text-gray-600">Wybierz typ integracji, którą chcesz dodać:</p>
+      <div class="grid grid-cols-2 gap-3">
+        @for (type of integrationTypes; track type) {
+          <button
+            mat-stroked-button
+            class="integration-type-button"
+            (click)="selectType(type)"
+          >
+            <mat-icon>integration_instructions</mat-icon>
+            <span>{{ getIntegrationTypeLabel(type) }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  } @else {
+    @if (selectedType === IntegrationType.Allegro) {
+      <div class="allegro-oauth-info">
+        <mat-icon color="primary" class="info-icon">info</mat-icon>
+        <p>
+          Kliknij przycisk poniżej, aby połączyć konto Allegro przez OAuth.
+          Zostaniesz przekierowany do strony Allegro w celu autoryzacji.
+        </p>
+      </div>
+    } @else {
+      <form [formGroup]="integrationForm" class="integration-form">
+        @switch (selectedType) {
+          @case (IntegrationType.Erli) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Nazwa wyświetlana</mat-label>
+              <input matInput formControlName="displayName" placeholder="np. Erli - Sklep główny" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>System ID</mat-label>
+              <input matInput formControlName="sourceSystemId" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Klucz API</mat-label>
+              <input matInput type="password" formControlName="apiKey" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+          }
+          @case (IntegrationType.Shopify) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Nazwa wyświetlana</mat-label>
+              <input matInput formControlName="displayName" placeholder="np. Shopify - Sklep główny" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>System ID</mat-label>
+              <input matInput formControlName="sourceSystemId" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>URL API</mat-label>
+              <input matInput formControlName="apiUrl" placeholder="https://your-store.myshopify.com" />
+              <mat-error>Podaj prawidłowy URL</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Admin API Token</mat-label>
+              <input matInput type="password" formControlName="adminApiToken" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+          }
+          @case (IntegrationType.Fakturownia) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Nazwa wyświetlana</mat-label>
+              <input matInput formControlName="displayName" placeholder="np. Fakturownia - Główne konto" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>System ID</mat-label>
+              <input matInput formControlName="sourceSystemId" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>URL API</mat-label>
+              <input matInput formControlName="apiUrl" placeholder="https://twojafirma.fakturownia.pl" />
+              <mat-error>Podaj prawidłowy URL</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Klucz API</mat-label>
+              <input matInput type="password" formControlName="apiKey" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+          }
+          @case (IntegrationType.Inpost) {
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Nazwa wyświetlana</mat-label>
+              <input matInput formControlName="displayName" placeholder="np. InPost ShipX - Główne konto" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <div class="grid grid-cols-2 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Organization ID</mat-label>
+                <input matInput type="number" formControlName="organizationId" />
+                <mat-error>Podaj prawidłowe ID</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Access Token</mat-label>
+                <input matInput type="password" formControlName="accessToken" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+            <h4 class="text-sm font-semibold mt-4 mb-2">Dane nadawcy</h4>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Nazwa nadawcy</mat-label>
+              <input matInput formControlName="senderName" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <div class="grid grid-cols-2 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nazwa firmy</mat-label>
+                <input matInput formControlName="senderCompanyName" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Imię</mat-label>
+                <input matInput formControlName="senderFirstName" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nazwisko</mat-label>
+                <input matInput formControlName="senderLastName" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="senderEmail" />
+                <mat-error>Podaj prawidłowy email</mat-error>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Telefon</mat-label>
+              <input matInput formControlName="senderPhone" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <div class="grid grid-cols-3 gap-3">
+              <mat-form-field appearance="outline" class="w-full col-span-2">
+                <mat-label>Ulica</mat-label>
+                <input matInput formControlName="senderAddressStreet" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nr budynku</mat-label>
+                <input matInput formControlName="senderAddressBuildingNumber" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Miasto</mat-label>
+                <input matInput formControlName="senderAddressCity" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Kod pocztowy</mat-label>
+                <input matInput formControlName="senderAddressPostCode" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Kod kraju</mat-label>
+                <input matInput formControlName="senderAddressCountryCode" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+          }
+          @case (IntegrationType.Dpd) {
+            <div class="grid grid-cols-2 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Login</mat-label>
+                <input matInput type="number" formControlName="login" />
+                <mat-error>Podaj prawidłowy login</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Hasło</mat-label>
+                <input matInput type="password" formControlName="password" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Master FID</mat-label>
+              <input matInput type="number" formControlName="masterFid" />
+              <mat-error>Podaj prawidłowe Master FID</mat-error>
+            </mat-form-field>
+            <h4 class="text-sm font-semibold mt-4 mb-2">Dane nadawcy</h4>
+            <div class="grid grid-cols-2 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nazwa nadawcy</mat-label>
+                <input matInput formControlName="senderName" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Nazwa firmy</mat-label>
+                <input matInput formControlName="senderCompany" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="senderEmail" />
+                <mat-error>Podaj prawidłowy email</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Telefon</mat-label>
+                <input matInput formControlName="senderPhone" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Adres</mat-label>
+              <input matInput formControlName="senderAddress" />
+              <mat-error>To pole jest wymagane</mat-error>
+            </mat-form-field>
+            <div class="grid grid-cols-3 gap-3">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Miasto</mat-label>
+                <input matInput formControlName="senderAddressCity" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Kod pocztowy</mat-label>
+                <input matInput formControlName="senderAddressPostCode" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Kod kraju</mat-label>
+                <input matInput formControlName="senderAddressCountryCode" />
+                <mat-error>To pole jest wymagane</mat-error>
+              </mat-form-field>
+            </div>
+          }
+        }
+      </form>
+    }
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  @if (selectedType) {
+    <button mat-button (click)="back()" [disabled]="loading">
+      <mat-icon>arrow_back</mat-icon>
+      Wstecz
+    </button>
+  }
+  <button mat-button (click)="cancel()" [disabled]="loading">Anuluj</button>
+  @if (selectedType) {
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="submit()"
+      [disabled]="loading"
+    >
+      @if (loading) {
+        <mat-spinner diameter="20" class="inline-block mr-2"></mat-spinner>
+      }
+      {{ selectedType === IntegrationType.Allegro ? 'Połącz konto' : 'Dodaj integrację' }}
+    </button>
+  }
+</mat-dialog-actions>
