@@ -20,6 +20,76 @@ export type Scalars = {
   UUID: { input: any; output: any; }
 };
 
+export type AllegroIntegrationViewModel = {
+  __typename?: 'AllegroIntegrationViewModel';
+  accessToken: Scalars['String']['output'];
+  clientId: Scalars['String']['output'];
+  clientSecret: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  displayName: Scalars['String']['output'];
+  expiresAt: Scalars['DateTime']['output'];
+  isEnabled: Scalars['Boolean']['output'];
+  redirectUri: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+  sourceSystemId: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type AllegroIntegrationViewModelFilterInput = {
+  accessToken?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<AllegroIntegrationViewModelFilterInput>>;
+  clientId?: InputMaybe<StringOperationFilterInput>;
+  clientSecret?: InputMaybe<StringOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  displayName?: InputMaybe<StringOperationFilterInput>;
+  expiresAt?: InputMaybe<DateTimeOperationFilterInput>;
+  isEnabled?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<AllegroIntegrationViewModelFilterInput>>;
+  redirectUri?: InputMaybe<StringOperationFilterInput>;
+  refreshToken?: InputMaybe<StringOperationFilterInput>;
+  sourceSystemId?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+  updatedAt?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type AllegroIntegrationViewModelSortInput = {
+  accessToken?: InputMaybe<SortEnumType>;
+  clientId?: InputMaybe<SortEnumType>;
+  clientSecret?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  displayName?: InputMaybe<SortEnumType>;
+  expiresAt?: InputMaybe<SortEnumType>;
+  isEnabled?: InputMaybe<SortEnumType>;
+  redirectUri?: InputMaybe<SortEnumType>;
+  refreshToken?: InputMaybe<SortEnumType>;
+  sourceSystemId?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+  updatedAt?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type AllegroIntegrationsConnection = {
+  __typename?: 'AllegroIntegrationsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<AllegroIntegrationsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<AllegroIntegrationViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type AllegroIntegrationsEdge = {
+  __typename?: 'AllegroIntegrationsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: AllegroIntegrationViewModel;
+};
+
 /** Defines when a policy shall be executed. */
 export enum ApplyPolicy {
   /** After the resolver was executed. */
@@ -97,6 +167,119 @@ export type EdgeBandingTypeViewModelOperationFilterInput = {
   in?: InputMaybe<Array<EdgeBandingTypeViewModel>>;
   neq?: InputMaybe<EdgeBandingTypeViewModel>;
   nin?: InputMaybe<Array<EdgeBandingTypeViewModel>>;
+};
+
+export type ErliIntegrationViewModel = {
+  __typename?: 'ErliIntegrationViewModel';
+  apiKey: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  displayName: Scalars['String']['output'];
+  isEnabled: Scalars['Boolean']['output'];
+  sourceSystemId: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ErliIntegrationViewModelFilterInput = {
+  and?: InputMaybe<Array<ErliIntegrationViewModelFilterInput>>;
+  apiKey?: InputMaybe<StringOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  displayName?: InputMaybe<StringOperationFilterInput>;
+  isEnabled?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<ErliIntegrationViewModelFilterInput>>;
+  sourceSystemId?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+  updatedAt?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type ErliIntegrationViewModelSortInput = {
+  apiKey?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  displayName?: InputMaybe<SortEnumType>;
+  isEnabled?: InputMaybe<SortEnumType>;
+  sourceSystemId?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+  updatedAt?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type ErliIntegrationsConnection = {
+  __typename?: 'ErliIntegrationsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<ErliIntegrationsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<ErliIntegrationViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type ErliIntegrationsEdge = {
+  __typename?: 'ErliIntegrationsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: ErliIntegrationViewModel;
+};
+
+export type FakturowniaIntegrationViewModel = {
+  __typename?: 'FakturowniaIntegrationViewModel';
+  apiKey: Scalars['String']['output'];
+  apiUrl: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  displayName: Scalars['String']['output'];
+  isEnabled: Scalars['Boolean']['output'];
+  sourceSystemId: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type FakturowniaIntegrationViewModelFilterInput = {
+  and?: InputMaybe<Array<FakturowniaIntegrationViewModelFilterInput>>;
+  apiKey?: InputMaybe<StringOperationFilterInput>;
+  apiUrl?: InputMaybe<StringOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  displayName?: InputMaybe<StringOperationFilterInput>;
+  isEnabled?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<FakturowniaIntegrationViewModelFilterInput>>;
+  sourceSystemId?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+  updatedAt?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type FakturowniaIntegrationViewModelSortInput = {
+  apiKey?: InputMaybe<SortEnumType>;
+  apiUrl?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  displayName?: InputMaybe<SortEnumType>;
+  isEnabled?: InputMaybe<SortEnumType>;
+  sourceSystemId?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+  updatedAt?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type FakturowniaIntegrationsConnection = {
+  __typename?: 'FakturowniaIntegrationsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<FakturowniaIntegrationsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<FakturowniaIntegrationViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type FakturowniaIntegrationsEdge = {
+  __typename?: 'FakturowniaIntegrationsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: FakturowniaIntegrationViewModel;
 };
 
 export type FloatOperationFilterInput = {
@@ -177,6 +360,94 @@ export type FurnitureModelsEdge = {
   node: FurnitureModelViewModel;
 };
 
+export type InpostIntegrationViewModel = {
+  __typename?: 'InpostIntegrationViewModel';
+  accessToken: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  displayName: Scalars['String']['output'];
+  isEnabled: Scalars['Boolean']['output'];
+  organizationId: Scalars['Int']['output'];
+  senderAddressBuildingNumber: Scalars['String']['output'];
+  senderAddressCity: Scalars['String']['output'];
+  senderAddressCountryCode: Scalars['String']['output'];
+  senderAddressPostCode: Scalars['String']['output'];
+  senderAddressStreet: Scalars['String']['output'];
+  senderCompanyName: Scalars['String']['output'];
+  senderEmail: Scalars['String']['output'];
+  senderFirstName: Scalars['String']['output'];
+  senderLastName: Scalars['String']['output'];
+  senderName: Scalars['String']['output'];
+  senderPhone: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type InpostIntegrationViewModelFilterInput = {
+  accessToken?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<InpostIntegrationViewModelFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  displayName?: InputMaybe<StringOperationFilterInput>;
+  isEnabled?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<InpostIntegrationViewModelFilterInput>>;
+  organizationId?: InputMaybe<IntOperationFilterInput>;
+  senderAddressBuildingNumber?: InputMaybe<StringOperationFilterInput>;
+  senderAddressCity?: InputMaybe<StringOperationFilterInput>;
+  senderAddressCountryCode?: InputMaybe<StringOperationFilterInput>;
+  senderAddressPostCode?: InputMaybe<StringOperationFilterInput>;
+  senderAddressStreet?: InputMaybe<StringOperationFilterInput>;
+  senderCompanyName?: InputMaybe<StringOperationFilterInput>;
+  senderEmail?: InputMaybe<StringOperationFilterInput>;
+  senderFirstName?: InputMaybe<StringOperationFilterInput>;
+  senderLastName?: InputMaybe<StringOperationFilterInput>;
+  senderName?: InputMaybe<StringOperationFilterInput>;
+  senderPhone?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+  updatedAt?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type InpostIntegrationViewModelSortInput = {
+  accessToken?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  displayName?: InputMaybe<SortEnumType>;
+  isEnabled?: InputMaybe<SortEnumType>;
+  organizationId?: InputMaybe<SortEnumType>;
+  senderAddressBuildingNumber?: InputMaybe<SortEnumType>;
+  senderAddressCity?: InputMaybe<SortEnumType>;
+  senderAddressCountryCode?: InputMaybe<SortEnumType>;
+  senderAddressPostCode?: InputMaybe<SortEnumType>;
+  senderAddressStreet?: InputMaybe<SortEnumType>;
+  senderCompanyName?: InputMaybe<SortEnumType>;
+  senderEmail?: InputMaybe<SortEnumType>;
+  senderFirstName?: InputMaybe<SortEnumType>;
+  senderLastName?: InputMaybe<SortEnumType>;
+  senderName?: InputMaybe<SortEnumType>;
+  senderPhone?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+  updatedAt?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type InpostIntegrationsConnection = {
+  __typename?: 'InpostIntegrationsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<InpostIntegrationsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<InpostIntegrationViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type InpostIntegrationsEdge = {
+  __typename?: 'InpostIntegrationsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: InpostIntegrationViewModel;
+};
+
 export type InpostShipmentViewModel = {
   __typename?: 'InpostShipmentViewModel';
   createdAt: Scalars['DateTime']['output'];
@@ -211,17 +482,32 @@ export type IntOperationFilterInput = {
 
 export type IntegratorQuery = {
   __typename?: 'IntegratorQuery';
+  allegroIntegrations?: Maybe<AllegroIntegrationsConnection>;
   barcodeScannerLogs: Array<StockLogViewModel>;
   dpdShipments: Array<DpdShipmentViewModel>;
+  erliIntegrations?: Maybe<ErliIntegrationsConnection>;
+  fakturowniaIntegrations?: Maybe<FakturowniaIntegrationsConnection>;
   furnitureModels?: Maybe<FurnitureModelsConnection>;
+  inpostIntegrations?: Maybe<InpostIntegrationsConnection>;
   inpostShipments: Array<InpostShipmentViewModel>;
   invoices: Array<InvoiceViewModel>;
   partDefinitionOrders?: Maybe<PartDefinitionOrdersConnection>;
   shipments: Array<ShipmentViewModel>;
+  shopifyIntegrations?: Maybe<ShopifyIntegrationsConnection>;
   stockGroups: Array<StockGroupViewModel>;
   stocks: Array<StockViewModel>;
   suppliers?: Maybe<SuppliersConnection>;
   tagParcelTemplates?: Maybe<TagParcelTemplatesConnection>;
+};
+
+
+export type IntegratorQueryAllegroIntegrationsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<AllegroIntegrationViewModelSortInput>>;
+  where?: InputMaybe<AllegroIntegrationViewModelFilterInput>;
 };
 
 
@@ -236,6 +522,26 @@ export type IntegratorQueryDpdShipmentsArgs = {
 };
 
 
+export type IntegratorQueryErliIntegrationsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<ErliIntegrationViewModelSortInput>>;
+  where?: InputMaybe<ErliIntegrationViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryFakturowniaIntegrationsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<FakturowniaIntegrationViewModelSortInput>>;
+  where?: InputMaybe<FakturowniaIntegrationViewModelFilterInput>;
+};
+
+
 export type IntegratorQueryFurnitureModelsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -243,6 +549,16 @@ export type IntegratorQueryFurnitureModelsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<FurnitureModelViewModelSortInput>>;
   where?: InputMaybe<FurnitureModelViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryInpostIntegrationsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InpostIntegrationViewModelSortInput>>;
+  where?: InputMaybe<InpostIntegrationViewModelFilterInput>;
 };
 
 
@@ -269,6 +585,16 @@ export type IntegratorQueryPartDefinitionOrdersArgs = {
 
 export type IntegratorQueryShipmentsArgs = {
   where?: InputMaybe<ShipmentViewModelFilterInput>;
+};
+
+
+export type IntegratorQueryShopifyIntegrationsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<ShopifyIntegrationViewModelSortInput>>;
+  where?: InputMaybe<ShopifyIntegrationViewModelFilterInput>;
 };
 
 
@@ -601,6 +927,64 @@ export type ShipmentViewModelFilterInput = {
   shipmentNumber?: InputMaybe<StringOperationFilterInput>;
   shipmentProvider?: InputMaybe<StringOperationFilterInput>;
   tenantId?: InputMaybe<UuidOperationFilterInput>;
+};
+
+export type ShopifyIntegrationViewModel = {
+  __typename?: 'ShopifyIntegrationViewModel';
+  adminApiToken: Scalars['String']['output'];
+  apiUrl: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  displayName: Scalars['String']['output'];
+  isEnabled: Scalars['Boolean']['output'];
+  sourceSystemId: Scalars['String']['output'];
+  tenantId: Scalars['UUID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ShopifyIntegrationViewModelFilterInput = {
+  adminApiToken?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<ShopifyIntegrationViewModelFilterInput>>;
+  apiUrl?: InputMaybe<StringOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  displayName?: InputMaybe<StringOperationFilterInput>;
+  isEnabled?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<ShopifyIntegrationViewModelFilterInput>>;
+  sourceSystemId?: InputMaybe<StringOperationFilterInput>;
+  tenantId?: InputMaybe<UuidOperationFilterInput>;
+  updatedAt?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type ShopifyIntegrationViewModelSortInput = {
+  adminApiToken?: InputMaybe<SortEnumType>;
+  apiUrl?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
+  displayName?: InputMaybe<SortEnumType>;
+  isEnabled?: InputMaybe<SortEnumType>;
+  sourceSystemId?: InputMaybe<SortEnumType>;
+  tenantId?: InputMaybe<SortEnumType>;
+  updatedAt?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type ShopifyIntegrationsConnection = {
+  __typename?: 'ShopifyIntegrationsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<ShopifyIntegrationsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<ShopifyIntegrationViewModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type ShopifyIntegrationsEdge = {
+  __typename?: 'ShopifyIntegrationsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: ShopifyIntegrationViewModel;
 };
 
 export enum SortEnumType {
