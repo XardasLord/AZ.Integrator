@@ -2,13 +2,17 @@ import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngxs/store';
 import { MatDialog } from '@angular/material/dialog';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { IntegrationWithType } from '../../models/integration.model';
 import { IntegrationType, IntegrationTypeLogos } from '../../models/integration-type.enum';
-import { DeleteIntegration, LoadIntegrations, ToggleIntegrationStatus } from '../../states/integrations.action';
+import {
+  DeleteIntegration,
+  LoadIntegrations,
+  TestIntegrationConnection,
+  ToggleIntegrationStatus,
+} from '../../states/integrations.action';
 import { ConfirmationDialogComponent } from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import { IntegrationsService } from '../../services/integrations.service';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-integration-card',
@@ -16,12 +20,15 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './integration-card.component.html',
   styleUrls: ['./integration-card.component.scss'],
   imports: [CommonModule, MaterialModule],
+  animations: [
+    trigger('cardHover', [
+      transition(':enter', [style({ opacity: 0 }), animate('250ms ease-out', style({ opacity: 1 }))]),
+    ]),
+  ],
 })
 export class IntegrationCardComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
-  private integrationsService = inject(IntegrationsService);
-  private toastr = inject(ToastrService);
 
   @Input() integrationWithType!: IntegrationWithType;
   testingConnection = false;
@@ -45,14 +52,6 @@ export class IntegrationCardComponent {
 
   get logoUrl(): string {
     return IntegrationTypeLogos[this.integrationWithType.type];
-  }
-
-  get statusColor(): string {
-    return this.isEnabled ? 'text-green-600' : 'text-red-600';
-  }
-
-  get statusLabel(): string {
-    return this.isEnabled ? 'Aktywna' : 'Nieaktywna';
   }
 
   toggleStatus(): void {
@@ -117,37 +116,35 @@ export class IntegrationCardComponent {
 
   testConnection(): void {
     this.testingConnection = true;
-    this.integrationsService.testConnection(this.integrationWithType.type, this.sourceSystemId).subscribe({
-      next: response => {
-        this.testingConnection = false;
-        if (response.isValid) {
-          this.toastr.success('Połączenie działa poprawnie!', 'Test połączenia');
-        } else {
-          this.toastr.warning(response.message || 'Połączenie nie działa poprawnie', 'Test połączenia');
-        }
-      },
-      error: () => {
-        this.testingConnection = false;
-        this.toastr.error('Nie udało się przetestować połączenia', 'Test połączenia');
-      },
-    });
+    this.store
+      .dispatch(new TestIntegrationConnection(this.integrationWithType.type as IntegrationType, this.sourceSystemId))
+      .subscribe({
+        next: () => {
+          this.testingConnection = false;
+        },
+        error: () => {
+          this.testingConnection = false;
+        },
+      });
   }
 
   editIntegration(): void {
-    // TODO: Implement EditIntegrationDialogComponent
-    this.toastr.info('Funkcja edycji będzie dostępna wkrótce', 'W przygotowaniu');
-    /*
-    const dialogRef = this.dialog.open(EditIntegrationDialogComponent, {
-      width: '600px',
-      maxHeight: '90vh',
-      data: this.integrationWithType,
-    });
+    const AddIntegrationDialogComponent = import('../add-integration-dialog/add-integration-dialog.component').then(
+      m => m.AddIntegrationDialogComponent
+    );
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.store.dispatch(new LoadIntegrations());
-      }
+    AddIntegrationDialogComponent.then(component => {
+      const dialogRef = this.dialog.open(component, {
+        width: '600px',
+        maxHeight: '90vh',
+        data: this.integrationWithType,
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.store.dispatch(new LoadIntegrations());
+        }
+      });
     });
-    */
   }
 }

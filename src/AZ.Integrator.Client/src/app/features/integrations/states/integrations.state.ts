@@ -3,7 +3,13 @@ import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { catchError, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { IntegrationsStateModel } from './integrations.state.model';
-import { AddIntegration, DeleteIntegration, LoadIntegrations, ToggleIntegrationStatus } from './integrations.action';
+import {
+  AddIntegration,
+  DeleteIntegration,
+  LoadIntegrations,
+  TestIntegrationConnection,
+  ToggleIntegrationStatus,
+} from './integrations.action';
 import { IntegrationsService } from '../services/integrations.service';
 import { IntegrationWithType } from '../models/integration.model';
 import { IntegrationType } from '../models/integration-type.enum';
@@ -141,6 +147,23 @@ export class IntegrationsState {
       }),
       catchError(error => {
         this.toastService.error('Błąd podczas usuwania integracji');
+        return throwError(() => error);
+      })
+    );
+  }
+
+  @Action(TestIntegrationConnection)
+  testIntegrationConnection(ctx: StateContext<IntegrationsStateModel>, action: TestIntegrationConnection) {
+    return this.integrationsService.testConnection(action.integrationType, action.sourceSystemId).pipe(
+      tap(response => {
+        if (response.isValid) {
+          this.toastService.success('Połączenie działa poprawnie!', 'Test połączenia');
+        } else {
+          this.toastService.warning(response.message || 'Połączenie nie działa poprawnie', 'Test połączenia');
+        }
+      }),
+      catchError(error => {
+        this.toastService.error('Nie udało się przetestować połączenia', 'Test połączenia');
         return throwError(() => error);
       })
     );

@@ -26,3 +26,11 @@ export class DeleteIntegration {
     public sourceSystemId: string
   ) {}
 }
+
+export class TestIntegrationConnection {
+  static readonly type = '[Integrations] Test Integration Connection';
+  constructor(
+    public integrationType: IntegrationType,
+    public sourceSystemId: string
+  ) {}
+}

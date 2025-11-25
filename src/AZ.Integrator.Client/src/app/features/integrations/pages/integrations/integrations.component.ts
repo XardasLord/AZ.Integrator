@@ -26,6 +26,7 @@ import { IntegrationCategory, IntegrationTypeCategories } from '../../models/int
 })
 export class IntegrationsComponent implements OnInit {
   private store = inject(Store);
+
   integrations$: Observable<IntegrationWithType[]>;
   filteredIntegrations$: Observable<IntegrationWithType[]>;
   loading$: Observable<boolean>;
@@ -76,6 +77,12 @@ export class IntegrationsComponent implements OnInit {
 
         return filtered;
       })
+    );
+  }
+
+  getActiveCount(): Observable<number> {
+    return this.integrations$.pipe(
+      map(integrations => integrations.filter(integration => (integration.integration as any).isEnabled).length)
     );
   }
 }

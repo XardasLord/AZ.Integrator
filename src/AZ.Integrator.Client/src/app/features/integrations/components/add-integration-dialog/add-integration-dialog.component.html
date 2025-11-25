@@ -1,5 +1,7 @@
-﻿<h2 mat-dialog-title>
-  @if (!selectedType) {
+﻿﻿<h2 mat-dialog-title>
+  @if (isEditMode) {
+    Edycja integracji {{ getIntegrationTypeLabel(selectedType!) }}
+  } @else if (!selectedType) {
     Dodaj nową integrację
   } @else {
     Konfiguracja integracji {{ getIntegrationTypeLabel(selectedType) }}
@@ -254,7 +256,7 @@
   }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  @if (selectedType) {
+  @if (selectedType && !isEditMode) {
     <button mat-button (click)="back()" [disabled]="loading">
       <mat-icon>arrow_back</mat-icon>
       Wstecz
@@ -266,7 +268,13 @@
       @if (loading) {
         <mat-spinner diameter="20" class="inline-block mr-2"></mat-spinner>
       }
-      {{ selectedType === IntegrationType.Allegro ? 'Połącz konto' : 'Dodaj integrację' }}
+      @if (isEditMode) {
+        Zapisz zmiany
+      } @else if (selectedType === IntegrationType.Allegro) {
+        Połącz konto
+      } @else {
+        Dodaj integrację
+      }
     </button>
   }
 </mat-dialog-actions>

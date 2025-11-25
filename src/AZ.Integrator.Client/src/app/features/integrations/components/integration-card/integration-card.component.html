@@ -1,4 +1,4 @@
-﻿<mat-card class="integration-card">
+﻿<mat-card class="integration-card" [class.active-integration]="isEnabled" [@cardHover]>
   <mat-card-header>
     <div class="integration-logo" mat-card-avatar>
       @if (logoUrl) {
@@ -7,9 +7,15 @@
         <mat-icon>integration_instructions</mat-icon>
       }
     </div>
-    <mat-card-title>{{ displayName }}</mat-card-title>
+    <mat-card-title class="flex items-center gap-2">
+      {{ displayName }}
+    </mat-card-title>
     <mat-card-subtitle>
-      <span [class]="statusColor + ' font-semibold'">{{ statusLabel }}</span>
+      @if (isEnabled) {
+        <span class="status-badge active">AKTYWNA</span>
+      } @else {
+        <span class="status-badge inactive">NIEAKTYWNA</span>
+      }
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
@@ -22,12 +28,7 @@
   </mat-card-content>
   <mat-card-actions class="card-actions">
     <div class="action-buttons">
-      <button
-        mat-icon-button
-        (click)="editIntegration()"
-        matTooltip="Edytuj integrację"
-        color="primary"
-      >
+      <button mat-icon-button (click)="editIntegration()" matTooltip="Edytuj integrację" color="primary">
         <mat-icon>edit</mat-icon>
       </button>
       <button
@@ -35,8 +36,7 @@
         (click)="testConnection()"
         [disabled]="testingConnection || !isEnabled"
         matTooltip="Przetestuj połączenie"
-        color="accent"
-      >
+        color="accent">
         @if (testingConnection) {
           <mat-spinner diameter="20"></mat-spinner>
         } @else {
@@ -47,16 +47,10 @@
         mat-icon-button
         (click)="toggleStatus()"
         [matTooltip]="isEnabled ? 'Dezaktywuj' : 'Aktywuj'"
-        [color]="isEnabled ? 'warn' : 'primary'"
-      >
+        [color]="isEnabled ? 'warn' : 'primary'">
         <mat-icon>{{ isEnabled ? 'pause_circle' : 'play_circle' }}</mat-icon>
       </button>
-      <button
-        mat-icon-button
-        (click)="deleteIntegration()"
-        matTooltip="Usuń integrację"
-        color="warn"
-      >
+      <button mat-icon-button (click)="deleteIntegration()" matTooltip="Usuń integrację" color="warn">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
