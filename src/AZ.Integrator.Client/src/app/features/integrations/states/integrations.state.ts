@@ -68,6 +68,18 @@ export class IntegrationsState {
     return state.integrations.filter(i => i.type === IntegrationType.Dpd);
   }
 
+  @Selector([INTEGRATIONS_STATE_TOKEN])
+  static activeMarketplaceIntegrations(state: IntegrationsStateModel): IntegrationWithType[] {
+    if (!state || !state.integrations) {
+      return [];
+    }
+    return state.integrations.filter(
+      i =>
+        (i.type === IntegrationType.Allegro || i.type === IntegrationType.Erli || i.type === IntegrationType.Shopify) &&
+        i.integration.isEnabled
+    );
+  }
+
   @Action(LoadIntegrations)
   loadIntegrations(ctx: StateContext<IntegrationsStateModel>) {
     ctx.patchState({ loading: true });

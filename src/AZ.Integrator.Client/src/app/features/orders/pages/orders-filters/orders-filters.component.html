@@ -1,11 +1,24 @@
 <div class="filters-container">
+  @if ((hasActiveMarketplaceIntegrations$ | async) === false) {
+    <div class="no-integrations-info">
+      <mat-icon class="info-icon">info</mat-icon>
+      <span class="info-text">
+        Brak aktywnych integracji z marketplace.
+        <a (click)="navigateToIntegrations()" class="info-link" *appRoleAllow="[AuthRoles.Admin]"
+          >Dodaj pierwszą integrację</a
+        >
+      </span>
+    </div>
+  }
+
   <mat-form-field class="store-selector" appearance="outline" *appRoleAllow="[AuthRoles.Admin]">
     <mat-label>Wybierz sklep</mat-label>
     <mat-select
+      [disabled]="(hasActiveMarketplaceIntegrations$ | async) === false"
       (selectionChange)="onStoreSelected($event.value)"
       [value]="selectedStore$ | async"
       [compareWith]="compareStores">
-      @for (group of sourceSystemGroups; let first = $first; track group) {
+      @for (group of sourceSystemGroups$ | async; let first = $first; track group) {
         <!-- Nagłówek grupy jako nieklikalny wiersz -->
         <mat-option disabled class="!cursor-default !opacity-100 !py-0 !min-h-0">
           @if (!first) {
@@ -47,6 +60,11 @@
 
   <mat-form-field class="search-field" appearance="outline">
     <mat-label>Login/Email</mat-label>
-    <input matInput (valueChanged)="searchTextChanged($event)" [value]="searchText$ | async" appDebounce />
+    <input
+      matInput
+      (valueChanged)="searchTextChanged($event)"
+      [value]="searchText$ | async"
+      [disabled]="(hasActiveMarketplaceIntegrations$ | async) === false"
+      appDebounce />
   </mat-form-field>
 </div>

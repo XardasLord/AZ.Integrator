@@ -80,6 +80,7 @@ const routes: Routes = [
         data: new RouteAuthVo({
           allowRoles: [AuthRoles.Admin],
         }),
+        providers: [provideStates([IntegrationsState])],
       },
       {
         path: MarketplaceRoutePath.ParcelTemplates,

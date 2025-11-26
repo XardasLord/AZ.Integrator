@@ -5,6 +5,42 @@
   flex-wrap: wrap;
 }
 
+.no-integrations-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 0.5rem;
+
+  .info-icon {
+    color: #856404;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .info-text {
+    color: #856404;
+    font-size: 14px;
+    flex: 1;
+  }
+
+  .info-link {
+    color: #0056b3;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+      color: #003d82;
+    }
+  }
+}
+
 .store-selector {
   min-width: 280px !important;
   width: 20rem !important;
