@@ -20,4 +20,7 @@ public class InpostIntegrationViewModel
     public string SenderAddressCity { get; set; }
     public string SenderAddressPostCode { get; set; }
     public string SenderAddressCountryCode { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTimeOffset? DeletedAt { get; set; }
+    public Guid? DeletedBy { get; set; }
 }

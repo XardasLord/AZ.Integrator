@@ -61,6 +61,39 @@ public static class Extensions
             
                 return Results.Ok(response);
             });
+
+        integrationsGroup.MapPut("/erli/{sourceSystemId}", 
+            async (string sourceSystemId, UpdateErliIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                request = request with { SourceSystemId = sourceSystemId };
+                var response = await mediator.Send(new Application.UseCases.Erli.Commands.Update.UpdateCommand(request), cancellationToken);
+            
+                return Results.Ok(response);
+            });
+
+        integrationsGroup.MapPatch("/erli/{sourceSystemId}", 
+            async (string sourceSystemId, ToggleIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Erli.Commands.Toggle.ToggleCommand(sourceSystemId, request), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapDelete("/erli/{sourceSystemId}", 
+            async (string sourceSystemId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Erli.Commands.Delete.DeleteCommand(sourceSystemId), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapGet("/erli/{sourceSystemId}/test", 
+            async (string sourceSystemId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Erli.Commands.Test.TestCommand(sourceSystemId), cancellationToken);
+            
+                return Results.Ok();
+            });
     }
 
     private static void MapShopifyEndpoints(RouteGroupBuilder integrationsGroup)
@@ -71,6 +104,39 @@ public static class Extensions
                 var response = await mediator.Send(new Application.UseCases.Shopify.Commands.Create.CreateCommand(request), cancellationToken);
             
                 return Results.Ok(response);
+            });
+
+        integrationsGroup.MapPut("/shopify/{sourceSystemId}", 
+            async (string sourceSystemId, UpdateShopifyIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                request = request with { SourceSystemId = sourceSystemId };
+                var response = await mediator.Send(new Application.UseCases.Shopify.Commands.Update.UpdateCommand(request), cancellationToken);
+            
+                return Results.Ok(response);
+            });
+
+        integrationsGroup.MapPatch("/shopify/{sourceSystemId}", 
+            async (string sourceSystemId, ToggleIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Shopify.Commands.Toggle.ToggleCommand(sourceSystemId, request), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapDelete("/shopify/{sourceSystemId}", 
+            async (string sourceSystemId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Shopify.Commands.Delete.DeleteCommand(sourceSystemId), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapGet("/shopify/{sourceSystemId}/test", 
+            async (string sourceSystemId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Shopify.Commands.Test.TestCommand(sourceSystemId), cancellationToken);
+            
+                return Results.Ok();
             });
     }
 
@@ -83,6 +149,39 @@ public static class Extensions
             
                 return Results.Ok(response);
             });
+
+        integrationsGroup.MapPut("/inpost/{organizationId:int}", 
+            async (int organizationId, UpdateInpostIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                request = request with { OrganizationId = organizationId };
+                var response = await mediator.Send(new Application.UseCases.Inpost.Commands.Update.UpdateCommand(request), cancellationToken);
+            
+                return Results.Ok(response);
+            });
+
+        integrationsGroup.MapPatch("/inpost/{organizationId:int}", 
+            async (int organizationId, ToggleIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Inpost.Commands.Toggle.ToggleCommand(organizationId, request), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapDelete("/inpost/{organizationId:int}", 
+            async (int organizationId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Inpost.Commands.Delete.DeleteCommand(organizationId), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapGet("/inpost/{organizationId:int}/test", 
+            async (int organizationId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Inpost.Commands.Test.TestCommand(organizationId), cancellationToken);
+            
+                return Results.Ok();
+            });
     }
 
     private static void MapFakturowniaEndpoints(RouteGroupBuilder integrationsGroup)
@@ -93,6 +192,39 @@ public static class Extensions
                 var response = await mediator.Send(new Application.UseCases.Fakturownia.Commands.Create.CreateCommand(request), cancellationToken);
             
                 return Results.Ok(response);
+            });
+
+        integrationsGroup.MapPut("/fakturownia/{sourceSystemId}", 
+            async (string sourceSystemId, UpdateFakturowniaIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                request = request with { SourceSystemId = sourceSystemId };
+                var response = await mediator.Send(new Application.UseCases.Fakturownia.Commands.Update.UpdateCommand(request), cancellationToken);
+            
+                return Results.Ok(response);
+            });
+
+        integrationsGroup.MapPatch("/fakturownia/{sourceSystemId}", 
+            async (string sourceSystemId, ToggleIntegrationRequest request, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Fakturownia.Commands.Toggle.ToggleCommand(sourceSystemId, request), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapDelete("/fakturownia/{sourceSystemId}", 
+            async (string sourceSystemId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Fakturownia.Commands.Delete.DeleteCommand(sourceSystemId), cancellationToken);
+            
+                return Results.NoContent();
+            });
+
+        integrationsGroup.MapGet("/fakturownia/{sourceSystemId}/test", 
+            async (string sourceSystemId, IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                await mediator.Send(new Application.UseCases.Fakturownia.Commands.Test.TestCommand(sourceSystemId), cancellationToken);
+            
+                return Results.Ok();
             });
     }
 

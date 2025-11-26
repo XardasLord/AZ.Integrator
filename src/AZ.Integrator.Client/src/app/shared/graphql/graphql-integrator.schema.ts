@@ -26,8 +26,11 @@ export type AllegroIntegrationViewModel = {
   clientId: Scalars['String']['output'];
   clientSecret: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedBy?: Maybe<Scalars['UUID']['output']>;
   displayName: Scalars['String']['output'];
   expiresAt: Scalars['DateTime']['output'];
+  isDeleted: Scalars['Boolean']['output'];
   isEnabled: Scalars['Boolean']['output'];
   redirectUri: Scalars['String']['output'];
   refreshToken: Scalars['String']['output'];
@@ -42,8 +45,11 @@ export type AllegroIntegrationViewModelFilterInput = {
   clientId?: InputMaybe<StringOperationFilterInput>;
   clientSecret?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedBy?: InputMaybe<UuidOperationFilterInput>;
   displayName?: InputMaybe<StringOperationFilterInput>;
   expiresAt?: InputMaybe<DateTimeOperationFilterInput>;
+  isDeleted?: InputMaybe<BooleanOperationFilterInput>;
   isEnabled?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<AllegroIntegrationViewModelFilterInput>>;
   redirectUri?: InputMaybe<StringOperationFilterInput>;
@@ -58,8 +64,11 @@ export type AllegroIntegrationViewModelSortInput = {
   clientId?: InputMaybe<SortEnumType>;
   clientSecret?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  deletedAt?: InputMaybe<SortEnumType>;
+  deletedBy?: InputMaybe<SortEnumType>;
   displayName?: InputMaybe<SortEnumType>;
   expiresAt?: InputMaybe<SortEnumType>;
+  isDeleted?: InputMaybe<SortEnumType>;
   isEnabled?: InputMaybe<SortEnumType>;
   redirectUri?: InputMaybe<SortEnumType>;
   refreshToken?: InputMaybe<SortEnumType>;
@@ -173,7 +182,10 @@ export type ErliIntegrationViewModel = {
   __typename?: 'ErliIntegrationViewModel';
   apiKey: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedBy?: Maybe<Scalars['UUID']['output']>;
   displayName: Scalars['String']['output'];
+  isDeleted: Scalars['Boolean']['output'];
   isEnabled: Scalars['Boolean']['output'];
   sourceSystemId: Scalars['String']['output'];
   tenantId: Scalars['UUID']['output'];
@@ -184,7 +196,10 @@ export type ErliIntegrationViewModelFilterInput = {
   and?: InputMaybe<Array<ErliIntegrationViewModelFilterInput>>;
   apiKey?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedBy?: InputMaybe<UuidOperationFilterInput>;
   displayName?: InputMaybe<StringOperationFilterInput>;
+  isDeleted?: InputMaybe<BooleanOperationFilterInput>;
   isEnabled?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<ErliIntegrationViewModelFilterInput>>;
   sourceSystemId?: InputMaybe<StringOperationFilterInput>;
@@ -195,7 +210,10 @@ export type ErliIntegrationViewModelFilterInput = {
 export type ErliIntegrationViewModelSortInput = {
   apiKey?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  deletedAt?: InputMaybe<SortEnumType>;
+  deletedBy?: InputMaybe<SortEnumType>;
   displayName?: InputMaybe<SortEnumType>;
+  isDeleted?: InputMaybe<SortEnumType>;
   isEnabled?: InputMaybe<SortEnumType>;
   sourceSystemId?: InputMaybe<SortEnumType>;
   tenantId?: InputMaybe<SortEnumType>;
@@ -229,7 +247,10 @@ export type FakturowniaIntegrationViewModel = {
   apiKey: Scalars['String']['output'];
   apiUrl: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedBy?: Maybe<Scalars['UUID']['output']>;
   displayName: Scalars['String']['output'];
+  isDeleted: Scalars['Boolean']['output'];
   isEnabled: Scalars['Boolean']['output'];
   sourceSystemId: Scalars['String']['output'];
   tenantId: Scalars['UUID']['output'];
@@ -241,7 +262,10 @@ export type FakturowniaIntegrationViewModelFilterInput = {
   apiKey?: InputMaybe<StringOperationFilterInput>;
   apiUrl?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedBy?: InputMaybe<UuidOperationFilterInput>;
   displayName?: InputMaybe<StringOperationFilterInput>;
+  isDeleted?: InputMaybe<BooleanOperationFilterInput>;
   isEnabled?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<FakturowniaIntegrationViewModelFilterInput>>;
   sourceSystemId?: InputMaybe<StringOperationFilterInput>;
@@ -253,7 +277,10 @@ export type FakturowniaIntegrationViewModelSortInput = {
   apiKey?: InputMaybe<SortEnumType>;
   apiUrl?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  deletedAt?: InputMaybe<SortEnumType>;
+  deletedBy?: InputMaybe<SortEnumType>;
   displayName?: InputMaybe<SortEnumType>;
+  isDeleted?: InputMaybe<SortEnumType>;
   isEnabled?: InputMaybe<SortEnumType>;
   sourceSystemId?: InputMaybe<SortEnumType>;
   tenantId?: InputMaybe<SortEnumType>;
@@ -364,7 +391,10 @@ export type InpostIntegrationViewModel = {
   __typename?: 'InpostIntegrationViewModel';
   accessToken: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedBy?: Maybe<Scalars['UUID']['output']>;
   displayName: Scalars['String']['output'];
+  isDeleted: Scalars['Boolean']['output'];
   isEnabled: Scalars['Boolean']['output'];
   organizationId: Scalars['Int']['output'];
   senderAddressBuildingNumber: Scalars['String']['output'];
@@ -386,7 +416,10 @@ export type InpostIntegrationViewModelFilterInput = {
   accessToken?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<InpostIntegrationViewModelFilterInput>>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedBy?: InputMaybe<UuidOperationFilterInput>;
   displayName?: InputMaybe<StringOperationFilterInput>;
+  isDeleted?: InputMaybe<BooleanOperationFilterInput>;
   isEnabled?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<InpostIntegrationViewModelFilterInput>>;
   organizationId?: InputMaybe<IntOperationFilterInput>;
@@ -408,7 +441,10 @@ export type InpostIntegrationViewModelFilterInput = {
 export type InpostIntegrationViewModelSortInput = {
   accessToken?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  deletedAt?: InputMaybe<SortEnumType>;
+  deletedBy?: InputMaybe<SortEnumType>;
   displayName?: InputMaybe<SortEnumType>;
+  isDeleted?: InputMaybe<SortEnumType>;
   isEnabled?: InputMaybe<SortEnumType>;
   organizationId?: InputMaybe<SortEnumType>;
   senderAddressBuildingNumber?: InputMaybe<SortEnumType>;
@@ -934,7 +970,10 @@ export type ShopifyIntegrationViewModel = {
   adminApiToken: Scalars['String']['output'];
   apiUrl: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  deletedBy?: Maybe<Scalars['UUID']['output']>;
   displayName: Scalars['String']['output'];
+  isDeleted: Scalars['Boolean']['output'];
   isEnabled: Scalars['Boolean']['output'];
   sourceSystemId: Scalars['String']['output'];
   tenantId: Scalars['UUID']['output'];
@@ -946,7 +985,10 @@ export type ShopifyIntegrationViewModelFilterInput = {
   and?: InputMaybe<Array<ShopifyIntegrationViewModelFilterInput>>;
   apiUrl?: InputMaybe<StringOperationFilterInput>;
   createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedBy?: InputMaybe<UuidOperationFilterInput>;
   displayName?: InputMaybe<StringOperationFilterInput>;
+  isDeleted?: InputMaybe<BooleanOperationFilterInput>;
   isEnabled?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<ShopifyIntegrationViewModelFilterInput>>;
   sourceSystemId?: InputMaybe<StringOperationFilterInput>;
@@ -958,7 +1000,10 @@ export type ShopifyIntegrationViewModelSortInput = {
   adminApiToken?: InputMaybe<SortEnumType>;
   apiUrl?: InputMaybe<SortEnumType>;
   createdAt?: InputMaybe<SortEnumType>;
+  deletedAt?: InputMaybe<SortEnumType>;
+  deletedBy?: InputMaybe<SortEnumType>;
   displayName?: InputMaybe<SortEnumType>;
+  isDeleted?: InputMaybe<SortEnumType>;
   isEnabled?: InputMaybe<SortEnumType>;
   sourceSystemId?: InputMaybe<SortEnumType>;
   tenantId?: InputMaybe<SortEnumType>;

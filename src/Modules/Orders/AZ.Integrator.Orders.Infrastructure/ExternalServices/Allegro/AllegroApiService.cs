@@ -175,7 +175,7 @@ public class AllegroApiService(
 
     private async Task<string> GetAccessToken(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var details = await integrationsReadFacade.GetAllegroIntegrationDetails(tenantId, sourceSystemId)
+        var details = await integrationsReadFacade.GetActiveAllegroIntegrationDetails(tenantId, sourceSystemId)
                       ?? throw new ApplicationException($"Erli integration for tenant '{tenantId.Value}' and SourceSystemID '{sourceSystemId}' does not exist");
         
         return details.AccessToken;

@@ -7,7 +7,7 @@ namespace AZ.Integrator.Integrations.Infrastructure.Facade;
 
 public class IntegrationsReadFacade(IDbContextFactory<IntegrationDataViewContext> factory) : IIntegrationsReadFacade
 {
-    public async Task<AllegroIntegrationViewModel?> GetAllegroIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
+    public async Task<AllegroIntegrationViewModel?> GetActiveAllegroIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
     {
         await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
         
@@ -15,12 +15,13 @@ public class IntegrationsReadFacade(IDbContextFactory<IntegrationDataViewContext
             .Where(x => x.TenantId == tenantId)
             .Where(x => x.SourceSystemId == sourceSystemId)
             .Where(x => x.IsEnabled)
+            .Where(x => !x.IsDeleted)
             .SingleOrDefaultAsync(cancellationToken);
 
         return details;
     }
 
-    public async Task<ErliIntegrationViewModel?> GetErliIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
+    public async Task<ErliIntegrationViewModel?> GetActiveErliIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
     {
         await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
         
@@ -28,12 +29,13 @@ public class IntegrationsReadFacade(IDbContextFactory<IntegrationDataViewContext
             .Where(x => x.TenantId == tenantId)
             .Where(x => x.SourceSystemId == sourceSystemId)
             .Where(x => x.IsEnabled)
+            .Where(x => !x.IsDeleted)
             .SingleOrDefaultAsync(cancellationToken);
 
         return details;
     }
 
-    public async Task<ShopifyIntegrationViewModel?> GetShopifyIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
+    public async Task<ShopifyIntegrationViewModel?> GetActiveShopifyIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
     {
         await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
         
@@ -41,12 +43,13 @@ public class IntegrationsReadFacade(IDbContextFactory<IntegrationDataViewContext
             .Where(x => x.TenantId == tenantId)
             .Where(x => x.SourceSystemId == sourceSystemId)
             .Where(x => x.IsEnabled)
+            .Where(x => !x.IsDeleted)
             .SingleOrDefaultAsync(cancellationToken);
 
         return details;
     }
 
-    public async Task<InpostIntegrationViewModel?> GetInpostIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default)
+    public async Task<InpostIntegrationViewModel?> GetActiveInpostIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default)
     {
         await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
         
@@ -58,13 +61,66 @@ public class IntegrationsReadFacade(IDbContextFactory<IntegrationDataViewContext
         return details;
     }
 
-    public async Task<FakturowniaIntegrationViewModel?> GetFakturowniaIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default)
+    public async Task<FakturowniaIntegrationViewModel?> GetActiveFakturowniaIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default)
     {
         await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
         
         var details = await dataViewContext.Fakturownia
             .Where(x => x.TenantId == tenantId)
             .Where(x => x.IsEnabled)
+            .Where(x => !x.IsDeleted)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        return details;
+    }
+
+    public async Task<ErliIntegrationViewModel?> GetErliIntegrationBySourceSystemIdAsync(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
+    {
+        await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
+        
+        var details = await dataViewContext.Erli
+            .Where(x => x.TenantId == tenantId)
+            .Where(x => x.SourceSystemId == sourceSystemId)
+            .Where(x => !x.IsDeleted)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        return details;
+    }
+
+    public async Task<ShopifyIntegrationViewModel?> GetShopifyIntegrationBySourceSystemIdAsync(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
+    {
+        await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
+        
+        var details = await dataViewContext.Shopify
+            .Where(x => x.TenantId == tenantId)
+            .Where(x => x.SourceSystemId == sourceSystemId)
+            .Where(x => !x.IsDeleted)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        return details;
+    }
+
+    public async Task<FakturowniaIntegrationViewModel?> GetFakturowniaIntegrationBySourceSystemIdAsync(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default)
+    {
+        await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
+        
+        var details = await dataViewContext.Fakturownia
+            .Where(x => x.TenantId == tenantId)
+            .Where(x => x.SourceSystemId == sourceSystemId)
+            .Where(x => !x.IsDeleted)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        return details;
+    }
+
+    public async Task<InpostIntegrationViewModel?> GetInpostIntegrationByOrganizationIdAsync(Guid tenantId, int organizationId, CancellationToken cancellationToken = default)
+    {
+        await using var dataViewContext = await factory.CreateDbContextAsync(cancellationToken);
+        
+        var details = await dataViewContext.Inpost
+            .Where(x => x.TenantId == tenantId)
+            .Where(x => x.OrganizationId == organizationId)
+            .Where(x => !x.IsDeleted)
             .SingleOrDefaultAsync(cancellationToken);
 
         return details;

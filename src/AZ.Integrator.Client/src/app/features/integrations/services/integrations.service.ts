@@ -129,7 +129,7 @@ export class IntegrationsService extends RemoteServiceBase {
   updateIntegrationStatus(type: IntegrationType, sourceSystemId: string, isEnabled: boolean): Observable<void> {
     const command: UpdateIntegrationCommand = { sourceSystemId, isEnabled };
     const endpoint = this.getEndpointForType(type);
-    return this.httpClient.put<void>(`${this.apiUrl}/integrations/${endpoint}/${sourceSystemId}`, command);
+    return this.httpClient.patch<void>(`${this.apiUrl}/integrations/${endpoint}/${sourceSystemId}`, command);
   }
 
   deleteIntegration(type: IntegrationType, sourceSystemId: string): Observable<void> {

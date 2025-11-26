@@ -15,5 +15,9 @@ SELECT
     display_name,
     is_enabled,
     created_at,
-    updated_at
+    updated_at,
+    
+    is_deleted,
+    deleted_at,
+    deleted_by
 FROM integration.allegro;

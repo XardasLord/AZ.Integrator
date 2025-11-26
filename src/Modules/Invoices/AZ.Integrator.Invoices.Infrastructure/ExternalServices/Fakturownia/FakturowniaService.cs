@@ -25,7 +25,7 @@ public class FakturowniaService(
         DeliveryDto deliveryDto,
         TenantId tenantId)
     {
-        var integrationDetails = await integrationsReadFacade.GetFakturowniaIntegrationDetails(tenantId)
+        var integrationDetails = await integrationsReadFacade.GetActiveFakturowniaIntegrationDetails(tenantId)
             ?? throw new InvoiceGenerationException("No active fakturownia integration details found for tenant.");
         
         var payload = new CreateInvoicePayload
@@ -81,7 +81,7 @@ public class FakturowniaService(
 
     public async Task<byte[]> Download(long invoiceId, TenantId tenantId)
     {
-        var integrationDetails = await integrationsReadFacade.GetFakturowniaIntegrationDetails(tenantId)
+        var integrationDetails = await integrationsReadFacade.GetActiveFakturowniaIntegrationDetails(tenantId)
                                  ?? throw new InvoiceGenerationException("No active fakturownia integration details found for tenant.");
         
         var queryParams = new Dictionary<string, string>

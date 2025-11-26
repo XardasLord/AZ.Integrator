@@ -20,5 +20,9 @@ SELECT
     sender_address_building_number,
     sender_address_city,
     sender_address_post_code,
-    sender_address_country_code
+    sender_address_country_code,
+
+    is_deleted,
+    deleted_at,
+    deleted_by
 FROM integration.inpost;

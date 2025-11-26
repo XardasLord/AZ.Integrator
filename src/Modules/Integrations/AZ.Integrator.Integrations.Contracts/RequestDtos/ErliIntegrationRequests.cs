@@ -4,3 +4,8 @@ public record AddErliIntegrationRequest(
     string SourceSystemId,
     string ApiKey,
     string DisplayName);
+
+public record UpdateErliIntegrationRequest(
+    string SourceSystemId,
+    string ApiKey,
+    string DisplayName);

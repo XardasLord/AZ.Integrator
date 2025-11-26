@@ -20,6 +20,7 @@ public class IntegrationViewResolver(ICurrentUser currentUser)
     public IQueryable<AllegroIntegrationViewModel> GetAllegroIntegrations(IntegrationDataViewContext dataViewContext) 
         => dataViewContext.Allegro
             .Where(x => x.TenantId == currentUser.TenantId)
+            .Where(x => !x.IsDeleted)
             .AsQueryable();
     
     [RequireFeatureFlag(FeatureFlagCodes.IntegrationsModule)]
@@ -30,6 +31,7 @@ public class IntegrationViewResolver(ICurrentUser currentUser)
     public IQueryable<ErliIntegrationViewModel> GetErliIntegrations(IntegrationDataViewContext dataViewContext) 
         => dataViewContext.Erli
             .Where(x => x.TenantId == currentUser.TenantId)
+            .Where(x => !x.IsDeleted)
             .AsQueryable();
     
     [RequireFeatureFlag(FeatureFlagCodes.IntegrationsModule)]
@@ -40,6 +42,7 @@ public class IntegrationViewResolver(ICurrentUser currentUser)
     public IQueryable<ShopifyIntegrationViewModel> GetShopifyIntegrations(IntegrationDataViewContext dataViewContext) 
         => dataViewContext.Shopify
             .Where(x => x.TenantId == currentUser.TenantId)
+            .Where(x => !x.IsDeleted)
             .AsQueryable();
     
     [RequireFeatureFlag(FeatureFlagCodes.IntegrationsModule)]
@@ -50,6 +53,7 @@ public class IntegrationViewResolver(ICurrentUser currentUser)
     public IQueryable<InpostIntegrationViewModel> GetInpostIntegrations(IntegrationDataViewContext dataViewContext) 
         => dataViewContext.Inpost
             .Where(x => x.TenantId == currentUser.TenantId)
+            .Where(x => !x.IsDeleted)
             .AsQueryable();
     
     [RequireFeatureFlag(FeatureFlagCodes.IntegrationsModule)]
@@ -60,5 +64,6 @@ public class IntegrationViewResolver(ICurrentUser currentUser)
     public IQueryable<FakturowniaIntegrationViewModel> GetFakturowniaIntegrations(IntegrationDataViewContext dataViewContext) 
         => dataViewContext.Fakturownia
             .Where(x => x.TenantId == currentUser.TenantId)
+            .Where(x => !x.IsDeleted)
             .AsQueryable();
 }

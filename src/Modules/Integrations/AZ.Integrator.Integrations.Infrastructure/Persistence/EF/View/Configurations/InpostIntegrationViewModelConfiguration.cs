@@ -32,5 +32,9 @@ public class InpostIntegrationViewModelConfiguration : IEntityTypeConfiguration<
         builder.Property(e => e.SenderAddressCity).HasColumnName("sender_address_city");
         builder.Property(e => e.SenderAddressPostCode).HasColumnName("sender_address_post_code");
         builder.Property(e => e.SenderAddressCountryCode).HasColumnName("sender_address_country_code");
+        
+        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.DeletedBy).HasColumnName("deleted_by");
     }
 }

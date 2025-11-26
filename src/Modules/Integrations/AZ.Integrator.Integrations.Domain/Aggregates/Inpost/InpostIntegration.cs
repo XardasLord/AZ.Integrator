@@ -15,6 +15,7 @@ public class InpostIntegration : Entity, IAggregateRoot
     private DateTimeOffset _createdAt;
     private DateTimeOffset _updatedAt;
     private SenderData _senderData;
+    private SoftDeleteInfo _softDeleteInfo;
 
     public TenantId TenantId => _tenantId;
     public int OrganizationId => _organizationId;
@@ -24,6 +25,7 @@ public class InpostIntegration : Entity, IAggregateRoot
     public DateTimeOffset CreatedAt => _createdAt;
     public DateTimeOffset UpdatedAt => _updatedAt;
     public SenderData SenderData => _senderData;
+    public SoftDeleteInfo SoftDeleteInfo => _softDeleteInfo;
     
     private InpostIntegration()
     {
@@ -46,9 +48,34 @@ public class InpostIntegration : Entity, IAggregateRoot
             _isEnabled = true,
             _createdAt = DateTimeOffset.UtcNow,
             _updatedAt = currentDateTime.CurrentDate(),
-            _senderData = senderData
+            _senderData = senderData,
+            _softDeleteInfo = SoftDeleteInfo.NotDeleted()
         };
 
         return integration;
+    }
+
+    public void Update(
+        string accessToken,
+        string displayName,
+        SenderData senderData,
+        ICurrentDateTime currentDateTime)
+    {
+        _accessToken = accessToken;
+        _displayName = displayName;
+        _senderData = senderData;
+        _updatedAt = currentDateTime.CurrentDate();
+    }
+
+    public void SetEnabled(bool isEnabled, ICurrentDateTime currentDateTime)
+    {
+        _isEnabled = isEnabled;
+        _updatedAt = currentDateTime.CurrentDate();
+    }
+
+    public void Delete(ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    {
+        _softDeleteInfo = SoftDeleteInfo.Deleted(currentDateTime.CurrentDate(), currentUser.UserId);
+        SetEnabled(false, currentDateTime);
     }
 }

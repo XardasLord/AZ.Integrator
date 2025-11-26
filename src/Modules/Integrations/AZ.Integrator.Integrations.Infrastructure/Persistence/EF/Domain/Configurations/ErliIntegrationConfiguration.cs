@@ -43,5 +43,14 @@ public class ErliIntegrationConfiguration : IEntityTypeConfiguration<ErliIntegra
         builder.Property(e => e.UpdatedAt)
             .HasColumnName("updated_at")
             .IsRequired();
+
+        builder.ComplexProperty(e => e.SoftDeleteInfo, sd =>
+        {
+            sd.IsRequired();
+            
+            sd.Property(x => x.IsDeleted).HasColumnName("is_deleted").IsRequired();
+            sd.Property(x => x.DeletedAt).HasColumnName("deleted_at");
+            sd.Property(x => x.DeletedBy).HasColumnName("deleted_by");
+        });
     }
 }

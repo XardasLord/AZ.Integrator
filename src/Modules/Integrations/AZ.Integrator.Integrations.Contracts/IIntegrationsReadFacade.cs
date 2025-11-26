@@ -4,9 +4,14 @@ namespace AZ.Integrator.Integrations.Contracts;
 
 public interface IIntegrationsReadFacade
 {
-    Task<AllegroIntegrationViewModel?> GetAllegroIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
-    Task<ErliIntegrationViewModel?> GetErliIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
-    Task<ShopifyIntegrationViewModel?> GetShopifyIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
-    Task<InpostIntegrationViewModel?> GetInpostIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default);
-    Task<FakturowniaIntegrationViewModel?> GetFakturowniaIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default);
+    Task<AllegroIntegrationViewModel?> GetActiveAllegroIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
+    Task<ErliIntegrationViewModel?> GetActiveErliIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
+    Task<ShopifyIntegrationViewModel?> GetActiveShopifyIntegrationDetails(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
+    Task<InpostIntegrationViewModel?> GetActiveInpostIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default);
+    Task<FakturowniaIntegrationViewModel?> GetActiveFakturowniaIntegrationDetails(Guid tenantId, CancellationToken cancellationToken = default);
+
+    Task<ErliIntegrationViewModel?> GetErliIntegrationBySourceSystemIdAsync(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
+    Task<ShopifyIntegrationViewModel?> GetShopifyIntegrationBySourceSystemIdAsync(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
+    Task<FakturowniaIntegrationViewModel?> GetFakturowniaIntegrationBySourceSystemIdAsync(Guid tenantId, string sourceSystemId, CancellationToken cancellationToken = default);
+    Task<InpostIntegrationViewModel?> GetInpostIntegrationByOrganizationIdAsync(Guid tenantId, int organizationId, CancellationToken cancellationToken = default);
 }

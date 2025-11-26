@@ -20,5 +20,9 @@ public class ErliIntegrationViewModelConfiguration : IEntityTypeConfiguration<Er
         builder.Property(e => e.IsEnabled).HasColumnName("is_enabled");
         builder.Property(e => e.CreatedAt).HasColumnName("created_at");
         builder.Property(e => e.UpdatedAt).HasColumnName("updated_at");
+        
+        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.DeletedBy).HasColumnName("deleted_by");
     }
 }

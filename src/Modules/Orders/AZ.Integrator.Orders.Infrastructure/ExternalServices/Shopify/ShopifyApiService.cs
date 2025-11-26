@@ -79,7 +79,7 @@ public class ShopifyApiService(IIntegrationsReadFacade integrationsReadFacade) :
 
     private async Task<ShopifyIntegrationViewModel> GetAccount(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var details = await integrationsReadFacade.GetShopifyIntegrationDetails(tenantId, sourceSystemId)
+        var details = await integrationsReadFacade.GetActiveShopifyIntegrationDetails(tenantId, sourceSystemId)
             ?? throw new ApplicationException($"Shopify integration for tenant '{tenantId.Value}' and SourceSystemID '{sourceSystemId}' does not exist");
         
         return details;

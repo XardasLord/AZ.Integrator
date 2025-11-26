@@ -26,7 +26,7 @@ public class CreateInpostShipmentCommandHandler(
     {
         await EnsureShipmentForOrderNotExists(command, cancellationToken);
 
-        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId, cancellationToken)
+        var integrationDetails = await integrationsReadFacade.GetActiveInpostIntegrationDetails(currentUser.TenantId, cancellationToken)
                                  ?? throw new InpostShipmentCreationException($"Inpost integration details not found for tenant '{currentUser.TenantId}'.");
 
         var shipment = MapToShipment(command, integrationDetails);

@@ -24,7 +24,7 @@ public class ShipXApiService(
         var shipmentJson = System.Text.Json.JsonSerializer.Serialize(shipment);
         var shipmentContent = new StringContent(shipmentJson, Encoding.UTF8, "application/json");
         
-        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId) 
+        var integrationDetails = await integrationsReadFacade.GetActiveInpostIntegrationDetails(currentUser.TenantId) 
                                  ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
         
         var httpClient = PrepareHttpClient(integrationDetails);
@@ -55,7 +55,7 @@ public class ShipXApiService(
             { "type", "A6" }
         }.ToHttpQueryString();
         
-        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId)
+        var integrationDetails = await integrationsReadFacade.GetActiveInpostIntegrationDetails(currentUser.TenantId)
                                  ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
         var httpClient = PrepareHttpClient(integrationDetails);
         
@@ -91,7 +91,7 @@ public class ShipXApiService(
 
         var httpParams = queryParams.ToHttpQueryString();
         
-        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId)
+        var integrationDetails = await integrationsReadFacade.GetActiveInpostIntegrationDetails(currentUser.TenantId)
                                  ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
         var httpClient = PrepareHttpClient(integrationDetails);
         
@@ -117,7 +117,7 @@ public class ShipXApiService(
 
     public async Task<ShipmentResponse> GetDetails(ShipmentNumber number)
     {
-        var integrationDetails = await integrationsReadFacade.GetInpostIntegrationDetails(currentUser.TenantId)
+        var integrationDetails = await integrationsReadFacade.GetActiveInpostIntegrationDetails(currentUser.TenantId)
                                  ?? throw new InpostShipmentCreationException($"No active Inpost ShipX integration details found for tenant '{currentUser.TenantId}'.");
         var httpClient = PrepareHttpClient(integrationDetails);
         

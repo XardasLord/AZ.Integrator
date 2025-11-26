@@ -14,6 +14,7 @@ public class ShopifyIntegration : Entity, IAggregateRoot
     private bool _isEnabled;
     private DateTimeOffset _createdAt;
     private DateTimeOffset _updatedAt;
+    private SoftDeleteInfo _softDeleteInfo;
 
     public TenantId TenantId => _tenantId;
     public SourceSystemId SourceSystemId => _sourceSystemId;
@@ -23,6 +24,7 @@ public class ShopifyIntegration : Entity, IAggregateRoot
     public bool IsEnabled => _isEnabled;
     public DateTimeOffset CreatedAt => _createdAt;
     public DateTimeOffset UpdatedAt => _updatedAt;
+    public SoftDeleteInfo SoftDeleteInfo => _softDeleteInfo;
     
     private ShopifyIntegration()
     {
@@ -45,9 +47,34 @@ public class ShopifyIntegration : Entity, IAggregateRoot
             _displayName = displayName,
             _isEnabled = true,
             _createdAt = DateTimeOffset.UtcNow,
-            _updatedAt = currentDateTime.CurrentDate()
+            _updatedAt = currentDateTime.CurrentDate(),
+            _softDeleteInfo = SoftDeleteInfo.NotDeleted()
         };
 
         return integration;
+    }
+
+    public void Update(
+        string apiUrl,
+        string adminApiToken,
+        string displayName,
+        ICurrentDateTime currentDateTime)
+    {
+        _apiUrl = apiUrl;
+        _adminApiToken = adminApiToken;
+        _displayName = displayName;
+        _updatedAt = currentDateTime.CurrentDate();
+    }
+
+    public void SetEnabled(bool isEnabled, ICurrentDateTime currentDateTime)
+    {
+        _isEnabled = isEnabled;
+        _updatedAt = currentDateTime.CurrentDate();
+    }
+
+    public void Delete(ICurrentUser currentUser, ICurrentDateTime currentDateTime)
+    {
+        _softDeleteInfo = SoftDeleteInfo.Deleted(currentDateTime.CurrentDate(), currentUser.UserId);
+        SetEnabled(false, currentDateTime);
     }
 }

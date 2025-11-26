@@ -145,7 +145,7 @@ public class ErliApiService(
 
     private async Task<string> GetApiKey(TenantId tenantId, SourceSystemId sourceSystemId)
     {
-        var details = await integrationsReadFacade.GetErliIntegrationDetails(tenantId, sourceSystemId)
+        var details = await integrationsReadFacade.GetActiveErliIntegrationDetails(tenantId, sourceSystemId)
             ?? throw new ApplicationException($"Erli integration for tenant '{tenantId.Value}' and SourceSystemID '{sourceSystemId}' does not exist");
         
         return details.ApiKey;
