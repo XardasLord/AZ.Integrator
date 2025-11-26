@@ -1,6 +1,7 @@
 export enum AuthRoles {
   MasterAdmin = 'MASTER_ADMIN',
   Admin = 'ADMIN',
+  Operator = 'OPERATOR',
   ScannerIn = 'SCANNER_IN',
   ScannerOut = 'SCANNER_OUT',
 

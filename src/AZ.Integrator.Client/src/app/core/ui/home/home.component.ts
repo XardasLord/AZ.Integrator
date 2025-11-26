@@ -24,7 +24,7 @@ export class HomeComponent {
 
     if (roles.includes(AuthRoles.MasterAdmin)) {
       // TODO: Change to MasterAdmin specific route when available
-    } else if (roles.includes(AuthRoles.Admin)) {
+    } else if (roles.includes(AuthRoles.Admin) || roles.includes(AuthRoles.Operator)) {
       this.store.dispatch(new Navigate([MarketplaceRoutePath.Orders]));
     } else if (roles.includes(AuthRoles.ScannerIn)) {
       this.store.dispatch(new Navigate([StocksRoutePath.BarcodeScanner]));

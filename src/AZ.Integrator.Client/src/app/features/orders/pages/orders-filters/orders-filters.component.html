@@ -11,7 +11,7 @@
     </div>
   }
 
-  <mat-form-field class="store-selector" appearance="outline" *appRoleAllow="[AuthRoles.Admin]">
+  <mat-form-field class="store-selector" appearance="outline" *appRoleAllow="[AuthRoles.Admin, AuthRoles.Operator]">
     <mat-label>Wybierz sklep</mat-label>
     <mat-select
       [disabled]="(hasActiveMarketplaceIntegrations$ | async) === false"

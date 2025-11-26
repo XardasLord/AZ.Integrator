@@ -78,7 +78,7 @@ const routes: Routes = [
         loadChildren: () => import('../../features/orders/orders.module').then(m => m.OrdersModule),
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
-          allowRoles: [AuthRoles.Admin],
+          allowRoles: [AuthRoles.Admin, AuthRoles.Operator],
         }),
         providers: [provideStates([IntegrationsState])],
       },
@@ -88,7 +88,7 @@ const routes: Routes = [
           import('../../features/package-templates/parcel-templates.module').then(m => m.ParcelTemplatesModule),
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
-          allowRoles: [AuthRoles.Admin],
+          allowRoles: [AuthRoles.Admin, AuthRoles.Operator],
         }),
       },
 
@@ -97,7 +97,7 @@ const routes: Routes = [
         loadComponent: () => import('../../features/stocks/pages/stocks/stocks.component').then(c => c.StocksComponent),
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
-          allowRoles: [AuthRoles.Admin],
+          allowRoles: [AuthRoles.Admin, AuthRoles.Operator],
         }),
         providers: [provideStates([StocksState]), StocksService, StockGroupsService],
       },
@@ -135,7 +135,7 @@ const routes: Routes = [
         providers: [provideStates([FormatsState]), FurnitureFormatsService],
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
-          allowRoles: [AuthRoles.Admin],
+          allowRoles: [AuthRoles.Admin, AuthRoles.Operator],
         }),
       },
       {
@@ -147,7 +147,7 @@ const routes: Routes = [
         providers: [provideStates([SuppliersState]), SuppliersService],
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
-          allowRoles: [AuthRoles.Admin],
+          allowRoles: [AuthRoles.Admin, AuthRoles.Operator],
         }),
       },
       {
@@ -162,7 +162,7 @@ const routes: Routes = [
         ],
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
-          allowRoles: [AuthRoles.Admin],
+          allowRoles: [AuthRoles.Admin, AuthRoles.Operator],
         }),
       },
       {
@@ -179,7 +179,7 @@ const routes: Routes = [
         ],
         canActivate: mapToCanActivate([AuthGuard]),
         data: new RouteAuthVo({
-          allowRoles: [AuthRoles.Admin],
+          allowRoles: [AuthRoles.Admin, AuthRoles.Operator],
         }),
       },
       {

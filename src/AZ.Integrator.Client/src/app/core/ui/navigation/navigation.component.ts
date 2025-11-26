@@ -69,21 +69,21 @@ export class NavigationComponent implements OnInit {
     {
       title: 'Sklep i wysyłka',
       icon: 'storefront',
-      roles: [AuthRoles.Admin],
+      roles: [AuthRoles.Admin, AuthRoles.Operator],
       featureFlag: FeatureFlagCode_MarketplaceModule,
       subItems: [
         {
           title: 'Zamówienia',
           icon: 'shopping_cart',
           route: MarketplaceRoutePath.Orders,
-          roles: [AuthRoles.Admin],
+          roles: [AuthRoles.Admin, AuthRoles.Operator],
           featureFlag: FeatureFlagCode_Marketplace_OrdersModule,
         },
         {
           title: 'Szablony paczek',
           icon: 'inventory',
           route: MarketplaceRoutePath.ParcelTemplates,
-          roles: [AuthRoles.Admin],
+          roles: [AuthRoles.Admin, AuthRoles.Operator],
           featureFlag: FeatureFlagCode_Marketplace_ParcelTemplatesModule,
         },
       ],
@@ -92,14 +92,14 @@ export class NavigationComponent implements OnInit {
     {
       title: 'Magazyn',
       icon: 'warehouse',
-      roles: [AuthRoles.Admin],
+      roles: [AuthRoles.Admin, AuthRoles.Operator],
       featureFlag: FeatureFlagCode_WarehouseModule,
       subItems: [
         {
           title: 'Stany magazynowe',
           icon: 'inventory',
           route: StocksRoutePath.Stocks,
-          roles: [AuthRoles.Admin],
+          roles: [AuthRoles.Admin, AuthRoles.Operator],
           featureFlag: FeatureFlagCode_Warehouse_StocksModule,
         },
         {
@@ -121,28 +121,28 @@ export class NavigationComponent implements OnInit {
     {
       title: 'Zarządzanie formatkami',
       icon: 'description',
-      roles: [AuthRoles.Admin],
+      roles: [AuthRoles.Admin, AuthRoles.Operator],
       featureFlag: FeatureFlagCode_ProcurementModule,
       subItems: [
         {
           title: 'Formatki',
           icon: 'view_module',
           route: FurnitureFormatsRoutePath.Formats,
-          roles: [AuthRoles.Admin],
+          roles: [AuthRoles.Admin, AuthRoles.Operator],
           featureFlag: FeatureFlagCode_ProcurementModule,
         },
         {
           title: 'Dostawcy',
           icon: 'factory',
           route: FurnitureFormatsRoutePath.Suppliers,
-          roles: [AuthRoles.Admin],
+          roles: [AuthRoles.Admin, AuthRoles.Operator],
           featureFlag: FeatureFlagCode_ProcurementModule,
         },
         {
           title: 'Zamówienia',
           icon: 'assignment',
           route: FurnitureFormatsRoutePath.Orders,
-          roles: [AuthRoles.Admin],
+          roles: [AuthRoles.Admin, AuthRoles.Operator],
           featureFlag: FeatureFlagCode_ProcurementModule,
         },
       ],
