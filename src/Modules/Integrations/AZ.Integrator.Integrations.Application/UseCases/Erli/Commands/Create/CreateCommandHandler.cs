@@ -1,5 +1,5 @@
 ﻿using AZ.Integrator.Domain.Abstractions;
-using AZ.Integrator.Integrations.Application.Common.Exceptions;
+using AZ.Integrator.Integrations.Application.Common;
 using AZ.Integrator.Integrations.Contracts.ViewModels;
 using AZ.Integrator.Integrations.Domain.Aggregates.Erli;
 using AZ.Integrator.Integrations.Domain.Aggregates.Erli.Specifications;
@@ -15,14 +15,18 @@ public class CreateCommandHandler(
 {
     public async ValueTask<ErliIntegrationViewModel> Handle(CreateCommand command, CancellationToken cancellationToken)
     {
-        var spec = new ErliIntegrationBySourceSystemIdSpec(currentUser.TenantId, command.Request.SourceSystemId);
-        var exists = await repository.AnyAsync(spec, cancellationToken);
-
-        if (exists)
-            throw new IntegrationAlreadyExistsException(currentUser.TenantId, command.Request.SourceSystemId);
+        // Generujemy unikalny SourceSystemId dla tego tenanta
+        string sourceSystemId;
+        bool isUnique;
+        do
+        {
+            sourceSystemId = SourceSystemIdGenerator.Generate("erli-");
+            var spec = new ErliIntegrationBySourceSystemIdSpec(currentUser.TenantId, sourceSystemId);
+            isUnique = !await repository.AnyAsync(spec, cancellationToken);
+        } while (!isUnique);
         
         var integration = ErliIntegration.Create(
-            command.Request.SourceSystemId,
+            sourceSystemId,
             command.Request.ApiKey,
             command.Request.DisplayName,
             currentUser, currentDateTime);

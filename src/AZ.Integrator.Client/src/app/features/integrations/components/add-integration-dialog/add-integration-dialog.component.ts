@@ -65,32 +65,57 @@ export class AddIntegrationDialogComponent {
         this.integrationForm = this.fb.group({
           displayName: [data.displayName || '', Validators.required],
         });
+        // W trybie edycji dodaj sourceSystemId jako disabled
+        if (this.isEditMode) {
+          this.integrationForm.addControl(
+            'sourceSystemId',
+            this.fb.control({ value: data.sourceSystemId || '', disabled: true })
+          );
+        }
         break;
 
       case IntegrationType.Erli:
         this.integrationForm = this.fb.group({
-          sourceSystemId: [{ value: data.sourceSystemId || '', disabled: this.isEditMode }, Validators.required],
           apiKey: [data.apiKey || '', Validators.required],
           displayName: [data.displayName || '', Validators.required],
         });
+        // W trybie edycji dodaj sourceSystemId jako disabled
+        if (this.isEditMode) {
+          this.integrationForm.addControl(
+            'sourceSystemId',
+            this.fb.control({ value: data.sourceSystemId || '', disabled: true })
+          );
+        }
         break;
 
       case IntegrationType.Shopify:
         this.integrationForm = this.fb.group({
-          sourceSystemId: [{ value: data.sourceSystemId || '', disabled: this.isEditMode }, Validators.required],
           apiUrl: [data.apiUrl || '', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
           adminApiToken: [data.adminApiToken || '', Validators.required],
           displayName: [data.displayName || '', Validators.required],
         });
+        // W trybie edycji dodaj sourceSystemId jako disabled
+        if (this.isEditMode) {
+          this.integrationForm.addControl(
+            'sourceSystemId',
+            this.fb.control({ value: data.sourceSystemId || '', disabled: true })
+          );
+        }
         break;
 
       case IntegrationType.Fakturownia:
         this.integrationForm = this.fb.group({
-          sourceSystemId: [{ value: data.sourceSystemId || '', disabled: this.isEditMode }, Validators.required],
           apiKey: [data.apiKey || '', Validators.required],
           apiUrl: [data.apiUrl || '', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
           displayName: [data.displayName || '', Validators.required],
         });
+        // W trybie edycji dodaj sourceSystemId jako disabled
+        if (this.isEditMode) {
+          this.integrationForm.addControl(
+            'sourceSystemId',
+            this.fb.control({ value: data.sourceSystemId || '', disabled: true })
+          );
+        }
         break;
 
       case IntegrationType.Inpost:
@@ -161,6 +186,9 @@ export class AddIntegrationDialogComponent {
     if (this.isEditMode) {
       // Tryb edycji
       switch (this.selectedType) {
+        case IntegrationType.Allegro:
+          request = this.integrationsService.updateAllegroIntegration(integration.sourceSystemId, formValue);
+          break;
         case IntegrationType.Erli:
           request = this.integrationsService.updateErliIntegration(integration.sourceSystemId, formValue);
           break;

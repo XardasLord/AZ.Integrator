@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,7 +17,6 @@ import { SourceSystemState } from '../../../../shared/states/source-system.state
 import { AuthRoles } from '../../../../shared/auth/models/auth.roles';
 import { AuthRoleAllowDirective } from '../../../../shared/auth/directives/auth-role-allow.directive';
 import { IntegrationsState } from '../../../integrations/states/integrations.state';
-import { LoadIntegrations } from '../../../integrations/states/integrations.action';
 import { IntegrationToSourceSystemHelper } from '../../helpers/integration-to-source-system.helper';
 import { IntegrationsRoutePath } from '../../../../core/modules/app-routing.module';
 import { Navigate } from '@ngxs/router-plugin';
@@ -28,7 +27,7 @@ import { Navigate } from '@ngxs/router-plugin';
   styleUrls: ['./orders-filters.component.scss'],
   imports: [MaterialModule, DebounceDirective, AsyncPipe, AuthRoleAllowDirective],
 })
-export class OrdersFiltersComponent implements OnInit {
+export class OrdersFiltersComponent {
   private store = inject(Store);
 
   searchText$: Observable<string> = this.store.select(OrdersState.getSearchText);
@@ -39,10 +38,6 @@ export class OrdersFiltersComponent implements OnInit {
   hasActiveMarketplaceIntegrations$: Observable<boolean> = this.store
     .select(IntegrationsState.activeMarketplaceIntegrations)
     .pipe(map(integrations => integrations.length > 0));
-
-  ngOnInit() {
-    this.store.dispatch(new LoadIntegrations());
-  }
 
   searchTextChanged(searchText: string) {
     this.store.dispatch(new ApplyFilter(searchText));

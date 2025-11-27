@@ -93,12 +93,14 @@ export class IntegrationCardComponent {
         if (integration.sourceSystemId) details.push(`ID: ${integration.sourceSystemId}`);
         break;
       case IntegrationType.Erli:
-        if (integration.sourceSystemId) details.push(`System ID: ${integration.sourceSystemId}`);
+        if (integration.sourceSystemId) details.push(`ID: ${integration.sourceSystemId}`);
         break;
       case IntegrationType.Shopify:
+        if (integration.sourceSystemId) details.push(`ID: ${integration.sourceSystemId}`);
         if (integration.apiUrl) details.push(`URL: ${integration.apiUrl}`);
         break;
       case IntegrationType.Fakturownia:
+        if (integration.sourceSystemId) details.push(`ID: ${integration.sourceSystemId}`);
         if (integration.apiUrl) details.push(`URL: ${integration.apiUrl}`);
         break;
       case IntegrationType.Inpost:

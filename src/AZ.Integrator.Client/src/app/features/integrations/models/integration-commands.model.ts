@@ -1,5 +1,4 @@
 export interface AddErliIntegrationCommand {
-  sourceSystemId: string;
   apiKey: string;
   displayName: string;
 }
@@ -22,14 +21,12 @@ export interface AddInpostIntegrationCommand {
 }
 
 export interface AddShopifyIntegrationCommand {
-  sourceSystemId: string;
   apiUrl: string;
   adminApiToken: string;
   displayName: string;
 }
 
 export interface AddFakturowniaIntegrationCommand {
-  sourceSystemId: string;
   apiKey: string;
   apiUrl: string;
   displayName: string;
@@ -52,4 +49,8 @@ export interface AddDpdIntegrationCommand {
 export interface UpdateIntegrationCommand {
   sourceSystemId: string;
   isEnabled: boolean;
+}
+
+export interface UpdateAllegroIntegrationCommand {
+  displayName: string;
 }

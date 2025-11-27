@@ -14,6 +14,7 @@ import {
   AddFakturowniaIntegrationCommand,
   AddInpostIntegrationCommand,
   AddShopifyIntegrationCommand,
+  UpdateAllegroIntegrationCommand,
   UpdateIntegrationCommand,
 } from '../models/integration-commands.model';
 import { IntegrationWithType } from '../models/integration.model';
@@ -142,6 +143,10 @@ export class IntegrationsService extends RemoteServiceBase {
     return this.httpClient.get<{ isValid: boolean; message?: string }>(
       `${this.apiUrl}/integrations/${endpoint}/${sourceSystemId}/test`
     );
+  }
+
+  updateAllegroIntegration(sourceSystemId: string, command: UpdateAllegroIntegrationCommand): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/integrations/allegro/${sourceSystemId}`, command);
   }
 
   updateErliIntegration(sourceSystemId: string, command: AddErliIntegrationCommand): Observable<void> {
