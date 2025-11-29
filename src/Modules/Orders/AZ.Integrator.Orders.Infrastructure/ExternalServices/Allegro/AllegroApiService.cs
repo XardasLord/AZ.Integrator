@@ -5,6 +5,7 @@ using System.Web;
 using AZ.Integrator.Domain.SharedKernel.ValueObjects;
 using AZ.Integrator.Integrations.Contracts;
 using AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
+using AZ.Integrator.Orders.Contracts.Dtos;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.RequestModels;
 using AZ.Integrator.Orders.Infrastructure.ExternalServices.Allegro.ResponseModels;
 using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
@@ -20,6 +21,18 @@ public class AllegroApiService(
     : IAllegroService
 {
     private const string AllegroMediaType = "application/vnd.allegro.public.v1+json";
+
+    public async Task<AllegroShopInfoResponseDto> GetShopInfo(Guid tenantId, string accessToken)
+    {
+        var httpClient = PrepareHttpClientWithAccessToken(tenantId, accessToken);
+        using var response = await httpClient.GetAsync("me");
+        
+        response.EnsureSuccessStatusCode();
+
+        var shopInfo = await response.Content.ReadFromJsonAsync<AllegroShopInfoResponseDto>();
+
+        return shopInfo;
+    }
 
     public async Task<IEnumerable<OrderEvent>> GetOrderEvents(Guid tenantId, string sourceSystemId)
     {
@@ -168,6 +181,15 @@ public class AllegroApiService(
     {
         var httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessToken(tenantId, sourceSystemId));
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AllegroMediaType));
+
+        return httpClient;
+    }
+
+    private HttpClient PrepareHttpClientWithAccessToken(TenantId tenantId, string accessToken)
+    {
+        var httpClient = httpClientFactory.CreateClient(ExternalHttpClientNames.AllegroHttpClientName);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AllegroMediaType));
 
         return httpClient;

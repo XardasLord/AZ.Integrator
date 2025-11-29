@@ -1,5 +1,5 @@
 // Extended type definitions for keycloak-js compatibility
-export interface KeycloakProfile {
+export interface AppKeycloakProfile {
   id?: string;
   username?: string;
   email?: string;
@@ -9,9 +9,16 @@ export interface KeycloakProfile {
   emailVerified?: boolean;
   totp?: boolean;
   createdTimestamp?: number;
+  attributes?: AppKeycloakUserAttributes;
 }
 
-export interface KeycloakTokenParsed {
+export interface AppKeycloakUserAttributes {
+  tenant_id?: string[];
+  tenant_name?: string[];
+  [key: string]: string[] | undefined;
+}
+
+export interface AppKeycloakTokenParsed {
   exp?: number;
   iat?: number;
   nonce?: string;

@@ -22,12 +22,17 @@ public class AllegroIntegration : Entity, IAggregateRoot
 
     public TenantId TenantId => _tenantId;
     public SourceSystemId SourceSystemId => _sourceSystemId;
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public string AccessToken => _accessToken;
+    public string RefreshToken => _refreshToken;
+    public DateTime ExpiresAt => _expiresAt;
+    
+    [Obsolete("Will be removed.")]
     public string ClientId => _clientId;
+    [Obsolete("Will be removed.")]
     public string ClientSecret => _clientSecret;
+    [Obsolete("Will be removed.")]
     public string RedirectUri => _redirectUri;
+    
     public string DisplayName => _displayName;
     public bool IsEnabled => _isEnabled;
     public DateTimeOffset CreatedAt => _createdAt;
@@ -36,6 +41,36 @@ public class AllegroIntegration : Entity, IAggregateRoot
     
     private AllegroIntegration()
     {
+    }
+    
+    public static AllegroIntegration Create(
+        SourceSystemId sourceSystemId,
+        Guid tenantId,
+        string accessToken,
+        string refreshToken,
+        DateTime expiresAt,
+        string displayName,
+        ICurrentUser currentUser,
+        ICurrentDateTime currentDateTime)
+    {
+        var integration = new AllegroIntegration
+        {
+            _tenantId = tenantId,
+            _sourceSystemId = sourceSystemId,
+            _accessToken = accessToken,
+            _refreshToken = refreshToken,
+            _expiresAt = expiresAt,
+            _clientId = "",
+            _clientSecret = "",
+            _redirectUri = "",
+            _displayName = displayName,
+            _isEnabled = true,
+            _createdAt = DateTimeOffset.UtcNow,
+            _updatedAt = currentDateTime.CurrentDate(),
+            _softDeleteInfo = SoftDeleteInfo.NotDeleted()
+        };
+
+        return integration;
     }
 
     public void SetEnabled(bool isEnabled, ICurrentDateTime currentDateTime)
@@ -48,5 +83,13 @@ public class AllegroIntegration : Entity, IAggregateRoot
     {
         _softDeleteInfo = SoftDeleteInfo.Deleted(currentDateTime.CurrentDate(), currentUser.UserId);
         SetEnabled(false, currentDateTime);
+    }
+    
+    public void UpdateTokens(string newAccessToken, string newRefreshToken, DateTime newExpiresAt, ICurrentDateTime currentDateTime)
+    {
+        _accessToken = newAccessToken;
+        _refreshToken = newRefreshToken;
+        _expiresAt = newExpiresAt;
+        _updatedAt = currentDateTime.CurrentDate();
     }
 }

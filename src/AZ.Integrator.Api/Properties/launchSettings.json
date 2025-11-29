@@ -18,7 +18,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://192.168.0.185:6010;https://localhost:6010"
+      "applicationUrl": "https://api.aboxyn.local.pl:6010;https://192.168.0.185:6010;https://localhost:6010"
     },
     "IIS Express": {
       "commandName": "IISExpress",

@@ -1,10 +1,12 @@
-﻿using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
+﻿using AZ.Integrator.Orders.Contracts.Dtos;
+using AZ.Integrator.Shared.Application.ExternalServices.Allegro.Models;
 using AZ.Integrator.Shared.Application.ExternalServices.Shared.Models;
 
 namespace AZ.Integrator.Orders.Application.Common.ExternalServices.Allegro;
 
 public interface IAllegroService
 {
+    Task<AllegroShopInfoResponseDto> GetShopInfo(Guid tenantId, string accessToken);
     Task<IEnumerable<OrderEvent>> GetOrderEvents(Guid tenantId, string sourceSystemId);
     Task<GetNewOrdersModelResponse> GetOrders(GetAllQueryFilters filters, Guid tenantId, string sourceSystemId);
     Task<GetOrderDetailsModelResponse> GetOrderDetails(Guid orderId, Guid tenantId, string sourceSystemId);

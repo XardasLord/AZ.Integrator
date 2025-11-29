@@ -19,11 +19,14 @@ import {
 } from '../models/integration-commands.model';
 import { IntegrationWithType } from '../models/integration.model';
 import { IntegrationType } from '../models/integration-type.enum';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../../../shared/states/auth.state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IntegrationsService extends RemoteServiceBase {
+  private store = inject(Store);
   private getAllegroIntegrationsGql = inject(GetAllegroIntegrationsGQL);
   private getErliIntegrationsGql = inject(GetErliIntegrationsGQL);
   private getShopifyIntegrationsGql = inject(GetShopifyIntegrationsGQL);
@@ -103,7 +106,9 @@ export class IntegrationsService extends RemoteServiceBase {
 
   connectAllegro(): Observable<void> {
     // Redirect do API dla autoryzacji OAuth
-    window.location.href = `${this.apiUrl}/integrations/allegro`;
+    const tenantId = this.store.selectSnapshot(AuthState.getTenantId);
+
+    window.location.href = `${this.apiUrl}/integrations/allegro/connect?tenantId=${tenantId}`;
     return new Observable();
   }
 

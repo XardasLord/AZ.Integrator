@@ -15,7 +15,8 @@ namespace AZ.Integrator.Integrations.Infrastructure.Hangfire.Jobs.RefreshTenantA
 public class RefreshAllegroTenantAccessTokenCommandHandler(
     IAggregateRepository<AllegroIntegration> repository,
     IHttpClientFactory httpClientFactory,
-    AllegroOptions allegroOptions)
+    AllegroOptions allegroOptions,
+    ICurrentDateTime currentDateTime)
     : JobCommandHandlerBase<RefreshAllegroTenantAccessTokenCommand>
 {
     public override async ValueTask<Unit> Handle(RefreshAllegroTenantAccessTokenCommand command, CancellationToken cancellationToken)
@@ -27,8 +28,8 @@ public class RefreshAllegroTenantAccessTokenCommandHandler(
         var allegroTokenDetails = await repository.SingleOrDefaultAsync(spec, cancellationToken)
             ?? throw new InvalidOperationException($"Allegro integration details not found for Tenant: {command.TenantId}, SourceSystem: {command.SourceSystemId}");
 
-        var queryParams = PrepareQueryFilters(allegroTokenDetails);
-        var httpClient = PrepareHttpClient(allegroTokenDetails.ClientId, allegroTokenDetails.ClientSecret);
+        var queryParams = PrepareQueryFilters(allegroTokenDetails, allegroOptions);
+        var httpClient = PrepareHttpClient(allegroOptions.ClientId, allegroOptions.ClientSecret);
         
         using var response = await httpClient.PostAsync($"{allegroOptions.TokenEndpoint}?{queryParams}", null, cancellationToken);
         
@@ -36,22 +37,24 @@ public class RefreshAllegroTenantAccessTokenCommandHandler(
 
         var refreshAccessTokenResponse = await response.Content.ReadFromJsonAsync<RefreshAllegroAccessTokenResponse>(cancellationToken: cancellationToken);
 
-        allegroTokenDetails.AccessToken = refreshAccessTokenResponse.access_token;
-        allegroTokenDetails.RefreshToken = refreshAccessTokenResponse.refresh_token;
-        allegroTokenDetails.ExpiresAt = GetExpiryTimestamp(refreshAccessTokenResponse.access_token);
+        allegroTokenDetails.UpdateTokens(
+            refreshAccessTokenResponse!.access_token,
+            refreshAccessTokenResponse.refresh_token,
+            GetExpiryTimestamp(refreshAccessTokenResponse.access_token),
+            currentDateTime);
 
         await repository.SaveChangesAsync(cancellationToken);
         
         return Unit.Value;
     }
     
-    private static string PrepareQueryFilters(AllegroIntegration allegroIntegration)
+    private static string PrepareQueryFilters(AllegroIntegration allegroIntegration, AllegroOptions allegroOptions)
     {
         var queryParamsDictionary = new Dictionary<string, object>
         {
             { "grant_type", "refresh_token" }, 
             { "refresh_token", allegroIntegration.RefreshToken }, 
-            { "redirect_uri", allegroIntegration.RedirectUri }
+            { "redirect_uri", allegroOptions.RedirectUri }
         };
 
         return queryParamsDictionary.ToHttpQueryString();

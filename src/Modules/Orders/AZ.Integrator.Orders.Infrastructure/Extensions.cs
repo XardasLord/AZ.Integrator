@@ -27,7 +27,9 @@ public static class Extensions
         services.AddAllegro(configuration);
         services.AddErli(configuration);
         services.AddShopify(configuration);
+        
         services.AddTransient<IOrdersFacade, OrdersFacade>();
+        services.AddTransient<IOrdersAllegroIntegrationFacade, OrdersAllegroIntegrationFacade>();
         
         return services;
     }

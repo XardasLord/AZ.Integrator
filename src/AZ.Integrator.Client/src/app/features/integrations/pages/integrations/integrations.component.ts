@@ -1,7 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { map, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 import { MaterialModule } from '../../../../shared/modules/material.module';
 import { IntegrationWithType } from '../../models/integration.model';
 import { IntegrationsState } from '../../states/integrations.state';
@@ -26,6 +28,9 @@ import { IntegrationCategory, IntegrationTypeCategories } from '../../models/int
 })
 export class IntegrationsComponent implements OnInit {
   private store = inject(Store);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
 
   integrations$: Observable<IntegrationWithType[]>;
   filteredIntegrations$: Observable<IntegrationWithType[]>;
@@ -42,6 +47,43 @@ export class IntegrationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(new LoadIntegrations());
+    this.checkConnectionStatus();
+  }
+
+  private checkConnectionStatus(): void {
+    const queryParams = this.route.snapshot.queryParamMap;
+
+    // Sprawdzenie różnych typów połączeń
+    const connectionTypes = [
+      { param: 'allegro_connected', name: 'Allegro' },
+      { param: 'erli_connected', name: 'Erli' },
+      { param: 'shopify_connected', name: 'Shopify' },
+      { param: 'fakturownia_connected', name: 'Fakturownia' },
+      { param: 'inpost_connected', name: 'InPost' },
+      { param: 'dpd_connected', name: 'DPD' },
+    ];
+
+    const connectedType = connectionTypes.find(type => queryParams.has(type.param));
+
+    if (connectedType) {
+      // Pokazanie komunikatu o pomyślnym połączeniu
+      this.toastr.success(
+        `Twoje konto ${connectedType.name} zostało pomyślnie połączone z systemem`,
+        'Połączenie nawiązane! 🎉',
+        {
+          timeOut: 5000,
+          progressBar: true,
+          closeButton: true,
+        }
+      );
+
+      // Usunięcie parametru z URL, aby nie był widoczny
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {},
+        replaceUrl: true,
+      });
+    }
   }
 
   onCategoryChange(category: IntegrationCategory | null): void {

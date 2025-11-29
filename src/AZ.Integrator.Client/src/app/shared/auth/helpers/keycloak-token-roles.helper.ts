@@ -1,6 +1,6 @@
 import { AuthRoles } from '../models/auth.roles';
-import { KeycloakTokenParsed } from '../../../types/keycloak-js';
+import { AppKeycloakTokenParsed } from '../../../types/keycloak-js';
 
-export function getAuthRolesFromToken(tokenParsed: KeycloakTokenParsed): AuthRoles[] {
+export function getAuthRolesFromToken(tokenParsed: AppKeycloakTokenParsed): AuthRoles[] {
   return <AuthRoles[]>tokenParsed['roles'];
 }

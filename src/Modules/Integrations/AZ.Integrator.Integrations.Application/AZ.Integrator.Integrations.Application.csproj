@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Orders\AZ.Integrator.Orders.Contracts\AZ.Integrator.Orders.Contracts.csproj" />
         <ProjectReference Include="..\AZ.Integrator.Integrations.Domain\AZ.Integrator.Integrations.Domain.csproj" />
         <ProjectReference Include="..\AZ.Integrator.Integrations.Contracts\AZ.Integrator.Integrations.Contracts.csproj" />
     </ItemGroup>

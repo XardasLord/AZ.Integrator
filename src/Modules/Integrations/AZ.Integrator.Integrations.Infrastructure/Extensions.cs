@@ -15,8 +15,10 @@ using AZ.Integrator.Integrations.Infrastructure.Persistence.GraphQL.QueryResolve
 using AZ.Integrator.Shared.Infrastructure.Repositories;
 using HotChocolate.Execution.Configuration;
 using Mediator;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +34,7 @@ public static class Extensions
         services.AddModuleDomainServices();
 
         services.AddTransient<IIntegrationsReadFacade, IntegrationsReadFacade>();
+        services.AddTransient<IIntegrationsWriteFacade, IntegrationsWriteFacade>();
 
         return services;
     }
@@ -44,12 +47,38 @@ public static class Extensions
         
         integrationsGroup.MapGet("/info", () => Results.Ok("Integrations module")).AllowAnonymous();
         
+        MapAllegroEndpoints(integrationsGroup);
         MapErliEndpoints(integrationsGroup);
         MapShopifyEndpoints(integrationsGroup);
         MapInpostEndpoints(integrationsGroup);
         MapFakturowniaEndpoints(integrationsGroup);
         
         return endpoints;
+    }
+
+    private static void MapAllegroEndpoints(RouteGroupBuilder integrationsGroup)
+    {
+        integrationsGroup.MapGet("/allegro/connect", 
+            ([FromQuery] Guid tenantId, IConfiguration configuration) =>
+            {
+                // TODO: Verify if tenantId exists if not return bad request response
+                
+                var props = new AuthenticationProperties
+                {
+                    // Tu aplikacja wróci PO zakończeniu całego flow (po callbacku, zapisaniu tokenów itd.)
+                    RedirectUri = $"{configuration["Application:ClientAppUrl"]}/integrations?allegro_connected",
+                    Items =
+                    {
+                        ["tenant_id"] = tenantId.ToString()
+                    }
+                };
+
+                return Results.Challenge(
+                    properties: props,
+                    authenticationSchemes: [ "allegro-aboxyn" ]
+                );
+            })
+            .AllowAnonymous();
     }
 
     private static void MapErliEndpoints(RouteGroupBuilder integrationsGroup)
